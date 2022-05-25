@@ -1,5 +1,4 @@
 // node_modules
-import Link from "next/link"
 import PropTypes from "prop-types"
 // components
 import Attribution from "../../components/attribution"
@@ -12,39 +11,12 @@ import {
   DataItemValue,
   DataPanel,
 } from "../../components/data-area"
-import { DataGridContainer } from "../../components/data-grid"
 import PagePreamble from "../../components/page-preamble"
-import SortableGrid from "../../components/sortable-grid"
 import Status from "../../components/status"
+import TreatmentTable from "../../components/treatment-table"
 // libs
 import buildBreadcrumbs from "../../libs/breadcrumbs"
 import Request from "../../libs/request"
-
-const treatmentColumns = [
-  {
-    id: "treatment_term_id",
-    title: "Term ID",
-    display: ({ source: treatment }) => {
-      return (
-        <Link href={treatment["@id"]}>
-          <a>{treatment.treatment_term_id}</a>
-        </Link>
-      )
-    },
-  },
-  {
-    id: "treatment_term_name",
-    title: "Term Name",
-  },
-  {
-    id: "treatment_type",
-    title: "Type",
-  },
-  {
-    id: "purpose",
-    title: "Purpose",
-  },
-]
 
 const Tissue = ({ tissue, donors, award, lab, source, treatments }) => {
   return (
@@ -93,9 +65,7 @@ const Tissue = ({ tissue, donors, award, lab, source, treatments }) => {
       {treatments.length > 0 && (
         <>
           <DataAreaTitle>Treatments</DataAreaTitle>
-          <DataGridContainer>
-            <SortableGrid data={treatments} columns={treatmentColumns} />
-          </DataGridContainer>
+          <TreatmentTable treatments={treatments} />
         </>
       )}
       <Attribution award={award} lab={lab} />
@@ -104,26 +74,26 @@ const Tissue = ({ tissue, donors, award, lab, source, treatments }) => {
 }
 
 Tissue.propTypes = {
-  // Technical treatment to display
+  // Tissue sample to display
   tissue: PropTypes.object.isRequired,
-  // Donors associated with the tissue
+  // Donors associated with the sample
   donors: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Award applied to this technical sample
+  // Award applied to this sample
   award: PropTypes.shape({
     "@id": PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  // Lab that submitted this technical sample
+  // Lab that submitted this sample
   lab: PropTypes.shape({
     "@id": PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  // Source lab or source for this technical sample
+  // Source lab or source for this sample
   source: PropTypes.shape({
     "@id": PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  // Treatments associated with the tissue
+  // Treatments associated with the sample
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
