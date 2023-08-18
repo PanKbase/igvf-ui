@@ -28,9 +28,11 @@ import {
   requestDocuments,
   requestDonors,
   requestFiles,
+  requestOntologyTerms,
 } from "../../lib/common-requests";
 import errorObjectToProps from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
+import { splitIlluminaSequenceFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 
 export default function MeasurementSet({
@@ -43,18 +45,8 @@ export default function MeasurementSet({
   attribution = null,
   isJson,
 }) {
-  // Split files array into two arrays: those with illumina_read_type and those without.
-  const [filesWithReadType, filesWithoutReadType] = files.reduce(
-    (acc, file) => {
-      if (file.illumina_read_type) {
-        acc[0].push(file);
-      } else {
-        acc[1].push(file);
-      }
-      return acc;
-    },
-    [[], []]
-  );
+  const { filesWithReadType, filesWithoutReadType } =
+    splitIlluminaSequenceFiles(files);
 
   return (
     <>
@@ -220,7 +212,7 @@ export async function getServerSideProps({ params, req, query }) {
     const uniqueSequencingPlatformPaths = [...new Set(sequencingPlatformPaths)];
     const sequencingPlatforms =
       uniqueSequencingPlatformPaths.length > 0
-        ? await requestFiles(uniqueSequencingPlatformPaths, request)
+        ? await requestOntologyTerms(uniqueSequencingPlatformPaths, request)
         : [];
 
     const breadcrumbs = await buildBreadcrumbs(
