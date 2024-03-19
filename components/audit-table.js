@@ -1,6 +1,5 @@
 // node_modules
 import PropTypes from "prop-types";
-import { Fragment } from "react";
 // components
 import { auditMap } from "./audit";
 import SortableGrid from "./sortable-grid";
@@ -8,39 +7,28 @@ import SortableGrid from "./sortable-grid";
 const auditColumns = [
   {
     id: "audit_level",
-    title: "Audit Level",
+    title: "Severity Level",
     display: ({ source }) => {
-      const filteredSource = source.audit_levels.filter(
-        (audit) => audit !== "INTERNAL_ACTION"
-      );
+      const auditLevel = source.audit_level;
+      const mapping = auditMap[auditLevel];
       return (
-        <div>
-          {filteredSource.map((level) => {
-            const mapping = auditMap[level];
-            return (
-              <Fragment key={level}>
-                <div className="flex items-center justify-start gap-1">
-                  <mapping.Icon className={`h-4 w-4 ${mapping.color}`} />
-                  <div>{mapping.humanReadable}</div>
-                </div>
-              </Fragment>
-            );
-          })}
+        <div className="flex items-center justify-start gap-1">
+          <mapping.Icon className={`h-4 w-4 ${mapping.color}`} />
+          <div>{mapping.humanReadable}</div>
         </div>
       );
     },
-    isSortable: false,
   },
   {
     id: "audit_category",
-    title: "Audit Category",
+    title: "Category",
     display: ({ source }) => source.audit_category,
     isSortable: false,
   },
   {
-    id: "audit_detail",
-    title: "Audit Detail",
-    display: ({ source }) => source.audit_detail,
+    id: "audit_description",
+    title: "Description",
+    display: ({ source }) => source.audit_description,
     isSortable: false,
   },
 ];
@@ -49,7 +37,7 @@ const auditColumns = [
  * Display a sortable table of the given audits.
  */
 export default function AuditTable({ data }) {
-  return <SortableGrid data={data} columns={auditColumns} />;
+  return <SortableGrid data={data} columns={auditColumns} isTotalCountHidden />;
 }
 
 AuditTable.propTypes = {
