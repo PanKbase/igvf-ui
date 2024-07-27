@@ -47,7 +47,7 @@ export default function AuditDoc({ auditDoc, schemas }) {
     <>
       <PagePreamble />
       <p>
-        The IGVF Data and Administration Coordinating Center has established an
+        The PanKbase Data and Administration Coordinating Center has established an
         audit system, utilizing flags, to detect discrepancies in the data.
         While dependencies ensure metadata accuracy within an individual object,
         audits primarily focus on validating metadata between linked objects.

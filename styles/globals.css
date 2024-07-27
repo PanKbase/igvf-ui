@@ -47,16 +47,16 @@
 :root {
   --color-background: #f8f8f8;
 
-  --color-brand: #337788;
-  --color-brand-accent: #666666;
-  --color-brand-highlight: #2a6270;
+  --color-brand: #cd6fab;
+  --color-brand-accent: #7ca6d7;
+  --color-brand-highlight: #a34e8c;
 
   --color-data-background: #ffffff;
   --color-data-header-background: #e0e0e0;
   --color-data-border: #c0c0c0;
   --color-data-list-item-border: #e5e7eb;
   --color-collapse-ctrl-border: #e5e7eb;
-  --color-collapse-ctrl-text: #374151;
+  --color-collapse-ctrl-text: #ba4d9c;
   --color-collapse-ctrl-background: #f3f4f6;
 
   --color-panel-background: #fff;

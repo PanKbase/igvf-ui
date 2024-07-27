@@ -65,7 +65,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://igvfd-dev.demo.igvf.org',
+            'backend_url': 'https://pankbase-dev.demo.pankbase.org',
             'tags': [
             ],
         },
@@ -76,7 +76,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://api.staging.igvf.org',
+            'backend_url': 'https://api.staging.pankbase.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -88,7 +88,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://api.sandbox.igvf.org',
+            'backend_url': 'https://api.sandbox.pankbase.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -100,7 +100,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://api.data.igvf.org',
+            'backend_url': 'https://api.data.pankbase.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -111,7 +111,7 @@ config: Dict[str, Any] = {
 
 @dataclass
 class Common:
-    organization_name: str = 'igvf-dacc'
+    organization_name: str = 'pankbase'
     project_name: str = 'igvf-ui'
     default_region: str = 'us-west-2'
     aws_cdk_version: str = '2.114.1'
@@ -203,4 +203,4 @@ def get_pipeline_config_name_from_branch(branch: str) -> str:
 
 
 def get_backend_url_from_branch(branch: str) -> str:
-    return f'https://igvfd-{branch}.demo.igvf.org'
+    return f'https://pankbase-{branch}.demo.pankbase.org'
