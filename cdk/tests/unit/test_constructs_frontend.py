@@ -59,7 +59,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                         },
                         {
                             'Name': 'BACKEND_URL',
-                            'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                            'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                         }
                     ],
                     'Essential': True,
@@ -95,7 +95,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                 },
                 {
                     'Key': 'branch',
@@ -166,7 +166,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                 },
                 {
                     'Key': 'branch',
@@ -207,7 +207,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                 },
                 {
                     'Key': 'branch',
@@ -240,7 +240,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                 },
                 {
                     'Key': 'branch',
@@ -415,7 +415,7 @@ def test_constructs_frontend_frontend_define_domain_name(stack, instance_type, e
             max_capacity=7,
         )
     )
-    assert frontend.domain_name == 'igvf-ui-some-branch.my.test.domain.org'
+    assert frontend.domain_name == 'pankbase-ui-some-branch.my.test.domain.org'
     old_config = {
         k: v
         for k, v in asdict(config).items()
@@ -455,7 +455,7 @@ def test_constructs_frontend_get_url_prefix():
         tags=[],
     )
     url_prefix = get_url_prefix(config_without_prefix)
-    assert url_prefix == 'igvf-ui-some-branch'
+    assert url_prefix == 'pankbase-ui-some-branch'
     config_with_prefix = Config(
         name='abc',
         branch='some-branch',

@@ -10,7 +10,7 @@ def test_config_exists():
 def test_config_common_dataclass():
     from infrastructure.config import Common
     common = Common()
-    assert common.organization_name == 'igvf-dacc'
+    assert common.organization_name == 'pankbase'
     assert common.project_name == 'igvf-ui'
 
 
@@ -25,7 +25,7 @@ def test_config_config_dataclass():
             ('test', 'tag'),
         ]
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert config.branch == 'xyz-branch'
     assert config.frontend == {}
@@ -47,7 +47,7 @@ def test_config_pipeline_config_dataclass():
             ('xyz', '321'),
         ]
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert config.existing_resources_class == igvf_dev.Resources
     assert config.account_and_region == igvf_dev.US_WEST_2
@@ -67,7 +67,7 @@ def test_config_build_config_from_name():
         backend_url='http://my-specific-endpoint.org',
         frontend={},
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert config.branch == 'my-branch'
     assert config.frontend == {}
@@ -77,12 +77,12 @@ def test_config_build_config_from_name():
         'dev',
         branch='my-branch',
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert config.branch == 'my-branch'
     assert config.frontend
     assert config.name == 'dev'
-    assert config.backend_url == 'https://igvfd-dev.demo.igvf.org'
+    assert config.backend_url == 'https://pankbase-dev.demo.pankbase.org'
 
 
 def test_config_build_config_from_name_demo(mocker):
@@ -102,7 +102,7 @@ def test_config_build_config_from_name_demo(mocker):
         # Overrides.
         frontend={}
     )
-    assert config.backend_url == 'https://igvfd-my-branch.demo.igvf.org'
+    assert config.backend_url == 'https://pankbase-my-branch.demo.pankbase.org'
 
 
 def test_config_build_pipeline_config_from_name():
@@ -114,7 +114,7 @@ def test_config_build_pipeline_config_from_name():
         branch='my-branch',
         pipeline='my-pipeline',
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert ('time-to-live-hours', '60') in config.tags
     assert config.branch == 'my-branch'
@@ -124,7 +124,7 @@ def test_config_build_pipeline_config_from_name():
         'dev',
         branch='my-branch',
     )
-    assert config.common.organization_name == 'igvf-dacc'
+    assert config.common.organization_name == 'pankbase'
     assert config.common.project_name == 'igvf-ui'
     assert config.pipeline == 'DevDeploymentPipelineStack'
     assert config.name == 'dev'
@@ -160,7 +160,7 @@ def test_config_get_raw_config_from_name():
     assert raw_config['branch'] == 'my-branch'
     assert raw_config['frontend']
     assert raw_config['name'] == 'dev'
-    assert raw_config['backend_url'] == 'https://igvfd-dev.demo.igvf.org'
+    assert raw_config['backend_url'] == 'https://pankbase-dev.demo.pankbase.org'
 
 
 def test_config_get_raw_config_from_name_demo():
@@ -194,7 +194,7 @@ def test_config_maybe_add_backend_url():
         maybe_add_backend_url(calculated_config)
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     maybe_add_backend_url(calculated_config)
-    assert calculated_config['backend_url'] == 'https://igvfd-IGVF-my-cool-feature-branch.demo.igvf.org'
+    assert calculated_config['backend_url'] == 'https://pankbase-IGVF-my-cool-feature-branch.demo.pankbase.org'
     calculated_config
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     calculated_config['backend_url'] = 'http://someotherendpoint.org'
@@ -217,7 +217,7 @@ def test_config_fill_in_calculated_config():
         'frontend': {},
         'branch': 'my-branch',
         'name': 'demo',
-        'backend_url': 'https://igvfd-my-branch.demo.igvf.org',
+        'backend_url': 'https://pankbase-my-branch.demo.pankbase.org',
         'tags': [('xyz', '123')]
     }
 
@@ -242,4 +242,4 @@ def test_config_get_backend_url_from_branch():
     from infrastructure.config import get_backend_url_from_branch
     assert get_backend_url_from_branch(
         'IGVF-my-feature-branch-123'
-    ) == 'https://igvfd-IGVF-my-feature-branch-123.demo.igvf.org'
+    ) == 'https://pankbase-IGVF-my-feature-branch-123.demo.pankbase.org'

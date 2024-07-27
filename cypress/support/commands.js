@@ -43,7 +43,7 @@ Cypress.Commands.add("loginAuth0", (username, password, isHomeFirst = true) => {
   cy.get(`[data-testid="navigation-authenticate"]`).click();
 
   // Login on Auth0 through the auth0 sign-in page.
-  cy.origin("auth.igvf.org", { args }, ({ username, password }) => {
+  cy.origin("t2depi.auth0.com", { args }, ({ username, password }) => {
     cy.get("#1-email").type(username);
     cy.get("#1-password").type(password);
     cy.get("button[type=submit]").click();
