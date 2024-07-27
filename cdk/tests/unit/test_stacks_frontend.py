@@ -68,7 +68,7 @@ def test_stacks_frontend_initialize_frontend_stack(config):
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://pankbase-some-test-backend.demo.pankbase.org'
                 },
                 {
                     'Key': 'branch',

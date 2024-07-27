@@ -1,6 +1,6 @@
 {
     "hosted-zone:account=654654139991:domainName=demo.pankbase.org:region=us-west-2": {
-        "Id": "/hostedzone/Z03254935D5QAQ90L5FK",
+        "Id": "/hostedzone/Z00135423IHTQWJ86GYEM",
         "Name": "demo.pankbase.org."
     },
     "vpc-provider:account=920073238245:filter.vpc-id=vpc-0223751116a32c207:region=us-west-2:returnAsymmetricSubnets=true": {
@@ -197,7 +197,7 @@
                         "subnetId": "subnet-006f61261b223ad16",
                         "cidr": "10.4.0.0/20",
                         "availabilityZone": "us-west-2a",
-                        "routeTableId": "subnet-006f61261b223ad16"
+                        "routeTableId": "rtb-0d5f810fbbcbe6b75"
                     },
                     {
                         "subnetId": "subnet-0ae3386d57a44ad95",
@@ -209,7 +209,7 @@
                         "subnetId": "subnet-0821805599b761a04",
                         "cidr": "10.4.32.0/20",
                         "availabilityZone": "us-west-2c",
-                        "routeTableId": "rtb-09365573a9265d9c"
+                        "routeTableId": "rtb-09365573a9265d9ce"
                     }
                 ]
             },
@@ -233,7 +233,7 @@
                         "subnetId": "subnet-07cabe650866de29f",
                         "cidr": "10.4.80.0/20",
                         "availabilityZone": "us-west-2c",
-                        "routeTableId": "rtb-0d87a15e2e0e7b6e"
+                        "routeTableId": "rtb-0d87a15e2e0e7b6ef"
                     }
                 ]
             }
