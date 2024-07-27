@@ -708,12 +708,12 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
             Policies
           </NavigationHrefItem>
           <NavigationHrefItem
-            id="igvf-help"
-            href="/help/about-igvf"
+            id="pankbase-help"
+            href="/help/about-pankbase"
             navigationClick={navigationClick}
             isChildItem
           >
-            IGVF
+            PanKbase
           </NavigationHrefItem>
         </NavigationGroupItem>
 

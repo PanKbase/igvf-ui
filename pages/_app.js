@@ -30,7 +30,7 @@ import "../styles/globals.css";
  * To confirm this banner continues to have the ability to appear, also show this banner on
  * localhost.
  */
-const testServerDomains = ["staging.igvf.org", "localhost"];
+const testServerDomains = ["staging.pankbase.org", "localhost"];
 
 /**
  * Display a warning banner to users when they browse the sandbox server. Allow the user to close
@@ -50,7 +50,7 @@ function TestServerWarning() {
     return (
       <div className="flex justify-center gap-1 border-b border-red-700 bg-red-600 p-1 text-sm text-white dark:border-red-700 dark:bg-red-800 dark:text-gray-100">
         <div>
-          This is the IGVF Sandbox for testing submissions. All files submitted
+          This is the PanKbase Sandbox for testing submissions. All files submitted
           here will be deleted after 30 days.
         </div>
         <button
@@ -114,7 +114,7 @@ function Site({ Component, pageProps, authentication }) {
         <title>{SITE_TITLE}</title>
         <meta
           name="description"
-          content="Portal for the Impact of Genomic Variation on Function consortium"
+          content="Portal for the PanKbase consortium"
         />
         <meta name="theme-color" content={BRAND_COLOR} />
         <link

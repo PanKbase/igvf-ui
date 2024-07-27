@@ -78,7 +78,7 @@ FileSetChartSection.propTypes = {
  * labels.
  */
 const FILESET_RELEASE_TITLE = "Data Sets Released";
-const FILESET_STATUS_TITLE = "Data Sets Produced by IGVF Labs";
+const FILESET_STATUS_TITLE = "Data Sets Produced by PanKbase Labs";
 
 export default function Home({ fileSets, fileCount, sampleCount }) {
   const releaseData = convertFileSetsToReleaseData(fileSets);
@@ -86,14 +86,10 @@ export default function Home({ fileSets, fileCount, sampleCount }) {
   return (
     <div className="@container/home">
       <HomeTitle />
-      <p className="my-8">
-        The NHGRI is funding this collaborative program that brings together
-        teams of investigators who will use state-of-the-art experimental and
-        computational approaches to model, predict, characterize and map genome
-        function, how genome function shapes phenotype, and how these processes
-        are affected by genomic variation. These joint efforts will produce a
-        catalog of the impact of genomic variants on genome function and
-        phenotypes.
+ 	<p className="my-8">
+	With the advent of single cell sequencing and multiplexed imaging technologies, several pancreas and islet phenotyping efforts in the United States and Europe are generating multimodal datasets, but information across different resources is fragmented. There is an unmet need in the pancreas and diabetes research community to connect and integrate information generated at the tissue and single cell level by complementary programs in order to define phenotypes and spatial relationships of pancreatic cell types and how they change developmentally and in diseases such as type 1 diabetes (T1D). Through aggregation and integration of diverse data generated from these unique pancreatic tissues and islets, we will build a pancreas knowledgebase (PanKbase) as the third pillar of the <a href="https://hirnetwork.org/" target="_blank">Human Islet Research Network (HIRN)</a> community along with the <a href="https://hirnetwork.org/coordinating_group/hirec" target="_blank">Human Islet Research Enhancement Center (HIREC)</a> and <a href="https://hpap.pmacs.upenn.edu" target="_blank">Human Pancreas Analysis Program (HPAP)</a>. The knowledge housed and built within PanKbase will be disseminated to the broader scientific community based on FAIR principles. Better access to and integration of these rich datasets will accelerate progress toward understanding T1D etiology and pathophysiology and lead to new diagnostic tool development, and transformative changes in diabetes prevention and care. Our project aspires to capitalize on features of the <a href="https://www.pancreatlas.org/" target="_blank">Pancreatlas</a> and <a href="https://gkb.dcmb.med.umich.edu/" target="_blank">GenomicKB</a> platform to build PanKbase that will connect and integrate pancreas and islet datasets generated through international tissue mapping efforts. In addition, PanKbase will have an analytics component that will enable the generation of new insights into molecular signatures of T1D and importantly facilitate cross-organ analysis (for example, pancreas and immune organs) for different stages of T1D development. We will make these insights openly accessible to all, including: basic scientists, pharmaceutical industry, clinicians designing and conducting clinical trials to prevent and treat T1D, and the machine learning community. PanKbase-fostered cross-disciplinary collaborations will promote innovation, with the ultimate aim of improving the lives of people with T1D.
+       </p>
+</body>  
       </p>
       <div className="my-4 @xl/home:flex @xl/home:gap-4">
         <Statistic

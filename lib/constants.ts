@@ -27,18 +27,18 @@ export const UI_VERSION = publicRuntimeConfig.UI_VERSION as string;
  * Auth0
  */
 export const AUTH0_CLIENT_ID: string = "xaO8MMn04qlT3TUnhczmKWZgBzqRySDm";
-export const AUTH0_ISSUER_BASE_DOMAIN: string = "auth.igvf.org";
+export const AUTH0_ISSUER_BASE_DOMAIN: string = "t2depi.auth0.com";
 export const AUTH0_AUDIENCE: string = "https://igvf-dacc.us.auth0.com/api/v2/";
 
 /**
  * Site title
  */
-export const SITE_TITLE: string = "IGVF";
+export const SITE_TITLE: string = "PanKbase";
 
 /**
  * Brand color
  */
-export const BRAND_COLOR: string = "#337788";
+export const BRAND_COLOR: string = "#cd6fab";
 
 /**
  * Path for authorization error page

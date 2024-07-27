@@ -51,10 +51,10 @@ export function Email() {
     <div>
       <a
         className="block"
-        href="mailto:igvf-portal-help@lists.stanford.edu"
+        href="mailto:help@pankbase.org"
         target="_blank"
         rel="noreferrer noopener"
-        aria-label="Email the IGVF help desk"
+        aria-label="Email the PanKbase help desk"
       >
         <EnvelopeIcon className="h-6 w-6 fill-brand" />
       </a>
@@ -70,10 +70,10 @@ export function Twitter() {
     <div>
       <a
         className="block"
-        href="https://twitter.com/IGVFConsortium"
+        href="https://twitter.com/PanKbase"
         target="_blank"
         rel="noreferrer noopener"
-        aria-label="IGVF Consortium on X"
+        aria-label="PanKbase Consortium on X"
       >
         <Icon.Twitter className="h-6 w-6" />
       </a>

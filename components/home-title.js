@@ -5,7 +5,7 @@ export default function HomeTitle() {
   return (
     <h1 className="relative">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 774.41 146.33">
-        <title>Impact of Genomic Variation on Function</title>
+        <title>PanKbase</title>
         <g className="fill-gray-400 dark:fill-gray-600">
           <path
             d="M243.84,45.85c0,1.09-0.19,2.1-0.57,3.03c-0.38,0.93-0.91,1.73-1.59,2.41c-0.68,0.68-1.49,1.21-2.44,1.59
@@ -183,20 +183,20 @@ export default function HomeTitle() {
       </svg>
       <div className="absolute right-0 top-0 flex gap-1">
         <a
-          href="https://catalog-dev.igvf.org/"
+          href="https://hirnetwork.org/"
           target="_blank"
           rel="noopener noreferrer"
           className="block rounded-full bg-[#85abd6] px-3 py-0 text-sm text-white no-underline @lg/home:py-1"
         >
-          Catalog
+          HIRN
         </a>
         <a
-          href="https://igvf.org/"
+          href="https://wiki.pankbase.org/"
           target="_blank"
           rel="noopener noreferrer"
           className="block rounded-full bg-brand px-3 py-0 text-sm text-white no-underline @lg/home:py-1"
         >
-          IGVF Consortium
+          PanKbase Wiki
         </a>
       </div>
     </h1>

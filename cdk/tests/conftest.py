@@ -139,7 +139,7 @@ def config():
             'desired_count': 1,
             'max_capacity': 4,
         },
-        backend_url='https://igvfd-some-test-backend.demo.igvf.org',
+        backend_url='https://pankbase-some-test-backend.demo.pankbase.org',
         tags=[
             ('test', 'tag')
         ],
