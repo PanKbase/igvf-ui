@@ -442,7 +442,6 @@ NavigationGroupExpandIcon.propTypes = {
 function NavigationGroupItem({
   id,
   title,
-  icon,
   isGroupOpened,
   handleGroupClick,
   children,
@@ -454,7 +453,6 @@ function NavigationGroupItem({
         onClick={() => handleGroupClick(id)}
         isNarrowNav={false}
       >
-        <NavigationIcon>{icon}</NavigationIcon>
         {title}
         <NavigationGroupExpandIcon isGroupOpened={isGroupOpened} />
       </NavigationButton>
@@ -470,8 +468,6 @@ NavigationGroupItem.propTypes = {
   id: PropTypes.string.isRequired,
   // Displayed title of the navigation group item
   title: PropTypes.string.isRequired,
-  // Component that renders the icon for this item
-  icon: PropTypes.node.isRequired,
   // True if the parent navigation item is open
   isGroupOpened: PropTypes.bool.isRequired,
   // Function to call when the user clicks the parent navigation item
@@ -607,77 +603,35 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           handleGroupClick={handleParentClick}
         >
           <NavigationHrefItem
-            id="raw-datasets"
-            href="/search/?type=MeasurementSet"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Raw Data Sets
-          </NavigationHrefItem>
-          <NavigationHrefItem
             id="processed-datasets"
-            href="/search/?type=AnalysisSet"
+            href="/search/?type=AnalysisSet&file_set_type=intermediate+analysis"
             navigationClick={navigationClick}
             isChildItem
           >
-            Processed Data Sets
+            Processed Data
           </NavigationHrefItem>
           <NavigationHrefItem
-            id="files"
-            href="/search/?type=File"
+            id="analysis-resources"
+            href="/search/?type=AnalysisSet&file_set_type=integrated+analysis"
             navigationClick={navigationClick}
             isChildItem
           >
-            Files
+            Analysis Resources
+          </NavigationHrefItem>
+          <NavigationHrefItem
+            id="analysis-results"
+            href="/search/?type=AnalysisSet&file_set_type=principal+analysis"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            Analysis Results
           </NavigationHrefItem>
         </NavigationGroupItem>
-
         <NavigationGroupItem
-          id="methodology"
-          title="Methodology"
+          id="methods"
+          title="Methods"
           icon={<Icon.Methodology />}
-          isGroupOpened={openedParents.includes("methodology")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="experimental-standards"
-            href="/methodology/experimental_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Experimental Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="computational-standards"
-            href="/methodology/computational_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Computational Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="genome-references"
-            href="/search?type=CuratedSet&file_set_type=genome"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Genome References
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="audits"
-            href="/audits"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Audit Documentation
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="data-model"
-          title="Data Model"
-          icon={<Icon.DataModel />}
-          isGroupOpened={openedParents.includes("data-model")}
+          isGroupOpened={openedParents.includes("methods")}
           handleGroupClick={handleParentClick}
         >
           <NavigationHrefItem
@@ -688,8 +642,47 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           >
             Schemas
           </NavigationHrefItem>
+          <NavigationHrefItem
+            id="donor-meta-data"
+            href="/methods/donor_meta_data"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            Donor meta-data
+          </NavigationHrefItem>
+          <NavigationHrefItem
+            id="data-processing"
+            href="/methods/data_processing"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            Data processing
+          </NavigationHrefItem>
+          <NavigationHrefItem
+            id="external-resources"
+            href="/methods/external_resources"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            External resources
+          </NavigationHrefItem>
+          <NavigationHrefItem
+            id="file-formats"
+            href="/methods/file_formats"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            File formats
+          </NavigationHrefItem>
+          <NavigationHrefItem
+            id="audits"
+            href="/audits"
+            navigationClick={navigationClick}
+            isChildItem
+          >
+            Audit Documentation
+          </NavigationHrefItem>
         </NavigationGroupItem>
-
         <NavigationGroupItem
           id="about"
           title="About"
@@ -774,9 +767,6 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           </NavigationGroupItem>
         ) : (
           <NavigationSignInItem id="authenticate">
-            <NavigationIcon>
-              <Icon.UserSignedOut />
-            </NavigationIcon>
             Sign In
           </NavigationSignInItem>
         )}

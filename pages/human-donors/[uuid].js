@@ -12,6 +12,7 @@ import {
   DataItemValue,
   DataPanel,
 } from "../../components/data-area";
+import { requestOntologyTerms } from "../../lib/common-requests";
 import DocumentTable from "../../components/document-table";
 import { EditableItem } from "../../components/edit";
 import JsonDisplay from "../../components/json-display";
@@ -117,7 +118,6 @@ export async function getServerSideProps({ params, req, query }) {
         request
       );
     }
-
     let relatedDonors = [];
     if (donor.related_donors?.length > 0) {
       const relatedDonorPaths = donor.related_donors.map(
@@ -136,11 +136,15 @@ export async function getServerSideProps({ params, req, query }) {
       req.headers.cookie
     );
     const attribution = await buildAttribution(donor, req.headers.cookie);
+    const diabetesStatus = donor.diabetes_status.length > 0
+      ? await requestOntologyTerms(donor.diabetes_status, request)
+          : [];
     return {
       props: {
         donor,
         phenotypicFeatures,
         relatedDonors,
+        diabetesStatus,
         documents,
         pageContext: { title: donor.accession },
         breadcrumbs,

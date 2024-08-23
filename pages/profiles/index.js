@@ -21,7 +21,6 @@ import {
   SchemaSearchField,
   SearchAndReportType,
 } from "../../components/profiles";
-import SchemaIcon from "../../components/schema-icon";
 import { Tooltip, TooltipRef, useTooltip } from "../../components/tooltip";
 // lib
 import buildBreadcrumbs from "../../lib/breadcrumbs";
@@ -231,7 +230,6 @@ function SubTree({
         className="flex items-center gap-1"
         data-testid={`schema-${toShishkebabCase(title)}`}
       >
-        <SchemaIcon type={objectType} />
         {schema ? (
           <>
             <Link
