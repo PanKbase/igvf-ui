@@ -65,12 +65,6 @@ export function DonorDataItems({ item, children }) {
           <DataItemValue>{item.diabetes_status_description}</DataItemValue>
         </>
       )}
-      {item.living_donor && (
-        <>
-          <DataItemLabel>Living Donor</DataItemLabel>
-          <DataItemValue>{item.living_donor}</DataItemValue>
-        </>
-      )}
       {item.biological_sex && (
         <>
           <DataItemLabel>Biological Sex</DataItemLabel>
@@ -115,34 +109,16 @@ export function DonorDataItems({ item, children }) {
           <DataItemValue>{item.genetic_ethnicities}</DataItemValue>
         </>
       )}
-      {item.aab_gada && (
-        <>
-          <DataItemLabel>AAB GADA</DataItemLabel>
-          <DataItemValue>{item.aab_gada}</DataItemValue>
-        </>
-      )}
       {item.aab_gada_value && (
         <>
           <DataItemLabel>AAB GADA Value</DataItemLabel>
           <DataItemValue>{item.aab_gada_value}</DataItemValue>
         </>
       )}
-      {item.aab_ia2 && (
-        <>
-          <DataItemLabel>AAB IA2</DataItemLabel>
-          <DataItemValue>{item.aab_ia2}</DataItemValue>
-        </>
-      )}
       {item.aab_ia2_value && (
         <>
           <DataItemLabel>AAB IA2 Value</DataItemLabel>
           <DataItemValue>{item.aab_ia2_value}</DataItemValue>
-        </>
-      )}
-      {item.aab_znt8 && (
-        <>
-          <DataItemLabel>AAB ZNT8</DataItemLabel>
-          <DataItemValue>{item.aab_znt8}</DataItemValue>
         </>
       )}
       {item.aab_znt8_value && (
@@ -181,12 +157,6 @@ export function DonorDataItems({ item, children }) {
           <DataItemValue>{item.hospital_stay}</DataItemValue>
         </>
       )}
-      {item.pancreas_tissue_available && (
-        <>
-          <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
-          <DataItemValue>{item.pancreas_tissue_available}</DataItemValue>
-        </>
-      )}
       {item.other_tissues_available && (
         <>
           <DataItemLabel>Other Tissues Available</DataItemLabel>
@@ -197,6 +167,48 @@ export function DonorDataItems({ item, children }) {
         <>
           <DataItemLabel>Phenotypic Features</DataItemLabel>
           <DataItemValue>{item.phenotypic_features}</DataItemValue>
+        </>
+      )}
+      {item.taxa && (
+        <>
+          <DataItemLabel>Taxa</DataItemLabel>
+          <DataItemValue>{item.taxa}</DataItemValue>
+        </>
+      )}
+      {item.ethnicities?.length > 0 && (
+        <>
+          <DataItemLabel>Ethnicities</DataItemLabel>
+          <DataItemValue>{item.ethnicities.join(", ")}</DataItemValue>
+        </>
+      )}
+      {item.sex && (
+        <>
+          <DataItemLabel>Sex</DataItemLabel>
+          <DataItemValue>{item.sex}</DataItemValue>
+        </>
+      )}
+      {item.aliases?.length > 0 && (
+        <>
+          <DataItemLabel>Aliases</DataItemLabel>
+          <DataItemValue>
+            <AliasList aliases={item.aliases} />
+          </DataItemValue>
+        </>
+      )}
+      {item.identifiers?.length > 0 && (
+        <>
+          <DataItemLabel>Identifiers</DataItemLabel>
+          <DataItemValue>{item.identifiers.join(", ")}</DataItemValue>
+        </>
+      )}
+      {item.url && (
+        <>
+          <DataItemLabel>URL</DataItemLabel>
+          <DataItemValueUrl>
+            <a href={item.url} target="_blank" rel="noopener noreferrer">
+              {item.url}
+            </a>
+          </DataItemValueUrl>
         </>
       )}
       {children}
@@ -215,7 +227,6 @@ DonorDataItems.commonProperties = [
   "bmi",
   "diabetes_status",
   "diabetes_status_description",
-  "living_donor",
   "biological_sex",
   "cause_of_death",
   "donation_type",
@@ -223,18 +234,14 @@ DonorDataItems.commonProperties = [
   "collections",
   "dbxrefs",
   "genetic_ethnicities",
-  "aab_gada",
   "aab_gada_value",
-  "aab_ia2",
   "aab_ia2_value",
-  "aab_znt8",
   "aab_znt8_value",
   "c_peptide",
   "diabetes_status_hba1c",
   "hba1c",
   "hla_typing",
   "hospital_stay",
-  "pancreas_tissue_available",
   "other_tissues_available",
   "phenotypic_features",
   "taxa",
@@ -671,7 +678,7 @@ export function FileDataItems({ item, fileSet = null, children }) {
       <DataItemLabel>File Format</DataItemLabel>
       <DataItemValue>{item.file_format}</DataItemValue>
       <DataItemLabel>Content Type</DataItemLabel>
-      <DataItemValue>{item.content_type}</DataItemValue>
+      <DataItemValue>{item.content_type}</DataItemLabel>
       {item.content_summary && (
         <>
           <DataItemLabel>Content Summary</DataItemLabel>
