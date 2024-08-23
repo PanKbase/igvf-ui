@@ -6,6 +6,7 @@
   html,
   body {
     height: 100vh;
+    font-family: 'Open Sans', sans-serif;
   }
 
   a {
@@ -43,17 +44,16 @@
     min-height: 2.5rem;
   }
 }
-
 :root {
   --color-background: #f8f8f8;
 
-  --color-brand: #cd6fab;
-  --color-brand-accent: #7ca6d7;
-  --color-brand-highlight: #a34e8c;
+  --color-brand: #219197;
+  --color-brand-accent: #94c95e;
+  --color-brand-highlight: #0c5357;
 
   --color-data-background: #ffffff;
   --color-data-header-background: #e0e0e0;
-  --color-data-border: #c0c0c0;
+  --color-data-border: #dddddd;
   --color-data-list-item-border: #e5e7eb;
   --color-collapse-ctrl-border: #e5e7eb;
   --color-collapse-ctrl-text: #ba4d9c;
@@ -62,8 +62,8 @@
   --color-panel-background: #fff;
   --color-panel-border: #d0d0d0;
 
-  --color-button-primary-background: #4f66a7;
-  --color-button-secondary-background: transparent;
+  --color-button-primary-background: #219197;
+  --color-button-secondary-background: #94c95e;
   --color-button-warning-background: #990f12;
   --color-button-selected-background: #d3dfff;
   --color-button-primary-border: #384977;
@@ -75,18 +75,18 @@
   --color-button-warning-label: #ffffff;
   --color-button-selected-label: #000000;
 
-  --color-button-primary-background-disabled: #a6b7e6;
+  --color-button-primary-background-disabled: #dddddd;
   --color-button-secondary-background-disabled: transparent;
   --color-button-warning-background-disabled: #b26b6c;
   --color-button-selected-background-disabled: transparent;
   --color-button-primary-border-disabled: #7f80bc;
-  --color-button-secondary-border-disabled: #b1bad3;
+  --color-button-secondary-border-disabled: #2D2E2F;
   --color-button-warning-border-disabled: #804041;
-  --color-button-selected-border-disabled: #b1bad3;
+  --color-button-selected-border-disabled: #2D2E2F;
   --color-button-primary-label-disabled: #e8e8e8;
-  --color-button-secondary-label-disabled: #b1bad3;
+  --color-button-secondary-label-disabled: #2D2E2F;
   --color-button-warning-label-disabled: #d8d8d8;
-  --color-button-selected-label-disabled: #b1bad3;
+  --color-button-selected-label-disabled: #2D2E2F;
 
   --color-button-audit-open-background: #d1fae5;
   --color-button-audit-closed-background: #ffffff;
@@ -104,18 +104,18 @@
   --color-audit-not-compliant-background: #ffd5b2;
   --color-audit-internal-action-background: #b2d6ff;
 
-  --color-facet-group-button-background: #f0e7ca;
-  --color-facet-group-button-selected-background: #bfa678;
-  --color-facet-group-button-border: #998868;
-  --color-facet-group-button-selected-border: #998868;
-  --color-facet-group-icon-background: #000000;
-  --color-facet-group-icon-stroke: #000000;
-  --color-facet-group-button-selected-text: #000000;
+  --color-facet-group-button-background: #219197;
+  --color-facet-group-button-selected-background: #94c95e;
+  --color-facet-group-button-border: #2D2E2F;
+  --color-facet-group-button-selected-border: #2D2E2F;
+  --color-facet-group-icon-background: #2D2E2F;
+  --color-facet-group-icon-stroke: #2D2E2F;
+  --color-facet-group-button-selected-text: #2D2E2F;
   --color-facet-group-button-border: #d1d5db;
-  --color-facet-group-button-text: #000000;
+  --color-facet-group-button-text: #2D2E2F;
 
-  --color-facet-title-background: #b2d0de;
-  --color-facet-title-text: #000000;
+  --color-facet-title-background: #219197;
+  --color-facet-title-text: #2D2E2F;
 
   --color-facet-tag-background: #a7f3d0;
   --color-facet-tag-border: #34d399;
@@ -140,7 +140,7 @@
   --color-tab-hover-border: #bfdbfe;
   --color-tab-title-selected-text: #2563eb;
   --color-tab-title-unselected-text: #1f2937;
-  --color-tab-title-disabled-text: #d1d5db;
+  --color-tab-title-disabled-text: #000000;
   --color-tab-title-hover-text: #1f2937;
 
   --color-json-panel-border: #d1d5db;
@@ -205,7 +205,7 @@
 
   --color-data-title: #6b7280;
   --color-data-label: #6b7280;
-  --color-data-value: #000000;
+  --color-data-value: #2D2E2F;
 
   --color-tooltip-code-background: #9ca3af;
   --color-tooltip-code-text: #000000;
@@ -394,7 +394,11 @@
 }
 
 a {
-  @apply underline;
+  color: var(--color-brand); /* Primary green for links */
+  text-decoration: none;
+}
+a:hover {
+    color: var(--color-brand-highlight); /* Highlight color for link hover */
 }
 
 /**
