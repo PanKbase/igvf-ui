@@ -12,6 +12,7 @@ import {
   DataItemValue,
   DataPanel,
 } from "../../components/data-area";
+import { requestOntologyTerms } from "../../lib/common-requests";
 import DocumentTable from "../../components/document-table";
 import { EditableItem } from "../../components/edit";
 import JsonDisplay from "../../components/json-display";
@@ -36,6 +37,8 @@ export default function HumanDonor({
   donor,
   phenotypicFeatures,
   relatedDonors,
+  diabetesStatus,
+  otherTissue,
   documents,
   attribution = null,
   isJson,
@@ -52,8 +55,8 @@ export default function HumanDonor({
         <ObjectPageHeader item={donor} isJsonFormat={isJson} />
         <JsonDisplay item={donor} isJsonFormat={isJson}>
           <DataPanel>
-            <DataArea>
-              <DonorDataItems item={donor} />
+          <DataArea>
+              <DonorDataItems item={donor} diabetesStatus={diabetesStatus} otherTissue={otherTissue}/>
               {donor.human_donor_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Identifiers</DataItemLabel>
@@ -90,6 +93,10 @@ HumanDonor.propTypes = {
   donor: PropTypes.object.isRequired,
   // Phenotypic features associated with human donor
   phenotypicFeatures: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Other Diabetes Status associated with human donor
+  diabetesStatus: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Other Tissue associated with human donor
+  otherTissue: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Related donors associated with human donor
   relatedDonors: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Documents associated with human donor
@@ -117,7 +124,6 @@ export async function getServerSideProps({ params, req, query }) {
         request
       );
     }
-
     let relatedDonors = [];
     if (donor.related_donors?.length > 0) {
       const relatedDonorPaths = donor.related_donors.map(
@@ -136,11 +142,19 @@ export async function getServerSideProps({ params, req, query }) {
       req.headers.cookie
     );
     const attribution = await buildAttribution(donor, req.headers.cookie);
+    const diabetesStatus = donor.diabetes_status.length > 0
+      ? await requestOntologyTerms(donor.diabetes_status, request)
+          : [];
+    const otherTissue = donor.other_tissues_available.length > 0
+      ? await requestOntologyTerms(donor.other_tissues_available, request)
+          : [];
     return {
       props: {
         donor,
         phenotypicFeatures,
         relatedDonors,
+        diabetesStatus,
+        otherTissue,
         documents,
         pageContext: { title: donor.accession },
         breadcrumbs,
