@@ -93,6 +93,8 @@ HumanDonor.propTypes = {
   donor: PropTypes.object.isRequired,
   // Phenotypic features associated with human donor
   phenotypicFeatures: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Phenotypic features associated with human donor
+  diabetesStatus: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Related donors associated with human donor
   relatedDonors: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Documents associated with human donor
