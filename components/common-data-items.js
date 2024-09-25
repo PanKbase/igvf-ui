@@ -119,7 +119,7 @@ export function DonorDataItems({ item, diabetesStatus = [], children }) {
           <DataItemValue>{item.living_donor ? "true" : "false"}</DataItemValue>
         </>
       )}
-      {diabetesStatus.length && (
+      {diabetesStatus.length > 0 && (
         <>
           <DataItemLabel>Diabetes Status</DataItemLabel>
           <DataItemValue>
