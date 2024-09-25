@@ -35,7 +35,7 @@ import { dataSize, truthyOrZero } from "../lib/general";
 /**
  * Display the data items common to all donor-derived objects.
  */
-export function DonorDataItems({ item, diabetesStatus = [], children }) {
+export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], children }) {
   return (
     <>
       {/* Donor Identification */}
@@ -126,7 +126,7 @@ export function DonorDataItems({ item, diabetesStatus = [], children }) {
           <SeparatedList>
               {diabetesStatus.map((status) => (
               <Link key={status["@id"]} href={status["@id"]}>
-              {status["@id"]}
+	      {status.term_id}
               </Link>
               ))}
           </SeparatedList>
@@ -248,15 +248,20 @@ export function DonorDataItems({ item, diabetesStatus = [], children }) {
           </DataItemValue>
         </>
       )}
-      {item.other_tissues_available && (
+      {otherTissue.length > 0 && (
         <>
           <DataItemLabel>Other Tissues Available</DataItemLabel>
-              <DataItemValue>
-              {item.other_tissues_available}
-              </DataItemValue>
+          <DataItemValue>
+          <SeparatedList>
+              {otherTissue.map((tissue) => (
+              <Link key={tissue["@id"]} href={tissue["@id"]}>
+              {tissue["@id"]}
+              </Link>
+              ))}
+          </SeparatedList>
+          </DataItemValue>
         </>
       )}
-
       {/* Supplementary Information */}
       {item.phenotypic_features && (
         <>
@@ -320,6 +325,7 @@ export function DonorDataItems({ item, diabetesStatus = [], children }) {
 DonorDataItems.propTypes = {
    item: PropTypes.object.isRequired,
    diabetesStatus: PropTypes.arrayOf(PropTypes.object),
+   otherTissue: PropTypes.arrayOf(PropTypes.object),
 };
 
 DonorDataItems.commonProperties = [
@@ -349,7 +355,6 @@ DonorDataItems.commonProperties = [
   "aab_znt8_value",
   "aab_znt8",
   "hla_typing",
-  "other_tissues_available",
   "phenotypic_features",
   "description",
   "collections",

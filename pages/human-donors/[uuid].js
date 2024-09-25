@@ -38,6 +38,7 @@ export default function HumanDonor({
   phenotypicFeatures,
   relatedDonors,
   diabetesStatus,
+  otherTissue,
   documents,
   attribution = null,
   isJson,
@@ -55,7 +56,7 @@ export default function HumanDonor({
         <JsonDisplay item={donor} isJsonFormat={isJson}>
           <DataPanel>
           <DataArea>
-              <DonorDataItems item={donor} />
+              <DonorDataItems item={donor} diabetesStatus={diabetesStatus} otherTissue={otherTissue}/>
               {donor.human_donor_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Identifiers</DataItemLabel>
@@ -70,7 +71,6 @@ export default function HumanDonor({
               )}
             </DataArea>
           </DataPanel>
-          <DonorDataItems item={donor} diabetesStatus={diabetesStatus} />
           {phenotypicFeatures.length > 0 && (
             <PhenotypicFeatureTable phenotypicFeatures={phenotypicFeatures} />
           )}
@@ -93,8 +93,10 @@ HumanDonor.propTypes = {
   donor: PropTypes.object.isRequired,
   // Phenotypic features associated with human donor
   phenotypicFeatures: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Phenotypic features associated with human donor
+  // Other Diabetes Status associated with human donor
   diabetesStatus: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Other Tissue associated with human donor
+  otherTissue: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Related donors associated with human donor
   relatedDonors: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Documents associated with human donor
@@ -143,12 +145,16 @@ export async function getServerSideProps({ params, req, query }) {
     const diabetesStatus = donor.diabetes_status.length > 0
       ? await requestOntologyTerms(donor.diabetes_status, request)
           : [];
+    const otherTissue = donor.other_tissues_available.length > 0
+      ? await requestOntologyTerms(donor.other_tissues_available, request)
+          : [];
     return {
       props: {
         donor,
         phenotypicFeatures,
         relatedDonors,
         diabetesStatus,
+        otherTissue,
         documents,
         pageContext: { title: donor.accession },
         breadcrumbs,
