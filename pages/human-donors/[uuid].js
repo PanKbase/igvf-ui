@@ -37,6 +37,7 @@ export default function HumanDonor({
   donor,
   phenotypicFeatures,
   relatedDonors,
+  diabetesStatus,
   documents,
   attribution = null,
   isJson,
@@ -53,7 +54,7 @@ export default function HumanDonor({
         <ObjectPageHeader item={donor} isJsonFormat={isJson} />
         <JsonDisplay item={donor} isJsonFormat={isJson}>
           <DataPanel>
-            <DataArea>
+          <DataArea>
               <DonorDataItems item={donor} />
               {donor.human_donor_identifiers?.length > 0 && (
                 <>
@@ -69,6 +70,7 @@ export default function HumanDonor({
               )}
             </DataArea>
           </DataPanel>
+          <DonorDataItems item={donor} diabetesStatus={diabetesStatus} />
           {phenotypicFeatures.length > 0 && (
             <PhenotypicFeatureTable phenotypicFeatures={phenotypicFeatures} />
           )}
