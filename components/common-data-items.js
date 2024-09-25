@@ -255,7 +255,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <SeparatedList>
               {otherTissue.map((tissue) => (
               <Link key={tissue["@id"]} href={tissue["@id"]}>
-              {tissue["@id"]}
+              {tissue.term_id}
               </Link>
               ))}
           </SeparatedList>
