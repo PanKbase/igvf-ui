@@ -64,9 +64,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
         <>
           <DataItemLabel>Genetic Sex</DataItemLabel>
           <DataItemValue>
-            {item.biological_sex !== "unspecified"
-              ? item.biological_sex
-              : "Value not specified"}
+            {item.biological_sex}
           </DataItemValue>
         </>
       )}
@@ -89,10 +87,10 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
         </>
       )}
       {/* Genetic and Ethnic Information */}
-      {item.genetic_ethnicities && (
+      {item.genetic_ethnicities?.length > 0 && (
         <>
           <DataItemLabel>Predicted Genetic Ancestry</DataItemLabel>
-          <DataItemValue>{item.genetic_ethnicities}</DataItemValue>
+          <DataItemValue>{item.genetic_ethnicities(", ")}</DataItemValue>
         </>
       )}
       {item.ethnicities?.length > 0 && (
@@ -111,6 +109,18 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
         <>
           <DataItemLabel>Diabetes Duration (years)</DataItemLabel>
           <DataItemValue>{item.diabetes_duration}</DataItemValue>
+        </>
+      )}
+      {item.family_history_of_diabetes !== undefined && (
+        <>
+          <DataItemLabel>Family History of Diabetes</DataItemLabel>
+          <DataItemValue>{item.family_history_of_diabetes}</DataItemValue>
+        </>
+      )}
+      {item.diabetes_duration !== undefined && (
+        <>
+          DataItemLabel>Relationship Type</DataItemLabel>
+          <DataItemValue>{item.family_history_of_diabetes_relationship}</DataItemValue>
         </>
       )}
       {item.living_donor !== undefined && (
@@ -139,7 +149,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.diabetes_status_description}</DataItemValue>
         </>
       )}
-      {item.diabetes_status_hba1c && (
+      {item.diabetes_status_hba1c !== undefined && (
         <>
           <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
           <DataItemValue>{item.diabetes_status_hba1c}</DataItemValue>
@@ -157,7 +167,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.c_peptide}</DataItemValue>
         </>
       )}
-      {item.cause_of_death && (
+      {item.cause_of_death !== undefined && (
         <>
           <DataItemLabel>Cause of Death</DataItemLabel>
           <DataItemValue>{item.cause_of_death}</DataItemValue>
@@ -175,7 +185,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.hospital_stay}</DataItemValue>
         </>
       )}
-      {item.donation_type && (
+      {item.donation_type !== undefined && (
         <>
           <DataItemLabel>Donation Type</DataItemLabel>
           <DataItemValue>{item.donation_type}</DataItemValue>
@@ -228,7 +238,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       <DataAreaTitle>HLA Typing</DataAreaTitle>
       <DataPanel>
       <DataArea>
-      {item.hla_typing && (
+      {item.hla_typing !== undefined && (
         <>
           <DataItemLabel>HLA Typing</DataItemLabel>
           <DataItemValue>{item.hla_typing}</DataItemValue>
@@ -263,13 +273,13 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
         </>
       )}
       {/* Supplementary Information */}
-      {item.phenotypic_features && (
+      {item.phenotypic_features !== undefined && (
         <>
           <DataItemLabel>Phenotypic Features</DataItemLabel>
           <DataItemValue>{item.phenotypic_features}</DataItemValue>
         </>
       )}
-      {item.description && (
+      {item.description !== undefined && (
         <>
           <DataItemLabel>Description</DataItemLabel>
           <DataItemValue>{item.description}</DataItemValue>
@@ -305,7 +315,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.identifiers.join(", ")}</DataItemValue>
         </>
       )}
-      {item.url && (
+      {item.url !== undefined && (
         <>
           <DataItemLabel>URL</DataItemLabel>
           <DataItemValueUrl>
