@@ -5,7 +5,6 @@
 // node_modules
 import _ from "lodash";
 import Image from "next/image";
-import Link from "next/link";
 import PropTypes from "prop-types";
 /* istanbul ignore file */
 
@@ -30,7 +29,7 @@ const Icon = {
       <polygon points="10,3.6 11.4,6.5 14.4,6.9 12.2,9 12.7,12.1 10,10.6 7.3,12.1 7.8,9 5.6,6.9 8.6,6.5 " />
     </svg>
   ),
-  Brand: ({ className = null, testid = "icon-brand" }) => (
+  Brand: () => (
     <Image
       src={`/collections/pkb.svg`}
       alt={`PanKbase Logo`}
