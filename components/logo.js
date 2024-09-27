@@ -5,7 +5,7 @@ export function Logo() {
   return (
     <div className="logo-container">
       {/* Add your logo content here */}
-      <img src="/collections/pkb-4.svg" alt="Site Logo" className="logo-image" />
+      <img src="../public/collections/pkb-4.svg" alt="Site Logo" className="logo-image" />
     </div>
   );
 }
