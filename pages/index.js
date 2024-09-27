@@ -1,5 +1,4 @@
 // node_modules
-import { DocumentTextIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import PropTypes from "prop-types";
 // components
@@ -7,7 +6,6 @@ import ChartFileSetLab from "../components/chart-file-set-lab";
 import ChartFileSetRelease from "../components/chart-file-set-release";
 import { DataAreaTitle, DataPanel } from "../components/data-area";
 import HomeTitle from "../components/home-title";
-import Icon from "../components/icon";
 // lib
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
