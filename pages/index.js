@@ -91,25 +91,22 @@ export default function Home({ fileSets, fileCount, sampleCount }) {
       </p>
       <div className="my-4 @xl/home:flex @xl/home:gap-4">
         <Statistic
-          graphic={<Icon.FileSet className="fill-sky-600" />}
-          label="Data Sets (Measurement Sets)"
+          label="Processed Data"
           value={fileSets.length}
-          query="type=MeasurementSet"
-          colorClass="bg-sky-100 dark:bg-sky-900 border-sky-600 hover:bg-sky-200 dark:hover:bg-sky-800"
+          query="type=AnalysisSet&file_set_type=intermediate+analysis"
+          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
         <Statistic
-          graphic={<DocumentTextIcon className="fill-teal-600" />}
-          label="Files"
+          label="Analysis Resources"
           value={fileCount}
-          query="type=File"
-          colorClass="bg-teal-200 dark:bg-teal-900 border-teal-600 hover:bg-teal-300 dark:hover:bg-teal-800"
+          query="type=AnalysisSet&file_set_type=integrated+analysis"
+          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
         <Statistic
-          graphic={<Icon.Sample className="fill-yellow-600" />}
-          label="Samples"
+          label="Analysis Results"
           value={sampleCount}
-          query="type=Sample"
-          colorClass="bg-yellow-100 dark:bg-yellow-900 border-yellow-600 hover:bg-yellow-200 dark:hover:bg-yellow-800"
+          query="type=AnalysisSet&file_set_type=principal+analysis"
+          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
       </div>
       {releaseData.length >= 2 && (
