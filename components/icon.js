@@ -358,10 +358,6 @@ Icon.Award.propTypes = {
   className: PropTypes.string,
   testid: PropTypes.string,
 };
-Icon.Brand.propTypes = {
-  className: PropTypes.string,
-  testid: PropTypes.string,
-};
 Icon.Catalog.propTypes = {
   className: PropTypes.string,
   testid: PropTypes.string,
