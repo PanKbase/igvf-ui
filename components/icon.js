@@ -2,7 +2,10 @@
  * Defines icons not available in Heroicons. You normally use this by importing the Icon default
  * component and specifying the icon name as a property of Icon.
  */
-
+// node_modules
+import _ from "lodash";
+import Image from "next/image";
+import Link from "next/link";
 import PropTypes from "prop-types";
 /* istanbul ignore file */
 
@@ -28,27 +31,10 @@ const Icon = {
     </svg>
   ),
   Brand: ({ className = null, testid = "icon-brand" }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      data-testid={testid}
-    >
-      <g className="fill-brand">
-        <path
-          d="M10,20C4.5,20,0,15.5,0,10C0,4.5,4.5,0,10,0c5.5,0,10,4.5,10,10C20,15.5,15.5,20,10,20z M10,2.8
-		C6,2.8,2.8,6,2.8,10c0,4,3.2,7.2,7.2,7.2c4,0,7.2-3.2,7.2-7.2C17.2,6,14,2.8,10,2.8z"
-        />
-        <path d="M12.7,10.2l1.4,1.4V5.3c-0.8-0.7-1.8-1.2-2.8-1.4v7.7L12.7,10.2z" />
-        <path d="M7.3,8.7l1.4-1.4V3.9c-1.1,0.2-2,0.7-2.8,1.4v2.1L7.3,8.7z" />
-        <path d="M7.3,9.8L5.9,8.4v6.3c0.8,0.7,1.8,1.2,2.8,1.4V8.4L7.3,9.8z" />
-      </g>
-      <path
-        className="fill-brand-accent"
-        d="M12.7,11.3l-1.4,1.4v3.5c1.1-0.2,2-0.7,2.8-1.4v-2.1L12.7,11.3z"
-      />
-    </svg>
+    <Image
+      src={`/collections/pkb.svg`}
+      alt={`PanKbase Logo`}
+    />
   ),
   Catalog: ({ className = null, testid = "icon-catalog" }) => (
     <svg

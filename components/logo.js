@@ -17,8 +17,8 @@ import Link from "next/link";
  * The graphic within the 105x70 box should have a maximum width of 95px and a maximum height of
  * 60px.
  */
-const LOGO_WIDTH = 105;
-const LOGO_HEIGHT = 70;
+const LOGO_WIDTH = 162;
+const LOGO_HEIGHT = 55;
 
 export function Logo() {
   return (
