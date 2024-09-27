@@ -117,7 +117,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.family_history_of_diabetes}</DataItemValue>
         </>
       )}
-      {item.diabetes_duration !== undefined && (
+      {item.family_history_of_diabetes_relationship !== undefined && (
         <>
           <DataItemLabel>Relationship Type</DataItemLabel>
           <DataItemValue>{item.family_history_of_diabetes_relationship}</DataItemValue>
