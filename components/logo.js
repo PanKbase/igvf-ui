@@ -1,10 +1,7 @@
-// components
-import Link from "./link-reloadable";
 // node_modules
 import _ from "lodash";
 import Image from "next/image";
 import Link from "next/link";
-import { PropTypes } from "prop-types";
 
 /**
  * Height and width of collection logos in pixels. PNG or JPEG files should have double this
@@ -27,11 +24,11 @@ export function Logo() {
   return (
     <div className="logo-container">
       {/* Add your logo content here */}
-      <Image 
+     <Image
      src={`/collections/pkb.svg`}
-     width={COLLECTION_WIDTH}
-     height={COLLECTION_HEIGHT}
-     alt={`${collection} collection`}
+     width={LOGO_WIDTH}
+     height={LOGO_HEIGHT}
+     alt={`PanKbase Logo`}
      />
      </div>
   );
