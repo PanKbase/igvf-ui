@@ -25,7 +25,7 @@ function Statistic({ graphic, label, value, query, colorClass }) {
         href={`/search/?${query}`}
         className={`flex h-full items-center gap-4 p-2 no-underline`}
       >
-        <div className="h-10 w-10 min-w-10 basis-10 rounded-full border border-gray-400 p-2 dark:border-gray-500">
+        <div>
           {graphic}
         </div>
         <div className="shrink">
