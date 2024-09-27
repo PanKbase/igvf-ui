@@ -25,7 +25,7 @@ export function Logo() {
     <div className="logo-container">
       {/* Add your logo content here */}
      <Image
-     src={`/collections/pkb.svg`}
+     src={`/collections/pkb-4.svg`}
      width={LOGO_WIDTH}
      height={LOGO_HEIGHT}
      alt={`PanKbase Logo`}
