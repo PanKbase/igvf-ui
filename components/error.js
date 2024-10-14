@@ -47,7 +47,7 @@ export default function Error({ statusCode = "ERROR", title = "" }) {
                 >
                   sign in
                 </ButtonAsLink>{" "}
-                if you are affiliated with the IGVF project. See the
+                if you are affiliated with the PanKbase project. See the
                 instructions for{" "}
                 <Link
                   href="/help/general-help/accessing-unreleased-data/"
