@@ -5,7 +5,6 @@ import {
   Bars2Icon,
   MinusIcon,
   PlusIcon,
-  QuestionMarkCircleIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import PropTypes from "prop-types";
@@ -26,13 +25,11 @@ import { useSessionStorage } from "./browser-storage";
 import { Button } from "./form-elements";
 import GlobalContext from "./global-context";
 import Icon from "./icon";
-import IdSearchTrigger from "./id-search-trigger";
 import IndexerState from "./indexer-state";
 import { Email, Twitter } from "./site-info";
 import SiteLogo from "./logo";
 import Modal from "./modal";
 import SessionContext from "./session-context";
-import SiteSearchTrigger from "./site-search-trigger";
 // lib
 import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
 import { UC } from "../lib/constants";
@@ -413,13 +410,6 @@ NavigationHrefItem.propTypes = {
 };
 
 /**
- * Wrapper for the site search icon while navigation is collapsed.
- */
-function NavigationSearchItem({ children }) {
-  return <li>{children}</li>;
-}
-
-/**
  * Icon for expanding or collapsing a navigation group item.
  */
 function NavigationGroupExpandIcon({ isGroupOpened }) {
@@ -549,21 +539,9 @@ NavigationList.propTypes = {
 };
 
 /**
- * Renders the search trigger buttons in the navigation.
- */
-function NavigationSearchTriggers() {
-  return (
-    <div className="flex gap-1">
-      <SiteSearchTrigger isExpanded />
-      <IdSearchTrigger />
-    </div>
-  );
-}
-
-/**
  * Renders the navigation area for mobile and desktop.
  */
-function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
+function NavigationExpanded({ navigationClick }) {
   // Holds the ids of the currently open parent navigation items
   const [openedParents, setOpenedParents] = React.useState([]);
   // Current Auth0 information
@@ -587,46 +565,7 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
 
   return (
     <>
-      {toggleNavCollapsed && (
-        <NavigationLogo
-          toggleNavCollapsed={toggleNavCollapsed}
-          isNavCollapsed={false}
-        />
-      )}
-      <NavigationSearchTriggers />
-      <NavigationList className="p-4">
-        <NavigationGroupItem
-          id="data"
-          title="Data"
-          icon={<Icon.Data />}
-          isGroupOpened={openedParents.includes("data")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="processed-datasets"
-            href="/search/?type=AnalysisSet&file_set_type=intermediate+analysis"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Processed Data
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="analysis-resources"
-            href="/search/?type=AnalysisSet&file_set_type=integrated+analysis"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Analysis Resources
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="analysis-results"
-            href="/search/?type=AnalysisSet&file_set_type=principal+analysis"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Analysis Results
-          </NavigationHrefItem>
-        </NavigationGroupItem>
+        <NavigationList className="p-4">
         <NavigationGroupItem
           id="methods"
           title="Methods"
@@ -683,58 +622,6 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
             Audit Documentation
           </NavigationHrefItem>
         </NavigationGroupItem>
-        <NavigationGroupItem
-          id="about"
-          title="About"
-          icon={
-            <Icon.Brand className="[&>g]:fill-black dark:[&>g]:fill-white dark:[&>path]:fill-gray-300" />
-          }
-          isGroupOpened={openedParents.includes("about")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="policies"
-            href="/policies"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Policies
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="pankbase-help"
-            href="/help/about-pankbase"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            PanKbase
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="help"
-          title="Help"
-          icon={<QuestionMarkCircleIcon />}
-          isGroupOpened={openedParents.includes("help")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="submission"
-            href="/help/data-submission"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data Submission
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="general-help"
-            href="/help/general-help"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            General Help
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
         {isAuthenticated ? (
           <NavigationGroupItem
             id="authenticate"
@@ -788,20 +675,14 @@ NavigationExpanded.propTypes = {
   // Function to call when user clicks a navigation item
   navigationClick: PropTypes.func.isRequired,
   // Function to call when user clicks the collapse button
-  toggleNavCollapsed: PropTypes.func,
+  // toggleNavCollapsed: PropTypes.func,
 };
 
-function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
+function NavigationCollapsed({ navigationClick }) {
   const { isAuthenticated } = useAuth0();
 
   return (
     <NavigationList className="w-full [&>ul>li]:my-2 [&>ul]:flex [&>ul]:flex-col [&>ul]:items-center">
-      <NavigationCollapseItem
-        toggleNavCollapsed={toggleNavCollapsed}
-        isNavCollapsed
-      >
-        <NavExpandIcon />
-      </NavigationCollapseItem>
       <NavigationHrefItem
         id="home"
         href="/"
@@ -812,9 +693,16 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
           <Icon.Brand />
         </NavigationIcon>
       </NavigationHrefItem>
-      <NavigationSearchItem>
-        <SiteSearchTrigger />
-      </NavigationSearchItem>
+      <NavigationHrefItem
+        id="schemas"
+        href="/profiles"
+        navigationClick={navigationClick}
+        isNarrowNav
+      >
+        <NavigationIcon isNarrowNav>
+          <Icon.Data />
+        </NavigationIcon>
+      </NavigationHrefItem>
       {isAuthenticated ? (
         <NavigationSignOutItem id="sign-out" isNarrowNav>
           <Icon.UserSignedIn className="h-8 w-8" />
@@ -824,21 +712,14 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
           <Icon.UserSignedOut className="h-8 w-8" />
         </NavigationSignInItem>
       )}
-      <NavigationHrefItem
-        id="help"
-        href="/help/general-help/"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <QuestionMarkCircleIcon />
-        </NavigationIcon>
-      </NavigationHrefItem>
       <NavigationItem>
         <IndexerState isCollapsed />
       </NavigationItem>
       <NavigationItem>
         <Email />
+      </NavigationItem>
+      <NavigationItem>
+        <Twitter />
       </NavigationItem>
     </NavigationList>
   );
@@ -848,18 +729,17 @@ NavigationCollapsed.propTypes = {
   // Function to call when user clicks a navigation item
   navigationClick: PropTypes.func.isRequired,
   // Function to call when user clicks the collapse button
-  toggleNavCollapsed: PropTypes.func.isRequired,
+  // toggleNavCollapsed: PropTypes.func.isRequired,
 };
 
 /**
  * Displays the full IGVF logo and the sidebar navigation collapse button.
  */
-function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
+function NavigationLogo({ isNavCollapsed }) {
   return (
     <div className="flex">
       <SiteLogo />
       <NavigationCollapseButton
-        toggleNavCollapsed={toggleNavCollapsed}
         isNavCollapsed={isNavCollapsed}
       />
     </div>
@@ -868,7 +748,7 @@ function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
 
 NavigationLogo.propTypes = {
   // Function to call when user clicks the collapse button
-  toggleNavCollapsed: PropTypes.func.isRequired,
+  // toggleNavCollapsed: PropTypes.func.isRequired,
   // True if the navigation is collapsed
   isNavCollapsed: PropTypes.bool.isRequired,
 };
@@ -941,22 +821,12 @@ export default function NavigationSection() {
           <Bars2Icon className="h-5 w-5 fill-white" />
         </button>
       </div>
-
-      <div className={isNavCollapsed ? "md:p-0" : "md:px-4"}>
+      {/* Render only the collapsed navigation for desktop */}
         <div className="hidden md:block">
-          {isNavCollapsed ? (
             <NavigationCollapsed
               navigationClick={navigationClick}
-              toggleNavCollapsed={toggleNavCollapsed}
             />
-          ) : (
-            <NavigationExpanded
-              navigationClick={navigationClick}
-              toggleNavCollapsed={toggleNavCollapsed}
-            />
-          )}
         </div>
-      </div>
 
       <MobileCollapsableArea
         isOpen={isMobileNavOpen}
