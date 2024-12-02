@@ -12,12 +12,13 @@ const collectionMap = {
   ClinGen: "clingen.svg",
   ENCODE: "encode.svg",
   GREGoR: "gregor.svg",
-  "IGVF_catalog_beta_v0.1": "igvf-catalog.svg",
   MaveDB: "mave-db.svg",
   MPRAbase: "mpra-base.svg",
   PanKbase: "pkb.svg",
   HPAP: "HPAP-logo-1024x650.jpg",
   IIDP: "logo_sm.png",
+  nPOD: "npod.png",
+  Prodo: "prodo.png",
 };
 
 /**

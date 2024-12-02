@@ -108,6 +108,7 @@ const renderers = {
   PlatformTerm: OntologyTerm,
   PredictionSet,
   PrimaryCell: Biosample,
+  PrimaryIslet: Biosample,
   Publication,
   ReferenceFile: File,
   RodentDonor,

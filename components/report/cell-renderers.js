@@ -485,6 +485,9 @@ export const reportPropertyRenderers = {
   PrimaryCell: {
     sample_terms: SampleTerms,
   },
+  PrimaryIslet: {
+    sample_terms: SampleTerms,
+  },
   Sample: {
     sample_terms: SampleTerms,
   },

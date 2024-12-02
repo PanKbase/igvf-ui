@@ -85,13 +85,17 @@ function AssayDetails({ measurementSet }) {
             {measurementSet.library_construction_platform && (
               <>
                 <DataItemLabel>Library Construction Platform</DataItemLabel>
-                <DataItemValue>
+                 {measurementSet.library_construction_platform.map((platform, index) => (
+                 <DataItemValue key={index}>
                   <Link
-                    href={measurementSet.library_construction_platform["@id"]}
+                     href={platform["@id"]}
                   >
-                    {measurementSet.library_construction_platform.term_name}
+                    {Array.isArray(platform.term_name)
+                    ? platform.term_name.join(", ")
+                    : platform.term_name}
                   </Link>
                 </DataItemValue>
+                 ))}
               </>
             )}
             {measurementSet.sequencing_library_types?.length > 0 && (
@@ -196,7 +200,13 @@ export default function MeasurementSet({
                     </DataItemValue>
                   </>
                 )}
-                {uniqueSampleSummaries.length > 0 && (
+                {measurementSet.donor_validation_method?.length > 0 && (
+                <>
+                <DataItemLabel>Donor Validation Method</DataItemLabel>
+                <DataItemValue>{measurementSet.donor_validation_method.join(", ")}</DataItemValue>
+                </>
+                )}
+               {uniqueSampleSummaries.length > 0 && (
                   <>
                     <DataItemLabel>Sample Summaries</DataItemLabel>
                     <DataItemList isCollapsible>

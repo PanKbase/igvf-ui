@@ -90,7 +90,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       {item.genetic_ethnicities?.length > 0 && (
         <>
           <DataItemLabel>Predicted Genetic Ancestry</DataItemLabel>
-          <DataItemValue>{item.genetic_ethnicities.join(", ")}</DataItemValue>
+              <DataItemValue>{item.genetic_ethnicities.map((ethnicityObj, index) => ( <span key={index}> {ethnicityObj.ethnicity} {ethnicityObj.percentage !== undefined ? ` (${ethnicityObj.percentage}%)` : ""} {index < item.genetic_ethnicities.length - 1 ? ", " : ""} </span>))}</DataItemValue>
         </>
       )}
       {item.ethnicities?.length > 0 && (
@@ -261,6 +261,26 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       <DataPanel>
       <DataArea>
       {/* Additional Biological Information */}
+      {item.data_available?.length > 0 && (
+      <>
+      <DataItemLabel>Data Available</DataItemLabel>
+      <DataItemValue>
+      {item.data_available.map((dataObj, index) => (
+        <div key={index}>
+          <strong>{dataObj.dataset}</strong> ({dataObj.dataset_tissue})
+          {dataObj.dataset_link && (
+            <>
+              {" - "}
+              <a href={dataObj.dataset_link} target="_blank" rel="noopener noreferrer">
+                Access Dataset
+              </a>
+            </>
+          )}
+        </div>
+      ))}
+      </DataItemValue>
+      </>
+      )}
       {item.pancreas_tissue_available !== undefined && (
         <>
           <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
@@ -643,27 +663,6 @@ export function BiosampleDataItems({
           </DataItemValue>
         </>
       )}
-      <>
-        <DataItemLabel>Age</DataItemLabel>
-        <DataItemValue>
-          {item.age === "unknown"
-            ? item.embryonic
-              ? "Embryonic"
-              : "unknown"
-            : item.embryonic
-            ? `Embryonic ${item.age}`
-            : item.age}
-          {item.age_units ? (
-            <>
-              {" "}
-              {item.age_units}
-              {item.age !== "1" ? "s" : ""}
-            </>
-          ) : (
-            ""
-          )}
-        </DataItemValue>
-      </>
       {partOf && (
         <>
           <DataItemLabel>Part of Sample</DataItemLabel>
@@ -715,8 +714,6 @@ BiosampleDataItems.propTypes = {
 };
 
 BiosampleDataItems.commonProperties = [
-  "age",
-  "age_units",
   "cellular_sub_pool",
   "embryonic",
   "nih_institutional_certification",
