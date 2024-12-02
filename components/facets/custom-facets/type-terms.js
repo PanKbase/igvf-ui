@@ -136,6 +136,7 @@ function convertNodeArrayToTree(nodes) {
  *   - Biosample
  *     - Tissue
  *     - PrimaryCell
+ *     - PrimaryIslet
  *   - TechnicalSample
  *   - MultiplexedSample
  * - FileSet
@@ -162,6 +163,12 @@ function convertNodeArrayToTree(nodes) {
  *           },
  *           {
  *             type: "PrimaryCell"
+ *             parent: "Biosample",
+ *             term: { original facet term object },
+ *             children: [],
+ *           },
+ *           {
+ *             type: "PrimaryIslet"
  *             parent: "Biosample",
  *             term: { original facet term object },
  *             children: [],
