@@ -53,7 +53,7 @@ function convertDonorsToChartData(donors) {
       });
       chartData.push(labEntry);
     }
-    // eslint-disable-next-line camelcase 
+    // eslint-disable-next-line camelcase
     if (diabetes_status_description in labEntry) {
       // eslint-disable-next-line camelcase
       labEntry[diabetes_status_description] += 1;
