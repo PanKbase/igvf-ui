@@ -1,6 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
-import { useState } from "react";
+// import { useState } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import Nivo's ResponsiveBar to avoid SSR issues
@@ -161,7 +161,9 @@ ChartDonorLab.propTypes = {
       lab: PropTypes.shape({
         title: PropTypes.string.isRequired,
       }).isRequired,
-      diabetes_status_description: PropTypes.string.isRequired,
+        /* eslint-disable camelcase */
+        diabetes_status_description: PropTypes.string.isRequired,
+       /* eslint-enable camelcase */
     })
   ).isRequired,
   title: PropTypes.string.isRequired,
