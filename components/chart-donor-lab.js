@@ -42,6 +42,7 @@ function convertDonorsToChartData(donors) {
   });
 
   donors.forEach((donor) => {
+    // eslint-disable-next-line camelcase
     const { lab, diabetes_status_description } = donor;
     let labEntry = chartData.find((entry) => entry.lab === lab.title);
 
@@ -52,9 +53,11 @@ function convertDonorsToChartData(donors) {
       });
       chartData.push(labEntry);
     }
-
+    // eslint-disable-next-line camelcase 
     if (diabetes_status_description in labEntry) {
+      // eslint-disable-next-line camelcase
       labEntry[diabetes_status_description] += 1;
+      // eslint-disable-next-line camelcase
       statusCounts[diabetes_status_description] += 1;
     }
   });
