@@ -14,7 +14,59 @@ import FetchRequest from "../lib/fetch-request";
 import { abbreviateNumber } from "../lib/general";
 import { convertFileSetsToReleaseData } from "../lib/home";
 
-// Titles for the charts on the homepage
+/**
+ * Display a statistic panel that shows a property and its count from the database.
+ */
+function Statistic({ graphic, label, value, query, colorClass }) {
+  return (
+    <div
+      className={`my-4 grow basis-1/3 rounded border @xl/home:my-0 ${colorClass}`}
+    >
+      <Link
+        href={`/search/?${query}`}
+        className="flex h-full items-center gap-4 p-2 no-underline"
+      >
+        <div>{graphic}</div>
+        <div className="shrink">
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            {label}
+          </div>
+          <div className="text-4xl font-light text-gray-800 dark:text-gray-200">
+            {abbreviateNumber(value)}
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+}
+
+Statistic.propTypes = {
+  graphic: PropTypes.element,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+  query: PropTypes.string.isRequired,
+  colorClass: PropTypes.string,
+};
+
+/**
+ * Display the chart section with a title.
+ */
+function FileSetChartSection({ title = "", children }) {
+  return (
+    <section className="relative my-8 hidden @xl/home:block">
+      {title && <DataAreaTitle className="text-center">{title}</DataAreaTitle>}
+      <DataPanel>{children}</DataPanel>
+    </section>
+  );
+}
+
+FileSetChartSection.propTypes = {
+  title: PropTypes.string,
+};
+
+/**
+ * Titles for the charts on the homepage.
+ */
 const DONOR_TITLE = "PanKbase Donors";
 const FILESET_STATUS_TITLE = "Data Sets Produced by PanKbase Labs";
 
@@ -27,7 +79,7 @@ export default function Home({
   fileSets,
   analysisCount,
   donorCount,
-  donors, // Pass donors as a prop
+  donors, // Add the donors prop
 }) {
   const releaseData = convertFileSetsToReleaseData(fileSets);
 
