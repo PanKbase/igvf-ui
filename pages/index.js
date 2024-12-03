@@ -4,76 +4,31 @@ import PropTypes from "prop-types";
 // components
 import ChartFileSetLab from "../components/chart-file-set-lab";
 import ChartFileSetRelease from "../components/chart-file-set-release";
+import ChartDonorLab from "../components/chart-donor-lab"; // Import the new chart component
 import { DataAreaTitle, DataPanel } from "../components/data-area";
 import HomeTitle from "../components/home-title";
 import SiteSearchTrigger from "../components/site-search-trigger";
-// import IdSearchTrigger from "../components/id-search-trigger";
 // lib
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { abbreviateNumber } from "../lib/general";
 import { convertFileSetsToReleaseData } from "../lib/home";
 
-/**
- * Display a statistic panel that shows a property and its count from the database.
- */
-function Statistic({ graphic, label, value, query, colorClass }) {
-  return (
-    <div
-      className={`my-4 grow basis-1/3 rounded border @xl/home:my-0 ${colorClass}`}
-    >
-      <Link
-        href={`/search/?${query}`}
-        className="flex h-full items-center gap-4 p-2 no-underline"
-      >
-        <div>{graphic}</div>
-        <div className="shrink">
-          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {label}
-          </div>
-          <div className="text-4xl font-light text-gray-800 dark:text-gray-200">
-            {abbreviateNumber(value)}
-          </div>
-        </div>
-      </Link>
-    </div>
-  );
-}
-
-Statistic.propTypes = {
-  graphic: PropTypes.element,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  query: PropTypes.string.isRequired,
-  colorClass: PropTypes.string,
-};
-
-/**
- * Display the chart section with a title.
- */
-function FileSetChartSection({ title = "", children }) {
-  return (
-    <section className="relative my-8 hidden @xl/home:block">
-      {title && <DataAreaTitle className="text-center">{title}</DataAreaTitle>}
-      <DataPanel>{children}</DataPanel>
-    </section>
-  );
-}
-
-FileSetChartSection.propTypes = {
-  title: PropTypes.string,
-};
-
-/**
- * Titles for the charts on the homepage.
- */
-const FILESET_RELEASE_TITLE = "Data Sets Released";
+// Titles for the charts on the homepage
+const DONOR_TITLE = "PanKbase Donors";
 const FILESET_STATUS_TITLE = "Data Sets Produced by PanKbase Labs";
 
 /**
  * The homepage for PanKbase.
  */
-export default function Home({ assayCount, processedCount, fileSets, analysisCount, donorCount }) {
+export default function Home({
+  assayCount,
+  processedCount,
+  fileSets,
+  analysisCount,
+  donorCount,
+  donors, // Pass donors as a prop
+}) {
   const releaseData = convertFileSetsToReleaseData(fileSets);
 
   return (
@@ -124,12 +79,19 @@ export default function Home({ assayCount, processedCount, fileSets, analysisCou
         />
       </div>
 
+      {/* Donor Chart */}
+      {donors.length > 0 && (
+        <FileSetChartSection title={DONOR_TITLE}>
+          <ChartDonorLab donors={donors} title={DONOR_TITLE} />
+        </FileSetChartSection>
+      )}
+
       {/* File Set Charts */}
       {releaseData.length >= 2 && (
-        <FileSetChartSection title={FILESET_RELEASE_TITLE}>
+        <FileSetChartSection title={FILESET_STATUS_TITLE}>
           <ChartFileSetRelease
             releaseData={releaseData}
-            title={FILESET_RELEASE_TITLE}
+            title={FILESET_STATUS_TITLE}
           />
         </FileSetChartSection>
       )}
@@ -148,6 +110,14 @@ Home.propTypes = {
   assayCount: PropTypes.number,
   processedCount: PropTypes.number,
   donorCount: PropTypes.number,
+  donors: PropTypes.arrayOf(
+    PropTypes.shape({
+      lab: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+      }).isRequired,
+      diabetes_status_description: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export async function getServerSideProps({ req }) {
@@ -161,8 +131,11 @@ export async function getServerSideProps({ req }) {
 
   if (FetchRequest.isResponseSuccess(results)) {
     const donorResults = (
-      await request.getObject("/search/?type=Donor&limit=0")
+      await request.getObject(
+        "/search/?type=HumanDonor&field=lab.title&field=diabetes_status_description&limit=0"
+      )
     ).optional();
+
     const analysisResults = (
       await request.getObject("/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0")
     ).optional();
@@ -180,6 +153,7 @@ export async function getServerSideProps({ req }) {
         processedCount: processedResults?.total || 0,
         assayCount: assayResults?.total || 0,
         donorCount: donorResults?.total || 0,
+        donors: donorResults?.["@graph"] || [], // Pass donor data as a prop
       },
     };
   }
