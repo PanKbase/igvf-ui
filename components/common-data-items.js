@@ -186,7 +186,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       )}
       {item.hospital_stay !== undefined && (
         <>
-          <DataItemLabel>Hospital Stay (days)</DataItemLabel>
+          <DataItemLabel>Hospital Stay (hours)</DataItemLabel>
           <DataItemValue>{item.hospital_stay}</DataItemValue>
         </>
       )}
