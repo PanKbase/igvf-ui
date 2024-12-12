@@ -859,6 +859,16 @@ export function FileDataItems({ item, fileSet = null, children }) {
           </DataItemValue>
         </>
       )}
+      {item.file_url && (
+        <>
+          <DataItemLabel>File Url</DataItemLabel>
+          <DataItemValue>
+            <a href={item.file_url} target="_blank" rel="noopener noreferrer">
+              {item.file_url}
+            </a>
+          </DataItemValue>
+        </>
+      )}
       {item.controlled_access && (
         <>
           <DataItemLabel>Controlled Access</DataItemLabel>
