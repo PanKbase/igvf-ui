@@ -63,6 +63,8 @@ export default function MatrixFile({
           <DataPanel>
             <DataArea>
               <FileDataItems item={matrixFile} fileSet={fileSet} />
+              <DataItemLabel>Download File</DataItemLabel>
+              <DataItemValue>{matrixFile.file_url}</DataItemValue>
             </DataArea>
           </DataPanel>
           <DataAreaTitle>Matrix Details</DataAreaTitle>
