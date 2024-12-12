@@ -63,8 +63,6 @@ export default function MatrixFile({
           <DataPanel>
             <DataArea>
               <FileDataItems item={matrixFile} fileSet={fileSet} />
-              <DataItemLabel>Download File</DataItemLabel>
-              <DataItemValue>{matrixFile.file_url}</DataItemValue>
             </DataArea>
           </DataPanel>
           <DataAreaTitle>Matrix Details</DataAreaTitle>
@@ -74,6 +72,8 @@ export default function MatrixFile({
               <DataItemValue>{matrixFile.dimension1}</DataItemValue>
               <DataItemLabel>Second Dimension</DataItemLabel>
               <DataItemValue>{matrixFile.dimension2}</DataItemValue>
+              <DataItemLabel>Download File</DataItemLabel>
+              <DataItemValue>{matrixFile.file_url}</DataItemValue>
             </DataArea>
           </DataPanel>
           {referenceFiles.length > 0 && (
