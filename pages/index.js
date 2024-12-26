@@ -2,17 +2,13 @@
 import Link from "next/link";
 import PropTypes from "prop-types";
 // components
-import ChartFileSetLab from "../components/chart-file-set-lab";
-import ChartFileSetRelease from "../components/chart-file-set-release";
-import { DataAreaTitle, DataPanel } from "../components/data-area";
+import { DataAreaTitle } from "../components/data-area";
 import HomeTitle from "../components/home-title";
 import SiteSearchTrigger from "../components/site-search-trigger";
-// import IdSearchTrigger from "../components/id-search-trigger";
 // lib
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { abbreviateNumber } from "../lib/general";
-import { convertFileSetsToReleaseData } from "../lib/home";
 
 /**
  * Display a statistic panel that shows a property and its count from the database.
@@ -49,33 +45,9 @@ Statistic.propTypes = {
 };
 
 /**
- * Display the chart section with a title.
- */
-function FileSetChartSection({ title = "", children }) {
-  return (
-    <section className="relative my-8 hidden @xl/home:block">
-      {title && <DataAreaTitle className="text-center">{title}</DataAreaTitle>}
-      <DataPanel>{children}</DataPanel>
-    </section>
-  );
-}
-
-FileSetChartSection.propTypes = {
-  title: PropTypes.string,
-};
-
-/**
- * Titles for the charts on the homepage.
- */
-const FILESET_RELEASE_TITLE = "Data Sets Released";
-const FILESET_STATUS_TITLE = "Data Sets Produced by PanKbase Labs";
-
-/**
  * The homepage for PanKbase.
  */
-export default function Home({ assayCount, processedCount, fileSets, analysisCount, donorCount }) {
-  const releaseData = convertFileSetsToReleaseData(fileSets);
-
+export default function Home({ assayCount, processedCount, analysisCount, donorCount }) {
   return (
     <div className="@container/home">
       <HomeTitle />
@@ -123,27 +95,11 @@ export default function Home({ assayCount, processedCount, fileSets, analysisCou
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
       </div>
-
-      {/* File Set Charts */}
-      {releaseData.length >= 2 && (
-        <FileSetChartSection title={FILESET_RELEASE_TITLE}>
-          <ChartFileSetRelease
-            releaseData={releaseData}
-            title={FILESET_RELEASE_TITLE}
-          />
-        </FileSetChartSection>
-      )}
-      {fileSets.length > 0 && (
-        <FileSetChartSection title={FILESET_STATUS_TITLE}>
-          <ChartFileSetLab fileSets={fileSets} title={FILESET_STATUS_TITLE} />
-        </FileSetChartSection>
-      )}
     </div>
   );
 }
 
 Home.propTypes = {
-  fileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
   analysisCount: PropTypes.number,
   assayCount: PropTypes.number,
   processedCount: PropTypes.number,
@@ -153,36 +109,25 @@ Home.propTypes = {
 export async function getServerSideProps({ req }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
 
-  const results = (
-    await request.getObject(
-      "/report/?type=MeasurementSet&field=%40id&field=preferred_assay_title&field=assay_term.term_name&field=files.@id&field=lab.title&field=status&field=creation_timestamp&field=release_timestamp&field=submitted_files_timestamp&status=released&status=archived&status=revoked&status=in+progress&limit=all"
-    )
-  ).union();
+  const donorResults = (
+    await request.getObject("/search/?type=Donor&limit=0")
+  ).optional();
+  const analysisResults = (
+    await request.getObject("/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0")
+  ).optional();
+  const processedResults = (
+    await request.getObject("/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0")
+  ).optional();
+  const assayResults = (
+    await request.getObject("/search/?type=MeasurementSet&limit=0")
+  ).optional();
 
-  if (FetchRequest.isResponseSuccess(results)) {
-    const donorResults = (
-      await request.getObject("/search/?type=Donor&limit=0")
-    ).optional();
-    const analysisResults = (
-      await request.getObject("/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0")
-    ).optional();
-    const processedResults = (
-      await request.getObject("/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0")
-    ).optional();
-    const assayResults = (
-      await request.getObject("/search/?type=MeasurementSet&limit=0")
-    ).optional();
-
-    return {
-      props: {
-        fileSets: results["@graph"],
-        analysisCount: analysisResults?.total || 0,
-        processedCount: processedResults?.total || 0,
-        assayCount: assayResults?.total || 0,
-        donorCount: donorResults?.total || 0,
-      },
-    };
-  }
-
-  return errorObjectToProps(results);
+  return {
+    props: {
+      analysisCount: analysisResults?.total || 0,
+      processedCount: processedResults?.total || 0,
+      assayCount: assayResults?.total || 0,
+      donorCount: donorResults?.total || 0,
+    },
+  };
 }
