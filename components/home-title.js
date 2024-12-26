@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import './globals.css';
 
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
