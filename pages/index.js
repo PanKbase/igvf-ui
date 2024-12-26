@@ -2,11 +2,9 @@
 import Link from "next/link";
 import PropTypes from "prop-types";
 // components
-import { DataAreaTitle } from "../components/data-area";
 import HomeTitle from "../components/home-title";
 import SiteSearchTrigger from "../components/site-search-trigger";
 // lib
-import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { abbreviateNumber } from "../lib/general";
 
