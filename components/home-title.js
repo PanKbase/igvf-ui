@@ -3,8 +3,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import './globals.css';
 
-export default function Header() {
+function injectFavicon(faviconUrl) {
+  let favicon = document.querySelector('link[rel="icon"]');
+  if (!favicon) {
+    favicon = document.createElement('link');
+    favicon.setAttribute('rel', 'icon');
+    favicon.setAttribute('type', 'image/png');
+    document.head.appendChild(favicon);
+  }
+  favicon.setAttribute('href', faviconUrl);
+}
 
+function injectFont(fontUrl) {
+  const linkTag = document.createElement('link');
+  linkTag.rel = 'stylesheet';
+  linkTag.href = fontUrl;
+  document.head.appendChild(linkTag);
+}
+
+export default function Header() {
   useEffect(() => {
     injectFavicon(
       'https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/favicon-32x32.png'
@@ -13,24 +30,6 @@ export default function Header() {
       'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'
     );
   }, []);
-
-  const injectFavicon = (faviconUrl) => {
-    let favicon = document.querySelector('link[rel="icon"]');
-    if (!favicon) {
-      favicon = document.createElement('link');
-      favicon.setAttribute('rel', 'icon');
-      favicon.setAttribute('type', 'image/png');
-      document.head.appendChild(favicon);
-    }
-    favicon.setAttribute('href', faviconUrl);
-  };
-
-  const injectFont = (fontUrl) => {
-    const linkTag = document.createElement('link');
-    linkTag.rel = 'stylesheet';
-    linkTag.href = fontUrl;
-    document.head.appendChild(linkTag);
-  };
 
   return (
     <div className="pkb-nav">
