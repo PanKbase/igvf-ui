@@ -1,4 +1,7 @@
 import React, { useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import './globals.css';
 
 export default function Header() {
 
@@ -32,30 +35,34 @@ export default function Header() {
   return (
     <div className="pkb-nav">
       <div className="logo">
-        <a href="/">
-          <img
+        <Link href="/">
+          <Image
             src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/pkb-4.svg"
             alt="PanKbase Logo"
+            width={40}
+            height={40}
           />
-        </a>
+        </Link>
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
           <a className="topmenu-item" href="#">
             Search
-            <img
-              style={{ height: '15px', width: '15px' }}
+            <Image
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
               alt="Search Icon"
+              width={15}
+              height={15}
             />
           </a>
           <a className="topmenu-item" href="#">Analysis</a>
           <a className="topmenu-item" href="#">
             Login
-            <img
-              style={{ height: '15px', width: '15px' }}
+            <Image
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
               alt="User Icon"
+              width={15}
+              height={15}
             />
           </a>
         </div>
