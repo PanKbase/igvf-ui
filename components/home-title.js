@@ -71,7 +71,7 @@ export default function Header() {
                 className="menu-item menu-item-main"
                 href="https://data.pankbase.org"
               >
-                Data Library 
+                Data Library
               </a>
             </div>
             <div className="menu-item-wrapper">
