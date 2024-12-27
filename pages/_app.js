@@ -18,7 +18,7 @@ import DarkModeManager from "../lib/dark-mode-manager";
 // components
 import Error from "../components/error";
 import GlobalContext from "../components/global-context";
-import NavigationSection from "../components/navigation";
+// import NavigationSection from "../components/navigation";
 import ScrollToTop from "../components/scroll-to-top";
 import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
@@ -156,7 +156,6 @@ function Site({ Component, pageProps, authentication }) {
         <GlobalContext.Provider value={globalContext}>
           <Session authentication={authentication}>
             <div className="md:flex">
-              <NavigationSection />
               <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
                 {pageProps.serverSideError ? (
                   <Error
