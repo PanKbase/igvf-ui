@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import SiteLogo from "./logo";
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -34,12 +34,7 @@ export default function Header() {
     <div className="pkb-nav">
       <div className="logo">
         <Link href="/">
-          <Image
-            src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/pkb-4.svg"
-            alt="PanKbase Logo"
-            width={40}
-            height={40}
-          />
+          <SiteLogo />
         </Link>
       </div>
       <div className="menu-wrapper">
@@ -72,16 +67,16 @@ export default function Header() {
               </a>
             </div>
             <div className="menu-item-wrapper">
-              <a className="menu-item menu-item-main" href="/single-cell.html">
-                Integrated Cell Browser
+              <a
+                className="menu-item menu-item-main"
+                href="https://data.pankbase.org"
+              >
+                Data Library 
               </a>
             </div>
             <div className="menu-item-wrapper">
-              <a
-                className="menu-item menu-item-main"
-                href="http://tools.cmdga.org:3838/metadata_analysis/"
-              >
-                Donor Metadata
+              <a className="menu-item menu-item-main" href="/single-cell.html">
+                Integrated Cell Browser
               </a>
             </div>
           </div>
@@ -90,7 +85,7 @@ export default function Header() {
             <div className="submenu">
               <a className="submenu-item" href="/data-browser.html">Data Browser</a>
               <a className="submenu-item" href="/single-cell.html">Integrated Cell Browser</a>
-              <a className="submenu-item" href="http://tools.cmdga.org:3838/metadata_analysis/">
+              <a className="submenu-item" href="https://data.pankbase.org/donor_metadata">
                 Donor Metadata
               </a>
               <a className="submenu-item" href="/apis.html">APIs</a>
