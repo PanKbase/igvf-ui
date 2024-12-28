@@ -124,12 +124,12 @@
 
   .menu-item.menu-item-selected {
     color: var(--color-brand);
-    border-bottom: 5px solid var(--color-brand);
+    border-bottom: 2px solid var(--color-brand);
   }
 
   .menu-item-wrapper:hover .menu-item {
     color: var(--color-brand);
-    border-bottom: 5px solid var(--color-brand);
+    border-bottom: 2px solid var(--color-brand);
   }
 
   .menu-item-main {
@@ -138,7 +138,7 @@
 
   .menu-item-wrapper:hover {
     color: var(--color-brand) !important;
-    border-bottom: 5px solid var(--color-brand);
+    border-bottom: 2px solid var(--color-brand);
   }
 
   .submenu {
@@ -180,11 +180,41 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px 20px 0 15px;
+    padding: 40px 20px;
     border-top: 3px solid var(--color-brand);
     box-shadow: 0px 2px 10px var(--color-brand);
     min-height: 70px;
     margin-top: auto;
+    gap: 40px;
+    font-size: 14px;
+  }
+
+  .menu-footer {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .menu-footer a, .menu-footer a:visited {
+    color: black !important;
+  }
+
+  .menu-footer a:hover {
+    color: var(--color-brand-accent) !important;
+    text-decoration: none;
+  }
+
+  .menu-item-wrapper-footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .submenu-footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+   a.submenu-item-footer {
+    font-weight: normal;
   }
 }
 :root {
