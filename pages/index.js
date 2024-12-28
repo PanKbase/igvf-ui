@@ -3,6 +3,7 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 // components
 import HomeTitle from "../components/home-title";
+import PkbFooter from "../components/pkb-footer";
 import SiteSearchTrigger from "../components/site-search-trigger";
 // lib
 import FetchRequest from "../lib/fetch-request";
@@ -93,6 +94,7 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
       </div>
+      <PkbFooter />
     </div>
   );
 }
