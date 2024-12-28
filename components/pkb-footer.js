@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import SiteLogo from "./logo";
 function PkbFooter() {
   return (
     <div className="pkb-footer">
