@@ -57,8 +57,8 @@
     padding: 5px 20px 0 15px;
     border-bottom: 2px solid var(--color-brand);
     box-shadow: 0px 2px 5px var(--color-brand);
-    z-index: 10;
     font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
   }
 
   .logo {
@@ -115,7 +115,7 @@
 
   .menu-item {
     position: relative;
-    padding: 5px 10px;
+    padding: 5px 5px;
     cursor: pointer;
     border-radius: 10px 10px 0 0;
     font-weight: 600;
