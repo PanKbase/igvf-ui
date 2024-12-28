@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const PkbFooter = () => {
   return (
@@ -7,62 +8,76 @@ const PkbFooter = () => {
       <div className="menu">
         <div className="main-menu-items">
           <div className="menu-item-wrapper">
-            <a className="menu-item menu-item-main" href="https://dev.pankgraph.org/">PanKgraph</a>
+            <Link href="https://dev.pankgraph.org/" className="menu-item menu-item-main">
+              PanKgraph
+            </Link>
           </div>
           <div className="menu-item-wrapper">
-            <a className="menu-item menu-item-main" href="/single-cell.html">Integrated Cell Browser</a>
+            <Link href="/single-cell.html" className="menu-item menu-item-main">
+              Integrated Cell Browser
+            </Link>
           </div>
           <div className="menu-item-wrapper">
-            <a className="menu-item menu-item-main" href="http://tools.cmdga.org:3838/metadata_analysis/">Donor Metadata</a>
+            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="menu-item menu-item-main">
+              Donor Metadata
+            </Link>
           </div>
         </div>
         <div className="menu-item-wrapper">
-          <a className="menu-item" href="/">Data</a>
+          <Link href="/" className="menu-item">
+            Data
+          </Link>
           <div className="submenu">
-            <a className="submenu-item" href="/data-browser.html">Data Browser</a>
-            <a className="submenu-item" href="/single-cell.html">Integrated Cell Browser</a>
-            <a className="submenu-item" href="http://tools.cmdga.org:3838/metadata_analysis/">Donor Metadata</a>
-            <a className="submenu-item" href="/apis.html">APIs</a>
+            <Link href="/data-browser.html" className="submenu-item">Data Browser</Link>
+            <Link href="/single-cell.html" className="submenu-item">Integrated Cell Browser</Link>
+            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="submenu-item">Donor Metadata</Link>
+            <Link href="/apis.html" className="submenu-item">APIs</Link>
           </div>
         </div>
         <div className="menu-item-wrapper">
-          <a className="menu-item" href="/">Resources</a>
+          <Link href="/" className="menu-item">
+            Resources
+          </Link>
           <div className="submenu">
-            <a className="submenu-item" href="/analytical-library.html">Analytical Library</a>
-            <a className="submenu-item" href="/publications.html">Publications</a>
+            <Link href="/analytical-library.html" className="submenu-item">Analytical Library</Link>
+            <Link href="/publications.html" className="submenu-item">Publications</Link>
           </div>
         </div>
         <div className="menu-item-wrapper">
-          <a className="menu-item" href="/">About</a>
+          <Link href="/" className="menu-item">
+            About
+          </Link>
           <div className="submenu">
-            <a className="submenu-item" href="/projects.html">Project</a>
-            <a className="submenu-item" href="/people.html">People</a>
-            <a className="submenu-item" href="/policies.html">Policies</a>
-            <a className="submenu-item" href="/programs.html">Programs</a>
-            <a className="submenu-item" href="/collaborate.html">Collaborate</a>
+            <Link href="/projects.html" className="submenu-item">Project</Link>
+            <Link href="/people.html" className="submenu-item">People</Link>
+            <Link href="/policies.html" className="submenu-item">Policies</Link>
+            <Link href="/programs.html" className="submenu-item">Programs</Link>
+            <Link href="/collaborate.html" className="submenu-item">Collaborate</Link>
           </div>
         </div>
         <div className="menu-item-wrapper">
-          <a className="menu-item" href="/">Help</a>
+          <Link href="/" className="menu-item">
+            Help
+          </Link>
           <div className="submenu">
-            <a className="submenu-item" href="/contact.html">Contact</a>
-            <a className="submenu-item" href="/metadata-data-standards.html">Metadata | Data Standards</a>
-            <a className="submenu-item" href="/tools-pipelines.html">Tools | Pipelines</a>
-            <a className="submenu-item" href="/tutorials.html">Tutorials</a>
-            <a className="submenu-item" href="/news.html">News</a>
+            <Link href="/contact.html" className="submenu-item">Contact</Link>
+            <Link href="/metadata-data-standards.html" className="submenu-item">Metadata | Data Standards</Link>
+            <Link href="/tools-pipelines.html" className="submenu-item">Tools | Pipelines</Link>
+            <Link href="/tutorials.html" className="submenu-item">Tutorials</Link>
+            <Link href="/news.html" className="submenu-item">News</Link>
           </div>
         </div>
       </div>
       <div className="f-row" style={{ gap: '20px' }}>
         <div className="logo">
-          <a href="/">
+          <Link href="/">
             <Image
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/pkb-4.svg"
               alt="PanKbase Logo"
               height={37}
               width={150}
             />
-          </a>
+          </Link>
         </div>
         <div>
           Supported by <strong>National Institutes of Health (NIH)</strong> grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong><br />
