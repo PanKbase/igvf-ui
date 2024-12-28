@@ -43,6 +43,10 @@
   .form-element-height-lg {
     min-height: 2.5rem;
   }
+  .md\:container {
+    max-width: 100% !important; /* Force container width to 100% */
+    width: 100% !important; /* Ensure it stretches fully */
+  }
 
   /* Header styles */
   .pkb-nav {
