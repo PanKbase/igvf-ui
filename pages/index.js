@@ -47,8 +47,8 @@ Statistic.propTypes = {
  */
 export default function Home({ assayCount, processedCount, analysisCount, donorCount }) {
   return (
-    <HomeTitle />
     <div className="@container/home">
+      <HomeTitle />
       <p className="my-8">
         PanKbase Data Library is a centralized resource of the human pancreas for diabetes
         research that provides access to deeply curated high-quality datasets,
