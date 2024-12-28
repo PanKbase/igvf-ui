@@ -23,7 +23,7 @@ function PkbFooter() {
           </div>
         </div>
         <div className="menu-item-wrapper-footer">
-          <Link href="/" className="menu-item-footer">
+          <Link href="/" className="menu-item">
             Data
           </Link>
           <div className="submenu-footer">
@@ -65,17 +65,6 @@ function PkbFooter() {
             <Link href="/tutorials.html" className="submenu-item-footer">Tutorials</Link>
             <Link href="/news.html" className="submenu-item-footer">News</Link>
           </div>
-        </div>
-      </div>
-      <div className="f-row" style={{ gap: '20px' }}>
-        <div className="logo">
-          <Link href="/">
-            <SiteLogo />
-          </Link>
-        </div>
-        <div>
-          Supported by <strong>National Institutes of Health (NIH)</strong> grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong><br />
-          Supplemental funds from the <strong>NIH Office of Data Science Strategies</strong>
         </div>
       </div>
     </div>
