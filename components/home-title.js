@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SiteLogo from "./logo";
@@ -25,7 +25,7 @@ function injectFont(fontUrl) {
 
 export default function Header() {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
-  const { sessionProperties } = useContext(SessionContext);
+  
 
   useEffect(() => {
     injectFavicon(

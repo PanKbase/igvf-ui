@@ -46,7 +46,7 @@ Statistic.propTypes = {
 /**
  * The homepage for PanKbase.
  */
-export default function Home({ assayCount, processedCount, analysisCount, donorCount }) {
+export default function Home({ assayCount, processedCount, analysisCount, donorCount, biosampleCount, workflowCount }) {
   return (
     <div className="@container/home">
       <HomeTitle />
@@ -116,6 +116,8 @@ Home.propTypes = {
   assayCount: PropTypes.number,
   processedCount: PropTypes.number,
   donorCount: PropTypes.number,
+  workflowCount: PropTypes.number,
+  biosampleCount: PropTypes.number,
 };
 
 export async function getServerSideProps({ req }) {
