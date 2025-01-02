@@ -1,10 +1,8 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SiteLogo from "./logo";
 import { useAuth0 } from "@auth0/auth0-react";
-import SessionContext from "./session-context";
-
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -15,17 +13,14 @@ function injectFavicon(faviconUrl) {
   }
   favicon.setAttribute('href', faviconUrl);
 }
-
 function injectFont(fontUrl) {
   const linkTag = document.createElement('link');
   linkTag.rel = 'stylesheet';
   linkTag.href = fontUrl;
   document.head.appendChild(linkTag);
 }
-
 export default function Header() {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
-  
 
   useEffect(() => {
     injectFavicon(
@@ -35,7 +30,6 @@ export default function Header() {
       'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'
     );
   }, []);
-
   return (
     <div className="pkb-nav">
       <div className="logo">
