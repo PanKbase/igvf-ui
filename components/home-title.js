@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SiteLogo from "./logo";
+import { useAuth0 } from "@auth0/auth0-react";
+import SessionContext from "./session-context";
+
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -21,6 +24,9 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { sessionProperties } = useContext(SessionContext);
+
   useEffect(() => {
     injectFavicon(
       'https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/favicon-32x32.png'
@@ -39,45 +45,50 @@ export default function Header() {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
-          <a className="topmenu-item" href="#">
-            Search
-            <Image
-              src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
-              alt="Search Icon"
-              width={15}
-              height={15}
-            />
-          </a>
-          <a className="topmenu-item" href="#">Analysis</a>
-          <a className="topmenu-item" href="#">
-            Login
-            <Image
-              src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-              alt="User Icon"
-              width={15}
-              height={15}
-            />
-          </a>
+          <a className="topmenu-item" href="#">Data Library Schema</a>
+          <div className="topmenu-item">
+            {isAuthenticated ? (
+              <button onClick={() => logout()} className="flex items-center">
+                Sign Out
+                <Image
+                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
+                  alt="User Icon"
+                  width={15}
+                  height={15}
+                />
+              </button>
+            ) : (
+              <button onClick={() => loginWithRedirect()} className="flex items-center">
+                Data Library Login
+                <Image
+                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
+                  alt="User Icon"
+                  width={15}
+                  height={15}
+                />
+              </button>
+            )}
+          </div>
         </div>
         <div className="menu">
-            <div className="menu-item-wrapper">
-              <a className="menu-item menu-item-main" href="https://dev.pankgraph.org/">
-                PanKgraph
-              </a>
-            </div>
-            <div className="menu-item-wrapper">
-              <a
-                className="menu-item menu-item-main"
-                href="https://data.pankbase.org"
-              >
-                Data Library
-              </a>
-            </div>
-            <div className="menu-item-wrapper">
-              <a className="menu-item menu-item-main" href="https://pankbase.org:8000/single-cell.html">
-                Integrated Cell Browser
-              </a>
-            </div>
+          <div className="menu-item-wrapper">
+            <a className="menu-item menu-item-main" href="https://dev.pankgraph.org/">
+              PanKgraph
+            </a>
+          </div>
+          <div className="menu-item-wrapper">
+            <a
+              className="menu-item menu-item-main"
+              href="https://data.pankbase.org"
+            >
+              Data Library
+            </a>
+          </div>
+          <div className="menu-item-wrapper">
+            <a className="menu-item menu-item-main" href="https://pankbase.org:8000/single-cell.html">
+              Integrated Cell Browser
+            </a>
+          </div>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Data</a>
             <div className="submenu">
@@ -87,33 +98,6 @@ export default function Header() {
                 Donor Metadata
               </a>
               <a className="submenu-item" href="https://pankbase.org:8000/apis.html">APIs</a>
-            </div>
-          </div>
-          <div className="menu-item-wrapper">
-            <a className="menu-item" href="#">Resources</a>
-            <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/analytical-library.html">Analytical Library</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/publications.html">Publications</a>
-            </div>
-          </div>
-          <div className="menu-item-wrapper">
-            <a className="menu-item" href="#">About</a>
-            <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/projects.html">Project</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/people.html">People</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/policies.html">Policies</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/programs.html">Programs</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/collaborate.html">Collaborate</a>
-            </div>
-          </div>
-          <div className="menu-item-wrapper">
-            <a className="menu-item" href="#">Help</a>
-            <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/contact.html">Contact</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/metadata-data-standards.html">Metadata | Data Standards</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/tools-pipelines.html">Tools | Pipelines</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/tutorials.html">Tutorials</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/news.html">News</a>
             </div>
           </div>
         </div>

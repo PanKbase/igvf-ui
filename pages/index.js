@@ -76,6 +76,12 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
         <Statistic
+          label="Biosamples"
+          value={biosampleCount}
+          query="type=Biosample"
+          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+        />
+        <Statistic
           label="Assays"
           value={assayCount}
           query="type=MeasurementSet"
@@ -91,6 +97,12 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
           label="Analysis Results"
           value={analysisCount}
           query="type=AnalysisSet&file_set_type=principal+analysis"
+          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+        />
+        <Statistic
+          label="Workflow"
+          value={workflowCount}
+          query="type=Workflow"
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
       </div>
@@ -121,6 +133,12 @@ export async function getServerSideProps({ req }) {
   const assayResults = (
     await request.getObject("/search/?type=MeasurementSet&limit=0")
   ).optional();
+  const biosampleResults = (
+    await request.getObject("/search/?type=Biosample&limit=0")
+  ).optional();
+  const workflowResults = (
+    await request.getObject("/search/?type=Workflow&limit=0")
+  ).optional();
 
   return {
     props: {
@@ -128,6 +146,8 @@ export async function getServerSideProps({ req }) {
       processedCount: processedResults?.total || 0,
       assayCount: assayResults?.total || 0,
       donorCount: donorResults?.total || 0,
+      biosampleCount: biosampleResults?.total || 0,
+      workflowCount: workflowResults?.total || 0,
     },
   };
 }

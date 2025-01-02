@@ -17,8 +17,8 @@ import Link from "next/link";
  * The graphic within the 105x70 box should have a maximum width of 95px and a maximum height of
  * 60px.
  */
-const LOGO_WIDTH = 162;
-const LOGO_HEIGHT = 55;
+const LOGO_WIDTH = 225;
+const LOGO_HEIGHT = 69;
 
 export function Logo() {
   return (
@@ -36,7 +36,7 @@ export function Logo() {
 
 export default function SiteLogo() {
   return (
-    <Link href="/" className="block w-32 py-2 md:h-auto md:w-auto md:px-8">
+    <Link href="/" className="block w-10 py-2 md:h-auto md:w-auto md:px-8">
       <Logo />
       <span className="sr-only">Home</span>
     </Link>
