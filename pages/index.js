@@ -86,6 +86,8 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
           query="type=MeasurementSet"
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
+      </div>
+      <div className="my-4 @xl/home:flex @xl/home:gap-4">
         <Statistic
           label="Processed Results"
           value={processedCount}
