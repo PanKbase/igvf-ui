@@ -39,16 +39,16 @@ export default function Header() {
     );
   }, []);
 
-  function handleSignOut() {
+  function function handleSignOut() {
     logout();
     setAuthStageLogout();
     setIsModalOpen(false);
-  };
+  }
 
-  function handleSignIn() {
+  function function handleSignIn() {
     loginWithRedirect();
     setAuthStageLogin();
-  };
+  }
 
   return (
     <div className="pkb-nav">
