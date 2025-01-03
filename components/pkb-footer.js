@@ -11,13 +11,13 @@ function PkbFooter() {
             </Link>
           </div>
           <div className="menu-item-wrapper-footer">
-            <Link href="/single-cell.html" className="menu-item menu-item-main">
-              Integrated Cell Browser
+            <Link href="https://data.pankbase.org" className="menu-item menu-item-main">
+              Data Library
             </Link>
           </div>
           <div className="menu-item-wrapper-footer">
-            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="menu-item menu-item-main">
-              Donor Metadata
+            <Link href="/single-cell.html" className="menu-item menu-item-main">
+              Integrated Cell Browser
             </Link>
           </div>
         </div>
@@ -26,10 +26,10 @@ function PkbFooter() {
             Data
           </Link>
           <div className="submenu-footer">
-            <Link href="/data-browser.html" className="submenu-item">Data Browser</Link>
-            <Link href="/single-cell.html" className="submenu-item">Integrated Cell Browser</Link>
-            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="submenu-item">Donor Metadata</Link>
-            <Link href="/apis.html" className="submenu-item">APIs</Link>
+            <Link href="/data-browser.html" className="submenu-item-footer">Data Browser</Link>
+            <Link href="/single-cell.html" className="submenu-item-footer">Integrated Cell Browser</Link>
+            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="submenu-item-footer">Donor Metadata</Link>
+            <Link href="/apis.html" className="submenu-item-footer">APIs</Link>
           </div>
         </div>
         <div className="menu-item-wrapper-footer">
