@@ -59,7 +59,7 @@ export default function Header() {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
-          <a className="topmenu-item" href="#">Data Library Schema</a>
+          <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
           <div className="topmenu-item">
             {isAuthenticated ? (
               <button onClick={() => setIsModalOpen(true)} className="flex items-center">

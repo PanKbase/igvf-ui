@@ -46,6 +46,8 @@
   .md\:container {
     max-width: 100% !important; /* Force container width to 100% */
     width: 100% !important; /* Ensure it stretches fully */
+    padding-left: 0 !important; /* Ensure it stretches fully */
+    padding-right: 0 !important; /* Ensure it stretches fully */
   }
 
   /* Header styles */
