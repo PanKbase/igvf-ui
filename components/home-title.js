@@ -39,13 +39,13 @@ export default function Header() {
     );
   }, []);
 
-  function function handleSignOut() {
+  function handleSignOut() {
     logout();
     setAuthStageLogout();
     setIsModalOpen(false);
   }
 
-  function function handleSignIn() {
+  function handleSignIn() {
     loginWithRedirect();
     setAuthStageLogin();
   }
