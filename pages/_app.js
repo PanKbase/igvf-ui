@@ -110,6 +110,9 @@ function Site({ Component, pageProps, authentication }) {
       <TestServerWarning />
       <HomeTitle />
       <div className="md:container">
+      <div className="pkb-beta">
+	  beta
+      </div>
         <ScrollToTop />
         <GlobalContext.Provider value={globalContext}>
           <Session authentication={authentication}>
