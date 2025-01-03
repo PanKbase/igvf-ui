@@ -26,8 +26,8 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  const { loginWithRedirect, logout, isAuthenticated, isLoading } = useAuth0();
-  const { sessionProperties, setAuthStageLogin, setAuthStageLogout } = useContext(SessionContext);
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { setAuthStageLogin, setAuthStageLogout } = useContext(SessionContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -39,13 +39,13 @@ export default function Header() {
     );
   }, []);
 
-  const handleSignOut = () => {
+  function handleSignOut() {
     logout();
     setAuthStageLogout();
     setIsModalOpen(false);
   };
 
-  const handleSignIn = () => {
+  function handleSignIn() {
     loginWithRedirect();
     setAuthStageLogin();
   };
