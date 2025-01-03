@@ -111,7 +111,7 @@ function Site({ Component, pageProps, authentication }) {
       <HomeTitle />
       <div className="md:container">
       <div className="pkb-beta">
-	  beta
+         beta
       </div>
         <ScrollToTop />
         <GlobalContext.Provider value={globalContext}>
