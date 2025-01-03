@@ -2,8 +2,8 @@
 import Link from "next/link";
 import PropTypes from "prop-types";
 // components
-import HomeTitle from "../components/home-title";
-import PkbFooter from "../components/pkb-footer";
+// import HomeTitle from "../components/home-title";
+// import PkbFooter from "../components/pkb-footer";
 import SiteSearchTrigger from "../components/site-search-trigger";
 // lib
 import FetchRequest from "../lib/fetch-request";
@@ -49,7 +49,6 @@ Statistic.propTypes = {
 export default function Home({ assayCount, processedCount, analysisCount, donorCount, biosampleCount, workflowCount }) {
   return (
     <div className="@container/home">
-      <HomeTitle />
       <p className="my-8">
         PanKbase Data Library is a centralized resource of the human pancreas for diabetes
         research that provides access to deeply curated high-quality datasets,
@@ -106,7 +105,6 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
           colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
         />
       </div>
-      <PkbFooter />
     </div>
   );
 }
