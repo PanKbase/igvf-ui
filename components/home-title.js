@@ -140,10 +140,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {/* Add beta label here AFTER menu-wrapper */}
-      <div className="pkb-beta">
-       beta
-      </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Modal.Header closeLabel="Cancel">
           <h2 className="text-lg font-semibold">Sign Out</h2>
