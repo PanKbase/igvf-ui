@@ -108,8 +108,8 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
+      <HomeTitle />
       <div className="md:container">
-        <HomeTitle />
         <ScrollToTop />
         <GlobalContext.Provider value={globalContext}>
           <Session authentication={authentication}>
@@ -124,8 +124,8 @@ function Site({ Component, pageProps, authentication }) {
             </div>
           </Session>
         </GlobalContext.Provider>
-        <PkbFooter />
       </div>
+    <PkbFooter />
     </ViewportOverlay>
   );
 }

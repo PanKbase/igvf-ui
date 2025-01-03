@@ -104,6 +104,14 @@ export default function Header() {
             </a>
           </div>
           <div className="menu-item-wrapper">
+            <a className="menu-item" href="#">Data</a>
+            <div className="submenu">
+              <a className="submenu-item" href="https://data.pankbase.org">Data Library</a>
+              <a className="submenu-item" href="http://data.pankbase.org/donor_metadata">Donor Metadata</a>
+              <a className="submenu-item" href="https://pankbase.org:8000/apis.html">APIs</a>
+            </div>
+          </div>
+          <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Resources</a>
             <div className="submenu">
               <a className="submenu-item" href="https://pankbase.org:8000/analytical-library.html">Analytical Library</a>
