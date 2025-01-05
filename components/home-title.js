@@ -65,30 +65,7 @@ export default function Header() {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
-          <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
-          <div className="topmenu-item">
-            {isAuthenticated ? (
-              <button onClick={() => setIsModalOpen(true)} className="flex items-center">
-                {isAdmin ? 'Admin' : 'User'} Logout
-                <Image
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-                  alt="User Icon"
-                  width={15}
-                  height={15}
-                />
-              </button>
-            ) : (
-              <button onClick={handleSignIn} className="flex items-center">
-                Data Library Login
-                <Image
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-                  alt="User Icon"
-                  width={15}
-                  height={15}
-                />
-              </button>
-            )}
-          </div>
+          <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Login & Schema<Image src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg" alt="User Icon" width={15} height={15} /></a>
         </div>
         <div className="menu">
           <div className="menu-item-wrapper">
