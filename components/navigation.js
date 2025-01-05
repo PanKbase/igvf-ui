@@ -622,12 +622,12 @@ function NavigationCollapsed() {
   );
 }
 
-NavigationCollapsed.propTypes = {
+//NavigationCollapsed.propTypes = {
   // Function to call when user clicks a navigation item
-  navigationClick: PropTypes.func.isRequired,
+  //navigationClick: PropTypes.func.isRequired,
   // Function to call when user clicks the collapse button
   // toggleNavCollapsed: PropTypes.func.isRequired,
-};
+//};
 
 /**
  * Displays the full IGVF logo and the sidebar navigation collapse button.
