@@ -106,9 +106,9 @@ export default function Header() {
           </div>
           {isAdmin && (
             <div className="menu-item-wrapper">
-              <a className="menu-item menu-item-main" href="/admin">
+              <Link className="menu-item menu-item-main" href="/admin">
                 Admin Panel
-              </a>
+              </Link>
             </div>
           )}
           <div className="menu-item-wrapper">
