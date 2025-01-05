@@ -703,11 +703,7 @@ export default function NavigationSection() {
   }, [toggleNavCollapsed]);
 
   return (
-    <section
-      className={`bg-brand md:sticky md:top-0 md:h-screen md:shrink-0 md:grow-0 md:overflow-y-auto md:bg-transparent ${
-        isNavCollapsed ? "md:w-12" : "md:w-72"
-      }`}
-    >
+    <section>
       <div className="flex h-14 items-center justify-between p-2 md:hidden">
         <button
           data-testid="mobile-navigation-trigger"
