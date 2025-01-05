@@ -463,13 +463,6 @@ NavigationGroupItem.propTypes = {
 };
 
 /**
- * Wraps a generic navigation item in an <li> tag.
- */
-function NavigationItem({ children }) {
-  return <li>{children}</li>;
-}
-
-/**
  * Handles the button to expand or collapse the sidebar navigation.
  */
 function NavigationCollapseButton({ toggleNavCollapsed, isNavCollapsed }) {
@@ -611,7 +604,7 @@ NavigationExpanded.propTypes = {
   // toggleNavCollapsed: PropTypes.func,
 };
 
-function NavigationCollapsed({ navigationClick }) {
+function NavigationCollapsed() {
   const { isAuthenticated } = useAuth0();
 
   return (

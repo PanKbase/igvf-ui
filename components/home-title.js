@@ -1,10 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import SiteLogo from "./logo";
-import { Button } from "./form-elements";
-import Modal from "./modal";
-import SessionContext from "./session-context";
 import NavigationSection from "../components/navigation";
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
