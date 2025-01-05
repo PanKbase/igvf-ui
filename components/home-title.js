@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "./form-elements";
 import Modal from "./modal";
 import SessionContext from "./session-context";
+import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
 
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
@@ -26,9 +27,10 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const { setAuthStageLogin, setAuthStageLogout } = useContext(SessionContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     injectFavicon(
@@ -37,16 +39,20 @@ export default function Header() {
     injectFont(
       'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'
     );
-  }, []);
+
+    if (user && user['https://pankbase.org/roles']?.includes('admin')) {
+      setIsAdmin(true);
+    }
+  }, [user]);
 
   function handleSignOut() {
-    logout();
+    logoutAuthProvider(logout);
     setAuthStageLogout();
     setIsModalOpen(false);
   }
 
   function handleSignIn() {
-    loginWithRedirect();
+    loginAuthProvider(loginWithRedirect);
     setAuthStageLogin();
   }
 
@@ -63,7 +69,7 @@ export default function Header() {
           <div className="topmenu-item">
             {isAuthenticated ? (
               <button onClick={() => setIsModalOpen(true)} className="flex items-center">
-                Sign Out
+                {isAdmin ? 'Admin' : 'User'} Logout
                 <Image
                   src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
                   alt="User Icon"
@@ -98,6 +104,13 @@ export default function Header() {
               Data Library
             </a>
           </div>
+          {isAdmin && (
+            <div className="menu-item-wrapper">
+              <a className="menu-item menu-item-main" href="/admin">
+                Admin Panel
+              </a>
+            </div>
+          )}
           <div className="menu-item-wrapper">
             <a className="menu-item menu-item-main" href="https://pankbase.org:8000/single-cell.html">
               Integrated Cell Browser
@@ -106,14 +119,15 @@ export default function Header() {
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Data</a>
             <div className="submenu">
-              <a className="submenu-item" href="https://data.pankbase.org">Data Library</a>
-              <a className="submenu-item" href="http://data.pankbase.org/donor_metadata">Donor Metadata</a>
+              <a className="submenu-item" href="https://pankbase.org:8000/data-browser.html">Data Browser</a>
+              <a className="submenu-item" href="http://tools.cmdga.org:3838/metadata_analysis_assays/">Donor Metadata</a>
               <a className="submenu-item" href="https://pankbase.org:8000/apis.html">APIs</a>
             </div>
           </div>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Resources</a>
             <div className="submenu">
+              <a className="submenu-item" href="https://pankbase.org:8000/single-cell.html">Integrated Cell Browser</a>
               <a className="submenu-item" href="https://pankbase.org:8000/analytical-library.html">Analytical Library</a>
               <a className="submenu-item" href="https://pankbase.org:8000/publications.html">Publications</a>
             </div>
