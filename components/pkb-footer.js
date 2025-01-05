@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 function PkbFooter() {
   return (
-    <div className="pkb-footer">
+      <div className="pkb-footer" style={{ display: 'flex', flexDirection: "column" }}>
       <div className="menu-footer">
         <div className="main-menu-items">
           <div className="menu-item-wrapper-footer">
