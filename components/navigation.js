@@ -25,8 +25,6 @@ import { useSessionStorage } from "./browser-storage";
 import { Button } from "./form-elements";
 import GlobalContext from "./global-context";
 import Icon from "./icon";
-import IndexerState from "./indexer-state";
-import { Email, Twitter } from "./site-info";
 import SiteLogo from "./logo";
 import Modal from "./modal";
 import SessionContext from "./session-context";
@@ -566,62 +564,6 @@ function NavigationExpanded({ navigationClick }) {
   return (
     <>
         <NavigationList className="p-4">
-        <NavigationGroupItem
-          id="methods"
-          title="Methods"
-          icon={<Icon.Methodology />}
-          isGroupOpened={openedParents.includes("methods")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="schemas"
-            href="/profiles"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Schemas
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="donor-meta-data"
-            href="/methods/donor_meta_data"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Donor meta-data
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="data-processing"
-            href="/methods/data_processing"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data processing
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="external-resources"
-            href="/methods/external_resources"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            External resources
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="file-formats"
-            href="/methods/file_formats"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            File formats
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="audits"
-            href="/audits"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Audit Documentation
-          </NavigationHrefItem>
-        </NavigationGroupItem>
         {isAuthenticated ? (
           <NavigationGroupItem
             id="authenticate"
@@ -657,15 +599,6 @@ function NavigationExpanded({ navigationClick }) {
             Sign In
           </NavigationSignInItem>
         )}
-        <NavigationItem>
-          <IndexerState />
-        </NavigationItem>
-        <NavigationItem>
-          <div className="flex justify-center gap-2">
-            <Email />
-            <Twitter />
-          </div>
-        </NavigationItem>
       </NavigationList>
     </>
   );
@@ -683,26 +616,6 @@ function NavigationCollapsed({ navigationClick }) {
 
   return (
     <NavigationList className="w-full [&>ul>li]:my-2 [&>ul]:flex [&>ul]:flex-col [&>ul]:items-center">
-      <NavigationHrefItem
-        id="home"
-        href="/"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <Icon.Brand />
-        </NavigationIcon>
-      </NavigationHrefItem>
-      <NavigationHrefItem
-        id="schemas"
-        href="/profiles"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <Icon.Data />
-        </NavigationIcon>
-      </NavigationHrefItem>
       {isAuthenticated ? (
         <NavigationSignOutItem id="sign-out" isNarrowNav>
           <Icon.UserSignedIn className="h-8 w-8" />
@@ -712,15 +625,6 @@ function NavigationCollapsed({ navigationClick }) {
           <Icon.UserSignedOut className="h-8 w-8" />
         </NavigationSignInItem>
       )}
-      <NavigationItem>
-        <IndexerState isCollapsed />
-      </NavigationItem>
-      <NavigationItem>
-        <Email />
-      </NavigationItem>
-      <NavigationItem>
-        <Twitter />
-      </NavigationItem>
     </NavigationList>
   );
 }
@@ -812,7 +716,6 @@ export default function NavigationSection() {
       }`}
     >
       <div className="flex h-14 items-center justify-between p-2 md:hidden">
-        <SiteLogo />
         <button
           data-testid="mobile-navigation-trigger"
           className="stroke-white md:hidden"
