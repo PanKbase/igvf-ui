@@ -31,13 +31,6 @@ import SessionContext from "./session-context";
 // lib
 import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
 import { UC } from "../lib/constants";
-const [isClient, setIsClient] = useState(false);
-
-useEffect(() => {
-  setIsClient(true); // Ensure rendering only happens on the client-side
-}, []);
-
-if (!isClient) return null; // Prevent rendering on the server
 
 /**
  * Icon for opening the sidebar navigation.
@@ -662,6 +655,12 @@ NavigationLogo.propTypes = {
  */
 export default function NavigationSection() {
   // True if user has opened the mobile menu
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true); // Ensure rendering only happens on the client-side
+  }, []);
+  // Prevent rendering during SSR
+  if (!isClient) { return null; } // Prevent rendering on the server
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   // True if user has collapsed the sidebar menu
   const [isNavCollapsed, setIsNavCollapsed] = useSessionStorage(
