@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import SiteLogo from "./logo";
-import dynamic from "next/dynamic";
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -12,11 +11,6 @@ function injectFavicon(faviconUrl) {
   }
   favicon.setAttribute('href', faviconUrl);
 }
-// Dynamically import NavigationSection without SSR
-const NavigationSection = dynamic(() => import("../components/navigation"), {
-  ssr: false,
-});
-
 function injectFont(fontUrl) {
   const linkTag = document.createElement('link');
   linkTag.rel = 'stylesheet';
@@ -45,8 +39,7 @@ useEffect(() => {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
-          <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
-        <NavigationSection />
+          <a className="topmenu-item" href="#">Search<Image src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg" alt="Search Icon" width={15} height={15} /></a><a className="topmenu-item" href="#">Analysis</a><a className="topmenu-item" href="#">Login<Image src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg" alt="User Icon" width={15} height={15} /></a>
         </div>
         <div className="menu">
           <div className="menu-item-wrapper">
