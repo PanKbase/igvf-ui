@@ -49,6 +49,13 @@
     padding-left: 0 !important; /* Ensure it stretches fully */
     padding-right: 0 !important; /* Ensure it stretches fully */
   }
+  .flex {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
   /* Header styles */
   .pkb-nav {

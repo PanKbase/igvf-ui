@@ -25,6 +25,12 @@ import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
+import dynamic from "next/dynamic";
+
+// Dynamically import NavigationSection without SSR
+const NavigationSection = dynamic(() => import("../components/navigation"), {
+  ssr: false,
+});
 
 const testServerDomains = ["staging.pankbase.org", "localhost"];
 
@@ -108,6 +114,19 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
+      <div className="flex flex-col border-b border-gray-200">
+      <div className="flex justify-between items-center p-4 bg-white shadow-sm">
+      <NavigationSection />
+      <a
+        className="text-sm font-medium text-gray-700 hover:text-gray-900"
+        href="https://data.pankbase.org/profiles"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      Data Library Schema
+      </a>
+      </div>
+      </div>
       <HomeTitle />
       <div className="md:container">
       <div className="pkb-beta">
