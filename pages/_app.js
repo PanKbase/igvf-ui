@@ -17,6 +17,7 @@ import {
 import DarkModeManager from "../lib/dark-mode-manager";
 // components
 import Error from "../components/error";
+//import NavigationSection from "../components/navigation";
 import GlobalContext from "../components/global-context";
 import HomeTitle from "../components/home-title";
 import PkbFooter from "../components/pkb-footer";
@@ -28,9 +29,9 @@ import "../styles/globals.css";
 import dynamic from "next/dynamic";
 
 // Dynamically import NavigationSection without SSR
-const NavigationSection = dynamic(() => import("../components/navigation"), {
-  ssr: false,
-});
+//const NavigationSection = dynamic(() => import("../components/navigation"), {
+//  ssr: false,
+//});
 
 const testServerDomains = ["staging.pankbase.org", "localhost"];
 
@@ -114,11 +115,11 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
-      <div className="header-flex border-b border-gray-200 px-6 bg-white shadow-sm">
-      <div className="ml-auto header-flex items-center space-x-4">
-      <NavigationSection />
-      </div>
-      </div>
+      //<div className="header-flex border-b border-gray-200 px-6 bg-white shadow-sm">
+      //<div className="ml-auto header-flex items-center space-x-4">
+      //<NavigationSection />
+      //</div>
+      //</div>
       <HomeTitle />
       <div className="md:container">
       <div className="pkb-beta">
