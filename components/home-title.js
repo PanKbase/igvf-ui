@@ -25,14 +25,16 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  useEffect(() => {
+useEffect(() => {
+  if (typeof window !== "undefined") {
     injectFavicon(
       'https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/favicon-32x32.png'
     );
     injectFont(
       'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'
     );
-  }, []);
+  }
+}, []);
 
   return (
     <div className="pkb-nav">
