@@ -656,17 +656,15 @@ NavigationLogo.propTypes = {
 export default function NavigationSection() {
   // True if user has opened the mobile menu
   const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true); // Ensure rendering only happens on the client-side
-  }, []);
-  // Prevent rendering during SSR
-  if (!isClient) { return null; } // Prevent rendering on the server
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   // True if user has collapsed the sidebar menu
   const [isNavCollapsed, setIsNavCollapsed] = useSessionStorage(
     "nav-collapsed",
     false
   );
+  useEffect(() => {
+    setIsClient(true); // Ensure rendering only happens on the client-side
+  }, []);
 
   /**
    * Called when the user clicks a navigation menu item.
@@ -707,7 +705,10 @@ export default function NavigationSection() {
       document.removeEventListener("keydown", handleCollapseKeypress);
     };
   }, [toggleNavCollapsed]);
-
+  // Render nothing until client-side rendering is confirmed
+  if (!isClient) {
+    return <div style={{ visibility: "hidden" }}></div>;
+  }
   return (
     <section>
       <div className="flex h-14 items-center justify-between p-2 md:hidden">
