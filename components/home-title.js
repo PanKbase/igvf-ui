@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import SiteLogo from "./logo";
-import NavigationSection from "../components/navigation";
+import dynamic from "next/dynamic";
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -12,6 +12,10 @@ function injectFavicon(faviconUrl) {
   }
   favicon.setAttribute('href', faviconUrl);
 }
+// Dynamically import NavigationSection without SSR
+const NavigationSection = dynamic(() => import("../components/navigation"), {
+  ssr: false,
+});
 
 function injectFont(fontUrl) {
   const linkTag = document.createElement('link');
