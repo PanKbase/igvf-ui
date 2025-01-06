@@ -126,10 +126,10 @@ function Site({ Component, pageProps, authentication }) {
                   <Component {...pageProps} />
                 )}
               </div>
+              </div>
             </div>
           </Session>
         </GlobalContext.Provider>
-      </div>
     <PkbFooter />
     </ViewportOverlay>
   );
