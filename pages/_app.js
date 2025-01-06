@@ -114,11 +114,11 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
-      <div className="flex flex-col border-b border-gray-200">
-      <div className="flex justify-between items-center p-4 bg-white shadow-sm">
+      <div className="flex border-b border-gray-200 p-4 bg-white shadow-sm">
+      <div className="ml-auto flex items-center space-x-4">
       <NavigationSection />
       <a
-        className="text-sm font-medium text-gray-700 hover:text-gray-900"
+        className="text-[0.7rem] font-medium text-gray-700 hover:text-gray-900"
         href="https://data.pankbase.org/profiles"
         target="_blank"
         rel="noopener noreferrer"
