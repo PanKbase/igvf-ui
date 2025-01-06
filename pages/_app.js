@@ -116,14 +116,6 @@ function Site({ Component, pageProps, authentication }) {
       <TestServerWarning />
       <div className="header-flex border-b border-gray-200 px-6 bg-white shadow-sm">
       <div className="ml-auto header-flex items-center space-x-4">
-      <a
-        className="text-[0.7rem] font-medium text-gray-700 hover:text-gray-900"
-        href="https://data.pankbase.org/profiles"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-      Data Library Schema
-      </a>
       <NavigationSection />
       </div>
       </div>
