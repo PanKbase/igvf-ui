@@ -110,14 +110,14 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
-      <HomeTitle />
-      <div className="md:container">
-      <div className="pkb-beta">
-         beta
-      </div>
-        <ScrollToTop />
         <GlobalContext.Provider value={globalContext}>
           <Session authentication={authentication}>
+            <HomeTitle />
+            <div className="md:container">
+            <div className="pkb-beta">
+              beta
+            </div>
+            <ScrollToTop />
             <div className="md:flex">
               <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
                 {pageProps.serverSideError ? (

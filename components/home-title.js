@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import SiteLogo from "./logo";
 import Image from "next/image";
+import NavigationSection from "../components/navigation";
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -40,7 +41,8 @@ useEffect(() => {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
-          <a className="topmenu-item" href="#">Search<Image src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg" alt="Search Icon" width={15} height={15} /></a><a className="topmenu-item" href="#">Analysis</a><a className="topmenu-item" href="#">Login<Image src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg" alt="User Icon" width={15} height={15} /></a>
+          <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
+          <NavigationSection />
         </div>
         <div className="menu">
           <div className="menu-item-wrapper">
