@@ -707,7 +707,7 @@ export default function NavigationSection() {
   }, [toggleNavCollapsed]);
   // Render nothing until client-side rendering is confirmed
   if (!isClient) {
-    return <div style={{ visibility: "hidden" }}></div>;
+     return <div style={{ visibility: "hidden" }} />;
   }
   return (
     <section>
