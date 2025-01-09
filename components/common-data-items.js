@@ -186,7 +186,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       )}
       {item.hospital_stay !== undefined && (
         <>
-          <DataItemLabel>Hospital Stay (days)</DataItemLabel>
+          <DataItemLabel>Hospital Stay (hours)</DataItemLabel>
           <DataItemValue>{item.hospital_stay}</DataItemValue>
         </>
       )}
@@ -201,6 +201,7 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
       {/* Immunological Information */}
       {(item.aab_gada_value !== undefined || item.aab_gada !== undefined ||
       item.aab_ia2_value !== undefined || item.aab_ia2 !== undefined ||
+      item.aab_iaa_value !== undefined || item.aab_iaa !== undefined ||
       item.aab_znt8_value !== undefined || item.aab_znt8 !== undefined) && (
       <>
       <DataAreaTitle>Auto Antibodies</DataAreaTitle>
@@ -228,6 +229,18 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
         <>
           <DataItemLabel>AAB IA2 Positive</DataItemLabel>
           <DataItemValue>{item.aab_ia2 ? "true" : "false"}</DataItemValue>
+        </>
+      )}
+      {item.aab_iaa_value !== undefined && (
+        <>
+          <DataItemLabel>AAB IAA Value (unit/ml)</DataItemLabel>
+          <DataItemValue>{item.aab_iaa_value}</DataItemValue>
+        </>
+      )}
+      {item.aab_iaa !== undefined && (
+        <>
+          <DataItemLabel>AAB IAA Positive</DataItemLabel>
+          <DataItemValue>{item.aab_iaa ? "true" : "false"}</DataItemValue>
         </>
       )}
       {item.aab_znt8_value !== undefined && (
