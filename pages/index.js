@@ -1,64 +1,53 @@
-// node_modules
+import React from 'react';
 import Link from "next/link";
 import PropTypes from "prop-types";
-// components
-// import HomeTitle from "../components/home-title";
-// import PkbFooter from "../components/pkb-footer";
 import SiteSearchTrigger from "../components/site-search-trigger";
-// lib
-import FetchRequest from "../lib/fetch-request";
+import { Users, Flask, Microscope, Database, GitBranch, ChartBar } from "lucide-react";
 import { abbreviateNumber } from "../lib/general";
 
-/**
- * Display a statistic panel that shows a property and its count from the database.
- */
-function Statistic({ graphic, label, value, query, colorClass }) {
+function Statistic({ icon: Icon, label, value, query, description }) {
   return (
-    <div
-      className={`my-4 grow basis-1/3 rounded border @xl/home:my-0 ${colorClass}`}
+    <Link
+      href={`/search/?${query}`}
+      className="group block w-full"
     >
-      <Link
-        href={`/search/?${query}`}
-        className="flex h-full items-center gap-4 p-2 no-underline"
-      >
-        <div>{graphic}</div>
-        <div className="shrink">
-          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {label}
+      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md">
+        <div className="flex items-start gap-4 p-6">
+          <div className="rounded-lg bg-teal-50 p-3">
+            <Icon className="h-6 w-6 text-teal-600" />
           </div>
-          <div className="text-4xl font-light text-gray-800 dark:text-gray-200">
-            {abbreviateNumber(value)}
+          <div className="flex-1">
+            <h3 className="mb-1 text-lg font-semibold text-gray-900">
+              {label}
+              <span className="ml-2 text-lg font-normal text-gray-600">
+                ({abbreviateNumber(value)})
+              </span>
+            </h3>
+            <p className="text-sm text-gray-600">
+              {description}
+            </p>
           </div>
         </div>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }
 
 Statistic.propTypes = {
-  graphic: PropTypes.element,
+  icon: PropTypes.elementType.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
-  colorClass: PropTypes.string,
+  description: PropTypes.string.isRequired,
 };
 
-/**
- * The homepage for PanKbase.
- */
 export default function Home({ assayCount, processedCount, analysisCount, donorCount, biosampleCount, workflowCount }) {
   return (
     <div className="@container/home">
       <p className="my-8">
-        PanKbase Data Library is a centralized resource of the human pancreas for diabetes
-        research that provides access to deeply curated high-quality datasets,
-        knowledge in computable forms, and advanced data science tools and
-        workflows. It enables open and reproducible multidisciplinary
-        collaboration to accelerate biomarker and therapeutic target
-        development.
+        The Data Library enables query and browsing components of analysis resources created by PanKbase, including meta-data on human donors and biosamples, details on experimental assays, standardized processing of data ('processed results'), workflows used to process data and create resources, and the resources themselves ('analysis results').
       </p>
 
-      {/* Interactive Search */}
       <section className="my-8">
         <h2 className="text-center text-lg font-bold">Search Data</h2>
         <div className="flex flex-col gap-4">
@@ -66,45 +55,48 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
         </div>
       </section>
 
-      {/* Statistics */}
-      <div className="my-4 @xl/home:flex @xl/home:gap-4">
+      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
         <Statistic
+          icon={Users}
           label="Donors"
           value={donorCount}
           query="type=Donor"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Human donors of a pancreatic biosample"
         />
         <Statistic
+          icon={Flask}
           label="Biosamples"
           value={biosampleCount}
           query="type=Biosample"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Pancreatic biosamples obtained from a donor"
         />
         <Statistic
+          icon={Microscope}
           label="Assays"
           value={assayCount}
           query="type=MeasurementSet"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Experimental assays performed on a biosample"
         />
-      </div>
-      <div className="my-4 @xl/home:flex @xl/home:gap-4">
         <Statistic
+          icon={Database}
           label="Processed Results"
           value={processedCount}
           query="type=AnalysisSet&file_set_type=intermediate+analysis"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Standardized processing of data generated from an assay"
         />
         <Statistic
+          icon={ChartBar}
           label="Analysis Results"
           value={analysisCount}
           query="type=AnalysisSet&file_set_type=principal+analysis"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Analyses of processed data such as integrated resources and downstream analysis"
         />
         <Statistic
+          icon={GitBranch}
           label="Workflow"
           value={workflowCount}
           query="type=Workflow"
-          colorClass="bg-transparent border-gray-200 hover:bg-gray-100"
+          description="Analysis workflows used to processed data and create resources"
         />
       </div>
     </div>
