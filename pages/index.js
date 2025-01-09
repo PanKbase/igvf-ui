@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import SiteSearchTrigger from "../components/site-search-trigger";
 import { Users, Flask, Microscope, Database, GitBranch, ChartBar } from "lucide-react";
 import { abbreviateNumber } from "../lib/general";
+import FetchRequest from "../lib/fetch-request";
 
 function Statistic({ icon: Icon, label, value, query, description }) {
   return (
@@ -45,7 +46,7 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
   return (
     <div className="@container/home">
       <p className="my-8">
-        The Data Library enables query and browsing components of analysis resources created by PanKbase, including meta-data on human donors and biosamples, details on experimental assays, standardized processing of data ('processed results'), workflows used to process data and create resources, and the resources themselves ('analysis results').
+        The Data Library enables query and browsing components of analysis resources created by PanKbase, including meta-data on human donors and biosamples, details on experimental assays, standardized processing of data (&apos;processed results&apos;), workflows used to process data and create resources, and the resources themselves (&apos;analysis results&apos;).
       </p>
 
       <section className="my-8">
