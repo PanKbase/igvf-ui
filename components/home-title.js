@@ -40,21 +40,14 @@ useEffect(() => {
       </div>
       <div className="menu-wrapper">
         <div className="topmenu">
+          <a className="topmenu-item" href="https://data.pankbase.org">Data Library Home</a>
           <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
           <NavigationSection />
         </div>
         <div className="menu">
           <div className="menu-item-wrapper">
-            <a className="menu-item menu-item-main" href="https://dev.pankgraph.org/" target="_blank" rel="noopener noreferrer">
+            <a className="menu-item menu-item-main" href="https://pankgraph.org" target="_blank" rel="noopener noreferrer">
               PanKgraph
-            </a>
-          </div>
-          <div className="menu-item-wrapper">
-            <a
-              className="menu-item menu-item-main"
-              href="https://data.pankbase.org"
-            target="_blank" rel="noopener noreferrer">
-              Data Library
             </a>
           </div>
           <div className="menu-item-wrapper">
@@ -65,37 +58,37 @@ useEffect(() => {
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Data</a>
             <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/data-browser.html" target="_blank" rel="noopener noreferrer">Data Browser</a>
-              <a className="submenu-item" href="http://tools.cmdga.org:3838/metadata_analysis_assays/" target="_blank" rel="noopener noreferrer">Donor Metadata</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/apis.html" target="_blank" rel="noopener noreferrer">APIs</a>
+              <a className="submenu-item" href="https://pankbase.org/donor-metadata.html" target="_blank" rel="noopener noreferrer">Donor Summary</a>
+              <a className="submenu-item" href="https://data.pankbase.org" target="_blank" rel="noopener noreferrer">Data Library</a>
+              <a className="submenu-item" href="https://pankbase.org/apis.html" target="_blank" rel="noopener noreferrer">APIs</a>
             </div>
           </div>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Resources</a>
             <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/single-cell.html" target="_blank" rel="noopener noreferrer">Integrated Cell Browser</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/analytical-library.html" target="_blank" rel="noopener noreferrer">Analytical Library</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/publications.html" target="_blank" rel="noopener noreferrer">Publications</a>
+              <a className="submenu-item" href="https://pankbase.org/single-cell.html" target="_blank" rel="noopener noreferrer">Integrated Cell Browser</a>
+              <a className="submenu-item" href="https://pankbase.org/analytical-library.html" target="_blank" rel="noopener noreferrer">Analytical Library</a>
+              <a className="submenu-item" href="https://pankbase.org/publications.html" target="_blank" rel="noopener noreferrer">Publications</a>
             </div>
           </div>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">About</a>
             <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/projects.html" target="_blank" rel="noopener noreferrer">Project</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/people.html" target="_blank" rel="noopener noreferrer">People</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/policies.html" target="_blank" rel="noopener noreferrer">Policies</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/programs.html" target="_blank" rel="noopener noreferrer">Programs</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/collaborate.html" target="_blank" rel="noopener noreferrer">Collaborate</a>
+              <a className="submenu-item" href="https://pankbase.org/projects.html" target="_blank" rel="noopener noreferrer">Project</a>
+              <a className="submenu-item" href="https://pankbase.org/people.html" target="_blank" rel="noopener noreferrer">People</a>
+              <a className="submenu-item" href="https://pankbase.org/policies.html" target="_blank" rel="noopener noreferrer">Policies</a>
+              <a className="submenu-item" href="https://pankbase.org/programs.html" target="_blank" rel="noopener noreferrer">Programs</a>
+              <a className="submenu-item" href="https://pankbase.org/collaborate.html" target="_blank" rel="noopener noreferrer">Collaborate</a>
             </div>
           </div>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Help</a>
             <div className="submenu">
-              <a className="submenu-item" href="https://pankbase.org:8000/contact.html" target="_blank" rel="noopener noreferrer">Contact</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/metadata-data-standards.html" target="_blank" rel="noopener noreferrer">Metadata | Data Standards</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/tools-pipelines.html" target="_blank" rel="noopener noreferrer">Tools | Pipelines</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/tutorials.html" target="_blank" rel="noopener noreferrer">Tutorials</a>
-              <a className="submenu-item" href="https://pankbase.org:8000/news.html" target="_blank" rel="noopener noreferrer">News</a>
+              <a className="submenu-item" href="https://pankbase.org/contact.html" target="_blank" rel="noopener noreferrer">Contact</a>
+              <a className="submenu-item" href="https://pankbase.org/metadata-data-standards.html" target="_blank" rel="noopener noreferrer">Metadata | Data Standards</a>
+              <a className="submenu-item" href="https://pankbase.org/tools-pipelines.html" target="_blank" rel="noopener noreferrer">Tools | Pipelines</a>
+              <a className="submenu-item" href="https://pankbase.org/tutorials.html" target="_blank" rel="noopener noreferrer">Tutorials</a>
+              <a className="submenu-item" href="https://pankbase.org/news.html" target="_blank" rel="noopener noreferrer">News</a>
             </div>
           </div>
         </div>

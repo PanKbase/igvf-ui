@@ -7,17 +7,12 @@ function PkbFooter() {
       <div className="menu-footer">
         <div className="main-menu-items">
           <div className="menu-item-wrapper-footer">
-            <Link href="https://dev.pankgraph.org/" className="menu-item menu-item-main">
+            <Link href="https://pankgraph.org/" className="menu-item menu-item-main">
               PanKgraph
             </Link>
           </div>
           <div className="menu-item-wrapper-footer">
-            <Link href="https://data.pankbase.org" className="menu-item menu-item-main">
-              Data Library
-            </Link>
-          </div>
-          <div className="menu-item-wrapper-footer">
-            <Link href="/single-cell.html" className="menu-item menu-item-main">
+            <Link href="https://pankbase.org/single-cell.html" className="menu-item menu-item-main">
               Integrated Cell Browser
             </Link>
           </div>
@@ -27,9 +22,9 @@ function PkbFooter() {
             Data
           </Link>
           <div className="submenu-footer">
-            <Link href="/data-browser.html" className="submenu-item-footer">Data Browser</Link>
-            <Link href="http://tools.cmdga.org:3838/metadata_analysis/" className="submenu-item-footer">Donor Metadata</Link>
-            <Link href="/apis.html" className="submenu-item-footer">APIs</Link>
+            <Link href="https://pankbase.org/donor-metadata.html" className="submenu-item-footer">Donor Summary</Link>
+            <Link href="https://data.pankbase.org" className="submenu-item-footer">Data Library</Link>
+            <Link href="https://pankbase.org/apis.html" className="submenu-item-footer">APIs</Link>
           </div>
         </div>
         <div className="menu-item-wrapper-footer">
@@ -37,9 +32,9 @@ function PkbFooter() {
             Resources
           </Link>
           <div className="submenu-footer">
-            <Link href="/single-cell.html" className="submenu-item-footer">Integrated Cell Browser</Link>
-            <Link href="/analytical-library.html" className="submenu-item-footer">Analytical Library</Link>
-            <Link href="/publications.html" className="submenu-item-footer">Publications</Link>
+            <Link href="https://pankbase.org/single-cell.html" className="submenu-item-footer">Integrated Cell Browser</Link>
+            <Link href="https://pankbase.org/analytical-library.html" className="submenu-item-footer">Analytical Library</Link>
+            <Link href="https://pankbase.org/publications.html" className="submenu-item-footer">Publications</Link>
           </div>
         </div>
         <div className="menu-item-wrapper-footer">
@@ -47,11 +42,11 @@ function PkbFooter() {
             About
           </Link>
           <div className="submenu-footer">
-            <Link href="/projects.html" className="submenu-item-footer">Project</Link>
-            <Link href="/people.html" className="submenu-item-footer">People</Link>
-            <Link href="/policies.html" className="submenu-item-footer">Policies</Link>
-            <Link href="/programs.html" className="submenu-item-footer">Programs</Link>
-            <Link href="/collaborate.html" className="submenu-item-footer">Collaborate</Link>
+            <Link href="https://pankbase.org/projects.html" className="submenu-item-footer">Project</Link>
+            <Link href="https://pankbase.org/people.html" className="submenu-item-footer">People</Link>
+            <Link href="https://pankbase.org/policies.html" className="submenu-item-footer">Policies</Link>
+            <Link href="https://pankbase.org/programs.html" className="submenu-item-footer">Programs</Link>
+            <Link href="https://pankbase.org/collaborate.html" className="submenu-item-footer">Collaborate</Link>
           </div>
         </div>
         <div className="menu-item-wrapper-footer">
@@ -59,11 +54,11 @@ function PkbFooter() {
             Help
           </Link>
           <div className="submenu-footer">
-            <Link href="/contact.html" className="submenu-item-footer">Contact</Link>
-            <Link href="/metadata-data-standards.html" className="submenu-item-footer">Metadata | Data Standards</Link>
-            <Link href="/tools-pipelines.html" className="submenu-item-footer">Tools | Pipelines</Link>
-            <Link href="/tutorials.html" className="submenu-item-footer">Tutorials</Link>
-            <Link href="/news.html" className="submenu-item-footer">News</Link>
+            <Link href="https://pankbase.org/contact.html" className="submenu-item-footer">Contact</Link>
+            <Link href="https://pankbase.org/metadata-data-standards.html" className="submenu-item-footer">Metadata | Data Standards</Link>
+            <Link href="https://pankbase.org/tools-pipelines.html" className="submenu-item-footer">Tools | Pipelines</Link>
+            <Link href="https://pankbase.org/tutorials.html" className="submenu-item-footer">Tutorials</Link>
+            <Link href="https://pankbase.org/news.html" className="submenu-item-footer">News</Link>
           </div>
         </div>
       </div>
