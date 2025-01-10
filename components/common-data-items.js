@@ -666,16 +666,6 @@ export function BiosampleDataItems({
           <DataItemValue>{item.cellular_sub_pool}</DataItemValue>
         </>
       )}
-      {item.originated_from && (
-        <>
-          <DataItemLabel>Originated From Sample</DataItemLabel>
-          <DataItemValue>
-            <Link href={item.originated_from["@id"]}>
-              {item.originated_from.accession}
-            </Link>
-          </DataItemValue>
-        </>
-      )}
       {partOf && (
         <>
           <DataItemLabel>Part of Sample</DataItemLabel>
