@@ -145,6 +145,7 @@
     padding: 5px 5px;
     cursor: pointer;
     border-radius: 10px 10px 0 0;
+    border-bottom: 2px solid transparent;
     font-weight: 600;
     color: var(--color-brand-black);
   }
