@@ -37,7 +37,7 @@ export function Logo() {
 export default function SiteLogo() {
   return (
     <Link
-      ref="https://pankbase.org"
+      href="https://pankbase.org"
       className="block w-10 py-2 md:h-auto md:w-auto md:px-8"
       target="_blank"
       rel="noopener noreferrer"
