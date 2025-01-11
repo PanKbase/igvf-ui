@@ -23,16 +23,18 @@ export default function SiteSearchTrigger({ isExpanded }) {
 
   return (
     <form onSubmit={handleSearch} className={`flex items-center ${isExpanded ? "w-full" : "w-auto"}`}>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search the site"
-        className="border rounded p-2 w-full"
-      />
-      <button type="submit" className="ml-2 p-2 rounded text-white" style={{ backgroundColor: '#219197' }}>
-        Search
-      </button>
+    <input
+       type="text"
+       value={searchTerm}
+       onChange={(e) => setSearchTerm(e.target.value)}
+       placeholder="Search the site"
+       className="border rounded p-2 w-full bg-white text-black dark:bg-gray-800 dark:text-white" />
+    <button
+       type="submit"
+       className="ml-2 p-2 rounded text-white bg-[#219197] dark:bg-gray-700"
+    >
+    Search
+    </button>
     </form>
   );
 }

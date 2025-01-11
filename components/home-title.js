@@ -55,6 +55,7 @@ useEffect(() => {
               Integrated Cell Browser
             </a>
           </div>
+          <span className="menu-separator">|</span>
           <div className="menu-item-wrapper">
             <a className="menu-item" href="#">Data</a>
             <div className="submenu">

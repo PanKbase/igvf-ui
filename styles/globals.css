@@ -112,6 +112,24 @@
     color: var(--color-brand-accent) !important;
   }
 
+  .menu-separator {
+    color: #666;
+    margin: 0 10px;
+    font-weight: 300;
+  }
+
+  .separator {
+    color: #666;
+    margin: 0 8px;
+    font-weight: 300;
+  }
+
+  .menu {
+    display: flex;
+    font-weight: 600;
+  }
+
+
   .menu {
     display: flex;
     font-weight: 600;
