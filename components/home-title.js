@@ -34,7 +34,7 @@ useEffect(() => {
   return (
     <div className="pkb-nav">
       <div className="logo">
-        <Link href="/">
+        <Link href="https://pankbase.org">
           <SiteLogo />
         </Link>
       </div>
