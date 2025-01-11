@@ -36,9 +36,11 @@ export function Logo() {
 
 export default function SiteLogo() {
   return (
-    <Link href="https://pankbase.org" className="block w-10 py-2 md:h-auto md:w-auto md:px-8">
+      <Link href="https://pankbase.org">
+      <a className="block w-10 py-2 md:h-auto md:w-auto md:px-8">
       <Logo />
       <span className="sr-only">Home</span>
-    </Link>
+      </a>
+      </Link>
   );
 }

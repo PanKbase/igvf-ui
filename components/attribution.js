@@ -37,40 +37,6 @@ export default function Attribution({ attribution = null }) {
                 </DataItemValue>
               </>
             )}
-            {attribution.pis && (
-              <>
-                <DataItemLabel>Principal Investigator(s)</DataItemLabel>
-                <DataItemValue>
-                  <SeparatedList isCollapsible>
-                    {attribution.pis.map((pi) => (
-                      <Link href={pi["@id"]} key={pi["@id"]}>
-                        {pi.title}
-                      </Link>
-                    ))}
-                  </SeparatedList>
-                </DataItemValue>
-              </>
-            )}
-            {attribution.contactPi && (
-              <>
-                <DataItemLabel>Contact P.I.</DataItemLabel>
-                <DataItemValue>
-                  <Link href={attribution.contactPi["@id"]}>
-                    {attribution.contactPi.title}
-                  </Link>
-                </DataItemValue>
-              </>
-            )}
-            {attribution.lab && (
-              <>
-                <DataItemLabel>Lab</DataItemLabel>
-                <DataItemValue>
-                  <Link href={attribution.lab["@id"]}>
-                    {attribution.lab.title}
-                  </Link>
-                </DataItemValue>
-              </>
-            )}
           </DataArea>
         </DataPanel>
       </>
