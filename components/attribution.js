@@ -10,7 +10,7 @@ import {
   DataItemValue,
   DataPanel,
 } from "./data-area";
-import SeparatedList from "./separated-list";
+//import SeparatedList from "./separated-list";
 
 /**
  * Displays the attribution properties of an item in its own data panel, typically from a data
