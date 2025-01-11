@@ -20,18 +20,6 @@ import Link from "next/link";
 const LOGO_WIDTH = 225;
 const LOGO_HEIGHT = 69;
 // node_modules
-import _ from "lodash";
-import Image from "next/image";
-import Link from "next/link";
-
-/**
- * Height and width of collection logos in pixels. PNG or JPEG files should have double this
- * resolution to appear crisp on retina displays. SVG files should keep these proportions.
- * The graphic within the box should have a maximum width of 95px and a maximum height of 60px.
- */
-const LOGO_WIDTH = 225;
-const LOGO_HEIGHT = 69;
-
 export function Logo() {
   return (
     <div className="logo-container">
@@ -48,8 +36,8 @@ export function Logo() {
 
 export default function SiteLogo() {
   return (
-    <Link 
-      href="https://pankbase.org"
+    <Link
+      ref="https://pankbase.org"
       className="block w-10 py-2 md:h-auto md:w-auto md:px-8"
       target="_blank"
       rel="noopener noreferrer"
