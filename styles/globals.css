@@ -115,7 +115,7 @@
   .menu-separator {
     color: var(--color-brand);
     margin: 0 5px;
-    font-weight: 300;
+    font-weight: 600;
   }
 
   .separator {
