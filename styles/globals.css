@@ -113,22 +113,16 @@
   }
 
   .menu-separator {
-    color: #666;
-    margin: 0 10px;
+    color: var(--color-brand);
+    margin: 0 5px;
     font-weight: 300;
   }
 
   .separator {
-    color: #666;
-    margin: 0 8px;
-    font-weight: 300;
-  }
-
-  .menu {
-    display: flex;
+    color: var(--color-brand);
+    margin: 0 4px;
     font-weight: 600;
   }
-
 
   .menu {
     display: flex;
@@ -152,12 +146,12 @@
 
   .menu-item.menu-item-selected {
     color: var(--color-brand);
-    border-bottom: 2px solid var(--color-brand);
+    outline-bottom: 2px solid var(--color-brand);
   }
 
   .menu-item-wrapper:hover .menu-item {
     color: var(--color-brand);
-    border-bottom: 2px solid var(--color-brand);
+    outline-bottom: 2px solid var(--color-brand);
   }
 
   .menu-item-main {
@@ -166,7 +160,7 @@
 
   .menu-item-wrapper:hover {
     color: var(--color-brand) !important;
-    border-bottom: 2px solid var(--color-brand);
+    outline-bottom: 2px solid var(--color-brand);
   }
 
   .submenu {
