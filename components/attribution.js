@@ -37,6 +37,14 @@ export default function Attribution({ attribution = null }) {
                 </DataItemValue>
               </>
             )}
+            {attribution.title && (
+              <>
+                <DataItemLabel>Title</DataItemLabel>
+                <DataItemValue>
+                    {attribution.title}
+                </DataItemValue>
+              </>
+            )}
           </DataArea>
         </DataPanel>
       </>
