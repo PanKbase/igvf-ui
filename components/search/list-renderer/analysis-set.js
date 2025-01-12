@@ -24,7 +24,7 @@ export default function AnalysisSet({ item: analysisSet }) {
         </SearchListItemUniqueId>
         <SearchListItemTitle>{analysisSet.file_set_type}</SearchListItemTitle>
         <SearchListItemMeta>
-          <span key="lab">{analysisSet.lab.title}</span>
+          <span key="lab">{analysisSet.award.title}</span>
         </SearchListItemMeta>
         <SearchListItemSupplement>
           <SearchListItemSupplementAlternateAccessions item={analysisSet} />

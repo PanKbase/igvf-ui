@@ -25,7 +25,7 @@ export default function Biosample({ item: biosample }) {
         </SearchListItemUniqueId>
         <SearchListItemTitle>{biosample.summary}</SearchListItemTitle>
         <SearchListItemMeta>
-          <span key="lab">{biosample.lab.title}</span>
+          <span key="lab">{biosample.award.title}</span>
         </SearchListItemMeta>
         {isSupplementsVisible && (
           <SearchListItemSupplement>

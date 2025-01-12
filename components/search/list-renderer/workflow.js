@@ -25,7 +25,7 @@ export default function Workflow({ item: workflow }) {
         </SearchListItemUniqueId>
         <SearchListItemTitle>{workflow.name}</SearchListItemTitle>
         <SearchListItemMeta>
-          <div key="lab">{workflow.lab.title}</div>
+          <div key="lab">{workflow.award.title}</div>
         </SearchListItemMeta>
         {isSupplementVisible && (
           <SearchListItemSupplement>
