@@ -32,7 +32,7 @@ export default function MeasurementSet({ item: measurementSet }) {
         </SearchListItemUniqueId>
         <SearchListItemTitle>{measurementSet.summary}</SearchListItemTitle>
         <SearchListItemMeta>
-          <div key="lab">{measurementSet.lab.title}</div>
+          <div key="lab">{measurementSet.award.title}</div>
         </SearchListItemMeta>
         {isSupplementsVisible && (
           <SearchListItemSupplement>
