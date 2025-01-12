@@ -175,7 +175,7 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
     <div className="@container/home">
       <p className="my-8">
           The Data Library enables query and browsing components of analysis resources created by PanKbase, including meta-data on human donors and biosamples, details on experimental assays, standardized processing of data (&apos;processed results&apos;), workflows used to process data and create resources, and the resources themselves (&apos;analysis results&apos;).</p>
-<p className="my-8">PanKbase internal donor IDs are provided (e.g. <a href="https://data.pankbase.org/human-donors/PKBDO7330CDCK/">PKBDO7330CDCK) and can be linked to RRIDs by clicking on each donor. To peruse summarized donor metadata, visit the <a href="https://pankbase.org/donor-metadata.html">Donor Summary</a> page. Explore interactive plots of single cell RNA-seq or single nucleus ATAC-seq data from available donors through the <a href="https://pankbase.org/single-cell.html">Integrated Cell Browser</a>.
+<p className="my-8">PanKbase internal donor IDs are provided (e.g. <a href="https://data.pankbase.org/human-donors/PKBDO7330CDCK/">PKBDO7330CDCK</a>) and can be linked to RRIDs by clicking on each donor. To peruse summarized donor metadata, visit the <a href="https://pankbase.org/donor-metadata.html">Donor Summary</a> page. Explore interactive plots of single cell RNA-seq or single nucleus ATAC-seq data from available donors through the <a href="https://pankbase.org/single-cell.html">Integrated Cell Browser</a>.
       </p>
 
       <section className="my-8">
