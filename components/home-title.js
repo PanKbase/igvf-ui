@@ -51,7 +51,7 @@ useEffect(() => {
             </a>
           </div>
           <div className="menu-item-wrapper">
-            <a className="menu-item menu-item-main" href="https://pankbase.org:8000/single-cell.html" target="_blank" rel="noopener noreferrer">
+            <a className="menu-item menu-item-main" href="https://pankbase.org/single-cell.html" target="_blank" rel="noopener noreferrer">
               Integrated Cell Browser
             </a>
           </div>
