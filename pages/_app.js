@@ -100,13 +100,13 @@ function Site({ Component, pageProps, authentication }) {
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#da532c" />
       </Head>
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-E2PEXFFGYR" />
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS" />
       <Script id="google-analytics-4-script">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-E2PEXFFGYR');
+          gtag('config', 'G-XYBYEW53TS');
         `}
       </Script>
       <TestServerWarning />
