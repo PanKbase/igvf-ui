@@ -39,7 +39,6 @@ import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
 import { truthyOrZero } from "../../lib/general";
 import { isJsonFormat } from "../../lib/query-utils";
-import { Ok } from "../../lib/result";
 
 export default function PrimaryIslet({
   primaryIslet,
