@@ -53,7 +53,6 @@ export default function PrimaryIslet({
   pooledFrom,
   pooledIn,
   sortedFractions,
-  sources,
   treatments,
   multiplexedInSamples,
   attribution = null,
@@ -78,7 +77,6 @@ export default function PrimaryIslet({
                 diseaseTerms={diseaseTerms}
                 partOf={partOf}
                 sampleTerms={primaryIslet.sample_terms}
-                sources={sources}
                 options={{
                   dateObtainedTitle: "Date Harvested",
                 }}
@@ -94,6 +92,14 @@ export default function PrimaryIslet({
                     <DataItemLabel>Isolation Center</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.isolation_center}
+                    </DataItemValue>
+                  </>
+                )}
+                {primaryIslet.resources && (
+                  <>
+                    <DataItemLabel>Resources</DataItemLabel>
+                    <DataItemValue>
+                      {primaryIslet.resources}
                     </DataItemValue>
                   </>
                 )}
@@ -361,7 +367,7 @@ PrimaryIslet.propTypes = {
   // Sorted fractions sample
   sortedFractions: PropTypes.arrayOf(PropTypes.object),
   // Source lab or source for this sample
-  sources: PropTypes.arrayOf(PropTypes.object),
+  // sources: PropTypes.arrayOf(PropTypes.object),
   // Treatments associated with the sample
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Multiplexed in samples
@@ -415,15 +421,6 @@ export async function getServerSideProps({ params, req, query }) {
       primaryIslet.sorted_fractions?.length > 0
         ? await requestBiosamples(primaryIslet.sorted_fractions, request)
         : [];
-    let sources = [];
-    if (primaryIslet.sources?.length > 0) {
-      const sourcePaths = primaryIslet.sources.map((source) => source["@id"]);
-      sources = Ok.all(
-        await request.getMultipleObjects(sourcePaths, {
-          filterErrors: true,
-        })
-      );
-    }
     let treatments = [];
     if (primaryIslet.treatments?.length > 0) {
       const treatmentPaths = primaryIslet.treatments.map(
@@ -463,7 +460,6 @@ export async function getServerSideProps({ params, req, query }) {
         pooledFrom,
         pooledIn,
         sortedFractions,
-        sources,
         treatments,
         multiplexedInSamples,
         pageContext: {
