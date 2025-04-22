@@ -154,6 +154,18 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
           <DataItemValue>{item.diabetes_status_description}</DataItemValue>
         </>
       )}
+      {item.t1d_stage && (
+        <>
+          <DataItemLabel>T1D Stage</DataItemLabel>
+          <DataItemValue>{item.t1d_stage}</DataItemValue>
+              </>
+      )}
+      {item.derived_diabetes_status && (
+        <>
+          <DataItemLabel>Derived diabetes status</DataItemLabel>
+          <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
+              </>
+      )}
       {item.diabetes_status_hba1c !== undefined && (
         <>
           <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
