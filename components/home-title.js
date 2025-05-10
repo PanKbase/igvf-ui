@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NavigationSection from "../components/navigation";
+
 export const pkbMenu = {
+    // Menu data unchanged...
     highlightItems: [
         { label: "PanKgraph", path: "https://pankgraph.org/" },
         { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
@@ -20,6 +22,7 @@ export const pkbMenu = {
                 { label: "APIs", path: "https://pankbase.org/apis.html" },
             ],
         },
+        // Other menu items unchanged...
         {
             label: "Resources",
             path: "",
@@ -72,6 +75,7 @@ function SiteLogo() {
     />
   );
 }
+
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -93,7 +97,8 @@ function injectFont(fontUrl) {
 export default function Header() {
   // State to track if any menu item is active (used in isActive function)
   const [menuItemActive, setMenuItemActive] = useState(false);
-
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       injectFavicon(
@@ -104,6 +109,7 @@ export default function Header() {
       );
     }
   }, []);
+  
   function isActive(path) {
     if (menuItemActive) {
       return false;
@@ -117,14 +123,56 @@ export default function Header() {
     }
     return false;
   }
+  
+  // Toggle mobile menu
+  function toggleMobileMenu() {
+    setMobileMenuOpen(!mobileMenuOpen);
+  }
+  
+  // Close menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (mobileMenuOpen && !event.target.closest('.pkb-nav')) {
+        setMobileMenuOpen(false);
+      }
+    }
 
+    if (typeof window !== 'undefined') {
+      document.addEventListener('click', handleClickOutside);
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }
+  }, [mobileMenuOpen]);
+  
   return (
-    <div className="pkb-nav">
+    <div className={`pkb-nav ${!mobileMenuOpen ? 'mobile-menu-closed' : ''}`}>
       <div className="logo">
         <Link href="https://pankbase.org">
           <SiteLogo />
         </Link>
       </div>
+      
+      {/* Mobile menu toggle button - only visible on small screens */}
+      <button
+        className="mobile-menu-toggle"
+        onClick={toggleMobileMenu}
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={mobileMenuOpen}
+      >
+        {mobileMenuOpen ? (
+          // X icon for close
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        ) : (
+          // Hamburger icon for menu
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </button>
+      
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
@@ -150,6 +198,7 @@ export default function Header() {
                 </div>
               ))}
             </div>
+            
             {/* Regular menu items with submenus */}
             {pkbMenu.menuItems.map((item, index) => (
               <div
@@ -182,6 +231,7 @@ export default function Header() {
             ))}
           </div>
         </div>
+        
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
           <Image
             width={37}
@@ -191,6 +241,7 @@ export default function Header() {
           />
         </a>
       </div>
+      
       {/* Beta tag */}
       <div className="pkb-beta">beta</div>
     </div>
