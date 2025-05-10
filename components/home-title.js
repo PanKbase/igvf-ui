@@ -171,7 +171,7 @@ export default function Header() {
             {/* Highlight items using the main-menu-items class from script 3 */}
             <div className="main-menu-items">
               {pkbMenu.highlightItems.map((item, index) => (
-                <div 
+                <div
                   key={`highlight-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? 'active' : ''}`}
                 >
