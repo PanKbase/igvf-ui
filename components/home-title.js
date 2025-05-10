@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import NavigationSection from "../components/navigation";
 // Menu data structure from script 5
 export const pkbMenu = {
     highlightItems: [
         { label: "PanKgraph", path: "https://pankgraph.org/" },
-        { label: "Integrated Cell Browser", path: "/single-cell.html" },
+        { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
     ],
     menuItems: [
         {
@@ -15,33 +15,33 @@ export const pkbMenu = {
             subMenuItems: [
                 {
                     label: "Donor Summary",
-                    path: "/donor-metadata.html",
+                    path: "https://pankbase.org/donor-metadata.html",
                 },
                 { label: "Data Library", path: "https://data.pankbase.org" },
-                { label: "APIs", path: "/apis.html" },
+                { label: "APIs", path: "https://pankbase.org/apis.html" },
             ],
         },
         {
             label: "Resources",
             path: "",
             subMenuItems: [
-                { label: "Integrated Cell Browser", path: "/single-cell.html" },
+                { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
                 {
                     label: "Analytical Library",
-                    path: "/analytical-library.html",
+                    path: "https://pankbase.org/analytical-library.html",
                 },
-                { label: "Publications", path: "/publications.html" },
+                { label: "Publications", path: "https://pankbase.org/publications.html" },
             ],
         },
         {
             label: "About",
             path: "",
             subMenuItems: [
-                { label: "Project", path: "/projects.html" },
-                { label: "People", path: "/people.html" },
-                { label: "Policies", path: "/policies.html" },
-                { label: "Programs", path: "/programs.html" },
-                { label: "Collaborate", path: "/collaborate.html" },
+                { label: "Project", path: "https://pankbase.org/projects.html" },
+                { label: "People", path: "https://pankbase.org/people.html" },
+                { label: "Policies", path: "https://pankbase.org/policies.html" },
+                { label: "Programs", path: "https://pankbase.org/programs.html" },
+                { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
             ],
         },
         {
@@ -51,11 +51,11 @@ export const pkbMenu = {
                 { label: "Contact | Feedback", path: "/contact.html" },
                 {
                     label: "Metadata | Data Standards",
-                    path: "/metadata-data-standards.html",
+                    path: "https://pankbase.org/metadata-data-standards.html",
                 },
-                { label: "Tools | Pipelines", path: "/tools-pipelines.html" },
-                { label: "Tutorials", path: "/tutorials.html" },
-                { label: "News", path: "/news.html" },
+                { label: "Tools | Pipelines", path: "https://pankbase.org/tools-pipelines.html" },
+                { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
+                { label: "News", path: "https://pankbase.org/news.html" },
             ],
         },
     ],
@@ -73,16 +73,6 @@ function SiteLogo() {
     />
   );
 }
-
-// NavigationSection component - maintained from original script 1
-function NavigationSection() {
-  return (
-    <div className="nav-section">
-      {/* Additional navigation elements can go here */}
-    </div>
-  );
-}
-
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
@@ -122,6 +112,7 @@ export default function Header() {
     if (menuItemActive) {
       return false;
     }
+    
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
@@ -139,39 +130,21 @@ export default function Header() {
           <SiteLogo />
         </Link>
       </div>
+      
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
             {/* Top menu from script 1 */}
             <a className="topmenu-item" href="https://data.pankbase.org">Data Library Home</a>
             <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
-            {/* Top menu from script 3 */}
-            <a className="topmenu-item">
-              Search
-              <Image
-                width={15}
-                height={15}
-                src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
-                alt="Search"
-              />
-            </a>
-            <a className="topmenu-item">Analysis</a>
-            <a className="topmenu-item">
-              Login
-              <Image
-                width={15}
-                height={15}
-                src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-                alt="Login"
-              />
-            </a>
             <NavigationSection />
           </div>
+          
           <div className="menu">
             {/* Highlight items using the main-menu-items class from script 3 */}
             <div className="main-menu-items">
               {pkbMenu.highlightItems.map((item, index) => (
-                <div
+                <div 
                   key={`highlight-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? 'active' : ''}`}
                 >
@@ -218,6 +191,7 @@ export default function Header() {
             ))}
           </div>
         </div>
+        
         {/* HIRN logo from script 3 */}
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
           <Image
@@ -228,6 +202,7 @@ export default function Header() {
           />
         </a>
       </div>
+      
       {/* Beta tag */}
       <div className="pkb-beta">beta</div>
     </div>
