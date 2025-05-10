@@ -122,7 +122,6 @@ export default function Header() {
     if (menuItemActive) {
       return false;
     }
-    
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
@@ -140,14 +139,12 @@ export default function Header() {
           <SiteLogo />
         </Link>
       </div>
-      
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
             {/* Top menu from script 1 */}
             <a className="topmenu-item" href="https://data.pankbase.org">Data Library Home</a>
             <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
-            
             {/* Top menu from script 3 */}
             <a className="topmenu-item">
               Search
@@ -170,7 +167,6 @@ export default function Header() {
             </a>
             <NavigationSection />
           </div>
-          
           <div className="menu">
             {/* Highlight items using the main-menu-items class from script 3 */}
             <div className="main-menu-items">
@@ -190,10 +186,8 @@ export default function Header() {
                 </div>
               ))}
             </div>
-            
             {/* Vertical separator as in script 1 */}
             <span className="menu-separator">|</span>
-            
             {/* Regular menu items with submenus */}
             {pkbMenu.menuItems.map((item, index) => (
               <div
@@ -226,7 +220,6 @@ export default function Header() {
             ))}
           </div>
         </div>
-        
         {/* HIRN logo from script 3 */}
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
           <Image
@@ -237,7 +230,6 @@ export default function Header() {
           />
         </a>
       </div>
-      
       {/* Beta tag */}
       <div className="pkb-beta">beta</div>
     </div>
