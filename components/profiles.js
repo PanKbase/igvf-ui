@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 import { AttachedButtons, ButtonLink, TextField } from "./form-elements";
 // lib
 import { SEARCH_MODE_TITLE } from "../lib/profiles";
-import NavigationSection from "../components/navigation";
 /**
  * Displays a search field for highlighting elements of a schema or list of schemas.
  */
@@ -21,7 +20,6 @@ export function SchemaSearchField({
 }) {
   return (
     <div className="md:flex">
-    <NavigationSection />
     <div className={`relative grow ${className}`}>
       <TextField
         name="schema-search"
