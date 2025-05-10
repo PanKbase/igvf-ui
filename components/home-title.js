@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Menu data structure from script 5
 export const pkbMenu = {
@@ -61,24 +62,26 @@ export const pkbMenu = {
 };
 
 // SiteLogo component
-const SiteLogo = () => {
+function SiteLogo() {
   return (
-    <img
-      style={{ height: '50px' }}
+    <Image
+      width={50}
+      height={50}
+      style={{ height: '50px', width: 'auto' }}
       src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
       alt="PanKbase Logo"
     />
   );
-};
+}
 
 // NavigationSection component - maintained from original script 1
-const NavigationSection = () => {
+function NavigationSection() {
   return (
     <div className="nav-section">
       {/* Additional navigation elements can go here */}
     </div>
   );
-};
+}
 
 function injectFavicon(faviconUrl) {
   let favicon = document.querySelector('link[rel="icon"]');
@@ -115,8 +118,10 @@ export default function Header() {
   }, []);
 
   // Helper to check if a path matches the current URL - follows script 3's logic
-  const isActive = (path) => {
-    if (menuItemActive) return false;
+  function isActive(path) {
+    if (menuItemActive) {
+      return false;
+    }
     
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
@@ -126,7 +131,7 @@ export default function Header() {
       }
     }
     return false;
-  };
+  }
 
   return (
     <div className="pkb-nav">
@@ -146,8 +151,9 @@ export default function Header() {
             {/* Top menu from script 3 */}
             <a className="topmenu-item">
               Search
-              <img
-                style={{ height: '15px', width: '15px' }}
+              <Image
+                width={15}
+                height={15}
                 src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
                 alt="Search"
               />
@@ -155,8 +161,9 @@ export default function Header() {
             <a className="topmenu-item">Analysis</a>
             <a className="topmenu-item">
               Login
-              <img
-                style={{ height: '15px', width: '15px' }}
+              <Image
+                width={15}
+                height={15}
                 src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
                 alt="Login"
               />
@@ -169,7 +176,7 @@ export default function Header() {
             <div className="main-menu-items">
               {pkbMenu.highlightItems.map((item, index) => (
                 <div 
-                  key={`highlight-${index}`} 
+                  key={`highlight-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? 'active' : ''}`}
                 >
                   <a
@@ -189,12 +196,12 @@ export default function Header() {
             
             {/* Regular menu items with submenus */}
             {pkbMenu.menuItems.map((item, index) => (
-              <div 
-                key={`menu-${index}`} 
+              <div
+                key={`menu-${index}`}
                 className={`menu-item-wrapper ${isActive(item.path) ? 'active' : ''}`}
               >
-                <a 
-                  className="menu-item" 
+                <a
+                  className="menu-item"
                   href={item.path || "#"}
                 >
                   {item.label}
@@ -222,9 +229,10 @@ export default function Header() {
         
         {/* HIRN logo from script 3 */}
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-          <img 
-            style={{ height: '37px' }} 
-            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" 
+          <Image
+            width={37}
+            height={37}
+            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
             alt="HIRN Logo"
           />
         </a>
