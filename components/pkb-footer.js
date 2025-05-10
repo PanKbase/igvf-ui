@@ -74,7 +74,6 @@ function PkbFooter() {
             </div>
           ))}
         </div>
-        
         {pkbMenu.menuItems.map((item, index) => (
           <div key={`footer-menu-${index}`} className="menu-item-wrapper">
             <Link href={item.path || "#"} className="menu-item">
@@ -96,7 +95,6 @@ function PkbFooter() {
           </div>
         ))}
       </div>
-      
       <div className="f-row" style={{ gap: '20px' }}>
         <Link href="/">
           <Image
