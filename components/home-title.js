@@ -98,7 +98,6 @@ export default function Header() {
   // State to track if any menu item is active (used in isActive function)
   const [menuItemActive, setMenuItemActive] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   useEffect(() => {
     if (typeof window !== "undefined") {
       injectFavicon(
@@ -109,7 +108,6 @@ export default function Header() {
       );
     }
   }, []);
-  
   function isActive(path) {
     if (menuItemActive) {
       return false;
@@ -123,12 +121,10 @@ export default function Header() {
     }
     return false;
   }
-  
   // Toggle mobile menu
   function toggleMobileMenu() {
     setMobileMenuOpen(!mobileMenuOpen);
   }
-  
   // Close menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -144,7 +140,6 @@ export default function Header() {
       };
     }
   }, [mobileMenuOpen]);
-  
   return (
     <div className={`pkb-nav ${!mobileMenuOpen ? 'mobile-menu-closed' : ''}`}>
       <div className="logo">
@@ -152,7 +147,6 @@ export default function Header() {
           <SiteLogo />
         </Link>
       </div>
-      
       {/* Mobile menu toggle button - only visible on small screens */}
       <button
         className="mobile-menu-toggle"
@@ -172,7 +166,6 @@ export default function Header() {
           </svg>
         )}
       </button>
-      
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
@@ -198,7 +191,6 @@ export default function Header() {
                 </div>
               ))}
             </div>
-            
             {/* Regular menu items with submenus */}
             {pkbMenu.menuItems.map((item, index) => (
               <div
@@ -231,7 +223,6 @@ export default function Header() {
             ))}
           </div>
         </div>
-        
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
           <Image
             width={37}
@@ -241,7 +232,6 @@ export default function Header() {
           />
         </a>
       </div>
-      
       {/* Beta tag */}
       <div className="pkb-beta">beta</div>
     </div>
