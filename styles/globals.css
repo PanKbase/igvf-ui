@@ -869,3 +869,112 @@ button.pkb.selected {
   /** Modal borders */
   --color-modal-border: #68799c;
 }
+
+/* Footer styles */
+.pkb-footer {
+  width: 100%;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 20px;
+  border-top: 3px solid var(--pkb-primary-green);
+  box-shadow: 0px 2px 10px var(--pkb-primary-green);
+  min-height: 70px;
+  margin-top: auto;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.pkb-footer .menu {
+  display: flex;
+  gap: 20px;
+}
+
+.pkb-footer .menu a, 
+.pkb-footer .menu a:visited {
+  color: var(--pkb-black) !important;
+}
+
+.pkb-footer .menu a:hover {
+  color: var(--pkb-secondary-green) !important;
+  text-decoration: none;
+}
+
+.pkb-footer .menu-item-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.pkb-footer .submenu {
+  display: flex;
+  flex-direction: column;
+}
+
+.pkb-footer a.submenu-item {
+  font-weight: normal;
+}
+
+.pkb-footer .menu-item.menu-item-main {
+  color: var(--pkb-primary-green) !important;
+  font-weight: 600;
+}
+
+.pkb-footer .f-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Footer dark mode styles */
+.dark .pkb-footer {
+  background: #111827;
+  border-top: 3px solid var(--pkb-primary-green);
+  box-shadow: 0px 2px 10px rgba(33, 145, 151, 0.5);
+}
+
+.dark .pkb-footer .menu a, 
+.dark .pkb-footer .menu a:visited {
+  color: #e5e7eb !important;
+}
+
+.dark .pkb-footer .menu a:hover {
+  color: var(--pkb-secondary-green) !important;
+}
+
+.dark .pkb-footer .menu-item.menu-item-main {
+  color: var(--pkb-primary-green) !important;
+}
+
+.dark .pkb-footer div {
+  color: #e5e7eb;
+}
+
+/* Dark logo variant - add this if you have a white version of your logo for dark mode */
+.dark .pkb-footer .dark-mode-logo {
+  display: block;
+}
+
+.dark .pkb-footer .light-mode-logo {
+  display: none;
+}
+
+.pkb-footer .dark-mode-logo {
+  display: none;
+}
+
+.pkb-footer .light-mode-logo {
+  display: block;
+}
+
+/* Responsive styles for footer */
+@media (max-width: 768px) {
+  .pkb-footer .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pkb-footer .f-row {
+    flex-direction: column;
+    text-align: center;
+  }
+}
