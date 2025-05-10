@@ -21,7 +21,6 @@ import Error from "../components/error";
 import GlobalContext from "../components/global-context";
 import HomeTitle from "../components/home-title";
 import PkbFooter from "../components/pkb-footer";
-import ScrollToTop from "../components/scroll-to-top";
 import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
@@ -114,7 +113,6 @@ function Site({ Component, pageProps, authentication }) {
           <Session authentication={authentication}>
             <HomeTitle />
             <div className="md:container">
-            <ScrollToTop />
             <div className="md:flex">
               <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
                 {pageProps.serverSideError ? (
