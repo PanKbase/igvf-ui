@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NavigationSection from "../components/navigation";
-// Menu data structure from script 5
 export const pkbMenu = {
     highlightItems: [
         { label: "PanKgraph", path: "https://pankgraph.org/" },
@@ -97,7 +96,6 @@ export default function Header() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Using the same favicon from script 3
       injectFavicon(
         "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
       );
@@ -106,13 +104,10 @@ export default function Header() {
       );
     }
   }, []);
-
-  // Helper to check if a path matches the current URL - follows script 3's logic
   function isActive(path) {
     if (menuItemActive) {
       return false;
     }
-    
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
@@ -130,21 +125,17 @@ export default function Header() {
           <SiteLogo />
         </Link>
       </div>
-      
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
-            {/* Top menu from script 1 */}
             <a className="topmenu-item" href="https://data.pankbase.org">Data Library Home</a>
             <a className="topmenu-item" href="https://data.pankbase.org/profiles">Data Library Schema</a>
             <NavigationSection />
           </div>
-          
           <div className="menu">
-            {/* Highlight items using the main-menu-items class from script 3 */}
             <div className="main-menu-items">
               {pkbMenu.highlightItems.map((item, index) => (
-                <div 
+                <div
                   key={`highlight-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? 'active' : ''}`}
                 >
@@ -191,8 +182,6 @@ export default function Header() {
             ))}
           </div>
         </div>
-        
-        {/* HIRN logo from script 3 */}
         <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
           <Image
             width={37}
@@ -202,7 +191,6 @@ export default function Header() {
           />
         </a>
       </div>
-      
       {/* Beta tag */}
       <div className="pkb-beta">beta</div>
     </div>
