@@ -186,8 +186,6 @@ export default function Header() {
                 </div>
               ))}
             </div>
-            {/* Vertical separator as in script 1 */}
-            <span className="menu-separator">|</span>
             {/* Regular menu items with submenus */}
             {pkbMenu.menuItems.map((item, index) => (
               <div
