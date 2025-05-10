@@ -6,7 +6,7 @@ import Image from 'next/image';
 export const pkbMenu = {
     highlightItems: [
         { label: "PanKgraph", path: "https://pankgraph.org/" },
-        { label: "Integrated Cell Browser", path: "/single-cell.html" },
+        { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
     ],
     menuItems: [
         {
@@ -15,33 +15,33 @@ export const pkbMenu = {
             subMenuItems: [
                 {
                     label: "Donor Summary",
-                    path: "/donor-metadata.html",
+                    path: "https://pankbase.org/donor-metadata.html",
                 },
                 { label: "Data Library", path: "https://data.pankbase.org" },
-                { label: "APIs", path: "/apis.html" },
+                { label: "APIs", path: "https://pankbase.org/apis.html" },
             ],
         },
         {
             label: "Resources",
             path: "",
             subMenuItems: [
-                { label: "Integrated Cell Browser", path: "/single-cell.html" },
+                { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
                 {
                     label: "Analytical Library",
-                    path: "/analytical-library.html",
+                    path: "https://pankbase.org/analytical-library.html",
                 },
-                { label: "Publications", path: "/publications.html" },
+                { label: "Publications", path: "https://pankbase.org/publications.html" },
             ],
         },
         {
             label: "About",
             path: "",
             subMenuItems: [
-                { label: "Project", path: "/projects.html" },
-                { label: "People", path: "/people.html" },
-                { label: "Policies", path: "/policies.html" },
-                { label: "Programs", path: "/programs.html" },
-                { label: "Collaborate", path: "/collaborate.html" },
+                { label: "Project", path: "https://pankbase.org/projects.html" },
+                { label: "People", path: "https://pankbase.org/people.html" },
+                { label: "Policies", path: "https://pankbase.org/policies.html" },
+                { label: "Programs", path: "https://pankbase.org/programs.html" },
+                { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
             ],
         },
         {
@@ -51,11 +51,11 @@ export const pkbMenu = {
                 { label: "Contact", path: "/contact.html" },
                 {
                     label: "Metadata | Data Standards",
-                    path: "/metadata-data-standards.html",
+                    path: "https://pankbase.org/metadata-data-standards.html",
                 },
-                { label: "Tools | Pipelines", path: "/tools-pipelines.html" },
-                { label: "Tutorials", path: "/tutorials.html" },
-                { label: "News", path: "/news.html" },
+                { label: "Tools | Pipelines", path: "https://pankbase.org/tools-pipelines.html" },
+                { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
+                { label: "News", path: "https://pankbase.org/news.html" },
             ],
         },
     ],

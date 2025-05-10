@@ -140,19 +140,19 @@ function Statistic({ icon: Icon, label, value, query, description }) {
       href={`/search/?${query}`}
       className="group block w-full"
     >
-      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md">
+      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
         <div className="flex items-start gap-4 p-6">
-          <div className="rounded-lg bg-teal-50 p-3">
-            <Icon className="h-6 w-6 text-teal-600" />
+          <div className="rounded-lg bg-teal-50 p-3 dark:bg-teal-900/30">
+            <Icon className="h-6 w-6 text-teal-600 dark:text-teal-400" />
           </div>
           <div className="flex-1">
-            <h3 className="mb-1 text-lg font-semibold text-gray-900">
+            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
               {label}
-              <span className="ml-2 text-lg font-normal text-gray-600">
+              <span className="ml-2 text-lg font-normal text-gray-600 dark:text-gray-400">
                 ({abbreviateNumber(value)})
               </span>
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               {description}
             </p>
           </div>
@@ -206,14 +206,14 @@ export default function Home({ assayCount, processedCount, analysisCount, donorC
         />
         <Statistic
           icon={Database}
-          label="Processed Results"
+          label="Itermediate Analysis Results"
           value={processedCount}
           query="type=AnalysisSet&file_set_type=intermediate+analysis"
           description="Standardized processing of data generated from an assay"
         />
         <Statistic
           icon={ChartBar}
-          label="Analysis Results"
+          label="Principal Analysis Results"
           value={analysisCount}
           query="type=AnalysisSet&file_set_type=principal+analysis"
           description="Analyses of processed data such as integrated resources and downstream analysis"
