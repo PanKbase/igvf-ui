@@ -1,3 +1,8 @@
+/* Import Tailwind CSS base, components, and utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Global variables - combining both scripts */
 :root {
     /* Variables from script 2 */
@@ -18,7 +23,7 @@
     --pkb-disabled-grey: #dddddd;
 }
 
-/* Base styles from script 2 */
+/* Base styles */
 @layer base {
   html,
   body {
@@ -48,7 +53,7 @@
   }
 }
 
-/* Component styles - combining both scripts */
+/* Component styles */
 @layer components {
   .form-element-height-sm {
     min-height: 1.25rem;
@@ -222,8 +227,7 @@
 
   .pkb-beta {
     height: 20px;
-    width: 6.5%;
-    height: 20px;
+    width: auto;
     line-height: 16px;
     background: #219197;
     color: white;
@@ -291,7 +295,7 @@
     flex-direction: column;
   }
 
-   a.submenu-item-footer {
+  a.submenu-item-footer {
     font-weight: normal;
   }
 }
