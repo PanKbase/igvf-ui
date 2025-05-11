@@ -1075,17 +1075,6 @@ button.pkb.selected {
      display: block; /* Show on mobile screens */
     }
   }
-  .mobile-menu-toggle {
-    display: block;
-    margin: 0 auto 10px;
-    padding: 5px 10px;
-    background-color: var(--pkb-primary-green);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
   /* Hide the menu by default on mobile */
   .mobile-menu-closed .menu-wrapper {
     display: none;
