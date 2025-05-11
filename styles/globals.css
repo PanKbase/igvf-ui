@@ -1057,6 +1057,24 @@ button.pkb.selected {
   }
   
   /* Create a mobile menu toggle button */
+/* Create a mobile menu toggle button - hidden by default */
+  .mobile-menu-toggle {
+    display: none; /* Hide by default on larger screens */
+    margin: 0 auto 10px;
+    padding: 5px 10px;
+    background-color: var(--pkb-primary-green);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Only show on mobile screens */
+  @media (max-width: 640px) {
+    .mobile-menu-toggle {
+     display: block; /* Show on mobile screens */
+    }
+  }
   .mobile-menu-toggle {
     display: block;
     margin: 0 auto 10px;
