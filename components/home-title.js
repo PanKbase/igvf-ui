@@ -148,12 +148,6 @@ export default function Header() {
         </Link>
       </div>
       {/* Mobile menu toggle button - only visible on small screens */}
-      <button
-        className="mobile-menu-toggle"
-        onClick={toggleMobileMenu}
-        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-        aria-expanded={mobileMenuOpen}
-      >
         {mobileMenuOpen ? (
           // X icon for close
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
