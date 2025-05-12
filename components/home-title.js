@@ -143,18 +143,6 @@ export default function Header() {
           <SiteLogo />
         </Link>
       </div>
-      {/* Mobile menu toggle button - only visible on small screens */}
-        {mobileMenuOpen ? (
-          // X icon for close
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        ) : (
-          // Hamburger icon for menu
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        )}
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div className="menu-wrapper">
           <div className="topmenu">
