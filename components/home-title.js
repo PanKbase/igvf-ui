@@ -121,10 +121,6 @@ export default function Header() {
     }
     return false;
   }
-  // Toggle mobile menu
-  function toggleMobileMenu() {
-    setMobileMenuOpen(!mobileMenuOpen);
-  }
   // Close menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
