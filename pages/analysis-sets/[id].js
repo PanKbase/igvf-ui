@@ -12,10 +12,12 @@ import {
   DataItemValue,
   DataPanel,
 } from "../../components/data-area";
+import { usePagePanels } from "../../components/page-panels";
 import DbxrefList from "../../components/dbxref-list";
 import DocumentTable from "../../components/document-table";
 import DonorTable from "../../components/donor-table";
 import { EditableItem } from "../../components/edit";
+import { FileGraph } from "../../components/file-graph";
 import FileTable from "../../components/file-table";
 import InputFileSets from "../../components/input-file-sets";
 import JsonDisplay from "../../components/json-display";
@@ -32,6 +34,7 @@ import {
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
+import { getAllDerivedFromFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 import SampleTable from "../../components/sample-table";
 
@@ -39,6 +42,8 @@ export default function AnalysisSet({
   analysisSet,
   documents,
   files,
+  fileFileSets,
+  derivedFromFiles,
   inputFileSets,
   inputFileSetSamples,
   controlFileSets,
@@ -49,6 +54,7 @@ export default function AnalysisSet({
   attribution = null,
   isJson,
 }) {
+  const pagePanels = usePagePanels(analysisSet["@id"]);
   return (
     <>
       <Breadcrumbs />
@@ -123,7 +129,17 @@ export default function AnalysisSet({
           )}
 
           {files.length > 0 && (
-            <FileTable files={files} fileSet={analysisSet} isDownloadable />
+            <>
+              <FileTable files={files} fileSet={analysisSet} isDownloadable />
+              <FileGraph
+                fileSet={analysisSet}
+                files={files}
+                fileFileSets={fileFileSets}
+                derivedFromFiles={derivedFromFiles}
+                pagePanels={pagePanels}
+                pagePanelId="file-graph"
+              />
+            </>
           )}
 
           {documents.length > 0 && <DocumentTable documents={documents} />}
@@ -138,6 +154,8 @@ AnalysisSet.propTypes = {
   analysisSet: PropTypes.object.isRequired,
   // Files to display
   files: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fileFileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  derivedFromFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Input file sets to display
   inputFileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Input file set samples
@@ -174,7 +192,18 @@ export async function getServerSideProps({ params, req, query }) {
     const filePaths = analysisSet.files.map((file) => file["@id"]);
     const files =
       filePaths.length > 0 ? await requestFiles(filePaths, request) : [];
-
+    const derivedFromFiles = await getAllDerivedFromFiles(files, request);
+    const combinedFiles = files.concat(derivedFromFiles);
+    // Get all file-set objects in every file's `file_sets` property.
+    let fileFileSets = [];
+    if (combinedFiles.length > 0) {
+      const fileSetPaths = combinedFiles.reduce((acc, file) => {
+        return acc.includes(file.file_set["@id"])
+          ? acc
+          : acc.concat(file.file_set["@id"]);
+      }, []);
+      fileFileSets = await requestFileSets(fileSetPaths, request);
+    }
     let inputFileSets = [];
     if (analysisSet.input_file_sets?.length > 0) {
       // The embedded `input_file_sets` in the analysis set don't have enough properties to display
@@ -297,6 +326,8 @@ export async function getServerSideProps({ params, req, query }) {
         analysisSet,
         documents,
         files,
+        fileFileSets,
+        derivedFromFiles,
         inputFileSets,
         inputFileSetSamples,
         controlFileSets,

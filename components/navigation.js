@@ -1,11 +1,7 @@
 // node_modules
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Bars2Icon,
-  MinusIcon,
-  PlusIcon,
-} from "@heroicons/react/20/solid";
+import { Bars2Icon, MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React, {
@@ -556,7 +552,7 @@ function NavigationExpanded({ navigationClick }) {
 
   return (
     <>
-        <NavigationList className="p-4">
+      <NavigationList className="p-4">
         {isAuthenticated ? (
           <NavigationGroupItem
             id="authenticate"
@@ -588,9 +584,7 @@ function NavigationExpanded({ navigationClick }) {
             </NavigationSignOutItem>
           </NavigationGroupItem>
         ) : (
-          <NavigationSignInItem id="authenticate">
-            Sign In
-          </NavigationSignInItem>
+          <NavigationSignInItem id="authenticate">Sign In</NavigationSignInItem>
         )}
       </NavigationList>
     </>
@@ -623,10 +617,10 @@ function NavigationCollapsed() {
 }
 
 //NavigationCollapsed.propTypes = {
-  // Function to call when user clicks a navigation item
-  //navigationClick: PropTypes.func.isRequired,
-  // Function to call when user clicks the collapse button
-  // toggleNavCollapsed: PropTypes.func.isRequired,
+// Function to call when user clicks a navigation item
+//navigationClick: PropTypes.func.isRequired,
+// Function to call when user clicks the collapse button
+// toggleNavCollapsed: PropTypes.func.isRequired,
 //};
 
 /**
@@ -636,9 +630,7 @@ function NavigationLogo({ isNavCollapsed }) {
   return (
     <div className="flex">
       <SiteLogo />
-      <NavigationCollapseButton
-        isNavCollapsed={isNavCollapsed}
-      />
+      <NavigationCollapseButton isNavCollapsed={isNavCollapsed} />
     </div>
   );
 }
@@ -707,7 +699,7 @@ export default function NavigationSection() {
   }, [toggleNavCollapsed]);
   // Render nothing until client-side rendering is confirmed
   if (!isClient) {
-     return <div style={{ visibility: "hidden" }} />;
+    return <div style={{ visibility: "hidden" }} />;
   }
   return (
     <section>
@@ -721,11 +713,9 @@ export default function NavigationSection() {
         </button>
       </div>
       {/* Render only the collapsed navigation for desktop */}
-        <div className="hidden md:block">
-            <NavigationCollapsed
-              navigationClick={navigationClick}
-            />
-        </div>
+      <div className="hidden md:block">
+        <NavigationCollapsed navigationClick={navigationClick} />
+      </div>
 
       <MobileCollapsableArea
         isOpen={isMobileNavOpen}

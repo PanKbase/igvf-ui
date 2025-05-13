@@ -55,8 +55,12 @@ export default function HumanDonor({
         <ObjectPageHeader item={donor} isJsonFormat={isJson} />
         <JsonDisplay item={donor} isJsonFormat={isJson}>
           <DataPanel>
-          <DataArea>
-              <DonorDataItems item={donor} diabetesStatus={diabetesStatus} otherTissue={otherTissue}/>
+            <DataArea>
+              <DonorDataItems
+                item={donor}
+                diabetesStatus={diabetesStatus}
+                otherTissue={otherTissue}
+              />
               {donor.human_donor_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Identifiers</DataItemLabel>
@@ -142,12 +146,14 @@ export async function getServerSideProps({ params, req, query }) {
       req.headers.cookie
     );
     const attribution = await buildAttribution(donor, req.headers.cookie);
-    const diabetesStatus = donor.diabetes_status.length > 0
-      ? await requestOntologyTerms(donor.diabetes_status, request)
-          : [];
-    const otherTissue = donor.other_tissues_available.length > 0
-      ? await requestOntologyTerms(donor.other_tissues_available, request)
-          : [];
+    const diabetesStatus =
+      donor.diabetes_status.length > 0
+        ? await requestOntologyTerms(donor.diabetes_status, request)
+        : [];
+    const otherTissue =
+      donor.other_tissues_available.length > 0
+        ? await requestOntologyTerms(donor.other_tissues_available, request)
+        : [];
     return {
       props: {
         donor,

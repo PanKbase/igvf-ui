@@ -33,7 +33,9 @@ function TestServerWarning() {
   const [isTestWarningVisible, setIsTestWarningVisible] = useState(false);
 
   useEffect(() => {
-    const isTestingDomain = testServerDomains.includes(window.location.hostname);
+    const isTestingDomain = testServerDomains.includes(
+      window.location.hostname
+    );
     setIsTestWarningVisible(isTestingDomain);
   }, []);
 
@@ -41,9 +43,13 @@ function TestServerWarning() {
     return (
       <div className="flex justify-center gap-1 border-b border-red-700 bg-red-600 p-1 text-sm text-white dark:border-red-700 dark:bg-red-800 dark:text-gray-100">
         <div>
-          This is the PanKbase Sandbox for testing submissions. All files submitted here will be deleted after 30 days.
+          This is the PanKbase Sandbox for testing submissions. All files
+          submitted here will be deleted after 30 days.
         </div>
-        <button onClick={() => setIsTestWarningVisible(false)} aria-label="Close sandbox warning banner">
+        <button
+          onClick={() => setIsTestWarningVisible(false)}
+          aria-label="Close sandbox warning banner"
+        >
           <XCircleIcon className="h-4 w-4" />
         </button>
       </div>
@@ -93,13 +99,30 @@ function Site({ Component, pageProps, authentication }) {
         <title>{SITE_TITLE}</title>
         <meta name="description" content="Portal for the PanKbase consortium" />
         <meta name="theme-color" content={BRAND_COLOR} />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#da532c" />
       </Head>
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS" />
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS"
+      />
       <Script id="google-analytics-4-script">
         {`
           window.dataLayer = window.dataLayer || [];
@@ -109,23 +132,26 @@ function Site({ Component, pageProps, authentication }) {
         `}
       </Script>
       <TestServerWarning />
-        <GlobalContext.Provider value={globalContext}>
-          <Session authentication={authentication}>
-            <HomeTitle />
-            <div className="md:container">
+      <GlobalContext.Provider value={globalContext}>
+        <Session authentication={authentication}>
+          <HomeTitle />
+          <div className="md:container">
             <div className="md:flex">
               <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
                 {pageProps.serverSideError ? (
-                  <Error statusCode={pageProps.serverSideError.code} title={pageProps.serverSideError.description} />
+                  <Error
+                    statusCode={pageProps.serverSideError.code}
+                    title={pageProps.serverSideError.description}
+                  />
                 ) : (
                   <Component {...pageProps} />
                 )}
               </div>
-              </div>
             </div>
-          </Session>
-        </GlobalContext.Provider>
-    <PkbFooter />
+          </div>
+        </Session>
+      </GlobalContext.Provider>
+      <PkbFooter />
     </ViewportOverlay>
   );
 }
@@ -160,7 +186,10 @@ export default function App(props) {
         audience: AUTH0_AUDIENCE,
       }}
     >
-      <Site {...props} authentication={{ authTransitionPath, setAuthTransitionPath }} />
+      <Site
+        {...props}
+        authentication={{ authTransitionPath, setAuthTransitionPath }}
+      />
     </Auth0Provider>
   );
 }

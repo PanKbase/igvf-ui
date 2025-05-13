@@ -51,10 +51,10 @@ function jsonErrors(json) {
 const Editor = dynamic(
   async () => {
     const ace = await import("react-ace");
-    require("ace-builds/src-noconflict/mode-json");
-    require("ace-builds/src-noconflict/theme-solarized_light");
-    require("ace-builds/src-noconflict/theme-solarized_dark");
-    require("ace-builds/src-noconflict/ext-language_tools");
+    await import("ace-builds/src-noconflict/mode-json");
+    await import("ace-builds/src-noconflict/theme-solarized_light");
+    await import("ace-builds/src-noconflict/theme-solarized_dark");
+    await import("ace-builds/src-noconflict/ext-language_tools");
     return ace;
   },
   {

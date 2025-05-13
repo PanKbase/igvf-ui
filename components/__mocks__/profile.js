@@ -174,14 +174,14 @@ const profiles = {
         description:
           "The collection of biological data related to a single initiative, originating from a consortium.",
         type: "string",
-          enum: ["community", "ENCODE", "IGVF", "PanKbase"],
+        enum: ["community", "ENCODE", "IGVF", "PanKbase"],
       },
       viewing_group: {
         title: "View Access Group",
         description:
           "The group that determines which set of data the user has permission to view.",
         type: "string",
-          enum: ["community", "IGVF", "PanKbase"],
+        enum: ["community", "IGVF", "PanKbase"],
       },
       component: {
         title: "Project Component",
@@ -3540,7 +3540,7 @@ const profiles = {
         items: {
           title: "Published By",
           type: "string",
-            enum: ["community", "IGVF", "PanKbase", "ENCODE"],
+          enum: ["community", "IGVF", "PanKbase", "ENCODE"],
         },
       },
       "@id": {
