@@ -6,7 +6,7 @@ module.exports = {
       center: true,
       padding: "1rem",
       screens: {
-       DEFAULT: "100%",
+        DEFAULT: "100%",
       },
     },
     extend: {
@@ -101,7 +101,15 @@ module.exports = {
 
         "indexed-state": "var(--color-indexed-state-background)",
         "indexing-state": "var(--color-indexing-state-background)",
-
+        "file-graph-analysis": "var(--color-file-graph-analysis)",
+        "file-graph-auxiliary": "var(--color-file-graph-auxiliary)",
+        "file-graph-construct-library":
+          "var(--color-file-graph-construct-library)",
+        "file-graph-curated": "var(--color-file-graph-curated)",
+        "file-graph-measurement": "var(--color-file-graph-measurement)",
+        "file-graph-model": "var(--color-file-graph-model)",
+        "file-graph-prediction": "var(--color-file-graph-prediction)",
+        "file-graph-unknown": "var(--color-file-graph-unknown)",
         "schema-name-highlight":
           "var(--color-schema-name-highlight-background)",
         "schema-search": "var(--color-schema-search-background)",
@@ -259,6 +267,15 @@ module.exports = {
         "audit-not-compliant": "var(--color-audit-not-compliant-fill)",
         "audit-internal-action": "var(--color-audit-internal-action-fill)",
         "audit-facet": "var(--color-audit-facet-fill)",
+        "file-graph-analysis": "var(--color-file-graph-analysis)",
+        "file-graph-auxiliary": "var(--color-file-graph-auxiliary)",
+        "file-graph-construct-library":
+          "var(--color-file-graph-construct-library)",
+        "file-graph-curated": "var(--color-file-graph-curated)",
+        "file-graph-measurement": "var(--color-file-graph-measurement)",
+        "file-graph-model": "var(--color-file-graph-model)",
+        "file-graph-prediction": "var(--color-file-graph-prediction)",
+        "file-graph-unknown": "var(--color-file-graph-unknown)",
       },
       gridTemplateColumns: {
         "min-2": "repeat(2, minmax(0, min-content))",

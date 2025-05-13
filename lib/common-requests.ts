@@ -74,8 +74,12 @@ export async function requestBiosamples(
   return (
     await request.getMultipleObjectsBulk(paths, [
       "accession",
+      "aliases",
       "disease_terms",
       "sample_terms",
+      "derived_from",
+      "input_file_for",
+      "lab.@id",
       "status",
       "summary",
     ])
@@ -169,6 +173,8 @@ export async function requestFileSets(
       paths,
       [
         "accession",
+        "@type",
+        "file_set_type",
         "aliases",
         "lab.title",
         "samples",

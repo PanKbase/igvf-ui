@@ -47,8 +47,8 @@ export default function AuditDoc({ auditDoc, schemas }) {
     <>
       <PagePreamble />
       <p>
-        The PanKbase Data and Administration Coordinating Center has established an
-        audit system, utilizing flags, to detect discrepancies in the data.
+        The PanKbase Data and Administration Coordinating Center has established
+        an audit system, utilizing flags, to detect discrepancies in the data.
         While dependencies ensure metadata accuracy within an individual object,
         audits primarily focus on validating metadata between linked objects.
         For example, a specific audit has been implemented to verify the linkage

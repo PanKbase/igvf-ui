@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import SiteSearchTrigger from "../components/site-search-trigger";
@@ -136,10 +136,7 @@ ChartBar.propTypes = { className: PropTypes.string };
 
 function Statistic({ icon: Icon, label, value, query, description }) {
   return (
-    <Link
-      href={`/search/?${query}`}
-      className="group block w-full"
-    >
+    <Link href={`/search/?${query}`} className="group block w-full">
       <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
         <div className="flex items-start gap-4 p-6">
           <div className="rounded-lg bg-teal-50 p-3 dark:bg-teal-900/30">
@@ -170,11 +167,24 @@ Statistic.propTypes = {
   description: PropTypes.string.isRequired,
 };
 
-export default function Home({ assayCount, processedCount, analysisCount, donorCount, biosampleCount, workflowCount }) {
+export default function Home({
+  assayCount,
+  processedCount,
+  analysisCount,
+  donorCount,
+  biosampleCount,
+  workflowCount,
+}) {
   return (
     <div className="@container/home">
       <p className="my-8">
-          The Data Library enables query and browsing components of analysis resources created by PanKbase, including meta-data on human donors and biosamples, details on experimental assays, standardized processing of data (&apos;processed results&apos;), workflows used to process data and create resources, and the resources themselves (&apos;analysis results&apos;).</p>
+        The Data Library enables query and browsing components of analysis
+        resources created by PanKbase, including meta-data on human donors and
+        biosamples, details on experimental assays, standardized processing of
+        data (&apos;processed results&apos;), workflows used to process data and
+        create resources, and the resources themselves (&apos;analysis
+        results&apos;).
+      </p>
       <section className="my-8">
         <h2 className="text-center text-lg font-bold">Search Data</h2>
         <div className="flex flex-col gap-4">
@@ -246,10 +256,14 @@ export async function getServerSideProps({ req }) {
     await request.getObject("/search/?type=Donor&limit=0")
   ).optional();
   const analysisResults = (
-    await request.getObject("/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0")
+    await request.getObject(
+      "/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0"
+    )
   ).optional();
   const processedResults = (
-    await request.getObject("/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0")
+    await request.getObject(
+      "/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0"
+    )
   ).optional();
   const assayResults = (
     await request.getObject("/search/?type=MeasurementSet&limit=0")

@@ -97,25 +97,19 @@ export default function PrimaryIslet({
                 {primaryIslet.resources && (
                   <>
                     <DataItemLabel>Resources</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.resources}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.resources}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.pmi && (
                   <>
                     <DataItemLabel>Post-mortem Interval</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.pmi}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.pmi}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.rrid && (
                   <>
                     <DataItemLabel>rrid</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.rrid}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.rrid}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.cold_ischaemia_time && (
@@ -129,22 +123,20 @@ export default function PrimaryIslet({
                 {primaryIslet.organ_source && (
                   <>
                     <DataItemLabel>Organ Source</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.organ_source}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.organ_source}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.prep_viability && (
                   <>
                     <DataItemLabel>Prep Viability (percentage)</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.prep_viability}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.prep_viability}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.warm_ischaemia_duration && (
                   <>
-                    <DataItemLabel>Warm Ischaemia Duration/Down Time (hours)</DataItemLabel>
+                    <DataItemLabel>
+                      Warm Ischaemia Duration/Down Time (hours)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.warm_ischaemia_duration}
                     </DataItemValue>
@@ -168,7 +160,9 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.pre_shipment_culture_time && (
                   <>
-                    <DataItemLabel>Pre-Shipment Culture Time (hours)</DataItemLabel>
+                    <DataItemLabel>
+                      Pre-Shipment Culture Time (hours)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.pre_shipment_culture_time}
                     </DataItemValue>
@@ -185,9 +179,7 @@ export default function PrimaryIslet({
                 {primaryIslet.digest_time && (
                   <>
                     <DataItemLabel>Digest Time (hours)</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.digest_time}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.digest_time}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.percentage_trapped && (
@@ -201,9 +193,7 @@ export default function PrimaryIslet({
                 {primaryIslet.islet_yield && (
                   <>
                     <DataItemLabel>Islet Yield</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.islet_yield}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.islet_yield}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.pancreas_weight && (
@@ -216,7 +206,9 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.post_shipment_islet_viability && (
                   <>
-                    <DataItemLabel>Post-Shipment islet viability (%)</DataItemLabel>
+                    <DataItemLabel>
+                      Post-Shipment islet viability (%)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.post_shipment_islet_viability}
                     </DataItemValue>
@@ -249,7 +241,9 @@ export default function PrimaryIslet({
                 {primaryIslet.preservation_method && (
                   <>
                     <DataItemLabel>Preservation Method</DataItemLabel>
-                    <DataItemValue>{primaryIslet.preservation_method}</DataItemValue>
+                    <DataItemValue>
+                      {primaryIslet.preservation_method}
+                    </DataItemValue>
                   </>
                 )}
                 {primaryIslet.ccf_id && (
@@ -264,8 +258,8 @@ export default function PrimaryIslet({
                     </Link>
                   </>
                 )}
-          </BiosampleDataItems>
-          </DataArea>
+              </BiosampleDataItems>
+            </DataArea>
           </DataPanel>
           {donors.length > 0 && <DonorTable donors={donors} />}
           {primaryIslet.file_sets.length > 0 && (
@@ -445,7 +439,10 @@ export async function getServerSideProps({ params, req, query }) {
       primaryIslet.accession,
       req.headers.cookie
     );
-    const attribution = await buildAttribution(primaryIslet, req.headers.cookie);
+    const attribution = await buildAttribution(
+      primaryIslet,
+      req.headers.cookie
+    );
     return {
       props: {
         primaryIslet,
