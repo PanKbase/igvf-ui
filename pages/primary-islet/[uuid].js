@@ -150,6 +150,14 @@ export default function PrimaryIslet({
                     </DataItemValue>
                   </>
                 )}
+                {primaryIslet.purity_assay?.length > 0 && (
+                  <>
+                    <DataItemLabel>Purity Assay</DataItemLabel>
+                    <DataItemValue>
+                      {primaryIslet.purity_assay.join(", ")}
+                    </DataItemValue>
+                  </>
+                )}
                 {primaryIslet.hand_picked && (
                   <>
                     <DataItemLabel>Hand Picked</DataItemLabel>

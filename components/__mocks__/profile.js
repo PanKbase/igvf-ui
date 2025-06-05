@@ -751,7 +751,7 @@ const profiles = {
         },
       },
       sex: {
-        title: "Sex",
+        title: "Gender",
         type: "string",
       },
       "@id": {

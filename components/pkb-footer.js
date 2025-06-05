@@ -1,15 +1,10 @@
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 
-// Using the same pkbMenu structure from the header component
+// Updated pkbMenu structure
 export const pkbMenu = {
   highlightItems: [
     { label: "PanKgraph", path: "https://pankgraph.org/" },
-    {
-      label: "Integrated Cell Browser",
-      path: "https://pankbase.org/single-cell.html",
-    },
+    { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" }
   ],
   menuItems: [
     {
@@ -18,125 +13,122 @@ export const pkbMenu = {
       subMenuItems: [
         {
           label: "Donor Summary",
-          path: "https://pankbase.org/donor-metadata.html",
+          path: "https://dev.pankbase.org/donor-metadata.html",
         },
         { label: "Data Library", path: "https://data.pankbase.org" },
-        { label: "APIs", path: "https://pankbase.org/apis.html" },
+        { label: "APIs", path: "https://dev.pankbase.org/apis.html" },
       ],
     },
     {
       label: "Resources",
       path: "",
       subMenuItems: [
-        {
-          label: "Integrated Cell Browser",
-          path: "https://pankbase.org/single-cell.html",
-        },
+        { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" },
+        { label: "Differential Gene Expression Browser", path: "https://dev.pankbase.org/diff-exp.html" },
         {
           label: "Analytical Library",
-          path: "https://pankbase.org/analytical-library.html",
+          path: "https://dev.pankbase.org/analytical-library.html",
         },
         {
-          label: "Publications",
-          path: "https://pankbase.org/publications.html",
+          label: "Metadata Standards",
+          path: "https://dev.pankbase.org/metadata-data-standards.html",
         },
+        { label: "Tools | Pipelines", path: "https://dev.pankbase.org/tools-pipelines.html" },
+        { label: "Publications", path: "https://dev.pankbase.org/publications.html" },
       ],
     },
     {
       label: "About",
       path: "",
       subMenuItems: [
-        { label: "Project", path: "https://pankbase.org/projects.html" },
-        { label: "People", path: "https://pankbase.org/people.html" },
-        { label: "Policies", path: "https://pankbase.org/policies.html" },
-        { label: "Programs", path: "https://pankbase.org/programs.html" },
-        { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
+        { label: "Project", path: "https://dev.pankbase.org/projects.html" },
+        { label: "People", path: "https://dev.pankbase.org/people.html" },
+        { label: "Policies", path: "https://dev.pankbase.org/policies.html" },
+        { label: "Programs", path: "https://dev.pankbase.org/programs.html" },
+        { label: "Collaborate", path: "https://dev.pankbase.org/collaborate.html" },
       ],
     },
     {
       label: "Help",
       path: "",
       subMenuItems: [
-        { label: "Contact", path: "/contact.html" },
-        {
-          label: "Metadata | Data Standards",
-          path: "https://pankbase.org/metadata-data-standards.html",
-        },
-        {
-          label: "Tools | Pipelines",
-          path: "https://pankbase.org/tools-pipelines.html",
-        },
-        { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
-        { label: "News", path: "https://pankbase.org/news.html" },
+        { label: "Contact | Feedback", path: "https://dev.pankbase.org/contact.html" },
+        { label: "Tutorials", path: "https://dev.pankbase.org/tutorials.html" },
+        { label: "GitHub", path: "https://github.com/PanKbase"},
+        { label: "News", path: "https://dev.pankbase.org/news.html" },
       ],
     },
   ],
 };
 
-function PkbFooter() {
+export default function PkbFooter() {
   return (
     <div className="pkb-footer">
       <div className="menu">
         <div className="main-menu-items">
           {pkbMenu.highlightItems.map((item, index) => (
-            <div
-              key={`footer-highlight-${index}`}
-              className="menu-item-wrapper"
-            >
-              <Link href={item.path} className="menu-item menu-item-main">
+            <div key={index} className="menu-item-wrapper">
+              <a className="menu-item menu-item-main" href={item.path}>
                 {item.label}
-              </Link>
+              </a>
             </div>
           ))}
         </div>
         {pkbMenu.menuItems.map((item, index) => (
-          <div key={`footer-menu-${index}`} className="menu-item-wrapper">
-            <Link href={item.path || "#"} className="menu-item">
+          <div key={index} className="menu-item-wrapper">
+            <a className="menu-item" href={item.path || null}>
               {item.label}
-            </Link>
+            </a>
             {item.subMenuItems && (
               <div className="submenu">
                 {item.subMenuItems.map((subItem, subIndex) => (
-                  <Link
-                    key={`footer-submenu-${index}-${subIndex}`}
-                    href={subItem.path || "#"}
+                  <a
+                    key={subIndex}
                     className="submenu-item"
+                    href={subItem.path || null}
                   >
                     {subItem.label}
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}
           </div>
         ))}
       </div>
+      
+      {/* Social Media Icons Section - Exact match to Vue */}
+      <div className="f-row align-v-center logos" style={{ gap: "10px" }}>
+        <a href="https://x.com/PanKbase" target="_blank" title="@PanKbase">
+          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/x-black.svg" alt="X (Twitter)" />
+        </a>
+        <a href="https://bsky.app/profile/pankbase.bsky.social" target="_blank" title="@pankbase.bsky.social">
+          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/bluesky-black.svg" alt="Bluesky" />
+        </a>
+        <a href="https://www.linkedin.com/groups/13199008/" target="_blank" title="LinkedIn">
+          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/linkedin-black.svg" alt="LinkedIn" />
+        </a>
+        <a href="https://github.com/PanKbase" target="_blank" title="GitHub">
+          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/github-black.svg" alt="GitHub" />
+        </a>
+      </div>
+      
       <div className="f-row" style={{ gap: "20px" }}>
-        <Link href="/">
-          <Image
-            width={37}
-            height={37}
-            style={{ height: "37px", width: "auto" }}
+        <a href="/">
+          <img 
+            style={{ height: "37px" }} 
             src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black.svg"
             alt="PanKbase Logo"
           />
-        </Link>
+        </a>
         <div>
-          Supported by <strong>National Institutes of Health (NIH)</strong>{" "}
-          grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
+          Supported by <strong>National Institutes of Health (NIH)</strong> grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
           <br />
-          Supplemental funds from the{" "}
-          <strong>NIH Office of Data Science Strategies</strong>
+          Supplemental funds from the <strong>NIH Office of Data Science Strategies</strong>
         </div>
-        <a
-          href="https://hirnetwork.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={37}
-            height={37}
-            style={{ height: "37px", width: "auto" }}
-            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
+        <a href="https://hirnetwork.org/" target="_blank">
+          <img 
+            style={{ height: "37px" }} 
+            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" 
             alt="HIRN Logo"
           />
         </a>
@@ -144,5 +136,3 @@ function PkbFooter() {
     </div>
   );
 }
-
-export default PkbFooter;
