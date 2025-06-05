@@ -112,7 +112,7 @@ export default function PkbHeader() {
       return false;
     }
     return false;
-  };
+  }
 
   return (
     <div style={{ width: "100%" }}>
