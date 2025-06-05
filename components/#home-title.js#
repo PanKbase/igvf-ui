@@ -97,7 +97,7 @@ export default function PkbHeader() {
     );
   }, []);
 
-  function isActive(path) {
+OC  const isActive = (path) => {
     // Compare menu item's path to current path to set active
     // but only the first instance (matching Vue logic exactly)
     if (menuItemActive) {
