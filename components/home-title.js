@@ -244,8 +244,6 @@ export default function Header() {
           />
         </a>
       </div>
-      {/* Beta tag */}
-      <div className="pkb-beta">beta</div>
     </div>
   );
 }
