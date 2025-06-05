@@ -1,10 +1,12 @@
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 // Updated pkbMenu structure
 export const pkbMenu = {
   highlightItems: [
     { label: "PanKgraph", path: "https://pankgraph.org/" },
-    { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" }
+    { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" },
   ],
   menuItems: [
     {
@@ -54,7 +56,7 @@ export const pkbMenu = {
       subMenuItems: [
         { label: "Contact | Feedback", path: "https://dev.pankbase.org/contact.html" },
         { label: "Tutorials", path: "https://dev.pankbase.org/tutorials.html" },
-        { label: "GitHub", path: "https://github.com/PanKbase"},
+        { label: "GitHub", path: "https://github.com/PanKbase" },
         { label: "News", path: "https://dev.pankbase.org/news.html" },
       ],
     },
@@ -95,40 +97,64 @@ export default function PkbFooter() {
           </div>
         ))}
       </div>
-      
+
       {/* Social Media Icons Section - Exact match to Vue */}
       <div className="f-row align-v-center logos" style={{ gap: "10px" }}>
-        <a href="https://x.com/PanKbase" target="_blank" title="@PanKbase">
-          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/x-black.svg" alt="X (Twitter)" />
+        <a href="https://x.com/PanKbase" target="_blank" title="@PanKbase" rel="noopener noreferrer">
+          <Image
+            width={20}
+            height={20}
+            src="https://hugeampkpncms.org/sites/default/files/images/logos/external/x-black.svg"
+            alt="X (Twitter)"
+          />
         </a>
-        <a href="https://bsky.app/profile/pankbase.bsky.social" target="_blank" title="@pankbase.bsky.social">
-          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/bluesky-black.svg" alt="Bluesky" />
+        <a href="https://bsky.app/profile/pankbase.bsky.social" target="_blank" title="@pankbase.bsky.social" rel="noopener noreferrer">
+          <Image
+            width={20}
+            height={20}
+            src="https://hugeampkpncms.org/sites/default/files/images/logos/external/bluesky-black.svg"
+            alt="Bluesky"
+          />
         </a>
-        <a href="https://www.linkedin.com/groups/13199008/" target="_blank" title="LinkedIn">
-          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/linkedin-black.svg" alt="LinkedIn" />
+        <a href="https://www.linkedin.com/groups/13199008/" target="_blank" title="LinkedIn" rel="noopener noreferrer">
+          <Image
+            width={20}
+            height={20}
+            src="https://hugeampkpncms.org/sites/default/files/images/logos/external/linkedin-black.svg"
+            alt="LinkedIn"
+          />
         </a>
-        <a href="https://github.com/PanKbase" target="_blank" title="GitHub">
-          <img src="https://hugeampkpncms.org/sites/default/files/images/logos/external/github-black.svg" alt="GitHub" />
+        <a href="https://github.com/PanKbase" target="_blank" title="GitHub" rel="noopener noreferrer">
+          <Image
+            width={20}
+            height={20}
+            src="https://hugeampkpncms.org/sites/default/files/images/logos/external/github-black.svg"
+            alt="GitHub"
+          />
         </a>
       </div>
-      
+
       <div className="f-row" style={{ gap: "20px" }}>
-        <a href="/">
-          <img 
-            style={{ height: "37px" }} 
+        <Link href="/">
+          <Image
+            width={37}
+            height={37}
+            style={{ height: "37px", width: "auto" }}
             src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black.svg"
             alt="PanKbase Logo"
           />
-        </a>
+        </Link>
         <div>
           Supported by <strong>National Institutes of Health (NIH)</strong> grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
           <br />
           Supplemental funds from the <strong>NIH Office of Data Science Strategies</strong>
         </div>
-        <a href="https://hirnetwork.org/" target="_blank">
-          <img 
-            style={{ height: "37px" }} 
-            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" 
+        <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
+          <Image
+            width={37}
+            height={37}
+            style={{ height: "37px", width: "auto" }}
+            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
             alt="HIRN Logo"
           />
         </a>
