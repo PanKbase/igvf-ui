@@ -6,7 +6,7 @@ import Image from "next/image";
 export const pkbMenu = {
   highlightItems: [
     { label: "PanKgraph", path: "https://pankgraph.org/" },
-    { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" }
+    { label: "Integrated Cell Browser", path: "https://dev.pankbase.org/single-cell.html" },
   ],
   menuItems: [
     {
@@ -56,7 +56,7 @@ export const pkbMenu = {
       subMenuItems: [
         { label: "Contact | Feedback", path: "https://dev.pankbase.org/contact.html" },
         { label: "Tutorials", path: "https://dev.pankbase.org/tutorials.html" },
-        { label: "GitHub", path: "https://github.com/PanKbase"},
+        { label: "GitHub", path: "https://github.com/PanKbase" },
         { label: "News", path: "https://dev.pankbase.org/news.html" },
       ],
     },
@@ -100,15 +100,16 @@ export default function PkbHeader() {
   const isActive = (path) => {
     // Compare menu item's path to current path to set active
     // but only the first instance (matching Vue logic exactly)
-    if (menuItemActive) return false;
+    if (menuItemActive) {
+      return false;
+    }
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
         menuItemActive = true;
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
     return false;
   };
@@ -118,34 +119,40 @@ export default function PkbHeader() {
       {/* Google Analytics placeholder - would be implemented separately */}
       <div className="pkb-nav">
         <div className="logo">
-          <a href="/">
-            <img
-              style={{ height: "50px" }}
+          <Link href="/">
+            <Image
+              width={50}
+              height={50}
+              style={{ height: "50px", width: "auto" }}
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
               alt="PanKbase Logo"
             />
-          </a>
+          </Link>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <div className="menu-wrapper">
             <div className="topmenu">
-              <a className="topmenu-item">
+              <button type="button" className="topmenu-item">
                 Search
-                <img
+                <Image
+                  width={15}
+                  height={15}
                   style={{ height: "15px", width: "15px" }}
                   src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
                   alt="Search"
                 />
-              </a>
-              <a className="topmenu-item">Analysis</a>
-              <a className="topmenu-item">
+              </button>
+              <button type="button" className="topmenu-item">Analysis</button>
+              <button type="button" className="topmenu-item">
                 Login
-                <img
+                <Image
+                  width={15}
+                  height={15}
                   style={{ height: "15px", width: "15px" }}
                   src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
                   alt="User"
                 />
-              </a>
+              </button>
             </div>
             <div className="menu">
               <div className="main-menu-items">
@@ -157,6 +164,8 @@ export default function PkbHeader() {
                     <a
                       className="menu-item menu-item-main"
                       href={item.path}
+                      target={item.path.startsWith("http") ? "_blank" : "_self"}
+                      rel={item.path.startsWith("http") ? "noopener noreferrer" : ""}
                     >
                       {item.label}
                     </a>
@@ -168,7 +177,7 @@ export default function PkbHeader() {
                   key={`menu-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
                 >
-                  <a className="menu-item" href={item.path || null}>
+                  <a className="menu-item" href={item.path || "#"}>
                     {item.label}
                   </a>
                   {item.subMenuItems && (
@@ -177,7 +186,9 @@ export default function PkbHeader() {
                         <a
                           key={`submenu-${index}-${subIndex}`}
                           className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
-                          href={subItem.path || null}
+                          href={subItem.path || "#"}
+                          target={subItem.path && subItem.path.startsWith("http") ? "_blank" : "_self"}
+                          rel={subItem.path && subItem.path.startsWith("http") ? "noopener noreferrer" : ""}
                           data-whatever={isActive(subItem.path).toString()}
                         >
                           {subItem.label}
@@ -190,9 +201,11 @@ export default function PkbHeader() {
             </div>
           </div>
           <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <img 
-              style={{ height: "37px" }} 
-              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" 
+            <Image
+              width={37}
+              height={37}
+              style={{ height: "37px", width: "auto" }}
+              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
               alt="HIRN Logo"
             />
           </a>
