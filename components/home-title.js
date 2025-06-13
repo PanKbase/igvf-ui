@@ -163,12 +163,12 @@ export default function Header() {
       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
         <div className="menu-wrapper">
           <div className="topmenu">
-            <a className="topmenu-item" href="https://data.dev.pankbase.org">
+            <a className="topmenu-item" href="https://data.pankbase.org">
               Data Library Home
             </a>
             <a
               className="topmenu-item"
-              href="https://data.dev.pankbase.org/profiles"
+              href="https://data.pankbase.org/profiles"
             >
               Data Library Schema
             </a>
@@ -184,7 +184,7 @@ export default function Header() {
                   <a
                     className="menu-item menu-item-main"
                     href={item.path}
-                    target={item.path.startsWith("http") ? "_blank" : "_self"}
+                    target= "_self"
                     rel={
                       item.path.startsWith("http") ? "noopener noreferrer" : ""
                     }
@@ -210,11 +210,7 @@ export default function Header() {
                         key={`submenu-${index}-${subIndex}`}
                         className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
                         href={subItem.path || null}
-                        target={
-                          subItem.path && subItem.path.startsWith("http")
-                            ? "_blank"
-                            : "_self"
-                        }
+                        target="_self"
                         rel={
                           subItem.path && subItem.path.startsWith("http")
                             ? "noopener noreferrer"
@@ -233,7 +229,7 @@ export default function Header() {
         </div>
         <a
           href="https://hirnetwork.org/"
-          target="_blank"
+          target="_self"
           rel="noopener noreferrer"
         >
           <Image
