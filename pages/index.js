@@ -197,7 +197,7 @@ export default function Home({
           icon={Users}
           label="Donors"
           value={donorCount}
-          query="type=Donor"
+          query="type=HumanDonor"
           description="Human donors of a pancreatic biosample"
         />
         <Statistic
@@ -253,7 +253,7 @@ export async function getServerSideProps({ req }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
 
   const donorResults = (
-    await request.getObject("/search/?type=Donor&limit=0")
+    await request.getObject("/search/?type=HumanDonor&limit=0")
   ).optional();
   const analysisResults = (
     await request.getObject(
