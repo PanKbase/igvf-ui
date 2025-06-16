@@ -15,7 +15,6 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 // components
-import AliasList from "./alias-list";
 import {
   DataPanel,
   DataArea,
@@ -441,14 +440,6 @@ export function DonorDataItems({
           )}
 
           {/* Metadata and External Links */}
-          {item.aliases?.length > 0 && (
-            <>
-              <DataItemLabel>Aliases</DataItemLabel>
-              <DataItemValue>
-                <AliasList aliases={item.aliases} />
-              </DataItemValue>
-            </>
-          )}
           {item.identifiers?.length > 0 && (
             <>
               <DataItemLabel>Identifiers</DataItemLabel>
@@ -521,7 +512,6 @@ DonorDataItems.commonProperties = [
   "description",
   "collections",
   "dbxrefs",
-  "aliases",
   "identifiers",
   "url",
 ];
@@ -920,14 +910,6 @@ export function FileDataItems({ item, fileSet = null, children }) {
           <DataItemValue>{item.content_summary}</DataItemValue>
         </>
       )}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.dbxrefs?.length > 0 && (
         <>
           <DataItemLabel>External Resources</DataItemLabel>
@@ -1003,7 +985,6 @@ FileDataItems.propTypes = {
 };
 
 FileDataItems.commonProperties = [
-  "aliases",
   "content_md5sum",
   "content_type",
   "content_summary",

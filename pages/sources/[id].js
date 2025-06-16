@@ -47,14 +47,6 @@ export default function Source({ source, isJson }) {
                   </DataItemValue>
                 </>
               )}
-              {source.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={source.aliases} />
-                  </DataItemValue>
-                </>
-              )}
             </DataArea>
           </DataPanel>
         </JsonDisplay>

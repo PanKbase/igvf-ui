@@ -216,7 +216,7 @@ export default function Home({
         />
         <Statistic
           icon={Database}
-          label="Itermediate Analysis Results"
+          label="Intermediate Analysis Results"
           value={processedCount}
           query="type=AnalysisSet&file_set_type=intermediate+analysis"
           description="Standardized processing of data generated from an assay"

@@ -68,14 +68,6 @@ export default function AnalysisSet({
         <JsonDisplay item={analysisSet} isJsonFormat={isJson}>
           <DataPanel>
             <DataArea>
-              {analysisSet.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={analysisSet.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               <DataItemLabel>File Set Type</DataItemLabel>
               <DataItemValue>{analysisSet.file_set_type}</DataItemValue>
               {analysisSet.publication_identifiers?.length > 0 && (

@@ -112,14 +112,6 @@ export default function Treatment({
                   <DataItemValue>{treatment.submitter_comment}</DataItemValue>
                 </>
               )}
-              {treatment.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={treatment.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {(treatment.lot_id ||
                 treatment.product_id ||
                 sources.length > 0) && (

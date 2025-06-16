@@ -52,14 +52,6 @@ export default function Document({ document, attribution = null, isJson }) {
                   <DataItemValue>{document.submitter_comment}</DataItemValue>
                 </>
               )}
-              {document.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={document.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {document.urls?.length > 0 && (
                 <>
                   <DataItemLabel>Additional Information</DataItemLabel>

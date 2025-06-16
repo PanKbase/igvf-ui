@@ -70,14 +70,6 @@ export default function Workflow({
                   {workflow.source_url}
                 </a>
               </DataItemValueUrl>
-              {workflow.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={workflow.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {workflow.standards_page && (
                 <>
                   <DataItemLabel>Standards Page</DataItemLabel>

@@ -92,14 +92,6 @@ export default function AnalysisStep({
                   </DataItemValue>
                 </>
               )}
-              {analysisStep.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={analysisStep.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {analysisStep.submitter_comment && (
                 <>
                   <DataItemLabel>Submitter Comment</DataItemLabel>
