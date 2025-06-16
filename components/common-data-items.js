@@ -636,14 +636,6 @@ export function SampleDataItems({
           <DataItemValue>{item.revoke_detail}</DataItemValue>
         </>
       )}
-      {item.aliases && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.publication_identifiers && (
         <>
           <DataItemLabel>Publication Identifiers</DataItemLabel>
@@ -685,7 +677,6 @@ SampleDataItems.propTypes = {
 };
 
 SampleDataItems.commonProperties = [
-  "aliases",
   "date_obtained",
   "dbxrefs",
   "description",
@@ -843,14 +834,6 @@ export function OntologyTermDataItems({ item, isA, children }) {
           <DataItemValue>{item.synonyms.join(", ")}</DataItemValue>
         </>
       )}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {children}
       {item.submitter_comment && (
         <>
@@ -870,7 +853,6 @@ OntologyTermDataItems.propTypes = {
 };
 
 OntologyTermDataItems.commonProperties = [
-  "aliases",
   "submitter_comment",
   "synonyms",
   "term_id",
@@ -1021,14 +1003,6 @@ export function FileSetDataItems({ item, children }) {
         </>
       )}
       {children}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.url && (
         <>
           <DataItemLabel>URL</DataItemLabel>
@@ -1080,7 +1054,6 @@ FileSetDataItems.commonProperties = [
   "file_set_type",
   "summary",
   "description",
-  "aliases",
   "url",
   "submitter_comment",
   "revoke_detail",

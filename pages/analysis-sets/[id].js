@@ -2,7 +2,6 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 // components
-import AliasList from "../../components/alias-list";
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
