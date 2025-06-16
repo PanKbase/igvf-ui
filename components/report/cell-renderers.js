@@ -18,7 +18,6 @@ import {
   useCollapseControl,
 } from "../collapse-control";
 import SeparatedList from "../separated-list";
-import { AliasesCell } from "../table-cells";
 import UnspecifiedProperty from "../unspecified-property";
 // lib
 import { attachmentToServerHref } from "../../lib/attachment";
@@ -77,23 +76,6 @@ Attachment.propTypes = {
       download: PropTypes.string.isRequired,
     }),
   }).isRequired,
-};
-
-/**
- * Display a vertical list of aliases and allow it to break on any character to avoid making an
- * unreasonably wide column. It seems unlikely that a cell would have so many aliases that it
- * needs a collapse/expand button.
- */
-function Aliases({ source }) {
-  return <AliasesCell source={source} />;
-}
-
-Aliases.propTypes = {
-  // Object displayed in a row
-  source: PropTypes.shape({
-    // Array of aliases
-    aliases: PropTypes.arrayOf(PropTypes.string),
-  }),
 };
 
 /**
@@ -504,7 +486,6 @@ export const reportPropertyRenderers = {
 
 export const propertyRenderers = {
   "@id": AtId,
-  aliases: Aliases,
   attachment: Attachment,
   href: Href,
   "attachment.href": AttachmentHref,

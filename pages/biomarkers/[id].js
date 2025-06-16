@@ -73,14 +73,6 @@ export default function Biomarker({
                   </DataItemValue>
                 </>
               )}
-              {biomarker.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={biomarker.aliases} />
-                  </DataItemValue>
-                </>
-              )}
             </DataArea>
           </DataPanel>
           <Attribution attribution={attribution} />

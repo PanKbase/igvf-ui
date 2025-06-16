@@ -94,14 +94,6 @@ export default function OpenReadingFrame({ orf, isJson }) {
                   <DataItemValue>{orf.pct_coverage_orf}</DataItemValue>
                 </>
               )}
-              {orf.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={orf.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {orf.submitter_comment && (
                 <>
                   <DataItemLabel>Submitter Comment</DataItemLabel>

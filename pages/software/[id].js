@@ -54,14 +54,6 @@ export default function Software({
                   {software.source_url}
                 </a>
               </DataItemValueUrl>
-              {software.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={software.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {software.publication_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Publication Identifiers</DataItemLabel>
