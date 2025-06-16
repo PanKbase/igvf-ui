@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import AliasList from "../../components/alias-list";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
 import {

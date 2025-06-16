@@ -21,7 +21,6 @@ import buildBreadcrumbs from "../../lib/breadcrumbs";
 import { requestSoftwareVersions } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
-import AliasList from "../../components/alias-list";
 import buildAttribution from "../../lib/attribution";
 import { isJsonFormat } from "../../lib/query-utils";
 
