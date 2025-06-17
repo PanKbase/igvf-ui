@@ -29,7 +29,7 @@ export default function Attribution({ attribution = null }) {
           <DataArea>
             {attribution.award && (
               <>
-                <DataItemLabel>Award</DataItemLabel>
+                <DataItemLabel>Funding</DataItemLabel>
                 <DataItemValue>
                   <Link href={attribution.award["@id"]}>
                     {attribution.award.name}

@@ -25,7 +25,6 @@ import {
   DataItemValueUrl,
 } from "./data-area";
 import DbxrefList from "./dbxref-list";
-import ProductInfo from "./product-info";
 import SeparatedList from "./separated-list";
 // lib
 import { formatDate } from "../lib/dates";
@@ -54,7 +53,7 @@ export function DonorDataItems({
           )}
           {item.center_donor_id && (
             <>
-              <DataItemLabel>Center Donor ID</DataItemLabel>
+              <DataItemLabel>Program Donor ID</DataItemLabel>
               <DataItemValue>{item.center_donor_id}</DataItemValue>
             </>
           )}
@@ -72,7 +71,7 @@ export function DonorDataItems({
           )}
           {item.gender && (
             <>
-              <DataItemLabel>Self-Reported Gender</DataItemLabel>
+              <DataItemLabel>Reported sex at birth</DataItemLabel>
               <DataItemValue>{item.gender}</DataItemValue>
             </>
           )}
@@ -108,7 +107,7 @@ export function DonorDataItems({
           )}
           {item.self_reported_ethnicities?.length > 0 && (
             <>
-              <DataItemLabel>Self-Reported Ethnicity</DataItemLabel>
+              <DataItemLabel>Reported Ethnicity</DataItemLabel>
               <DataItemValue>{item.self_reported_ethnicities.join(", ")}</DataItemValue>
             </>
           )}
@@ -148,7 +147,7 @@ export function DonorDataItems({
           )}
           {Array.isArray(diabetesStatus) && diabetesStatus?.length > 0 ? (
             <>
-              <DataItemLabel>Diabetes Status</DataItemLabel>
+              <DataItemLabel>Diabetes Ontology Classification</DataItemLabel>
               <DataItemValue>
                 <SeparatedList>
                   {diabetesStatus.map((status) => (
@@ -167,7 +166,7 @@ export function DonorDataItems({
           )}
           {item.diabetes_status_description && (
             <>
-              <DataItemLabel>Diabetes Status Description</DataItemLabel>
+              <DataItemLabel>Clinical Diagnosis of Diabetes</DataItemLabel>
               <DataItemValue>{item.diabetes_status_description}</DataItemValue>
             </>
           )}
@@ -217,7 +216,7 @@ export function DonorDataItems({
           )}
           {item.other_theraphy?.length > 0 && (
             <>
-              <DataItemLabel>Other Therapy</DataItemLabel>
+              <DataItemLabel>Other Medication</DataItemLabel>
               <DataItemValue>
                 {item.other_theraphy.join(", ")}
               </DataItemValue>
@@ -562,18 +561,6 @@ export function SampleDataItems({
         <>
           <DataItemLabel>Description</DataItemLabel>
           <DataItemValue>{item.description}</DataItemValue>
-        </>
-      )}
-      {(item.lot_id || sources) && (
-        <>
-          <DataItemLabel>Sources</DataItemLabel>
-          <DataItemValue>
-            <ProductInfo
-              lotId={item.lot_id}
-              productId={item.product_id}
-              sources={sources}
-            />
-          </DataItemValue>
         </>
       )}
       {truthyOrZero(item.starting_amount) && (
