@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
-import BiomarkerTable from "../../components/biomarker-table";
 import Breadcrumbs from "../../components/breadcrumbs";
 import { BiosampleDataItems } from "../../components/common-data-items";
 import {
@@ -26,7 +25,6 @@ import TreatmentTable from "../../components/treatment-table";
 import buildAttribution from "../../lib/attribution";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
 import {
-  requestBiomarkers,
   requestBiosamples,
   requestDocuments,
   requestDonors,
@@ -42,7 +40,6 @@ import { Ok } from "../../lib/result";
 
 export default function PrimaryCell({
   primaryCell,
-  biomarkers,
   constructLibrarySets,
   diseaseTerms,
   documents,
@@ -144,13 +141,6 @@ export default function PrimaryCell({
               title="Sorted Fractions of Sample"
             />
           )}
-          {biomarkers.length > 0 && (
-            <BiomarkerTable
-              biomarkers={biomarkers}
-              reportLink={`/multireport/?type=Biomarker&biomarker_for=${primaryCell["@id"]}`}
-              reportLabel={`Report of biological markers that are associated with biosample ${primaryCell.accession}`}
-            />
-          )}
           {treatments.length > 0 && (
             <TreatmentTable
               treatments={treatments}
@@ -169,8 +159,6 @@ export default function PrimaryCell({
 PrimaryCell.propTypes = {
   // Primary-cell sample to display
   primaryCell: PropTypes.object.isRequired,
-  // Biomarkers of the sample
-  biomarkers: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Construct library sets associated with the sample
   constructLibrarySets: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Disease ontology for this sample
@@ -208,10 +196,6 @@ export async function getServerSideProps({ params, req, query }) {
     await request.getObject(`/primary-cells/${params.uuid}/`)
   ).union();
   if (FetchRequest.isResponseSuccess(primaryCell)) {
-    const biomarkers =
-      primaryCell.biomarkers?.length > 0
-        ? await requestBiomarkers(primaryCell.biomarkers, request)
-        : [];
     let diseaseTerms = [];
     if (primaryCell.disease_terms?.length > 0) {
       const diseaseTermPaths = primaryCell.disease_terms.map(
@@ -282,7 +266,6 @@ export async function getServerSideProps({ params, req, query }) {
     return {
       props: {
         primaryCell,
-        biomarkers,
         constructLibrarySets,
         diseaseTerms,
         documents,
