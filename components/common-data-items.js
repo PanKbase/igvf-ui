@@ -520,7 +520,6 @@ DonorDataItems.commonProperties = [
  */
 export function SampleDataItems({
   item,
-  sources = null,
   constructLibrarySets = [],
   children,
 }) {
@@ -658,7 +657,6 @@ SampleDataItems.propTypes = {
   // Object derived from the sample.json schema
   item: PropTypes.object.isRequired,
   // Source lab or source for this sample
-  sources: PropTypes.arrayOf(PropTypes.object),
   // Construct library sets for this sample
   constructLibrarySets: PropTypes.arrayOf(PropTypes.object),
 };
@@ -691,14 +689,12 @@ export function BiosampleDataItems({
   diseaseTerms = null,
   partOf = null,
   sampleTerms = null,
-  sources = null,
   children,
 }) {
   return (
     <SampleDataItems
       item={item}
       constructLibrarySets={constructLibrarySets}
-      sources={sources}
     >
       {sampleTerms?.length > 0 && (
         <>
@@ -778,8 +774,6 @@ BiosampleDataItems.propTypes = {
   partOf: PropTypes.object,
   // Sample ontology for the biosample
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
-  // Source lab or source for this biosample
-  sources: PropTypes.arrayOf(PropTypes.object),
 };
 
 BiosampleDataItems.commonProperties = [
