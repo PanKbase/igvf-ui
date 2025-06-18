@@ -26,6 +26,7 @@ export const pkbMenu = {
       path: "",
       subMenuItems: [
         { label: "Integrated Cell Browser", path: "https://pankbase.org/single-cell.html" },
+        { label: "PCA Explorer", path: "https://dev.pankbase.org/pca-explorer.html" },
         { label: "Differential Gene Expression Browser", path: "https://pankbase.org/diff-exp.html" },
         {
           label: "Analytical Library",
@@ -46,7 +47,7 @@ export const pkbMenu = {
         { label: "Project", path: "https://pankbase.org/projects.html" },
         { label: "People", path: "https://pankbase.org/people.html" },
         { label: "Policies", path: "https://pankbase.org/policies.html" },
-        { label: "Programs", path: "https://pankbase.org/programs.html" },
+        { label: "Related Programs", path: "https://pankbase.org/programs.html" },
         { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
       ],
     },

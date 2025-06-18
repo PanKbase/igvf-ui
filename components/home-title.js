@@ -22,6 +22,9 @@ export const pkbMenu = {
           path: "https://pankbase.org/donor-metadata.html",
         },
         { label: "Data Library", path: "https://data.pankbase.org" },
+        { label: "User Guide", path: "https://data.pankbase.org/help/general-help/user-guide" },
+        { label: "Scripts", path: "https://github.com/PanKbase/PanKbase-data-library-scripts" },
+        { label: "Schema", path: "https://data.pankbase.org/profiles" },
         { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
     },
@@ -37,6 +40,10 @@ export const pkbMenu = {
         {
           label: "Differential Gene Expression Browser",
           path: "https://pankbase.org/diff-exp.html",
+        },
+        {
+          label: "PCA Explorer",
+          path: "https://pankbase.org/pca-explorer.html",
         },
         {
           label: "Analytical Library",
@@ -63,7 +70,7 @@ export const pkbMenu = {
         { label: "Project", path: "https://pankbase.org/projects.html" },
         { label: "People", path: "https://pankbase.org/people.html" },
         { label: "Policies", path: "https://pankbase.org/policies.html" },
-        { label: "Programs", path: "https://pankbase.org/programs.html" },
+        { label: "Related Programs", path: "https://pankbase.org/programs.html" },
         { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
       ],
     },
@@ -164,19 +171,19 @@ export default function Header() {
         <div className="menu-wrapper">
           <div className="topmenu">
             <a className="topmenu-item" href="https://data.pankbase.org">
-              Data Library Home
+              Home
             </a>
             <a className="topmenu-item" href="https://data.pankbase.org/help/general-help/user-guide">
-              Data Library User Guide
+              User Guide
             </a>
             <a className="topmenu-item" href="https://github.com/PanKbase/PanKbase-data-library-exploration">
-              Data Library Exploration Tool
+              Scripts
             </a>
             <a
               className="topmenu-item"
               href="https://data.pankbase.org/profiles"
             >
-              Data Library Schema
+              Schema
             </a>
             <NavigationSection />
           </div>
