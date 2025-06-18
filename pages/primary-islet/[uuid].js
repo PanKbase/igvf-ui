@@ -85,7 +85,7 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.isolation_center && (
                   <>
-                    <DataItemLabel>Isolation Center</DataItemLabel>
+                    <DataItemLabel>Islet Isolation Center</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.isolation_center}
                     </DataItemValue>
@@ -125,14 +125,14 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.prep_viability && (
                   <>
-                    <DataItemLabel>Prep Viability (percentage)</DataItemLabel>
+                    <DataItemLabel>Pre-Shipment Islet Viability (percentage)</DataItemLabel>
                     <DataItemValue>{primaryIslet.prep_viability}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.warm_ischaemia_duration && (
                   <>
                     <DataItemLabel>
-                      Warm Ischaemia Duration/Down Time (hours)
+                      Warm Ischemia Duration/Down Time (hours)
                     </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.warm_ischaemia_duration}
@@ -141,7 +141,7 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.purity?.length > 0 && (
                   <>
-                    <DataItemLabel>Purity</DataItemLabel>
+                    <DataItemLabel>Pre-Shipment Islet Purity</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.purity.join(", ")}
                     </DataItemValue>
@@ -157,7 +157,7 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.hand_picked && (
                   <>
-                    <DataItemLabel>Hand Picked</DataItemLabel>
+                    <DataItemLabel>Hand-Picked</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.hand_picked ? "Yes" : "No"}
                     </DataItemValue>
@@ -183,7 +183,7 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.digest_time && (
                   <>
-                    <DataItemLabel>Digest Time (hours)</DataItemLabel>
+                    <DataItemLabel>Pancreas Digest Time (hours)</DataItemLabel>
                     <DataItemValue>{primaryIslet.digest_time}</DataItemValue>
                   </>
                 )}
@@ -203,7 +203,7 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.pancreas_weight && (
                   <>
-                    <DataItemLabel>IEQ/Pancreas Weight</DataItemLabel>
+			<DataItemLabel>IEQ/Pancreas Weight (grams)</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.pancreas_weight}
                     </DataItemValue>
@@ -212,7 +212,7 @@ export default function PrimaryIslet({
                 {primaryIslet.post_shipment_islet_viability && (
                   <>
                     <DataItemLabel>
-                      Post-Shipment islet viability (%)
+                      Pre-Shipment islet viability (%)
                     </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.post_shipment_islet_viability}
