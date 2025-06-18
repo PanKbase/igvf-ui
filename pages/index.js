@@ -126,6 +126,64 @@ function ChartBar({ className }) {
   );
 }
 
+// New icon components for additional cards
+function FileText({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14,2 14,8 20,8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10,9 9,9 8,9" />
+    </svg>
+  );
+}
+
+function Code({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <polyline points="16,18 22,12 16,6" />
+      <polyline points="8,6 2,12 8,18" />
+    </svg>
+  );
+}
+
+function BookOpen({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  );
+}
+
 // PropTypes for SVG components
 Users.propTypes = { className: PropTypes.string };
 Flask.propTypes = { className: PropTypes.string };
@@ -133,6 +191,9 @@ Microscope.propTypes = { className: PropTypes.string };
 Database.propTypes = { className: PropTypes.string };
 GitBranch.propTypes = { className: PropTypes.string };
 ChartBar.propTypes = { className: PropTypes.string };
+FileText.propTypes = { className: PropTypes.string };
+Code.propTypes = { className: PropTypes.string };
+BookOpen.propTypes = { className: PropTypes.string };
 
 function Statistic({ icon: Icon, label, value, query, description }) {
   return (
@@ -164,6 +225,41 @@ Statistic.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+// New component for external link cards
+function ExternalLinkCard({ icon: Icon, label, href, description }) {
+  return (
+    <a 
+      href={href} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="group block w-full"
+    >
+      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-start gap-4 p-6">
+          <div className="rounded-lg bg-blue-50 p-3 dark:bg-blue-900/30">
+            <Icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <div className="flex-1">
+            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {label}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              {description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+ExternalLinkCard.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };
 
@@ -234,6 +330,31 @@ export default function Home({
           value={workflowCount}
           query="type=Workflow"
           description="Analysis workflows used to processed data and create resources"
+        />
+      </div>
+
+      {/* Separation line */}
+      <div className="my-8 border-t border-gray-200 dark:border-gray-700"></div>
+
+      {/* Additional resource cards */}
+      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+        <ExternalLinkCard
+          icon={FileText}
+          label="Schema"
+          href="https://data.pankbase.org/profiles"
+          description="Data schema and metadata profiles used in PanKbase"
+        />
+        <ExternalLinkCard
+          icon={Code}
+          label="Scripts"
+          href="https://github.com/PanKbase/PanKbase-data-library-scripts"
+          description="Data exploration scripts and tools for PanKbase analysis"
+        />
+        <ExternalLinkCard
+          icon={BookOpen}
+          label="User Guide"
+          href="https://data.pankbase.org/help/general-help/user-guide"
+          description="Comprehensive guide for using the PanKbase Data Library"
         />
       </div>
     </div>
