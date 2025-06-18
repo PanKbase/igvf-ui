@@ -9,7 +9,7 @@ export const pkbMenu = {
     { label: "PanKgraph", path: "https://pankgraph.org/" },
     {
       label: "Integrated Cell Browser",
-      path: "https://dev.pankbase.org/single-cell.html",
+      path: "https://pankbase.org/single-cell.html",
     },
   ],
   menuItems: [
@@ -19,10 +19,10 @@ export const pkbMenu = {
       subMenuItems: [
         {
           label: "Donor Summary",
-          path: "https://dev.pankbase.org/donor-metadata.html",
+          path: "https://pankbase.org/donor-metadata.html",
         },
         { label: "Data Library", path: "https://data.pankbase.org" },
-        { label: "APIs", path: "https://dev.pankbase.org/apis.html" },
+        { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
     },
     // Other menu items unchanged...
@@ -32,27 +32,27 @@ export const pkbMenu = {
       subMenuItems: [
         {
           label: "Integrated Cell Browser",
-          path: "https://dev.pankbase.org/single-cell.html",
+          path: "https://pankbase.org/single-cell.html",
         },
         {
           label: "Differential Gene Expression Browser",
-          path: "https://dev.pankbase.org/diff-exp.html",
+          path: "https://pankbase.org/diff-exp.html",
         },
         {
           label: "Analytical Library",
-          path: "https://dev.pankbase.org/analytical-library.html",
+          path: "https://pankbase.org/analytical-library.html",
         },
         {
           label: "Metadata Standards",
-          path: "https://dev.pankbase.org/metadata-data-standards.html",
+          path: "https://pankbase.org/metadata-data-standards.html",
         },
         {
           label: "Tools | Pipelines",
-          path: "https://dev.pankbase.org/tools-pipelines.html",
+          path: "https://pankbase.org/tools-pipelines.html",
         },
         {
           label: "Publications",
-          path: "https://dev.pankbase.org/publications.html",
+          path: "https://pankbase.org/publications.html",
         },
       ],
     },
@@ -60,21 +60,21 @@ export const pkbMenu = {
       label: "About",
       path: "",
       subMenuItems: [
-        { label: "Project", path: "https://dev.pankbase.org/projects.html" },
-        { label: "People", path: "https://dev.pankbase.org/people.html" },
-        { label: "Policies", path: "https://dev.pankbase.org/policies.html" },
-        { label: "Programs", path: "https://dev.pankbase.org/programs.html" },
-        { label: "Collaborate", path: "https://dev.pankbase.org/collaborate.html" },
+        { label: "Project", path: "https://pankbase.org/projects.html" },
+        { label: "People", path: "https://pankbase.org/people.html" },
+        { label: "Policies", path: "https://pankbase.org/policies.html" },
+        { label: "Programs", path: "https://pankbase.org/programs.html" },
+        { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
       ],
     },
     {
       label: "Help",
       path: "",
       subMenuItems: [
-        { label: "Contact | Feedback", path: "https://dev.pankbase.org/contact.html" },
-        { label: "Tutorials", path: "https://dev.pankbase.org/tutorials.html" },
+        { label: "Contact | Feedback", path: "https://pankbase.org/contact.html" },
+        { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
         { label: "GitHub", path: "https://github.com/PanKbase" },
-        { label: "News", path: "https://dev.pankbase.org/news.html" },
+        { label: "News", path: "https://pankbase.org/news.html" },
       ],
     },
   ],
@@ -156,7 +156,7 @@ export default function Header() {
   return (
     <div className={`pkb-nav ${!mobileMenuOpen ? "mobile-menu-closed" : ""}`}>
       <div className="logo">
-        <Link href="https://dev.pankbase.org">
+        <Link href="https://pankbase.org">
           <SiteLogo />
         </Link>
       </div>
@@ -165,6 +165,12 @@ export default function Header() {
           <div className="topmenu">
             <a className="topmenu-item" href="https://data.pankbase.org">
               Data Library Home
+            </a>
+            <a className="topmenu-item" href="https://data.pankbase.org/help/general-help/user-guide">
+              Data Library User Guide
+            </a>
+            <a className="topmenu-item" href="https://github.com/PanKbase/PanKbase-data-library-exploration">
+              Data Library Exploration Tool
             </a>
             <a
               className="topmenu-item"
