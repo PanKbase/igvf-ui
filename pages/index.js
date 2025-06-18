@@ -231,10 +231,10 @@ Statistic.propTypes = {
 // New component for external link cards
 function ExternalLinkCard({ icon: Icon, label, href, description }) {
   return (
-    <a 
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer" 
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group block w-full"
     >
       <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
@@ -334,7 +334,7 @@ export default function Home({
       </div>
 
       {/* Separation line */}
-      <div className="my-8 border-t border-gray-200 dark:border-gray-700"></div>
+      <div className="my-8 border-t border-gray-200 dark:border-gray-700" />
 
       {/* Additional resource cards */}
       <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
