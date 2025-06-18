@@ -91,6 +91,7 @@ export default function AnalysisSet({
                   <DataItemLabel>Summary</DataItemLabel>
                   <DataItemValue>{analysisSet.summary}</DataItemValue>
                 </>
+              )}
               {analysisSet.description && (
                 <>
                   <DataItemLabel>Description</DataItemLabel>
