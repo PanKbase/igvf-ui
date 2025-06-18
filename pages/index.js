@@ -239,8 +239,8 @@ function ExternalLinkCard({ icon: Icon, label, href, description }) {
     >
       <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
         <div className="flex items-start gap-4 p-6">
-          <div className="rounded-lg bg-blue-50 p-3 dark:bg-blue-900/30">
-            <Icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <div className="rounded-lg p-3" style={{ backgroundColor: 'rgba(11, 181, 223, 0.1)' }}>
+            <Icon className="h-6 w-6" style={{ color: '#0bb5df' }} />
           </div>
           <div className="flex-1">
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
