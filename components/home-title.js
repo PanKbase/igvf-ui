@@ -172,7 +172,7 @@ export default function Header() {
         <div className="menu-wrapper">
           <div className="topmenu">
             <a className="topmenu-item" href="https://pankbase.org/funding.html">
-		Funding Opportunities <img style={{height: "15px", width: "15px"}} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg" />
+		Funding Opportunities <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg" />
             </a>
             <a className="topmenu-item" href="https://data.pankbase.org">
               Home
