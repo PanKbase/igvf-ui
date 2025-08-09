@@ -92,6 +92,7 @@ const renderers = {
   CuratedSet,
   Document,
   Gene,
+  HumanBetaCellLine: Biosample,
   HumanDonor,
   ImageFile: File,
   InVitroSystem: Biosample,
