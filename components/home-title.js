@@ -21,10 +21,19 @@ export const pkbMenu = {
           label: "Donor Summary",
           path: "https://pankbase.org/donor-metadata.html",
         },
-        { label: "Funding Opportunities", path: "https://pankbase.org/funding.html" },
+        {
+          label: "Funding Opportunities",
+          path: "https://pankbase.org/funding.html",
+        },
         { label: "Data Library", path: "https://data.pankbase.org" },
-        { label: "User Guide", path: "https://data.pankbase.org/help/general-help/user-guide" },
-        { label: "Scripts", path: "https://github.com/PanKbase/PanKbase-data-library-scripts" },
+        {
+          label: "User Guide",
+          path: "https://data.pankbase.org/help/general-help/user-guide",
+        },
+        {
+          label: "Scripts",
+          path: "https://github.com/PanKbase/PanKbase-data-library-scripts",
+        },
         { label: "Schema", path: "https://data.pankbase.org/profiles" },
         { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
@@ -71,7 +80,10 @@ export const pkbMenu = {
         { label: "Project", path: "https://pankbase.org/projects.html" },
         { label: "People", path: "https://pankbase.org/people.html" },
         { label: "Policies", path: "https://pankbase.org/policies.html" },
-        { label: "Related Programs", path: "https://pankbase.org/programs.html" },
+        {
+          label: "Related Programs",
+          path: "https://pankbase.org/programs.html",
+        },
         { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
       ],
     },
@@ -79,7 +91,10 @@ export const pkbMenu = {
       label: "Help",
       path: "",
       subMenuItems: [
-        { label: "Contact | Feedback", path: "https://pankbase.org/contact.html" },
+        {
+          label: "Contact | Feedback",
+          path: "https://pankbase.org/contact.html",
+        },
         { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
         { label: "GitHub", path: "https://github.com/PanKbase" },
         { label: "News", path: "https://pankbase.org/news.html" },
@@ -171,16 +186,29 @@ export default function Header() {
       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
         <div className="menu-wrapper">
           <div className="topmenu">
-            <a className="topmenu-item" href="https://pankbase.org/funding.html">
-		Funding Opportunities <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg" />
+            <a
+              className="topmenu-item"
+              href="https://pankbase.org/funding.html"
+            >
+              Funding Opportunities{" "}
+              <img
+                style={{ height: "15px", width: "15px" }}
+                src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+              />
             </a>
             <a className="topmenu-item" href="https://data.pankbase.org">
               Home
             </a>
-            <a className="topmenu-item" href="https://data.pankbase.org/help/general-help/user-guide">
+            <a
+              className="topmenu-item"
+              href="https://data.pankbase.org/help/general-help/user-guide"
+            >
               User Guide
             </a>
-            <a className="topmenu-item" href="https://github.com/PanKbase/PanKbase-data-library-exploration">
+            <a
+              className="topmenu-item"
+              href="https://github.com/PanKbase/PanKbase-data-library-exploration"
+            >
               Scripts
             </a>
             <a
@@ -201,7 +229,7 @@ export default function Header() {
                   <a
                     className="menu-item menu-item-main"
                     href={item.path}
-                    target= "_self"
+                    target="_self"
                     rel={
                       item.path.startsWith("http") ? "noopener noreferrer" : ""
                     }

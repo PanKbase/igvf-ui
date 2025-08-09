@@ -96,7 +96,9 @@ async function getFileDerivedFromFiles(
 
   // Collect all derived_from file paths from `files`.
   let derivedFromPaths = files.reduce((acc: string[], file) => {
-    return (file.derived_from ?? []).length > 0 ? acc.concat(file.derived_from!) : acc;
+    return (file.derived_from ?? []).length > 0
+      ? acc.concat(file.derived_from!)
+      : acc;
   }, []);
 
   // Deduplicate the paths.
