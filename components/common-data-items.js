@@ -92,23 +92,29 @@ export function DonorDataItems({
             <>
               <DataItemLabel>Predicted Genetic Ancestry</DataItemLabel>
               <DataItemValue>
-                {item.genetic_predicted_ethnicities.map((ethnicityObj, index) => (
-                  <span key={index}>
-                    {" "}
-                    {ethnicityObj.ethnicity}{" "}
-                    {ethnicityObj.percentage !== undefined
-                      ? ` (${ethnicityObj.percentage}%)`
-                      : ""}{" "}
-                    {index < item.genetic_predicted_ethnicities.length - 1 ? ", " : ""}{" "}
-                  </span>
-                ))}
+                {item.genetic_predicted_ethnicities.map(
+                  (ethnicityObj, index) => (
+                    <span key={index}>
+                      {" "}
+                      {ethnicityObj.ethnicity}{" "}
+                      {ethnicityObj.percentage !== undefined
+                        ? ` (${ethnicityObj.percentage}%)`
+                        : ""}{" "}
+                      {index < item.genetic_predicted_ethnicities.length - 1
+                        ? ", "
+                        : ""}{" "}
+                    </span>
+                  )
+                )}
               </DataItemValue>
             </>
           )}
           {item.self_reported_ethnicities?.length > 0 && (
             <>
               <DataItemLabel>Reported Ethnicity</DataItemLabel>
-              <DataItemValue>{item.self_reported_ethnicities.join(", ")}</DataItemValue>
+              <DataItemValue>
+                {item.self_reported_ethnicities.join(", ")}
+              </DataItemValue>
             </>
           )}
         </DataArea>
@@ -217,9 +223,7 @@ export function DonorDataItems({
           {item.other_theraphy?.length > 0 && (
             <>
               <DataItemLabel>Other Medication</DataItemLabel>
-              <DataItemValue>
-                {item.other_theraphy.join(", ")}
-              </DataItemValue>
+              <DataItemValue>{item.other_theraphy.join(", ")}</DataItemValue>
             </>
           )}
           {item.hospital_stay !== undefined && (
@@ -255,14 +259,14 @@ export function DonorDataItems({
                   <DataItemValue>{item.aab_gada_value}</DataItemValue>
                 </>
               )}
-          {item.aab_gada_assay?.length > 0 && (
-            <>
-              <DataItemLabel>AAB GADA Assay</DataItemLabel>
-              <DataItemValue>
-                {item.aab_gada_assay.join(", ")}
-              </DataItemValue>
-            </>
-          )}
+              {item.aab_gada_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB GADA Assay</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_gada_assay.join(", ")}
+                  </DataItemValue>
+                </>
+              )}
               {item.aab_gada !== undefined && (
                 <>
                   <DataItemLabel>AAB GADA Positive</DataItemLabel>
@@ -285,28 +289,24 @@ export function DonorDataItems({
                   </DataItemValue>
                 </>
               )}
-          {item.aab_ia2_assay?.length > 0 && (
-            <>
-              <DataItemLabel>AAB IA2 Assay</DataItemLabel>
-              <DataItemValue>
-                {item.aab_ia2_assay.join(", ")}
-              </DataItemValue>
-            </>
-          )}
+              {item.aab_ia2_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB IA2 Assay</DataItemLabel>
+                  <DataItemValue>{item.aab_ia2_assay.join(", ")}</DataItemValue>
+                </>
+              )}
               {item.aab_iaa_value !== undefined && (
                 <>
                   <DataItemLabel>AAB IAA Value (unit/ml)</DataItemLabel>
                   <DataItemValue>{item.aab_iaa_value}</DataItemValue>
                 </>
               )}
-          {item.aab_iaa_assay?.length > 0 && (
-            <>
-              <DataItemLabel>AAB IAA Assay</DataItemLabel>
-              <DataItemValue>
-                {item.aab_iaa_assay.join(", ")}
-              </DataItemValue>
-            </>
-          )}
+              {item.aab_iaa_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB IAA Assay</DataItemLabel>
+                  <DataItemValue>{item.aab_iaa_assay.join(", ")}</DataItemValue>
+                </>
+              )}
               {item.aab_iaa !== undefined && (
                 <>
                   <DataItemLabel>AAB IAA Positive</DataItemLabel>
@@ -321,14 +321,14 @@ export function DonorDataItems({
                   <DataItemValue>{item.aab_znt8_value}</DataItemValue>
                 </>
               )}
-          {item.aab_znt8_assay?.length > 0 && (
-            <>
-              <DataItemLabel>AAB ZNT8 Assay</DataItemLabel>
-              <DataItemValue>
-                {item.aab_znt8_assay.join(", ")}
-              </DataItemValue>
-            </>
-          )}
+              {item.aab_znt8_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB ZNT8 Assay</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_znt8_assay.join(", ")}
+                  </DataItemValue>
+                </>
+              )}
               {item.aab_znt8 !== undefined && (
                 <>
                   <DataItemLabel>AAB ZNT8 Positive</DataItemLabel>
@@ -518,11 +518,7 @@ DonorDataItems.commonProperties = [
 /**
  * Display data items common to all sample-derived objects.
  */
-export function SampleDataItems({
-  item,
-  constructLibrarySets = [],
-  children,
-}) {
+export function SampleDataItems({ item, constructLibrarySets = [], children }) {
   return (
     <>
       <DataItemLabel>Summary</DataItemLabel>
@@ -692,10 +688,7 @@ export function BiosampleDataItems({
   children,
 }) {
   return (
-    <SampleDataItems
-      item={item}
-      constructLibrarySets={constructLibrarySets}
-    >
+    <SampleDataItems item={item} constructLibrarySets={constructLibrarySets}>
       {sampleTerms?.length > 0 && (
         <>
           <DataItemLabel>Sample Terms</DataItemLabel>

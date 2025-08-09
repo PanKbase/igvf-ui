@@ -707,7 +707,7 @@ select.pkb {
   appearance: none;
   cursor: pointer;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" fill="none" stroke="black" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>')
-      no-repeat right 10px center;
+    no-repeat right 10px center;
   background-size: 10px;
   width: fit-content;
 }
@@ -715,7 +715,7 @@ select.pkb {
 select.pkb:hover {
   color: white;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" fill="none" stroke="white" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>')
-      no-repeat right 10px center;
+    no-repeat right 10px center;
   background-color: var(--pkb-secondary-green);
   background-size: 10px;
   border: 1px solid var(--pkb-secondary-green);
