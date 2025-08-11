@@ -381,6 +381,14 @@ export function DonorDataItems({
               </DataItemValue>
             </>
           )}
+      {item.publication_data?.length > 0 && (
+        <>
+          <DataItemLabel>Publication Data</DataItemLabel>
+          <DataItemValue>
+            <DbxrefList dbxrefs={item.publication_data} isCollapsible />
+          </DataItemValue>
+        </>
+      )}
           {item.pancreas_tissue_available !== undefined && (
             <>
               <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
