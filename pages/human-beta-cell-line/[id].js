@@ -318,7 +318,7 @@ export async function getServerSideProps({ params, req, query }) {
   const isJson = isJsonFormat(query);
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const humanBetaCellLine = (
-    await request.getObject(`/human-beta-cell-line/${params.id}/`)
+    await request.getObject(`/human-beta-cell-lines/${params.id}/`)
   ).union();
   if (FetchRequest.isResponseSuccess(humanBetaCellLine)) {
     const biomarkers =
