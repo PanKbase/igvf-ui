@@ -23,6 +23,7 @@ const PROPERTIES_TO_OMIT = [
   "pis",
   "schema_version",
   "status",
+  "submitted_by",
   "uuid",
 ];
 

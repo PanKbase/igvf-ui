@@ -770,6 +770,54 @@ const profiles = {
     },
   },
 
+  HumanBetaCellLine: {
+    title: "Human Beta Cell Line",
+    $id: "/profiles/human_beta_cell_line.json",
+    required: ["award", "lab", "source", "donors", "taxa", "sample_terms"],
+    identifyingProperties: [
+      "uuid",
+      "accession",
+      "alternate_accessions",
+      "aliases",
+    ],
+    properties: {
+      "@id": {
+        title: "ID",
+        type: "string",
+        notSubmittable: true,
+      },
+      "@type": {
+        title: "Type",
+        type: "array",
+        items: {
+          type: "string",
+        },
+        notSubmittable: true,
+      },
+      sample_terms: {
+        title: "Sample Terms",
+        description: "Ontology term identifying a biosample.",
+        type: "string",
+        linkTo: "SampleTerm",
+      },
+      donors: {
+        title: "Donors",
+        description: "Donor(s). Any contributing donor.",
+        type: "array",
+        minItems: 1,
+        uniqueItems: true,
+        items: {
+          title: "Donor",
+          description: "Donor(s).",
+          comment:
+            "See concrete class human_donor.json or rodent_donor.json for available identifiers.",
+          type: "string",
+          linkTo: "Donor",
+        },
+      },
+    },
+  },
+
   InVitroSystem: {
     title: "In Vitro System",
     $id: "/profiles/in_vitro_system.json",

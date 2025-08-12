@@ -5,6 +5,7 @@ import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
 import BiomarkerTable from "../../components/biomarker-table";
 import Breadcrumbs from "../../components/breadcrumbs";
+import { BiosampleDataItems } from "../../components/common-data-items";
 import {
   DataArea,
   DataAreaTitle,
@@ -75,70 +76,49 @@ export default function HumanBetaCellLine({
           <DataAreaTitle>Cell line description</DataAreaTitle>
           <DataPanel>
             <DataArea>
-              {humanBetaCellLine.description && (
-                <>
-                  <DataItemLabel>Description</DataItemLabel>
-                  <DataItemValue>{humanBetaCellLine.description}</DataItemValue>
-                </>
-              )}
-              {humanBetaCellLine.sample_terms?.length > 0 && (
-                <>
-                  <DataItemLabel>Sample Terms</DataItemLabel>
-                  <DataItemValue>
-                    {humanBetaCellLine.sample_terms.map((term, index) => (
-                      <span key={term["@id"]}>
-                        <a href={term["@id"]}>
-                          {term.term_name || term.term_id}
-                        </a>
-                        {index < humanBetaCellLine.sample_terms.length - 1 &&
-                          ", "}
-                      </span>
-                    ))}
-                  </DataItemValue>
-                </>
-              )}
-              {humanBetaCellLine.sample_name && (
-                <>
-                  <DataItemLabel>Sample Name</DataItemLabel>
-                  <DataItemValue>{humanBetaCellLine.sample_name}</DataItemValue>
-                </>
-              )}
-              {sources?.length > 0 && (
-                <>
-                  <DataItemLabel>Sources</DataItemLabel>
-                  <DataItemValue>
-                    {sources.map((source, index) => (
-                      <span key={source["@id"]}>
-                        <a href={source["@id"]}>{source.title}</a>
-                        {index < sources.length - 1 && ", "}
-                      </span>
-                    ))}
-                  </DataItemValue>
-                </>
-              )}
-              {humanBetaCellLine.classifications?.length > 0 && (
-                <>
-                  <DataItemLabel>Classifications</DataItemLabel>
-                  <DataItemValue>
-                    {humanBetaCellLine.classifications.join(", ")}
-                  </DataItemValue>
-                </>
-              )}
-              {humanBetaCellLine.lot_id && (
-                <>
-                  <DataItemLabel>Lot ID</DataItemLabel>
-                  <DataItemValue>{humanBetaCellLine.lot_id}</DataItemValue>
-                </>
-              )}
-              {humanBetaCellLine.product_id && (
-                <>
-                  <DataItemLabel>Product ID</DataItemLabel>
-                  <DataItemValue>{humanBetaCellLine.product_id}</DataItemValue>
-                </>
-              )}
+              <BiosampleDataItems
+                item={humanBetaCellLine}
+                classifications={humanBetaCellLine.classifications}
+                constructLibrarySets={_constructLibrarySets}
+                diseaseTerms={_diseaseTerms}
+                partOf={partOf}
+                sampleTerms={humanBetaCellLine.sample_terms}
+              >
+                {humanBetaCellLine.sample_name && (
+                  <>
+                    <DataItemLabel>Sample Name</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.sample_name}</DataItemValue>
+                  </>
+                )}
+                {sources?.length > 0 && (
+                  <>
+                    <DataItemLabel>Sources</DataItemLabel>
+                    <DataItemValue>
+                      {sources.map((source, index) => (
+                        <span key={source["@id"]}>
+                          <a href={source["@id"]}>{source.title}</a>
+                          {index < sources.length - 1 && ", "}
+                        </span>
+                      ))}
+                    </DataItemValue>
+                  </>
+                )}
+                {humanBetaCellLine.lot_id && (
+                  <>
+                    <DataItemLabel>Lot ID</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.lot_id}</DataItemValue>
+                  </>
+                )}
+                {humanBetaCellLine.product_id && (
+                  <>
+                    <DataItemLabel>Product ID</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.product_id}</DataItemValue>
+                  </>
+                )}
+              </BiosampleDataItems>
             </DataArea>
           </DataPanel>
-          {documents.length > 0 && <DocumentTable documents={documents} />}
+          {documents?.length > 0 && <DocumentTable documents={documents} />}
 
           {/* Cell line biosample description */}
           <DataAreaTitle>Cell line biosample description</DataAreaTitle>
@@ -205,7 +185,7 @@ export default function HumanBetaCellLine({
             />
           )}
 
-          {treatments.length > 0 && (
+          {treatments?.length > 0 && (
             <TreatmentTable
               treatments={treatments}
               reportLink={`/multireport/?type=Treatment&biosamples_treated=${humanBetaCellLine["@id"]}`}
@@ -213,7 +193,7 @@ export default function HumanBetaCellLine({
             />
           )}
 
-          {biomarkers.length > 0 && (
+          {biomarkers?.length > 0 && (
             <BiomarkerTable
               biomarkers={biomarkers}
               reportLink={`/multireport/?type=Biomarker&biomarker_for=${humanBetaCellLine["@id"]}`}
@@ -221,7 +201,7 @@ export default function HumanBetaCellLine({
             />
           )}
 
-          {humanBetaCellLine.file_sets.length > 0 && (
+          {humanBetaCellLine.file_sets?.length > 0 && (
             <FileSetTable
               fileSets={humanBetaCellLine.file_sets}
               reportLinkSpecs={{
@@ -250,35 +230,35 @@ export default function HumanBetaCellLine({
               )}
             </DataArea>
           </DataPanel>
-          {parts.length > 0 && (
+          {parts?.length > 0 && (
             <SampleTable
               samples={parts}
               reportLink={`/multireport/?type=Biosample&part_of=${humanBetaCellLine["@id"]}`}
               title="Parts"
             />
           )}
-          {pooledIn.length > 0 && (
+          {pooledIn?.length > 0 && (
             <SampleTable
               samples={pooledIn}
               reportLink={`/multireport/?type=Biosample&pooled_from=${humanBetaCellLine["@id"]}`}
               title="Pooled In"
             />
           )}
-          {demultiplexedTo.length > 0 && (
+          {demultiplexedTo?.length > 0 && (
             <SampleTable
               samples={demultiplexedTo}
               reportLink={`/multireport/?type=Biosample&demultiplexed_from=${humanBetaCellLine["@id"]}`}
               title="Demultiplexed To"
             />
           )}
-          {multiplexedInSamples.length > 0 && (
+          {multiplexedInSamples?.length > 0 && (
             <SampleTable
               samples={multiplexedInSamples}
               reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${humanBetaCellLine["@id"]}`}
               title="Multiplexed In"
             />
           )}
-          {sortedFractions.length > 0 && (
+          {sortedFractions?.length > 0 && (
             <SampleTable
               samples={sortedFractions}
               reportLink={`/multireport/?type=Sample&sorted_from.@id=${humanBetaCellLine["@id"]}`}
@@ -304,7 +284,7 @@ export default function HumanBetaCellLine({
               )}
             </DataArea>
           </DataPanel>
-          {donors.length > 0 && <DonorTable donors={donors} />}
+          {donors?.length > 0 && <DonorTable donors={donors} />}
 
           {/* External references */}
           <DataAreaTitle>External references</DataAreaTitle>
@@ -348,14 +328,14 @@ export default function HumanBetaCellLine({
           </DataPanel>
 
           {/* Additional sections */}
-          {pooledFrom.length > 0 && (
+          {pooledFrom?.length > 0 && (
             <SampleTable
               samples={pooledFrom}
               reportLink={`/multireport/?type=Sample&pooled_in=${humanBetaCellLine["@id"]}`}
               title="Biosamples Pooled From"
             />
           )}
-          {originOf.length > 0 && (
+          {originOf?.length > 0 && (
             <SampleTable
               samples={originOf}
               reportLink={`/multireport/?type=Biosample&originated_from.@id=${humanBetaCellLine["@id"]}`}
