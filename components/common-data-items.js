@@ -693,6 +693,7 @@ export function BiosampleDataItems({
   diseaseTerms = null,
   partOf = null,
   sampleTerms = null,
+  sources = null,
   children,
 }) {
   return (
@@ -757,6 +758,20 @@ export function BiosampleDataItems({
           <DataItemValue>{item.nih_institutional_certification}</DataItemValue>
         </>
       )}
+      {sources?.length > 0 && (
+        <>
+          <DataItemLabel>Sources</DataItemLabel>
+          <DataItemValue>
+            <SeparatedList>
+              {sources.map((source) => (
+                <Link href={source["@id"]} key={source["@id"]}>
+                  {source.title}
+                </Link>
+              ))}
+            </SeparatedList>
+          </DataItemValue>
+        </>
+      )}
       {children}
     </SampleDataItems>
   );
@@ -775,6 +790,8 @@ BiosampleDataItems.propTypes = {
   partOf: PropTypes.object,
   // Sample ontology for the biosample
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
+  // Sources for this biosample
+  sources: PropTypes.arrayOf(PropTypes.object),
 };
 
 BiosampleDataItems.commonProperties = [
