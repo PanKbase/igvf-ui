@@ -28,8 +28,6 @@ export default function Source({ source, isJson }) {
         <JsonDisplay item={source} isJsonFormat={isJson}>
           <DataPanel>
             <DataArea>
-              <DataItemLabel>Title</DataItemLabel>
-              <DataItemValue>{source.title}</DataItemValue>
               {source.description && (
                 <>
                   <DataItemLabel>Description</DataItemLabel>
@@ -73,7 +71,7 @@ export async function getServerSideProps({ params, req, query }) {
     return {
       props: {
         source,
-        pageContext: { title: source.name },
+        pageContext: { title: source.title },
         breadcrumbs,
         isJson,
       },
