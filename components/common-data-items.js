@@ -223,7 +223,7 @@ export function DonorDataItems({
           )}
           {item.other_theraphy?.length > 0 && (
             <>
-              <DataItemLabel>Other Medication</DataItemLabel>
+              <DataItemLabel>Medication</DataItemLabel>
               <DataItemValue>{item.other_theraphy.join(", ")}</DataItemValue>
             </>
           )}
