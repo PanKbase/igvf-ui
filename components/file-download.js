@@ -23,10 +23,13 @@ export function FileDownload({ file, className = "" }) {
     file.controlled_access && file.anvil_url
   );
 
+  // Use file_url if available, otherwise fallback to the original href with API_URL
+  const downloadUrl = file.file_url || `${API_URL}${file.href}`;
+
   return (
     <ButtonLink
       label={`Download file ${file.accession}`}
-      href={`${API_URL}${file.href}`}
+      href={downloadUrl}
       type="secondary"
       size="sm"
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}

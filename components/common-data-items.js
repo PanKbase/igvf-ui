@@ -25,6 +25,7 @@ import {
   DataItemValueUrl,
 } from "./data-area";
 import DbxrefList from "./dbxref-list";
+import { FileDownload } from "./file-download";
 import SeparatedList from "./separated-list";
 // lib
 import { formatDate } from "../lib/dates";
@@ -927,9 +928,10 @@ export function FileDataItems({ item, fileSet = null, children }) {
         <>
           <DataItemLabel>File Download</DataItemLabel>
           <DataItemValue>
-            <a href={item.file_url} target="_blank" rel="noopener noreferrer">
-              {item.file_url}
-            </a>
+            <div className="flex items-center gap-2">
+              <FileDownload file={item} />
+              <span className="text-sm text-gray-600">{item.file_url}</span>
+            </div>
           </DataItemValue>
         </>
       )}
