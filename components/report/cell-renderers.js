@@ -393,8 +393,8 @@ function FilesHref({ source }) {
   const hrefs = source.files
     ? source.files
         .map((file) => {
-          if (file.href) {
-            return `${API_URL}${file.href}`;
+          if (file.file_url) {
+            return `${file.file_url}`;
           }
         })
         .filter((e) => e !== undefined)
