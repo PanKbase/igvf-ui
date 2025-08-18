@@ -77,7 +77,6 @@ export function FileAccessionAndDownload({ file, isTargetBlank = false }) {
         <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
           {file.accession}
         </LinkedIdAndStatus>
-        <FileDownload file={file} />
       </div>
     </div>
   );
