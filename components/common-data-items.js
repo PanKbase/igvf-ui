@@ -144,6 +144,14 @@ export function DonorDataItems({
               </DataItemValue>
             </>
           )}
+          {item.other_disease_states?.length > 0 && (
+            <>
+              <DataItemLabel>Other Disease States</DataItemLabel>
+              <DataItemValue>
+                {item.other_disease_states.join(",")}
+              </DataItemValue>
+            </>
+          )}
           {item.living_donor !== undefined && (
             <>
               <DataItemLabel>Living Donor</DataItemLabel>
