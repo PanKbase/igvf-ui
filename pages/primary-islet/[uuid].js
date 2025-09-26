@@ -247,7 +247,7 @@ export default function PrimaryIslet({
                   <>
                     <DataItemLabel>Preservation Method</DataItemLabel>
                     <DataItemValue>
-                      {primaryIslet.preservation_method}
+                      {Array.isArray(primaryIslet.preservation_method) ? primaryIslet.preservation_method.join(", ") : primaryIslet.preservation_method}
                     </DataItemValue>
                   </>
                 )}
