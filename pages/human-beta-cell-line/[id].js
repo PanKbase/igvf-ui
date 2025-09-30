@@ -183,6 +183,36 @@ export default function HumanBetaCellLine({
                     <DataItemValue>{humanBetaCellLine.age}</DataItemValue>
                   </>
                 )}
+                {truthyOrZero(humanBetaCellLine.year_obtained) && (
+                  <>
+                    <DataItemLabel>Year Obtained</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.year_obtained}</DataItemValue>
+                  </>
+                )}
+                {truthyOrZero(humanBetaCellLine.vendor_passage) && (
+                  <>
+                    <DataItemLabel>Vendor Passage</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.vendor_passage}</DataItemValue>
+                  </>
+                )}
+                {humanBetaCellLine.coating_condition && (
+                  <>
+                    <DataItemLabel>Coating Condition</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.coating_condition}</DataItemValue>
+                  </>
+                )}
+                {humanBetaCellLine.excision_status && (
+                  <>
+                    <DataItemLabel>Excision Status</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.excision_status}</DataItemValue>
+                  </>
+                )}
+                {humanBetaCellLine.cell_density && (
+                  <>
+                    <DataItemLabel>Cell Density</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLine.cell_density}</DataItemValue>
+                  </>
+                )}
               </BiosampleDataItems>
             </DataArea>
           </DataPanel>
@@ -318,7 +348,7 @@ export async function getServerSideProps({ params, req, query }) {
   const isJson = isJsonFormat(query);
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const humanBetaCellLine = (
-    await request.getObject(`/human-beta-cell-lines/${params.id}/`)
+    await request.getObject(`/human-beta-cell-line/${params.id}/`)
   ).union();
   if (FetchRequest.isResponseSuccess(humanBetaCellLine)) {
     const biomarkers =
