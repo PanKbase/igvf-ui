@@ -40,8 +40,8 @@ import { truthyOrZero } from "../../lib/general";
 import { isJsonFormat } from "../../lib/query-utils";
 import { Ok } from "../../lib/result";
 
-export default function HumanBetaCellLine({
-  humanBetaCellLine,
+export default function HumanBetaCellLines({
+  humanBetaCellLines,
   constructLibrarySets,
   demultiplexedTo,
   diseaseTerms,
@@ -63,99 +63,99 @@ export default function HumanBetaCellLine({
   return (
     <>
       <Breadcrumbs />
-      <EditableItem item={humanBetaCellLine}>
+      <EditableItem item={humanBetaCellLines}>
         <PagePreamble>
           <AlternateAccessions
-            alternateAccessions={humanBetaCellLine.alternate_accessions}
+            alternateAccessions={humanBetaCellLines.alternate_accessions}
           />
         </PagePreamble>
-        <ObjectPageHeader item={humanBetaCellLine} isJsonFormat={isJson} />
-        <JsonDisplay item={humanBetaCellLine} isJsonFormat={isJson}>
+        <ObjectPageHeader item={humanBetaCellLines} isJsonFormat={isJson} />
+        <JsonDisplay item={humanBetaCellLines} isJsonFormat={isJson}>
           <DataPanel>
             <DataArea>
               <BiosampleDataItems
-                item={humanBetaCellLine}
+                item={humanBetaCellLines}
                 constructLibrarySets={constructLibrarySets}
                 diseaseTerms={diseaseTerms}
                 partOf={partOf}
-                sampleTerms={humanBetaCellLine.sample_terms}
+                sampleTerms={humanBetaCellLines.sample_terms}
                 sources={sources}
               >
-                {humanBetaCellLine.sample_name && (
+                {humanBetaCellLines.sample_name && (
                   <>
                     <DataItemLabel>Sample Name</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.sample_name}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.sample_name}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.classifications?.length > 0 && (
+                {humanBetaCellLines.classifications?.length > 0 && (
                   <>
                     <DataItemLabel>Classifications</DataItemLabel>
                     <DataItemValue>
-                      {humanBetaCellLine.classifications.join(", ")}
+                      {humanBetaCellLines.classifications.join(", ")}
                     </DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.lot_id && (
+                {humanBetaCellLines.lot_id && (
                   <>
                     <DataItemLabel>Lot ID</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.lot_id}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.lot_id}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.product_id && (
+                {humanBetaCellLines.product_id && (
                   <>
                     <DataItemLabel>Product ID</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.product_id}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.product_id}</DataItemValue>
                   </>
                 )}
-                {truthyOrZero(humanBetaCellLine.passage_number) && (
+                {truthyOrZero(humanBetaCellLines.passage_number) && (
                   <>
                     <DataItemLabel>Passage Number</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.passage_number}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.passage_number}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.growth_medium && (
+                {humanBetaCellLines.growth_medium && (
                   <>
                     <DataItemLabel>Growth Medium</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.growth_medium}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.growth_medium}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.date_obtained && (
+                {humanBetaCellLines.date_obtained && (
                   <>
                     <DataItemLabel>Date Obtained</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.date_obtained}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.date_obtained}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.date_harvested && (
+                {humanBetaCellLines.date_harvested && (
                   <>
                     <DataItemLabel>Date Harvested</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.date_harvested}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.date_harvested}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.authentication && (
+                {humanBetaCellLines.authentication && (
                   <>
                     <DataItemLabel>Authentication</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.authentication}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.authentication}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.url && (
+                {humanBetaCellLines.url && (
                   <>
                     <DataItemLabel>URL</DataItemLabel>
                     <DataItemValue>
                       <a
-                        href={humanBetaCellLine.url}
+                        href={humanBetaCellLines.url}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {humanBetaCellLine.url}
+                        {humanBetaCellLines.url}
                       </a>
                     </DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.publications?.length > 0 && (
+                {humanBetaCellLines.publications?.length > 0 && (
                   <>
                     <DataItemLabel>Publications</DataItemLabel>
                     <DataItemValue>
-                      {humanBetaCellLine.publications.map((pmid, index) => (
+                      {humanBetaCellLines.publications.map((pmid, index) => (
                         <span key={pmid}>
                           <a
                             href={`https://pubmed.ncbi.nlm.nih.gov/${pmid.replace("PMID:", "")}/`}
@@ -164,136 +164,136 @@ export default function HumanBetaCellLine({
                           >
                             {pmid}
                           </a>
-                          {index < humanBetaCellLine.publications.length - 1 &&
+                          {index < humanBetaCellLines.publications.length - 1 &&
                             ", "}
                         </span>
                       ))}
                     </DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.sex && (
+                {humanBetaCellLines.sex && (
                   <>
                     <DataItemLabel>Sex</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.sex}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.sex}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.age && (
+                {humanBetaCellLines.age && (
                   <>
                     <DataItemLabel>Age</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.age}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.age}</DataItemValue>
                   </>
                 )}
-                {truthyOrZero(humanBetaCellLine.year_obtained) && (
+                {truthyOrZero(humanBetaCellLines.year_obtained) && (
                   <>
                     <DataItemLabel>Year Obtained</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.year_obtained}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.year_obtained}</DataItemValue>
                   </>
                 )}
-                {truthyOrZero(humanBetaCellLine.vendor_passage) && (
+                {truthyOrZero(humanBetaCellLines.vendor_passage) && (
                   <>
                     <DataItemLabel>Vendor Passage</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.vendor_passage}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.vendor_passage}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.coating_condition && (
+                {humanBetaCellLines.coating_condition && (
                   <>
                     <DataItemLabel>Coating Condition</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.coating_condition}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.coating_condition}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.excision_status && (
+                {humanBetaCellLines.excision_status && (
                   <>
                     <DataItemLabel>Excision Status</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.excision_status}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.excision_status}</DataItemValue>
                   </>
                 )}
-                {humanBetaCellLine.cell_density && (
+                {humanBetaCellLines.cell_density && (
                   <>
                     <DataItemLabel>Cell Density</DataItemLabel>
-                    <DataItemValue>{humanBetaCellLine.cell_density}</DataItemValue>
+                    <DataItemValue>{humanBetaCellLines.cell_density}</DataItemValue>
                   </>
                 )}
               </BiosampleDataItems>
             </DataArea>
           </DataPanel>
           {donors?.length > 0 && <DonorTable donors={donors} />}
-          {humanBetaCellLine.file_sets?.length > 0 && (
+          {humanBetaCellLines.file_sets?.length > 0 && (
             <FileSetTable
-              fileSets={humanBetaCellLine.file_sets}
+              fileSets={humanBetaCellLines.file_sets}
               reportLinkSpecs={{
                 fileSetType: "FileSet",
                 identifierProp: "samples.accession",
-                itemIdentifier: humanBetaCellLine.accession,
+                itemIdentifier: humanBetaCellLines.accession,
               }}
             />
           )}
           {multiplexedInSamples?.length > 0 && (
             <SampleTable
               samples={multiplexedInSamples}
-              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${humanBetaCellLines["@id"]}`}
               title="Multiplexed In Samples"
             />
           )}
           {pooledFrom?.length > 0 && (
             <SampleTable
               samples={pooledFrom}
-              reportLink={`/multireport/?type=Sample&pooled_in=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Sample&pooled_in=${humanBetaCellLines["@id"]}`}
               title="Biosamples Pooled From"
             />
           )}
           {pooledIn?.length > 0 && (
             <SampleTable
               samples={pooledIn}
-              reportLink={`/multireport/?type=Biosample&pooled_from=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Biosample&pooled_from=${humanBetaCellLines["@id"]}`}
               title="Pooled In"
             />
           )}
           {parts?.length > 0 && (
             <SampleTable
               samples={parts}
-              reportLink={`/multireport/?type=Biosample&part_of=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Biosample&part_of=${humanBetaCellLines["@id"]}`}
               title="Sample Parts"
             />
           )}
-          {humanBetaCellLine.modifications?.length > 0 && (
+          {humanBetaCellLines.modifications?.length > 0 && (
             <ModificationTable
-              modifications={humanBetaCellLine.modifications}
-              reportLink={`/multireport/?type=Modification&biosamples_modified=${humanBetaCellLine["@id"]}`}
-              reportLabel={`Report of genetic modifications for ${humanBetaCellLine.accession}`}
+              modifications={humanBetaCellLines.modifications}
+              reportLink={`/multireport/?type=Modification&biosamples_modified=${humanBetaCellLines["@id"]}`}
+              reportLabel={`Report of genetic modifications for ${humanBetaCellLines.accession}`}
             />
           )}
           {sortedFractions?.length > 0 && (
             <SampleTable
               samples={sortedFractions}
-              reportLink={`/multireport/?type=Sample&sorted_from.@id=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Sample&sorted_from.@id=${humanBetaCellLines["@id"]}`}
               title="Sorted Fractions of Sample"
             />
           )}
           {treatments?.length > 0 && (
             <TreatmentTable
               treatments={treatments}
-              reportLink={`/multireport/?type=Treatment&biosamples_treated=${humanBetaCellLine["@id"]}`}
-              reportLabel={`Report of treatments applied to the biosample ${humanBetaCellLine.accession}`}
+              reportLink={`/multireport/?type=Treatment&biosamples_treated=${humanBetaCellLines["@id"]}`}
+              reportLabel={`Report of treatments applied to the biosample ${humanBetaCellLines.accession}`}
             />
           )}
           {biomarkers?.length > 0 && (
             <BiomarkerTable
               biomarkers={biomarkers}
-              reportLink={`/multireport/?type=Biomarker&biomarker_for=${humanBetaCellLine["@id"]}`}
-              reportLabel={`Report of biological markers that are associated with biosample ${humanBetaCellLine.accession}`}
+              reportLink={`/multireport/?type=Biomarker&biomarker_for=${humanBetaCellLines["@id"]}`}
+              reportLabel={`Report of biological markers that are associated with biosample ${humanBetaCellLines.accession}`}
             />
           )}
           {demultiplexedTo?.length > 0 && (
             <SampleTable
               samples={demultiplexedTo}
-              reportLink={`/multireport/?type=Biosample&demultiplexed_from=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Biosample&demultiplexed_from=${humanBetaCellLines["@id"]}`}
               title="Demultiplexed To"
             />
           )}
           {originOf?.length > 0 && (
             <SampleTable
               samples={originOf}
-              reportLink={`/multireport/?type=Biosample&originated_from.@id=${humanBetaCellLine["@id"]}`}
+              reportLink={`/multireport/?type=Biosample&originated_from.@id=${humanBetaCellLines["@id"]}`}
               title="Origin Sample Of"
             />
           )}
@@ -305,9 +305,9 @@ export default function HumanBetaCellLine({
   );
 }
 
-HumanBetaCellLine.propTypes = {
-  // Human Beta Cell Line sample to display
-  humanBetaCellLine: PropTypes.object.isRequired,
+HumanBetaCellLines.propTypes = {
+  // Human Beta Cell Lines sample to display
+  humanBetaCellLines: PropTypes.object.isRequired,
   // Biomarkers of the sample
   biomarkers: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Construct libraries that link to this object
@@ -347,57 +347,57 @@ HumanBetaCellLine.propTypes = {
 export async function getServerSideProps({ params, req, query }) {
   const isJson = isJsonFormat(query);
   const request = new FetchRequest({ cookie: req.headers.cookie });
-  const humanBetaCellLine = (
+  const humanBetaCellLines = (
     await request.getObject(`/human-beta-cell-line/${params.id}/`)
   ).union();
-  if (FetchRequest.isResponseSuccess(humanBetaCellLine)) {
+  if (FetchRequest.isResponseSuccess(humanBetaCellLines)) {
     const biomarkers =
-      humanBetaCellLine.biomarkers?.length > 0
-        ? await requestBiomarkers(humanBetaCellLine.biomarkers, request)
+      humanBetaCellLines.biomarkers?.length > 0
+        ? await requestBiomarkers(humanBetaCellLines.biomarkers, request)
         : [];
     const demultiplexedTo =
-      humanBetaCellLine.demultiplexed_to?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.demultiplexed_to, request)
+      humanBetaCellLines.demultiplexed_to?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.demultiplexed_to, request)
         : [];
     let diseaseTerms = [];
-    if (humanBetaCellLine.disease_terms?.length > 0) {
-      const diseaseTermPaths = humanBetaCellLine.disease_terms.map(
+    if (humanBetaCellLines.disease_terms?.length > 0) {
+      const diseaseTermPaths = humanBetaCellLines.disease_terms.map(
         (diseaseTerm) => diseaseTerm["@id"]
       );
       diseaseTerms = await requestOntologyTerms(diseaseTermPaths, request);
     }
-    const documents = humanBetaCellLine.documents
-      ? await requestDocuments(humanBetaCellLine.documents, request)
+    const documents = humanBetaCellLines.documents
+      ? await requestDocuments(humanBetaCellLines.documents, request)
       : [];
-    const donors = humanBetaCellLine.donors
-      ? await requestDonors(humanBetaCellLine.donors, request)
+    const donors = humanBetaCellLines.donors
+      ? await requestDonors(humanBetaCellLines.donors, request)
       : [];
-    const partOf = humanBetaCellLine.part_of
-      ? (await request.getObject(humanBetaCellLine.part_of)).optional()
+    const partOf = humanBetaCellLines.part_of
+      ? (await request.getObject(humanBetaCellLines.part_of)).optional()
       : null;
     const parts =
-      humanBetaCellLine.parts?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.parts, request)
+      humanBetaCellLines.parts?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.parts, request)
         : [];
     const pooledFrom =
-      humanBetaCellLine.pooled_from?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.pooled_from, request)
+      humanBetaCellLines.pooled_from?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.pooled_from, request)
         : [];
     const pooledIn =
-      humanBetaCellLine.pooled_in?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.pooled_in, request)
+      humanBetaCellLines.pooled_in?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.pooled_in, request)
         : [];
     const originOf =
-      humanBetaCellLine.origin_of?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.origin_of, request)
+      humanBetaCellLines.origin_of?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.origin_of, request)
         : [];
     const sortedFractions =
-      humanBetaCellLine.sorted_fractions?.length > 0
-        ? await requestBiosamples(humanBetaCellLine.sorted_fractions, request)
+      humanBetaCellLines.sorted_fractions?.length > 0
+        ? await requestBiosamples(humanBetaCellLines.sorted_fractions, request)
         : [];
     let sources = [];
-    if (humanBetaCellLine.sources?.length > 0) {
-      const sourcePaths = humanBetaCellLine.sources.map(
+    if (humanBetaCellLines.sources?.length > 0) {
+      const sourcePaths = humanBetaCellLines.sources.map(
         (source) => source["@id"]
       );
       sources = Ok.all(
@@ -407,18 +407,18 @@ export async function getServerSideProps({ params, req, query }) {
       );
     }
     let treatments = [];
-    if (humanBetaCellLine.treatments?.length > 0) {
-      const treatmentPaths = humanBetaCellLine.treatments.map(
+    if (humanBetaCellLines.treatments?.length > 0) {
+      const treatmentPaths = humanBetaCellLines.treatments.map(
         (treatment) => treatment["@id"]
       );
       treatments = await requestTreatments(treatmentPaths, request);
     }
-    const constructLibrarySets = humanBetaCellLine.construct_library_sets
-      ? await requestFileSets(humanBetaCellLine.construct_library_sets, request)
+    const constructLibrarySets = humanBetaCellLines.construct_library_sets
+      ? await requestFileSets(humanBetaCellLines.construct_library_sets, request)
       : [];
     let multiplexedInSamples = [];
-    if (humanBetaCellLine.multiplexed_in?.length > 0) {
-      const multiplexedInPaths = humanBetaCellLine.multiplexed_in.map(
+    if (humanBetaCellLines.multiplexed_in?.length > 0) {
+      const multiplexedInPaths = humanBetaCellLines.multiplexed_in.map(
         (sample) => sample["@id"]
       );
       multiplexedInSamples = await requestBiosamples(
@@ -427,17 +427,17 @@ export async function getServerSideProps({ params, req, query }) {
       );
     }
     const breadcrumbs = await buildBreadcrumbs(
-      humanBetaCellLine,
-      humanBetaCellLine.accession,
+      humanBetaCellLines,
+      humanBetaCellLines.accession,
       req.headers.cookie
     );
     const attribution = await buildAttribution(
-      humanBetaCellLine,
+      humanBetaCellLines,
       req.headers.cookie
     );
     return {
       props: {
-        humanBetaCellLine,
+        humanBetaCellLines,
         biomarkers,
         constructLibrarySets,
         demultiplexedTo,
@@ -454,7 +454,7 @@ export async function getServerSideProps({ params, req, query }) {
         treatments,
         multiplexedInSamples,
         pageContext: {
-          title: `${humanBetaCellLine.sample_terms?.[0]?.term_name || humanBetaCellLine.accession} — ${humanBetaCellLine.accession}`,
+          title: `${humanBetaCellLines.sample_terms?.[0]?.term_name || humanBetaCellLines.accession} — ${humanBetaCellLines.accession}`,
         },
         breadcrumbs,
         attribution,
@@ -462,5 +462,5 @@ export async function getServerSideProps({ params, req, query }) {
       },
     };
   }
-  return errorObjectToProps(humanBetaCellLine);
+  return errorObjectToProps(humanBetaCellLines);
 }
