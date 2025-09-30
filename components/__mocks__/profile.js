@@ -770,8 +770,8 @@ const profiles = {
     },
   },
 
-  HumanBetaCellLine: {
-    title: "Human Beta Cell Line",
+  HumanBetaCellLines: {
+    title: "Human Beta Cell Lines",
     $id: "/profiles/human_beta_cell_line.json",
     required: ["award", "lab", "source", "donors", "taxa", "sample_terms"],
     identifyingProperties: [
