@@ -137,6 +137,12 @@ export default function HumanBetaCellLines({
                     <DataItemValue>{humanBetaCellLines.authentication}</DataItemValue>
                   </>
                 )}
+                {humanBetaCellLines.nucleic_acid_delivery && (
+                  <>
+                    <DataItemLabel>Nucleic Acid Delivery</DataItemLabel>
+                    <DataItemValue>{humanBetaCellLines.nucleic_acid_delivery}</DataItemValue>
+                  </>
+                )}
                 {humanBetaCellLines.url && (
                   <>
                     <DataItemLabel>URL</DataItemLabel>
