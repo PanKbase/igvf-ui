@@ -61,14 +61,17 @@ export default async function buildAttribution(
     await fromOption(obj.award).and_then_async(async (awards) => {
       // Handle both single award and array of awards
       const awardArray = Array.isArray(awards) ? awards : [awards];
-      const awardObjects = await Promise.all(
+      const awardResults = await Promise.all(
         awardArray.map(async (award) => {
           const id = itemId(award);
-          return (await request.getObject(id)).map_err((_x) => null);
+          return await request.getObject(id);
         })
       );
-      // Filter out any failed requests and return the successful ones
-      return ok(awardObjects.filter(award => award !== null));
+      // Filter out failed requests and extract successful objects
+      const successfulAwards = awardResults
+        .filter(result => result.isOk())
+        .map(result => result.unwrap());
+      return ok(successfulAwards);
     })
   ).optional();
 

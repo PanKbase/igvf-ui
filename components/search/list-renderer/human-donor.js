@@ -47,7 +47,7 @@ export default function HumanDonor({ item: humanDonor }) {
         </SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">
-            {Array.isArray(humanDonor.award) 
+            {Array.isArray(humanDonor.award)
               ? humanDonor.award.map(award => award.title).join(", ")
               : humanDonor.award.title
             }
