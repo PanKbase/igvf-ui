@@ -46,7 +46,12 @@ export default function HumanDonor({ item: humanDonor }) {
           {title.length > 0 ? title.join(" ") : humanDonor["@id"]}
         </SearchListItemTitle>
         <SearchListItemMeta>
-          <span key="lab">{humanDonor.award.title}</span>
+          <span key="lab">
+            {Array.isArray(humanDonor.award) 
+              ? humanDonor.award.map(award => award.title).join(", ")
+              : humanDonor.award.title
+            }
+          </span>
         </SearchListItemMeta>
         {isSupplementVisible && (
           <SearchListItemSupplement>

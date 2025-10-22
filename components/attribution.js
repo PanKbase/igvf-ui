@@ -27,15 +27,21 @@ export default function Attribution({ attribution = null }) {
             itemType={attribution.type}
           />
           <DataArea>
-            {attribution.award && (
+            {attribution.award && attribution.award.length > 0 && (
               <>
                 <DataItemLabel>Funding</DataItemLabel>
                 <DataItemValue>
-                  <Link href={attribution.award["@id"]}>
-                    {attribution.award.name}
-                  </Link>
+                  {attribution.award.map((award, index) => (
+                    <span key={award["@id"]}>
+                      <Link href={award["@id"]}>
+                        {award.name}
+                      </Link>
+                      {index < attribution.award.length - 1 && ", "}
+                    </span>
+                  ))}
                 </DataItemValue>
               </>
+            )}
             )}
             {attribution.title && (
               <>
