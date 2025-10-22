@@ -33,7 +33,7 @@ export default function MeasurementSet({ item: measurementSet }) {
         <SearchListItemTitle>{measurementSet.summary}</SearchListItemTitle>
         <SearchListItemMeta>
           <div key="lab">
-            {Array.isArray(measurementSet.award) 
+            {Array.isArray(measurementSet.award)
               ? measurementSet.award.map(award => award.title).join(", ")
               : measurementSet.award.title
             }

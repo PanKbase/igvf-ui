@@ -26,7 +26,7 @@ export default function Workflow({ item: workflow }) {
         <SearchListItemTitle>{workflow.name}</SearchListItemTitle>
         <SearchListItemMeta>
           <div key="lab">
-            {Array.isArray(workflow.award) 
+            {Array.isArray(workflow.award)
               ? workflow.award.map(award => award.title).join(", ")
               : workflow.award.title
             }

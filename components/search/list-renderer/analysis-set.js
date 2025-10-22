@@ -25,7 +25,7 @@ export default function AnalysisSet({ item: analysisSet }) {
         <SearchListItemTitle>{analysisSet.file_set_type}</SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">
-            {Array.isArray(analysisSet.award) 
+            {Array.isArray(analysisSet.award)
               ? analysisSet.award.map(award => award.title).join(", ")
               : analysisSet.award.title
             }
