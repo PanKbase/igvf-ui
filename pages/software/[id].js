@@ -91,7 +91,11 @@ export async function getServerSideProps({ params, req, query }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const software = (await request.getObject(`/software/${params.id}/`)).union();
   if (FetchRequest.isResponseSuccess(software)) {
-    const award = (await request.getObject(software.award["@id"])).optional();
+    const award = software.award 
+      ? Array.isArray(software.award)
+        ? await Promise.all(software.award.map(a => request.getObject(a["@id"]).optional()))
+        : [(await request.getObject(software.award["@id"])).optional()]
+      : [];
     const lab = (await request.getObject(software.lab["@id"])).optional();
     const versions =
       software.versions.length > 0

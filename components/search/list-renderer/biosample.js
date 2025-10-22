@@ -25,7 +25,12 @@ export default function Biosample({ item: biosample }) {
         </SearchListItemUniqueId>
         <SearchListItemTitle>{biosample.summary}</SearchListItemTitle>
         <SearchListItemMeta>
-          <span key="lab">{biosample.award.title}</span>
+          <span key="lab">
+            {Array.isArray(biosample.award) 
+              ? biosample.award.map(award => award.title).join(", ")
+              : biosample.award.title
+            }
+          </span>
         </SearchListItemMeta>
         {isSupplementsVisible && (
           <SearchListItemSupplement>

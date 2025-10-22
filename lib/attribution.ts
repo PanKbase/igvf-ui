@@ -19,7 +19,7 @@ import { err, fromOption, ok } from "./result";
 export interface Attributable {
   "@type": string[];
   lab?: string | { "@id": string };
-  award?: string | { "@id": string };
+  award?: string | { "@id": string } | Array<string | { "@id": string }>;
   collections?: [string] | null;
 }
 
@@ -32,7 +32,7 @@ export interface Attributable {
 export interface Attribution {
   type: string;
   lab: DataProviderObject | null;
-  award: DataProviderObject | null;
+  award: DataProviderObject[] | null;
   contactPi: DataProviderObject | null;
   pis: object[] | null;
   collections: string[] | null;
@@ -58,15 +58,23 @@ export default async function buildAttribution(
   ).optional();
 
   const award = (
-    await fromOption(obj.award).and_then_async(async (x) => {
-      const id = itemId(x);
-      return (await request.getObject(id)).map_err((_x) => null);
+    await fromOption(obj.award).and_then_async(async (awards) => {
+      // Handle both single award and array of awards
+      const awardArray = Array.isArray(awards) ? awards : [awards];
+      const awardObjects = await Promise.all(
+        awardArray.map(async (award) => {
+          const id = itemId(award);
+          return (await request.getObject(id)).map_err((_x) => null);
+        })
+      );
+      // Filter out any failed requests and return the successful ones
+      return ok(awardObjects.filter(award => award !== null));
     })
   ).optional();
 
   const contactPi = (
     await fromOption(award)
-      .and_then((a) => fromOption(a.contact_pi as string))
+      .and_then((awards) => fromOption(awards[0]?.contact_pi as string))
       .and_then_async(async (p) => {
         return (await request.getObject(p)).map_err((_e) => null);
       })
@@ -74,7 +82,7 @@ export default async function buildAttribution(
 
   const pis = (
     await fromOption(award)
-      .and_then((a) => fromOption(a.pis as Array<string>))
+      .and_then((awards) => fromOption(awards[0]?.pis as Array<string>))
       .map_async(async (ps) => {
         return await requestUsers(ps, request);
       })

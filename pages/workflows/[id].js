@@ -154,7 +154,11 @@ export async function getServerSideProps({ params, req, query }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const workflow = (await request.getObject(`/workflow/${params.id}/`)).union();
   if (FetchRequest.isResponseSuccess(workflow)) {
-    const award = (await request.getObject(workflow.award["@id"])).optional();
+    const award = workflow.award 
+      ? Array.isArray(workflow.award)
+        ? await Promise.all(workflow.award.map(a => request.getObject(a["@id"]).optional()))
+        : [(await request.getObject(workflow.award["@id"])).optional()]
+      : [];
     const lab = (await request.getObject(workflow.lab["@id"])).optional();
     const documents = workflow.documents
       ? await requestDocuments(workflow.documents, request)
