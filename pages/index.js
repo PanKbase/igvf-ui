@@ -161,6 +161,123 @@ function BookOpen({ className }) {
   );
 }
 
+function Search({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
+    </svg>
+  );
+}
+
+function FileText({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14,2 14,8 20,8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10,9 9,9 8,9" />
+    </svg>
+  );
+}
+
+function Newspaper({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+      <path d="M18 14h-8" />
+      <path d="M15 18h-5" />
+      <path d="M10 6h8v4h-8V6Z" />
+    </svg>
+  );
+}
+
+function Plug({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M12 22v-5" />
+      <path d="M9 8V2" />
+      <path d="M15 8V2" />
+      <path d="M18 8v2a10 10 0 1 1-12 0V8" />
+    </svg>
+  );
+}
+
+function Package({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m21 16-8-7-8 7" />
+      <path d="M21 16v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5" />
+      <path d="M3 16l8-7 8 7" />
+      <path d="M12 9v13" />
+    </svg>
+  );
+}
+
+function Settings({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
 // PropTypes for SVG components
 Users.propTypes = { className: PropTypes.string };
 Flask.propTypes = { className: PropTypes.string };
@@ -170,6 +287,12 @@ GitBranch.propTypes = { className: PropTypes.string };
 ChartBar.propTypes = { className: PropTypes.string };
 Code.propTypes = { className: PropTypes.string };
 BookOpen.propTypes = { className: PropTypes.string };
+Search.propTypes = { className: PropTypes.string };
+FileText.propTypes = { className: PropTypes.string };
+Newspaper.propTypes = { className: PropTypes.string };
+Plug.propTypes = { className: PropTypes.string };
+Package.propTypes = { className: PropTypes.string };
+Settings.propTypes = { className: PropTypes.string };
 
 // Featured Datasets Carousel Component
 function FeaturedDatasetsCarousel({ items }) {
@@ -387,7 +510,7 @@ const carouselItems = [
 // Tools & Resources data
 const toolsResources = [
   {
-    icon: "🔌",
+    icon: <Plug className="w-6 h-6" />,
     title: "API Access",
     description: "Programmatic access to PanKbase data through RESTful API endpoints for integration with your analysis pipelines",
     url: "https://pankbase.github.io/pankbase-client-openapi-spec",
@@ -399,25 +522,25 @@ const toolsResources = [
     url: "https://github.com/PanKbase/PanKbase-data-library-scripts",
   },
   {
-    icon: "📋",
+    icon: <FileText className="w-6 h-6" />,
     title: "Data Standards",
     description: "Data schema and metadata profiles used in PanKbase for standardized pancreatic research data",
     url: "https://data.pankbase.org/standards/",
   },
   {
-    icon: "📖",
+    icon: <BookOpen className="w-6 h-6" />,
     title: "User Guide",
     description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
     url: "https://data.pankbase.org/help/general-help/user-guide",
   },
   {
-    icon: "📰",
+    icon: <Newspaper className="w-6 h-6" />,
     title: "Data Library News",
     description: "Latest updates, announcements, and news about the PanKbase Data Library and new resources",
     url: "https://data.pankbase.org/help/news/",
   },
   {
-    icon: "🔍",
+    icon: <Search className="w-6 h-6" />,
     title: "Search",
     description: "Search and query the PanKbase Data Library using fuzzy search across all resources",
     url: "https://data.pankbase.org/search/",
@@ -435,35 +558,35 @@ export default function Home({
 }) {
   const dataAccessCards = [
     {
-      icon: "👥",
+      icon: <Users className="w-6 h-6" />,
       title: "Donors",
       count: abbreviateNumber(donorCount),
       description: "Human donors of a pancreatic biosample",
       url: "https://data.pankbase.org/search/?type=HumanDonor",
     },
     {
-      icon: "🧪",
+      icon: <Flask className="w-6 h-6" />,
       title: "Biosamples",
       count: abbreviateNumber(biosampleCount),
       description: "Pancreatic biosamples obtained from a donor",
       url: "https://data.pankbase.org/search/?type=Biosample",
     },
     {
-      icon: "🔬",
+      icon: <Microscope className="w-6 h-6" />,
       title: "Measurement Sets",
       count: abbreviateNumber(assayCount),
       description: "Experimental assays performed on a biosample",
       url: "https://data.pankbase.org/search/?type=MeasurementSet",
     },
     {
-      icon: "📊",
+      icon: <ChartBar className="w-6 h-6" />,
       title: "Intermediate Analysis Results",
       count: abbreviateNumber(processedCount),
       description: "Standardized processing of data generated from an assay",
       url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
     },
     {
-      icon: "📦",
+      icon: <Package className="w-6 h-6" />,
       title: "Resource Analysis",
       count: abbreviateNumber(resourceAnalysisCount),
       description:
@@ -471,7 +594,7 @@ export default function Home({
       url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
     },
     {
-      icon: "📈",
+      icon: <ChartBar className="w-6 h-6" />,
       title: "Principal Analysis Results",
       count: abbreviateNumber(analysisCount),
       description:
@@ -479,7 +602,7 @@ export default function Home({
       url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
     },
     {
-      icon: "⚙️",
+      icon: <Settings className="w-6 h-6" />,
       title: "Workflows",
       count: abbreviateNumber(workflowCount),
       description: "Analysis workflows used to processed data and create resources",
