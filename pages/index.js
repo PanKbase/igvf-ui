@@ -123,27 +123,6 @@ function ChartBar({ className }) {
 }
 
 // New icon components for additional cards
-function FileText({ className }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14,2 14,8 20,8" />
-      <line x1="16" y1="13" x2="8" y2="13" />
-      <line x1="16" y1="17" x2="8" y2="17" />
-      <polyline points="10,9 9,9 8,9" />
-    </svg>
-  );
-}
-
 function Code({ className }) {
   return (
     <svg
@@ -195,19 +174,19 @@ function FeaturedDatasetsCarousel({ items }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsToShow = 4;
 
-  const scrollLeft = () => {
+  function scrollLeft() {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
-  };
+  }
 
-  const scrollRight = () => {
+  function scrollRight() {
     setCurrentIndex((prev) => Math.min(items.length - itemsToShow, prev + 1));
-  };
+  }
 
-  const handleItemClick = (item) => {
+  function handleItemClick(item) {
     if (item.s3Url) {
       window.location.href = item.s3Url;
     }
-  };
+  }
 
   return (
     <div className="relative overflow-hidden bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.1)] px-[60px] py-[30px]">
@@ -354,43 +333,43 @@ const carouselItems = [
     description: "Single-cell RNA-seq UMAP visualization with cell type annotations",
     meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
-    filename: "pankbase-scrna-umap-v3.3.tar.gz"
+    filename: "pankbase-scrna-umap-v3.3.tar.gz",
   },
   {
     title: "Pseudo-Bulk Counts (RUV-normalized, scRNA UMAP v3.3)",
     description: "RUV-normalized pseudo-bulk gene expression counts for differential analysis",
     meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
-    filename: "pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz"
+    filename: "pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
   },
   {
     title: "snATAC Marker Peaks",
     description: "Cell type marker peaks from single-nucleus ATAC-seq analysis",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
-    filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz"
+    filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
   },
   {
     title: "snATAC UMAP",
     description: "Single-nucleus ATAC-seq UMAP visualization of chromatin accessibility",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
-    filename: "pankbase-snatac-umap-v1.0.tar.gz"
+    filename: "pankbase-snatac-umap-v1.0.tar.gz",
   },
   {
     title: "PanKbase Donors",
     description: "Comprehensive donor metadata including demographics and clinical information",
     meta: "Updated: Oct 2025 | 3.7K donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
-    filename: "pankbase-donors.tar.gz"
+    filename: "pankbase-donors.tar.gz",
   },
   {
     title: "PanKbase Biosamples",
     description: "Pancreatic biosample collection with detailed experimental protocols",
     meta: "Updated: Oct 2025 | 3.6K samples",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
-    filename: "pankbase-biosamples.tar.gz"
-  }
+    filename: "pankbase-biosamples.tar.gz",
+  },
 ];
 
 // Tools & Resources data
@@ -399,7 +378,7 @@ const toolsResources = [
     icon: "🔌",
     title: "API Access",
     description: "Programmatic access to PanKbase data through RESTful API endpoints for integration with your analysis pipelines",
-    url: "https://pankbase.github.io/pankbase-client-openapi-spec"
+    url: "https://pankbase.github.io/pankbase-client-openapi-spec",
   },
   {
     icon: <Code className="w-6 h-6" />,
@@ -411,26 +390,26 @@ const toolsResources = [
     icon: "📋",
     title: "Data Standards",
     description: "Data schema and metadata profiles used in PanKbase for standardized pancreatic research data",
-    url: "https://data.pankbase.org/standards/"
+    url: "https://data.pankbase.org/standards/",
   },
   {
     icon: "📖",
     title: "User Guide",
     description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
-    url: "https://data.pankbase.org/help/general-help/user-guide"
+    url: "https://data.pankbase.org/help/general-help/user-guide",
   },
   {
     icon: "📰",
     title: "Data Library News",
     description: "Latest updates, announcements, and news about the PanKbase Data Library and new resources",
-    url: "https://data.pankbase.org/help/news/"
+    url: "https://data.pankbase.org/help/news/",
   },
   {
     icon: "🔍",
     title: "Search",
     description: "Search and query the PanKbase Data Library using fuzzy search across all resources",
-    url: "https://data.pankbase.org/search/"
-  }
+    url: "https://data.pankbase.org/search/",
+  },
 ];
 
 // Data Access cards data
@@ -440,50 +419,50 @@ const dataAccessCards = [
     title: "Donors",
     count: "3.7K",
     description: "Human donors of a pancreatic biosample",
-    url: "https://data.pankbase.org/search/?type=HumanDonor"
+    url: "https://data.pankbase.org/search/?type=HumanDonor",
   },
   {
     icon: "🧪",
     title: "Biosamples",
     count: "3.6K",
     description: "Pancreatic biosamples obtained from a donor",
-    url: "https://data.pankbase.org/search/?type=Biosample"
+    url: "https://data.pankbase.org/search/?type=Biosample",
   },
   {
     icon: "🔬",
     title: "Measurement Sets",
     count: "627",
     description: "Experimental assays performed on a biosample",
-    url: "https://data.pankbase.org/search/?type=MeasurementSet"
+    url: "https://data.pankbase.org/search/?type=MeasurementSet",
   },
   {
     icon: "📊",
     title: "Intermediate Analysis Results",
     count: "378",
     description: "Standardized processing of data generated from an assay",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis"
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
   },
   {
     icon: "📦",
     title: "Resource Analysis",
     count: "3",
     description: "Resource used to perform a principal analysis such as a donor x gene count matrix",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis"
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
   },
   {
     icon: "📈",
     title: "Principal Analysis Results",
     count: "47",
     description: "End result of analyzing data such as differential expression or peak calls",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis"
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
   },
   {
     icon: "⚙️",
     title: "Workflows",
     count: "5",
     description: "Analysis workflows used to processed data and create resources",
-    url: "https://data.pankbase.org/search/?type=Workflow"
-  }
+    url: "https://data.pankbase.org/search/?type=Workflow",
+  },
 ];
 
 export default function Home() {
@@ -523,4 +502,3 @@ export default function Home() {
     </div>
   );
 }
-
