@@ -341,14 +341,14 @@ const carouselItems = [
   {
     title: "PanKbase scRNA UMAP",
     description: "Single-cell RNA-seq UMAP visualization with cell type annotations",
-    meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
+    meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
   },
   {
     title: "Pseudo-Bulk Counts (RUV-normalized, scRNA UMAP v3.3)",
     description: "RUV-normalized pseudo-bulk gene expression counts for differential analysis",
-    meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
+    meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
     filename: "pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
   },
