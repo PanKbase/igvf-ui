@@ -172,14 +172,21 @@ BookOpen.propTypes = { className: PropTypes.string };
 // Featured Datasets Carousel Component
 function FeaturedDatasetsCarousel({ items }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsToShow = 4;
+  const itemWidth = 280;
+  const gap = 20;
+  const itemWidthWithGap = itemWidth + gap;
 
   function scrollLeft() {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
   }
 
   function scrollRight() {
-    setCurrentIndex((prev) => Math.min(items.length - itemsToShow, prev + 1));
+    setCurrentIndex((prev) => {
+      // Allow scrolling until the last item is visible
+      // For 6 items, we can scroll from 0 to items.length - 1 (0 to 5)
+      const maxIndex = items.length - 1;
+      return Math.min(maxIndex, prev + 1);
+    });
   }
 
   function handleItemClick(item) {
@@ -187,6 +194,9 @@ function FeaturedDatasetsCarousel({ items }) {
       window.location.href = item.s3Url;
     }
   }
+
+  // Maximum scroll position: can scroll up to show the last item
+  const maxScrollIndex = items.length - 1;
 
   return (
     <div className="relative overflow-hidden bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.1)] px-[60px] py-[30px]">
@@ -204,7 +214,7 @@ function FeaturedDatasetsCarousel({ items }) {
         <div
           className="flex gap-5 transition-transform duration-300 ease-in-out"
           style={{
-            transform: `translateX(-${currentIndex * (280 + 20)}px)`,
+            transform: `translateX(-${currentIndex * itemWidthWithGap}px)`,
           }}
         >
           {items.map((item, index) => (
@@ -221,16 +231,16 @@ function FeaturedDatasetsCarousel({ items }) {
               </div>
               <div className="text-[11px] opacity-70 mt-4 pt-4 border-t border-white/20">
                 {item.meta}
-              </div>
-            </div>
+          </div>
+          </div>
           ))}
         </div>
       </div>
       <button
         onClick={scrollRight}
-        disabled={currentIndex >= items.length - itemsToShow}
+        disabled={currentIndex >= maxScrollIndex}
         className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer text-lg text-[#219197] flex items-center justify-center transition-all z-10 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] ${
-          currentIndex >= items.length - itemsToShow
+          currentIndex >= maxScrollIndex
             ? "opacity-50 cursor-not-allowed"
             : ""
         }`}
@@ -497,7 +507,7 @@ export default function Home() {
           {dataAccessCards.map((card, index) => (
             <DataAccessCard key={index} {...card} />
           ))}
-        </div>
+      </div>
       </section>
     </div>
   );
