@@ -384,7 +384,7 @@ const toolsResources = [
     icon: <Code className="w-6 h-6" />,
     title: "Scripts",
     description: "Data exploration scripts and tools for PanKbase analysis workflows and custom data processing",
-    url: "https://github.com/PanKbase/PanKbase-data-library-scripts"
+    url: "https://github.com/PanKbase/PanKbase-data-library-scripts",
   },
   {
     icon: "📋",
