@@ -1,9 +1,5 @@
-import React from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import SiteSearchTrigger from "../components/site-search-trigger";
-import { abbreviateNumber } from "../lib/general";
-import FetchRequest from "../lib/fetch-request";
 
 // SVG Icon Components
 function Users({ className }) {
@@ -191,219 +187,340 @@ Microscope.propTypes = { className: PropTypes.string };
 Database.propTypes = { className: PropTypes.string };
 GitBranch.propTypes = { className: PropTypes.string };
 ChartBar.propTypes = { className: PropTypes.string };
-FileText.propTypes = { className: PropTypes.string };
 Code.propTypes = { className: PropTypes.string };
 BookOpen.propTypes = { className: PropTypes.string };
 
-function Statistic({ icon: Icon, label, value, query, description }) {
+// Featured Datasets Carousel Component
+function FeaturedDatasetsCarousel({ items }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsToShow = 4;
+
+  const scrollLeft = () => {
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const scrollRight = () => {
+    setCurrentIndex((prev) => Math.min(items.length - itemsToShow, prev + 1));
+  };
+
+  const handleItemClick = (item) => {
+    if (item.s3Url) {
+      window.location.href = item.s3Url;
+    }
+  };
+
   return (
-    <Link href={`/search/?${query}`} className="group block w-full">
-      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex items-start gap-4 p-6">
-          <div className="rounded-lg bg-teal-50 p-3 dark:bg-teal-900/30">
-            <Icon className="h-6 w-6 text-teal-600 dark:text-teal-400" />
-          </div>
-          <div className="flex-1">
-            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {label}
-              <span className="ml-2 text-lg font-normal text-gray-600 dark:text-gray-400">
-                ({abbreviateNumber(value)})
-              </span>
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {description}
-            </p>
-          </div>
+    <div className="relative overflow-hidden bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.1)] px-[60px] py-[30px]">
+      <button
+        onClick={scrollLeft}
+        disabled={currentIndex === 0}
+        className={`absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer text-lg text-[#219197] flex items-center justify-center transition-all z-10 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] ${
+          currentIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        aria-label="Scroll left"
+      >
+        ‹
+      </button>
+      <div className="overflow-hidden">
+        <div
+          className="flex gap-5 transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateX(-${currentIndex * (280 + 20)}px)`,
+          }}
+        >
+          {items.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => handleItemClick(item)}
+              className="min-w-[280px] bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg p-6 text-white cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(33,145,151,0.3)]"
+            >
+              <div className="text-lg font-semibold mb-2.5">
+                {item.title}
+              </div>
+              <div className="text-[13px] opacity-90 leading-[1.4]">
+                {item.description}
+              </div>
+              <div className="text-[11px] opacity-70 mt-4 pt-4 border-t border-white/20">
+                {item.meta}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </Link>
+      <button
+        onClick={scrollRight}
+        disabled={currentIndex >= items.length - itemsToShow}
+        className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer text-lg text-[#219197] flex items-center justify-center transition-all z-10 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] ${
+          currentIndex >= items.length - itemsToShow
+            ? "opacity-50 cursor-not-allowed"
+            : ""
+        }`}
+        aria-label="Scroll right"
+      >
+        ›
+      </button>
+    </div>
   );
 }
 
-Statistic.propTypes = {
-  icon: PropTypes.elementType.isRequired,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  query: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+FeaturedDatasetsCarousel.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      meta: PropTypes.string.isRequired,
+      s3Url: PropTypes.string.isRequired,
+      filename: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
-// New component for external link cards
-function ExternalLinkCard({ icon: Icon, label, href, description }) {
+// Resource Card Component for Tools & Resources
+function ResourceCard({ icon, title, description, url }) {
   return (
     <a
-      href={href}
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block w-full"
+      className="block bg-white rounded-lg p-[25px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] border-t-4 border-[#219197]"
     >
-      <div className="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex items-start gap-4 p-6">
-          <div className="rounded-lg p-3" style={{ backgroundColor: 'rgba(11, 181, 223, 0.1)' }}>
-            <Icon className="h-6 w-6" style={{ color: '#0bb5df' }} />
-          </div>
-          <div className="flex-1">
-            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {label}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {description}
-            </p>
-          </div>
+      {typeof icon === "string" ? (
+        <div className="text-4xl mb-4">{icon}</div>
+      ) : (
+        <div className="w-12 h-12 bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg flex items-center justify-center text-white text-2xl mb-4">
+          {icon}
         </div>
+      )}
+      <div className="text-lg font-semibold text-gray-900 mb-2.5">
+        {title}
+      </div>
+      <div className="text-[13px] text-gray-600 leading-relaxed">
+        {description}
       </div>
     </a>
   );
 }
 
-ExternalLinkCard.propTypes = {
-  icon: PropTypes.elementType.isRequired,
-  label: PropTypes.string.isRequired,
-  href: PropTypes.string.isRequired,
+ResourceCard.propTypes = {
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
-export default function Home({
-  assayCount,
-  processedCount,
-  analysisCount,
-  donorCount,
-  biosampleCount,
-  workflowCount,
-}) {
+// Data Access Card Component
+function DataAccessCard({ icon, title, count, description, url }) {
   return (
-    <div className="@container/home">
-      <p className="my-8">
-        The Data Library enables query and browsing components of analysis
-        resources created by PanKbase, including meta-data on human donors and
-        biosamples, details on experimental assays, standardized processing of
-        data (&apos;processed results&apos;), workflows used to process data and
-        create resources, and the resources themselves (&apos;analysis
-        results&apos;).
-      </p>
-      <section className="my-8">
-        <h2 className="text-center text-lg font-bold">Search Data</h2>
-        <div className="flex flex-col gap-4">
-          <SiteSearchTrigger isExpanded />
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block bg-white rounded-lg p-[25px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] border-t-4 border-[#219197]"
+    >
+      {typeof icon === "string" ? (
+        <div className="text-4xl mb-4">{icon}</div>
+      ) : (
+        <div className="w-12 h-12 bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg flex items-center justify-center text-white text-2xl mb-4">
+          {icon}
+        </div>
+      )}
+      <div className="text-lg font-semibold text-gray-900 mb-2.5">
+        {title}
+        {count && (
+          <span className="ml-2 text-base font-semibold text-gray-600">
+            ({count})
+          </span>
+        )}
+      </div>
+      <div className="text-[13px] text-gray-600 leading-relaxed">
+        {description}
+      </div>
+    </a>
+  );
+}
+
+DataAccessCard.propTypes = {
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  title: PropTypes.string.isRequired,
+  count: PropTypes.string,
+  description: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+};
+
+// Carousel items data
+const carouselItems = [
+  {
+    title: "PanKbase scRNA UMAP",
+    description: "Single-cell RNA-seq UMAP visualization with cell type annotations",
+    meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
+    filename: "pankbase-scrna-umap-v3.3.tar.gz"
+  },
+  {
+    title: "Pseudo-Bulk Counts (RUV-normalized, scRNA UMAP v3.3)",
+    description: "RUV-normalized pseudo-bulk gene expression counts for differential analysis",
+    meta: "Updated: Oct 2025 | 246,856 cells & 100 donors",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
+    filename: "pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz"
+  },
+  {
+    title: "snATAC Marker Peaks",
+    description: "Cell type marker peaks from single-nucleus ATAC-seq analysis",
+    meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
+    filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz"
+  },
+  {
+    title: "snATAC UMAP",
+    description: "Single-nucleus ATAC-seq UMAP visualization of chromatin accessibility",
+    meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
+    filename: "pankbase-snatac-umap-v1.0.tar.gz"
+  },
+  {
+    title: "PanKbase Donors",
+    description: "Comprehensive donor metadata including demographics and clinical information",
+    meta: "Updated: Oct 2025 | 3.7K donors",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
+    filename: "pankbase-donors.tar.gz"
+  },
+  {
+    title: "PanKbase Biosamples",
+    description: "Pancreatic biosample collection with detailed experimental protocols",
+    meta: "Updated: Oct 2025 | 3.6K samples",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
+    filename: "pankbase-biosamples.tar.gz"
+  }
+];
+
+// Tools & Resources data
+const toolsResources = [
+  {
+    icon: "🔌",
+    title: "API Access",
+    description: "Programmatic access to PanKbase data through RESTful API endpoints for integration with your analysis pipelines",
+    url: "https://pankbase.github.io/pankbase-client-openapi-spec"
+  },
+  {
+    icon: <Code className="w-6 h-6" />,
+    title: "Scripts",
+    description: "Data exploration scripts and tools for PanKbase analysis workflows and custom data processing",
+    url: "https://github.com/PanKbase/PanKbase-data-library-scripts"
+  },
+  {
+    icon: "📋",
+    title: "Data Standards",
+    description: "Data schema and metadata profiles used in PanKbase for standardized pancreatic research data",
+    url: "https://data.pankbase.org/standards/"
+  },
+  {
+    icon: "📖",
+    title: "User Guide",
+    description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
+    url: "https://data.pankbase.org/help/general-help/user-guide"
+  },
+  {
+    icon: "📰",
+    title: "Data Library News",
+    description: "Latest updates, announcements, and news about the PanKbase Data Library and new resources",
+    url: "https://data.pankbase.org/help/news/"
+  },
+  {
+    icon: "🔍",
+    title: "Search",
+    description: "Search and query the PanKbase Data Library using fuzzy search across all resources",
+    url: "https://data.pankbase.org/search/"
+  }
+];
+
+// Data Access cards data
+const dataAccessCards = [
+  {
+    icon: "👥",
+    title: "Donors",
+    count: "3.7K",
+    description: "Human donors of a pancreatic biosample",
+    url: "https://data.pankbase.org/search/?type=HumanDonor"
+  },
+  {
+    icon: "🧪",
+    title: "Biosamples",
+    count: "3.6K",
+    description: "Pancreatic biosamples obtained from a donor",
+    url: "https://data.pankbase.org/search/?type=Biosample"
+  },
+  {
+    icon: "🔬",
+    title: "Measurement Sets",
+    count: "627",
+    description: "Experimental assays performed on a biosample",
+    url: "https://data.pankbase.org/search/?type=MeasurementSet"
+  },
+  {
+    icon: "📊",
+    title: "Intermediate Analysis Results",
+    count: "378",
+    description: "Standardized processing of data generated from an assay",
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis"
+  },
+  {
+    icon: "📦",
+    title: "Resource Analysis",
+    count: "3",
+    description: "Resource used to perform a principal analysis such as a donor x gene count matrix",
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis"
+  },
+  {
+    icon: "📈",
+    title: "Principal Analysis Results",
+    count: "47",
+    description: "End result of analyzing data such as differential expression or peak calls",
+    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis"
+  },
+  {
+    icon: "⚙️",
+    title: "Workflows",
+    count: "5",
+    description: "Analysis workflows used to processed data and create resources",
+    url: "https://data.pankbase.org/search/?type=Workflow"
+  }
+];
+
+export default function Home() {
+  return (
+    <div className="@container/home max-w-[1400px] mx-auto px-10 py-10 bg-[#f5f5f5] min-h-screen">
+      {/* Featured Datasets Carousel Section */}
+      <section className="mb-12">
+        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
+          Featured Datasets
+        </h2>
+        <FeaturedDatasetsCarousel items={carouselItems} />
+      </section>
+
+      {/* Tools & Resources Section */}
+      <section className="mb-12">
+        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
+          Tools & Resources
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
+          {toolsResources.map((tool, index) => (
+            <ResourceCard key={index} {...tool} />
+          ))}
         </div>
       </section>
 
-      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-        <Statistic
-          icon={Users}
-          label="Donors"
-          value={donorCount}
-          query="type=HumanDonor"
-          description="Human donors of a pancreatic biosample"
-        />
-        <Statistic
-          icon={Flask}
-          label="Biosamples"
-          value={biosampleCount}
-          query="type=Biosample"
-          description="Pancreatic biosamples obtained from a donor"
-        />
-        <Statistic
-          icon={Microscope}
-          label="Assays"
-          value={assayCount}
-          query="type=MeasurementSet"
-          description="Experimental assays performed on a biosample"
-        />
-        <Statistic
-          icon={Database}
-          label="Intermediate Analysis Results"
-          value={processedCount}
-          query="type=AnalysisSet&file_set_type=intermediate+analysis"
-          description="Standardized processing of data generated from an assay"
-        />
-        <Statistic
-          icon={ChartBar}
-          label="Principal Analysis Results"
-          value={analysisCount}
-          query="type=AnalysisSet&file_set_type=principal+analysis"
-          description="Analyses of processed data such as integrated resources and downstream analysis"
-        />
-        <Statistic
-          icon={GitBranch}
-          label="Workflows"
-          value={workflowCount}
-          query="type=Workflow"
-          description="Analysis workflows used to processed data and create resources"
-        />
-      </div>
-
-      {/* Separation line */}
-      <div className="my-8 border-t border-gray-200 dark:border-gray-700" />
-
-      {/* Additional resource cards */}
-      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-        <ExternalLinkCard
-          icon={FileText}
-          label="Schema"
-          href="https://data.pankbase.org/profiles"
-          description="Data schema and metadata profiles used in PanKbase"
-        />
-        <ExternalLinkCard
-          icon={Code}
-          label="Scripts"
-          href="https://github.com/PanKbase/PanKbase-data-library-scripts"
-          description="Data exploration scripts and tools for PanKbase analysis"
-        />
-        <ExternalLinkCard
-          icon={BookOpen}
-          label="User Guide"
-          href="https://data.pankbase.org/help/general-help/user-guide"
-          description="Comprehensive guide for using the PanKbase Data Library"
-        />
-      </div>
+      {/* Data Access Section */}
+      <section>
+        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
+          Data Access
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
+          {dataAccessCards.map((card, index) => (
+            <DataAccessCard key={index} {...card} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
 
-Home.propTypes = {
-  analysisCount: PropTypes.number,
-  assayCount: PropTypes.number,
-  processedCount: PropTypes.number,
-  donorCount: PropTypes.number,
-  workflowCount: PropTypes.number,
-  biosampleCount: PropTypes.number,
-};
-
-export async function getServerSideProps({ req }) {
-  const request = new FetchRequest({ cookie: req.headers.cookie });
-
-  const donorResults = (
-    await request.getObject("/search/?type=HumanDonor&limit=0")
-  ).optional();
-  const analysisResults = (
-    await request.getObject(
-      "/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0"
-    )
-  ).optional();
-  const processedResults = (
-    await request.getObject(
-      "/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0"
-    )
-  ).optional();
-  const assayResults = (
-    await request.getObject("/search/?type=MeasurementSet&limit=0")
-  ).optional();
-  const biosampleResults = (
-    await request.getObject("/search/?type=Biosample&limit=0")
-  ).optional();
-  const workflowResults = (
-    await request.getObject("/search/?type=Workflow&limit=0")
-  ).optional();
-
-  return {
-    props: {
-      analysisCount: analysisResults?.total || 0,
-      processedCount: processedResults?.total || 0,
-      assayCount: assayResults?.total || 0,
-      donorCount: donorResults?.total || 0,
-      biosampleCount: biosampleResults?.total || 0,
-      workflowCount: workflowResults?.total || 0,
-    },
-  };
-}
