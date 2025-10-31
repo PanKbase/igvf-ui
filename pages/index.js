@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { abbreviateNumber } from "../lib/general";
+import FetchRequest from "../lib/fetch-request";
 
 // SVG Icon Components
 function Users({ className }) {
@@ -422,60 +424,68 @@ const toolsResources = [
   },
 ];
 
-// Data Access cards data
-const dataAccessCards = [
-  {
-    icon: "👥",
-    title: "Donors",
-    count: "3.7K",
-    description: "Human donors of a pancreatic biosample",
-    url: "https://data.pankbase.org/search/?type=HumanDonor",
-  },
-  {
-    icon: "🧪",
-    title: "Biosamples",
-    count: "3.6K",
-    description: "Pancreatic biosamples obtained from a donor",
-    url: "https://data.pankbase.org/search/?type=Biosample",
-  },
-  {
-    icon: "🔬",
-    title: "Measurement Sets",
-    count: "627",
-    description: "Experimental assays performed on a biosample",
-    url: "https://data.pankbase.org/search/?type=MeasurementSet",
-  },
-  {
-    icon: "📊",
-    title: "Intermediate Analysis Results",
-    count: "378",
-    description: "Standardized processing of data generated from an assay",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
-  },
-  {
-    icon: "📦",
-    title: "Resource Analysis",
-    count: "3",
-    description: "Resource used to perform a principal analysis such as a donor x gene count matrix",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
-  },
-  {
-    icon: "📈",
-    title: "Principal Analysis Results",
-    count: "47",
-    description: "End result of analyzing data such as differential expression or peak calls",
-    url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
-  },
-  {
-    icon: "⚙️",
-    title: "Workflows",
-    count: "5",
-    description: "Analysis workflows used to processed data and create resources",
-    url: "https://data.pankbase.org/search/?type=Workflow",
-  },
-];
-
-export default function Home() {
+export default function Home({
+  donorCount,
+  biosampleCount,
+  assayCount,
+  processedCount,
+  resourceAnalysisCount,
+  analysisCount,
+  workflowCount,
+}) {
+  const dataAccessCards = [
+    {
+      icon: "👥",
+      title: "Donors",
+      count: abbreviateNumber(donorCount),
+      description: "Human donors of a pancreatic biosample",
+      url: "https://data.pankbase.org/search/?type=HumanDonor",
+    },
+    {
+      icon: "🧪",
+      title: "Biosamples",
+      count: abbreviateNumber(biosampleCount),
+      description: "Pancreatic biosamples obtained from a donor",
+      url: "https://data.pankbase.org/search/?type=Biosample",
+    },
+    {
+      icon: "🔬",
+      title: "Measurement Sets",
+      count: abbreviateNumber(assayCount),
+      description: "Experimental assays performed on a biosample",
+      url: "https://data.pankbase.org/search/?type=MeasurementSet",
+    },
+    {
+      icon: "📊",
+      title: "Intermediate Analysis Results",
+      count: abbreviateNumber(processedCount),
+      description: "Standardized processing of data generated from an assay",
+      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
+    },
+    {
+      icon: "📦",
+      title: "Resource Analysis",
+      count: abbreviateNumber(resourceAnalysisCount),
+      description:
+        "Resource used to perform a principal analysis such as a donor x gene count matrix",
+      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
+    },
+    {
+      icon: "📈",
+      title: "Principal Analysis Results",
+      count: abbreviateNumber(analysisCount),
+      description:
+        "End result of analyzing data such as differential expression or peak calls",
+      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
+    },
+    {
+      icon: "⚙️",
+      title: "Workflows",
+      count: abbreviateNumber(workflowCount),
+      description: "Analysis workflows used to processed data and create resources",
+      url: "https://data.pankbase.org/search/?type=Workflow",
+    },
+  ];
   return (
     <div className="@container/home max-w-[1400px] mx-auto px-10 py-10 bg-[#f5f5f5] min-h-screen">
       {/* Featured Datasets Carousel Section */}
@@ -511,4 +521,58 @@ export default function Home() {
       </section>
     </div>
   );
+}
+
+Home.propTypes = {
+  donorCount: PropTypes.number.isRequired,
+  biosampleCount: PropTypes.number.isRequired,
+  assayCount: PropTypes.number.isRequired,
+  processedCount: PropTypes.number.isRequired,
+  resourceAnalysisCount: PropTypes.number.isRequired,
+  analysisCount: PropTypes.number.isRequired,
+  workflowCount: PropTypes.number.isRequired,
+};
+
+export async function getServerSideProps({ req }) {
+  const request = new FetchRequest({ cookie: req?.headers?.cookie });
+
+  const donorResults = (
+    await request.getObject("/search/?type=HumanDonor&limit=0")
+  ).optional();
+  const biosampleResults = (
+    await request.getObject("/search/?type=Biosample&limit=0")
+  ).optional();
+  const assayResults = (
+    await request.getObject("/search/?type=MeasurementSet&limit=0")
+  ).optional();
+  const processedResults = (
+    await request.getObject(
+      "/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0"
+    )
+  ).optional();
+  const resourceAnalysisResults = (
+    await request.getObject(
+      "/search/?type=AnalysisSet&file_set_type=resource+analysis&limit=0"
+    )
+  ).optional();
+  const principalAnalysisResults = (
+    await request.getObject(
+      "/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0"
+    )
+  ).optional();
+  const workflowResults = (
+    await request.getObject("/search/?type=Workflow&limit=0")
+  ).optional();
+
+  return {
+    props: {
+      donorCount: donorResults?.total ?? 0,
+      biosampleCount: biosampleResults?.total ?? 0,
+      assayCount: assayResults?.total ?? 0,
+      processedCount: processedResults?.total ?? 0,
+      resourceAnalysisCount: resourceAnalysisResults?.total ?? 0,
+      analysisCount: principalAnalysisResults?.total ?? 0,
+      workflowCount: workflowResults?.total ?? 0,
+    },
+  };
 }
