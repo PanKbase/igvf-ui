@@ -465,7 +465,7 @@ DataAccessCard.propTypes = {
 // Carousel items data
 const carouselItems = [
   {
-    title: "PanKbase scRNA UMAP",
+    title: "scRNA UMAP",
     description: "Single-cell RNA-seq UMAP visualization with cell type annotations",
     meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
@@ -486,14 +486,14 @@ const carouselItems = [
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
   },
   {
-    title: "PanKbase Donors",
+    title: "Donors",
     description: "Comprehensive donor metadata including demographics and clinical information",
     meta: "Updated: Oct 2025 | 3.7K donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
   },
   {
-    title: "PanKbase Biosamples",
+    title: "Biosamples",
     description: "Pancreatic biosample collection with detailed experimental protocols",
     meta: "Updated: Oct 2025 | 3.6K samples",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
