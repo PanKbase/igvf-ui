@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { abbreviateNumber } from "../lib/general";
 import FetchRequest from "../lib/fetch-request";
+import SiteSearchTrigger from "../components/site-search-trigger";
 
 // SVG Icon Components
 function Users({ className }) {
@@ -471,13 +472,6 @@ const carouselItems = [
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
   },
   {
-    title: "Pseudo-Bulk Counts (RUV-normalized, scRNA UMAP v3.3)",
-    description: "RUV-normalized pseudo-bulk gene expression counts for differential analysis",
-    meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
-    filename: "pankbase-ruv-normalized-pseudo-bulk-counts-umap3.3.tar.gz",
-  },
-  {
     title: "snATAC Marker Peaks",
     description: "Cell type marker peaks from single-nucleus ATAC-seq analysis",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
@@ -617,6 +611,14 @@ export default function Home({
           Featured Datasets
         </h2>
         <FeaturedDatasetsCarousel items={carouselItems} />
+      </section>
+
+      {/* Search Data Section */}
+      <section className="mb-12">
+        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
+          Search Data
+        </h2>
+        <SiteSearchTrigger isExpanded={true} />
       </section>
 
       {/* Tools & Resources Section */}
