@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import SiteSearchTrigger from "../components/site-search-trigger";
+"use client"
+
+import { useState } from "react"
+
+import PropTypes from "prop-types"
+
+import SiteSearchTrigger from "../components/site-search-trigger"
 
 // SVG Icon Components
 function Users({ className }) {
@@ -20,7 +24,7 @@ function Users({ className }) {
       <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
-  );
+  )
 }
 
 function Flask({ className }) {
@@ -40,7 +44,7 @@ function Flask({ className }) {
       <path d="M20 21H4a2 2 0 0 1-2-2V9c0-.6.4-1 1-1h18c.6 0 1 .4 1 1v10a2 2 0 0 1-2 2Z" />
       <path d="M6.1 15h11.8" />
     </svg>
-  );
+  )
 }
 
 function Microscope({ className }) {
@@ -62,7 +66,7 @@ function Microscope({ className }) {
       <path d="M8 6h4" />
       <path d="M10 6a2 2 0 1 0 0-4" />
     </svg>
-  );
+  )
 }
 
 function Database({ className }) {
@@ -81,7 +85,7 @@ function Database({ className }) {
       <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
       <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
     </svg>
-  );
+  )
 }
 
 function GitBranch({ className }) {
@@ -101,7 +105,7 @@ function GitBranch({ className }) {
       <circle cx="6" cy="18" r="3" />
       <path d="M18 9a9 9 0 0 1-9 9" />
     </svg>
-  );
+  )
 }
 
 function ChartBar({ className }) {
@@ -120,10 +124,9 @@ function ChartBar({ className }) {
       <line x1="18" y1="20" x2="18" y2="4" />
       <line x1="6" y1="20" x2="6" y2="16" />
     </svg>
-  );
+  )
 }
 
-// New icon components for additional cards
 function Code({ className }) {
   return (
     <svg
@@ -139,7 +142,7 @@ function Code({ className }) {
       <polyline points="16,18 22,12 16,6" />
       <polyline points="8,6 2,12 8,18" />
     </svg>
-  );
+  )
 }
 
 function BookOpen({ className }) {
@@ -157,7 +160,7 @@ function BookOpen({ className }) {
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
     </svg>
-  );
+  )
 }
 
 function Search({ className }) {
@@ -175,7 +178,7 @@ function Search({ className }) {
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />
     </svg>
-  );
+  )
 }
 
 function FileText({ className }) {
@@ -196,7 +199,7 @@ function FileText({ className }) {
       <line x1="16" y1="17" x2="8" y2="17" />
       <polyline points="10,9 9,9 8,9" />
     </svg>
-  );
+  )
 }
 
 function Newspaper({ className }) {
@@ -216,7 +219,7 @@ function Newspaper({ className }) {
       <path d="M15 18h-5" />
       <path d="M10 6h8v4h-8V6Z" />
     </svg>
-  );
+  )
 }
 
 function Plug({ className }) {
@@ -236,7 +239,7 @@ function Plug({ className }) {
       <path d="M15 8V2" />
       <path d="M18 8v2a10 10 0 1 1-12 0V8" />
     </svg>
-  );
+  )
 }
 
 function Package({ className }) {
@@ -256,7 +259,7 @@ function Package({ className }) {
       <path d="M3 16l8-7 8 7" />
       <path d="M12 9v13" />
     </svg>
-  );
+  )
 }
 
 function Settings({ className }) {
@@ -274,61 +277,70 @@ function Settings({ className }) {
       <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
       <circle cx="12" cy="12" r="3" />
     </svg>
-  );
+  )
 }
 
-// PropTypes for SVG components
-Users.propTypes = { className: PropTypes.string };
-Flask.propTypes = { className: PropTypes.string };
-Microscope.propTypes = { className: PropTypes.string };
-Database.propTypes = { className: PropTypes.string };
-GitBranch.propTypes = { className: PropTypes.string };
-ChartBar.propTypes = { className: PropTypes.string };
-Code.propTypes = { className: PropTypes.string };
-BookOpen.propTypes = { className: PropTypes.string };
-Search.propTypes = { className: PropTypes.string };
-FileText.propTypes = { className: PropTypes.string };
-Newspaper.propTypes = { className: PropTypes.string };
-Plug.propTypes = { className: PropTypes.string };
-Package.propTypes = { className: PropTypes.string };
-Settings.propTypes = { className: PropTypes.string };
+Users.propTypes = { className: PropTypes.string }
+
+Flask.propTypes = { className: PropTypes.string }
+
+Microscope.propTypes = { className: PropTypes.string }
+
+Database.propTypes = { className: PropTypes.string }
+
+GitBranch.propTypes = { className: PropTypes.string }
+
+ChartBar.propTypes = { className: PropTypes.string }
+
+Code.propTypes = { className: PropTypes.string }
+
+BookOpen.propTypes = { className: PropTypes.string }
+
+Search.propTypes = { className: PropTypes.string }
+
+FileText.propTypes = { className: PropTypes.string }
+
+Newspaper.propTypes = { className: PropTypes.string }
+
+Plug.propTypes = { className: PropTypes.string }
+
+Package.propTypes = { className: PropTypes.string }
+
+Settings.propTypes = { className: PropTypes.string }
 
 // Featured Datasets Carousel Component
 function FeaturedDatasetsCarousel({ items }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemWidth = 280;
-  const gap = 20;
-  const itemWidthWithGap = itemWidth + gap;
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const itemWidth = 320
+  const gap = 24
+  const itemWidthWithGap = itemWidth + gap
 
   function scrollLeft() {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => Math.max(0, prev - 1))
   }
 
   function scrollRight() {
     setCurrentIndex((prev) => {
-      // Allow scrolling until the last item is visible
-      // For 6 items, we can scroll from 0 to items.length - 1 (0 to 5)
-      const maxIndex = items.length - 1;
-      return Math.min(maxIndex, prev + 1);
-    });
+      const maxIndex = items.length - 1
+      return Math.min(maxIndex, prev + 1)
+    })
   }
 
   function handleItemClick(item) {
     if (item.s3Url) {
-      window.location.href = item.s3Url;
+      window.location.href = item.s3Url
     }
   }
 
-  // Maximum scroll position: can scroll up to show the last item
-  const maxScrollIndex = items.length - 1;
+  const maxScrollIndex = items.length - 1
 
   return (
-    <div className="relative overflow-hidden bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.1)] px-[60px] py-[30px]">
+    <div className="relative overflow-hidden bg-gradient-to-br from-white to-slate-50 rounded-2xl shadow-lg px-20 py-12 border border-slate-100">
       <button
         onClick={scrollLeft}
         disabled={currentIndex === 0}
-        className={`absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer text-lg text-[#219197] flex items-center justify-center transition-all z-10 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] ${
-          currentIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+        className={`absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white border-2 border-teal-600 cursor-pointer text-xl text-teal-600 flex items-center justify-center transition-all z-10 hover:bg-teal-50 hover:shadow-xl font-bold ${
+          currentIndex === 0 ? "opacity-40 cursor-not-allowed" : ""
         }`}
         aria-label="Scroll left"
       >
@@ -336,7 +348,7 @@ function FeaturedDatasetsCarousel({ items }) {
       </button>
       <div className="overflow-hidden">
         <div
-          className="flex gap-5 transition-transform duration-300 ease-in-out"
+          className="flex gap-6 transition-transform duration-500 ease-out"
           style={{
             transform: `translateX(-${currentIndex * itemWidthWithGap}px)`,
           }}
@@ -345,35 +357,27 @@ function FeaturedDatasetsCarousel({ items }) {
             <div
               key={index}
               onClick={() => handleItemClick(item)}
-              className="min-w-[280px] bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg p-6 text-white cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(33,145,151,0.3)]"
+              className="min-w-80 bg-gradient-to-br from-teal-600 via-teal-500 to-cyan-600 rounded-xl p-7 text-white cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-teal-400/30"
             >
-              <div className="text-lg font-semibold mb-2.5">
-                {item.title}
-              </div>
-              <div className="text-[13px] opacity-90 leading-[1.4]">
-                {item.description}
-              </div>
-              <div className="text-[11px] opacity-70 mt-4 pt-4 border-t border-white/20">
-                {item.meta}
-          </div>
-          </div>
+              <div className="text-xl font-bold mb-3 text-white">{item.title}</div>
+              <div className="text-sm opacity-95 leading-relaxed mb-4">{item.description}</div>
+              <div className="text-xs opacity-75 pt-4 border-t border-white/20">{item.meta}</div>
+            </div>
           ))}
         </div>
       </div>
       <button
         onClick={scrollRight}
         disabled={currentIndex >= maxScrollIndex}
-        className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer text-lg text-[#219197] flex items-center justify-center transition-all z-10 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] ${
-          currentIndex >= maxScrollIndex
-            ? "opacity-50 cursor-not-allowed"
-            : ""
+        className={`absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white border-2 border-teal-600 cursor-pointer text-xl text-teal-600 flex items-center justify-center transition-all z-10 hover:bg-teal-50 hover:shadow-xl font-bold ${
+          currentIndex >= maxScrollIndex ? "opacity-40 cursor-not-allowed" : ""
         }`}
         aria-label="Scroll right"
       >
         ›
       </button>
     </div>
-  );
+  )
 }
 
 FeaturedDatasetsCarousel.propTypes = {
@@ -384,9 +388,9 @@ FeaturedDatasetsCarousel.propTypes = {
       meta: PropTypes.string.isRequired,
       s3Url: PropTypes.string.isRequired,
       filename: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
-};
+}
 
 // Resource Card Component for Tools & Resources
 function ResourceCard({ icon, title, description, url }) {
@@ -395,23 +399,19 @@ function ResourceCard({ icon, title, description, url }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white rounded-lg p-[25px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] border-t-4 border-[#219197]"
+      className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
-        <div className="text-4xl mb-4">{icon}</div>
+        <div className="text-4xl mb-5">{icon}</div>
       ) : (
-        <div className="w-12 h-12 bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg flex items-center justify-center text-white text-2xl mb-4">
+        <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg flex items-center justify-center text-white text-2xl mb-5 shadow-lg group-hover:shadow-xl transition-shadow">
           {icon}
         </div>
       )}
-      <div className="text-lg font-semibold text-gray-900 mb-2.5">
-        {title}
-      </div>
-      <div className="text-[13px] text-gray-600 leading-relaxed">
-        {description}
-      </div>
+      <div className="text-lg font-bold text-slate-900 mb-3">{title}</div>
+      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
     </a>
-  );
+  )
 }
 
 ResourceCard.propTypes = {
@@ -419,7 +419,7 @@ ResourceCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-};
+}
 
 // Data Access Card Component
 function DataAccessCard({ icon, title, count, description, url }) {
@@ -428,28 +428,22 @@ function DataAccessCard({ icon, title, count, description, url }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white rounded-lg p-[25px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] border-t-4 border-[#219197]"
+      className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
-        <div className="text-4xl mb-4">{icon}</div>
+        <div className="text-4xl mb-5">{icon}</div>
       ) : (
-        <div className="w-12 h-12 bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg flex items-center justify-center text-white text-2xl mb-4">
+        <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg flex items-center justify-center text-white text-2xl mb-5 shadow-lg group-hover:shadow-xl transition-shadow">
           {icon}
         </div>
       )}
-      <div className="text-lg font-semibold text-gray-900 mb-2.5">
+      <div className="text-lg font-bold text-slate-900 mb-3">
         {title}
-        {count && (
-          <span className="ml-2 text-base font-semibold text-gray-600">
-            ({count})
-          </span>
-        )}
+        {count && <span className="ml-2 text-base font-semibold text-slate-500">({count})</span>}
       </div>
-      <div className="text-[13px] text-gray-600 leading-relaxed">
-        {description}
-      </div>
+      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
     </a>
-  );
+  )
 }
 
 DataAccessCard.propTypes = {
@@ -458,7 +452,7 @@ DataAccessCard.propTypes = {
   count: PropTypes.string,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-};
+}
 
 // Carousel items data
 const carouselItems = [
@@ -497,7 +491,7 @@ const carouselItems = [
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
     filename: "pankbase-biosamples.tar.gz",
   },
-];
+]
 
 // Data Access buttons data
 const dataAccessButtons = [
@@ -519,7 +513,7 @@ const dataAccessButtons = [
     description: "Browse the PanKbase data library",
     url: "/browse",
   },
-];
+]
 
 // Resources buttons data
 const resourcesButtons = [
@@ -541,47 +535,55 @@ const resourcesButtons = [
     description: "Updates to PanKbase data library",
     url: "https://data.pankbase.org/help/news/",
   },
-];
+]
 
 export default function Home() {
   return (
-    <div className="@container/home max-w-[1400px] mx-auto px-10 py-10 bg-[#f5f5f5] min-h-screen">
-      {/* Featured Datasets Carousel Section */}
-      <section className="mb-12">
-        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Featured Datasets
-        </h2>
-        <FeaturedDatasetsCarousel items={carouselItems} />
-      </section>
+    <div className="@container/home min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 md:py-24">
+        {/* Featured Datasets Carousel Section */}
+        <section className="mb-20">
+          <div className="mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
+            <p className="text-lg text-slate-600">Explore our latest and most comprehensive research data</p>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+          </div>
+          <FeaturedDatasetsCarousel items={carouselItems} />
+        </section>
 
-      {/* Data Access Section */}
-      <section className="mb-12">
-        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Data Access
-        </h2>
-        <div className="mb-6">
-          <SiteSearchTrigger isExpanded={true} />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
-          {dataAccessButtons.map((button, index) => (
-            <ResourceCard key={index} {...button} />
-          ))}
-        </div>
-      </section>
+        {/* Data Access Section */}
+        <section className="mb-20">
+          <div className="mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
+            <p className="text-lg text-slate-600">Multiple ways to access and interact with our data</p>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+          </div>
+          <div className="mb-8">
+            <SiteSearchTrigger isExpanded={true} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dataAccessButtons.map((button, index) => (
+              <ResourceCard key={index} {...button} />
+            ))}
+          </div>
+        </section>
 
-      {/* Resources Section */}
-      <section>
-        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Resources
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
-          {resourcesButtons.map((button, index) => (
-            <ResourceCard key={index} {...button} />
-          ))}
-        </div>
-      </section>
+        {/* Resources Section */}
+        <section>
+          <div className="mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
+            <p className="text-lg text-slate-600">Documentation and support for researchers</p>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {resourcesButtons.map((button, index) => (
+              <ResourceCard key={index} {...button} />
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
-  );
+  )
 }
 
-Home.propTypes = {};
+Home.propTypes = {}
