@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { encodeUriElement } from "../lib/query-encoding";
 
-function SiteSearchTrigger({ isExpanded = false }) {
+function SiteSearchTrigger() {
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
@@ -41,8 +41,6 @@ function SiteSearchTrigger({ isExpanded = false }) {
   );
 }
 
-SiteSearchTrigger.propTypes = {
-  isExpanded: PropTypes.bool,
-};
+SiteSearchTrigger.propTypes = {};
 
 export default SiteSearchTrigger;

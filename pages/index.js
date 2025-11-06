@@ -419,7 +419,7 @@ ResourceCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-}
+};
 
 // Data Access Card Component
 function DataAccessCard({ icon, title, count, description, url }) {
@@ -559,7 +559,7 @@ export default function Home() {
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="mb-8">
-            <SiteSearchTrigger isExpanded={true} />
+            <SiteSearchTrigger />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dataAccessButtons.map((button, index) => (
