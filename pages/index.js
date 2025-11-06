@@ -465,8 +465,8 @@ DataAccessCard.propTypes = {
 // Carousel items data
 const carouselItems = [
   {
-    title: "scRNA UMAP",
-    description: "Single-cell RNA-seq UMAP visualization with cell type annotations",
+    title: "Pancreatic islet scRNA map",
+    description: "Single cell RNA-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
@@ -479,21 +479,21 @@ const carouselItems = [
     filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
   },
   {
-    title: "snATAC UMAP",
-    description: "Single-nucleus ATAC-seq UMAP visualization of chromatin accessibility",
+    title: "Pancreatic islet snATAC map",
+    description: "Single nuclear ATAC-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
   },
   {
-    title: "Donors",
+    title: "Donor meta-data",
     description: "Comprehensive donor metadata including demographics and clinical information",
     meta: "Updated: Oct 2025 | 3.7K donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
   },
   {
-    title: "Biosamples",
+    title: "Islet biosample meta-data",
     description: "Pancreatic biosample collection with detailed experimental protocols",
     meta: "Updated: Oct 2025 | 3.6K samples",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
@@ -501,108 +501,51 @@ const carouselItems = [
   },
 ];
 
-// Tools & Resources data
-const toolsResources = [
+// Data Access buttons data
+const dataAccessButtons = [
   {
     icon: <Plug className="w-6 h-6" />,
-    title: "API Access",
-    description: "Programmatic access to PanKbase data through RESTful API endpoints for integration with your analysis pipelines",
+    title: "API access",
+    description: "Programmatic access to the PanKbase data library through RESTful API endpoints",
     url: "https://pankbase.github.io/pankbase-client-openapi-spec",
   },
   {
     icon: <Code className="w-6 h-6" />,
     title: "Scripts",
-    description: "Data exploration scripts and tools for PanKbase analysis workflows and custom data processing",
+    description: "Example scripts for accessing the PanKbase data library",
     url: "https://github.com/PanKbase/PanKbase-data-library-scripts",
   },
   {
+    icon: <Database className="w-6 h-6" />,
+    title: "Browse",
+    description: "Browse the PanKbase data library",
+    url: "/browse",
+  },
+];
+
+// Resources buttons data
+const resourcesButtons = [
+  {
     icon: <FileText className="w-6 h-6" />,
-    title: "Data Standards",
-    description: "Data schema and metadata profiles used in PanKbase for standardized pancreatic research data",
+    title: "Data standards",
+    description: "Standards used for meta-data and data processing in the PanKbase data library",
     url: "https://data.pankbase.org/standards/",
   },
   {
     icon: <BookOpen className="w-6 h-6" />,
-    title: "User Guide",
+    title: "User guide",
     description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
     url: "https://data.pankbase.org/help/general-help/user-guide",
   },
   {
     icon: <Newspaper className="w-6 h-6" />,
-    title: "Data Library News",
-    description: "Latest updates, announcements, and news about the PanKbase Data Library and new resources",
+    title: "News",
+    description: "Updates to PanKbase data library",
     url: "https://data.pankbase.org/help/news/",
-  },
-  {
-    icon: <Search className="w-6 h-6" />,
-    title: "Search",
-    description: "Search and query the PanKbase Data Library using fuzzy search across all resources",
-    url: "https://data.pankbase.org/search/",
   },
 ];
 
-export default function Home({
-  donorCount,
-  biosampleCount,
-  assayCount,
-  processedCount,
-  resourceAnalysisCount,
-  analysisCount,
-  workflowCount,
-}) {
-  const dataAccessCards = [
-    {
-      icon: <Users className="w-6 h-6" />,
-      title: "Donors",
-      count: abbreviateNumber(donorCount),
-      description: "Human donors of a pancreatic biosample",
-      url: "https://data.pankbase.org/search/?type=HumanDonor",
-    },
-    {
-      icon: <Flask className="w-6 h-6" />,
-      title: "Biosamples",
-      count: abbreviateNumber(biosampleCount),
-      description: "Pancreatic biosamples obtained from a donor",
-      url: "https://data.pankbase.org/search/?type=Biosample",
-    },
-    {
-      icon: <Microscope className="w-6 h-6" />,
-      title: "Measurement Sets",
-      count: abbreviateNumber(assayCount),
-      description: "Experimental assays performed on a biosample",
-      url: "https://data.pankbase.org/search/?type=MeasurementSet",
-    },
-    {
-      icon: <ChartBar className="w-6 h-6" />,
-      title: "Intermediate Analysis Results",
-      count: abbreviateNumber(processedCount),
-      description: "Standardized processing of data generated from an assay",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
-    },
-    {
-      icon: <Package className="w-6 h-6" />,
-      title: "Resource Analysis",
-      count: abbreviateNumber(resourceAnalysisCount),
-      description:
-        "Resource used to perform a principal analysis such as a donor x gene count matrix",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
-    },
-    {
-      icon: <ChartBar className="w-6 h-6" />,
-      title: "Principal Analysis Results",
-      count: abbreviateNumber(analysisCount),
-      description:
-        "End result of analyzing data such as differential expression or peak calls",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
-    },
-    {
-      icon: <Settings className="w-6 h-6" />,
-      title: "Workflows",
-      count: abbreviateNumber(workflowCount),
-      description: "Analysis workflows used to processed data and create resources",
-      url: "https://data.pankbase.org/search/?type=Workflow",
-    },
-  ];
+export default function Home() {
   return (
     <div className="@container/home max-w-[1400px] mx-auto px-10 py-10 bg-[#f5f5f5] min-h-screen">
       {/* Featured Datasets Carousel Section */}
@@ -613,91 +556,34 @@ export default function Home({
         <FeaturedDatasetsCarousel items={carouselItems} />
       </section>
 
-      {/* Search Data Section */}
+      {/* Data Access Section */}
       <section className="mb-12">
         <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Search Data
+          Data Access
         </h2>
-        <SiteSearchTrigger isExpanded={true} />
-      </section>
-
-      {/* Tools & Resources Section */}
-      <section className="mb-12">
-        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Tools & Resources
-        </h2>
+        <div className="mb-6">
+          <SiteSearchTrigger isExpanded={true} />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
-          {toolsResources.map((tool, index) => (
-            <ResourceCard key={index} {...tool} />
+          {dataAccessButtons.map((button, index) => (
+            <ResourceCard key={index} {...button} />
           ))}
         </div>
       </section>
 
-      {/* Data Access Section */}
+      {/* Resources Section */}
       <section>
         <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Data Access
+          Resources
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
-          {dataAccessCards.map((card, index) => (
-            <DataAccessCard key={index} {...card} />
+          {resourcesButtons.map((button, index) => (
+            <ResourceCard key={index} {...button} />
           ))}
-      </div>
+        </div>
       </section>
     </div>
   );
 }
 
-Home.propTypes = {
-  donorCount: PropTypes.number.isRequired,
-  biosampleCount: PropTypes.number.isRequired,
-  assayCount: PropTypes.number.isRequired,
-  processedCount: PropTypes.number.isRequired,
-  resourceAnalysisCount: PropTypes.number.isRequired,
-  analysisCount: PropTypes.number.isRequired,
-  workflowCount: PropTypes.number.isRequired,
-};
-
-export async function getServerSideProps({ req }) {
-  const request = new FetchRequest({ cookie: req?.headers?.cookie });
-
-  const donorResults = (
-    await request.getObject("/search/?type=HumanDonor&limit=0")
-  ).optional();
-  const biosampleResults = (
-    await request.getObject("/search/?type=Biosample&limit=0")
-  ).optional();
-  const assayResults = (
-    await request.getObject("/search/?type=MeasurementSet&limit=0")
-  ).optional();
-  const processedResults = (
-    await request.getObject(
-      "/search/?type=AnalysisSet&file_set_type=intermediate+analysis&limit=0"
-    )
-  ).optional();
-  const resourceAnalysisResults = (
-    await request.getObject(
-      "/search/?type=AnalysisSet&file_set_type=resource+analysis&limit=0"
-    )
-  ).optional();
-  const principalAnalysisResults = (
-    await request.getObject(
-      "/search/?type=AnalysisSet&file_set_type=principal+analysis&limit=0"
-    )
-  ).optional();
-  const workflowResults = (
-    await request.getObject("/search/?type=Workflow&limit=0")
-  ).optional();
-
-  return {
-    props: {
-      donorCount: donorResults?.total ?? 0,
-      biosampleCount: biosampleResults?.total ?? 0,
-      assayCount: assayResults?.total ?? 0,
-      processedCount: processedResults?.total ?? 0,
-      resourceAnalysisCount: resourceAnalysisResults?.total ?? 0,
-      analysisCount: principalAnalysisResults?.total ?? 0,
-      workflowCount: workflowResults?.total ?? 0,
-    },
-  };
-}
+Home.propTypes = {};
