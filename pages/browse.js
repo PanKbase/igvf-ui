@@ -138,26 +138,20 @@ function DataAccessCard({ icon, title, count, description, url }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white rounded-lg p-[25px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] border-t-4 border-[#219197]"
+      className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
-        <div className="text-4xl mb-4">{icon}</div>
+        <div className="text-4xl mb-5">{icon}</div>
       ) : (
-        <div className="w-12 h-12 bg-gradient-to-br from-[#219197] to-[#1a7471] rounded-lg flex items-center justify-center text-white text-2xl mb-4">
+        <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg flex items-center justify-center text-white text-2xl mb-5 shadow-lg group-hover:shadow-xl transition-shadow">
           {icon}
         </div>
       )}
-      <div className="text-lg font-semibold text-gray-900 mb-2.5">
+      <div className="text-lg font-bold text-slate-900 mb-3">
         {title}
-        {count && (
-          <span className="ml-2 text-base font-semibold text-gray-600">
-            ({count})
-          </span>
-        )}
+        {count && <span className="ml-2 text-base font-semibold text-slate-500">({count})</span>}
       </div>
-      <div className="text-[13px] text-gray-600 leading-relaxed">
-        {description}
-      </div>
+      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
     </a>
   );
 }
@@ -234,17 +228,21 @@ export default function Browse({
   ];
 
   return (
-    <div className="@container/home max-w-[1400px] mx-auto px-10 py-10 bg-[#f5f5f5] min-h-screen">
-      <section>
-        <h2 className="text-[26px] font-semibold mb-6 pb-2.5 border-b-2 border-[#219197]">
-          Browse Data
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px]">
-          {dataAccessCards.map((card, index) => (
-            <DataAccessCard key={index} {...card} />
-          ))}
-        </div>
-      </section>
+    <div className="@container/home min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 md:py-24">
+        <section>
+          <div className="mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Browse Data</h2>
+            <p className="text-lg text-slate-600">Explore all available data types and resources</p>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dataAccessCards.map((card, index) => (
+              <DataAccessCard key={index} {...card} />
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
