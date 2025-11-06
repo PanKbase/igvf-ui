@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 
-import SiteSearchTrigger from "../components/site-search-trigger"
+import SiteSearchTrigger from "../components/site-search-trigger";
 
 // SVG Icon Components
 function Users({ className }) {
@@ -24,7 +24,7 @@ function Users({ className }) {
       <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
-  )
+  );
 }
 
 function Flask({ className }) {
@@ -44,7 +44,7 @@ function Flask({ className }) {
       <path d="M20 21H4a2 2 0 0 1-2-2V9c0-.6.4-1 1-1h18c.6 0 1 .4 1 1v10a2 2 0 0 1-2 2Z" />
       <path d="M6.1 15h11.8" />
     </svg>
-  )
+  );
 }
 
 function Microscope({ className }) {
@@ -66,7 +66,7 @@ function Microscope({ className }) {
       <path d="M8 6h4" />
       <path d="M10 6a2 2 0 1 0 0-4" />
     </svg>
-  )
+  );
 }
 
 function Database({ className }) {
@@ -85,7 +85,7 @@ function Database({ className }) {
       <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
       <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
     </svg>
-  )
+  );
 }
 
 function GitBranch({ className }) {
@@ -105,7 +105,7 @@ function GitBranch({ className }) {
       <circle cx="6" cy="18" r="3" />
       <path d="M18 9a9 9 0 0 1-9 9" />
     </svg>
-  )
+  );
 }
 
 function ChartBar({ className }) {
@@ -124,7 +124,7 @@ function ChartBar({ className }) {
       <line x1="18" y1="20" x2="18" y2="4" />
       <line x1="6" y1="20" x2="6" y2="16" />
     </svg>
-  )
+  );
 }
 
 function Code({ className }) {
@@ -142,7 +142,7 @@ function Code({ className }) {
       <polyline points="16,18 22,12 16,6" />
       <polyline points="8,6 2,12 8,18" />
     </svg>
-  )
+  );
 }
 
 function BookOpen({ className }) {
@@ -160,7 +160,7 @@ function BookOpen({ className }) {
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
     </svg>
-  )
+  );
 }
 
 function Search({ className }) {
@@ -178,7 +178,7 @@ function Search({ className }) {
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />
     </svg>
-  )
+  );
 }
 
 function FileText({ className }) {
@@ -199,7 +199,7 @@ function FileText({ className }) {
       <line x1="16" y1="17" x2="8" y2="17" />
       <polyline points="10,9 9,9 8,9" />
     </svg>
-  )
+  );
 }
 
 function Newspaper({ className }) {
@@ -219,7 +219,7 @@ function Newspaper({ className }) {
       <path d="M15 18h-5" />
       <path d="M10 6h8v4h-8V6Z" />
     </svg>
-  )
+  );
 }
 
 function Plug({ className }) {
@@ -239,7 +239,7 @@ function Plug({ className }) {
       <path d="M15 8V2" />
       <path d="M18 8v2a10 10 0 1 1-12 0V8" />
     </svg>
-  )
+  );
 }
 
 function Package({ className }) {
@@ -259,7 +259,7 @@ function Package({ className }) {
       <path d="M3 16l8-7 8 7" />
       <path d="M12 9v13" />
     </svg>
-  )
+  );
 }
 
 function Settings({ className }) {
@@ -277,62 +277,62 @@ function Settings({ className }) {
       <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
       <circle cx="12" cy="12" r="3" />
     </svg>
-  )
+  );
 }
 
-Users.propTypes = { className: PropTypes.string }
+Users.propTypes = { className: PropTypes.string };
 
-Flask.propTypes = { className: PropTypes.string }
+Flask.propTypes = { className: PropTypes.string };
 
-Microscope.propTypes = { className: PropTypes.string }
+Microscope.propTypes = { className: PropTypes.string };
 
-Database.propTypes = { className: PropTypes.string }
+Database.propTypes = { className: PropTypes.string };
 
-GitBranch.propTypes = { className: PropTypes.string }
+GitBranch.propTypes = { className: PropTypes.string };
 
-ChartBar.propTypes = { className: PropTypes.string }
+ChartBar.propTypes = { className: PropTypes.string };
 
-Code.propTypes = { className: PropTypes.string }
+Code.propTypes = { className: PropTypes.string };
 
-BookOpen.propTypes = { className: PropTypes.string }
+BookOpen.propTypes = { className: PropTypes.string };
 
-Search.propTypes = { className: PropTypes.string }
+Search.propTypes = { className: PropTypes.string };
 
-FileText.propTypes = { className: PropTypes.string }
+FileText.propTypes = { className: PropTypes.string };
 
-Newspaper.propTypes = { className: PropTypes.string }
+Newspaper.propTypes = { className: PropTypes.string };
 
-Plug.propTypes = { className: PropTypes.string }
+Plug.propTypes = { className: PropTypes.string };
 
-Package.propTypes = { className: PropTypes.string }
+Package.propTypes = { className: PropTypes.string };
 
-Settings.propTypes = { className: PropTypes.string }
+Settings.propTypes = { className: PropTypes.string };
 
 // Featured Datasets Carousel Component
 function FeaturedDatasetsCarousel({ items }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const itemWidth = 320
-  const gap = 24
-  const itemWidthWithGap = itemWidth + gap
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemWidth = 320;
+  const gap = 24;
+  const itemWidthWithGap = itemWidth + gap;
 
   function scrollLeft() {
-    setCurrentIndex((prev) => Math.max(0, prev - 1))
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   }
 
   function scrollRight() {
     setCurrentIndex((prev) => {
-      const maxIndex = items.length - 1
-      return Math.min(maxIndex, prev + 1)
-    })
+      const maxIndex = items.length - 1;
+      return Math.min(maxIndex, prev + 1);
+    });
   }
 
   function handleItemClick(item) {
     if (item.s3Url) {
-      window.location.href = item.s3Url
+      window.location.href = item.s3Url;
     }
   }
 
-  const maxScrollIndex = items.length - 1
+  const maxScrollIndex = items.length - 1;
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-white to-slate-50 rounded-2xl shadow-lg px-20 py-12 border border-slate-100">
@@ -377,7 +377,7 @@ function FeaturedDatasetsCarousel({ items }) {
         ›
       </button>
     </div>
-  )
+  );
 }
 
 FeaturedDatasetsCarousel.propTypes = {
@@ -390,7 +390,7 @@ FeaturedDatasetsCarousel.propTypes = {
       filename: PropTypes.string.isRequired,
     }),
   ).isRequired,
-}
+};
 
 // Resource Card Component for Tools & Resources
 function ResourceCard({ icon, title, description, url }) {
@@ -411,7 +411,7 @@ function ResourceCard({ icon, title, description, url }) {
       <div className="text-lg font-bold text-slate-900 mb-3">{title}</div>
       <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
     </a>
-  )
+  );
 }
 
 ResourceCard.propTypes = {
@@ -443,7 +443,7 @@ function DataAccessCard({ icon, title, count, description, url }) {
       </div>
       <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
     </a>
-  )
+  );
 }
 
 DataAccessCard.propTypes = {
@@ -452,7 +452,7 @@ DataAccessCard.propTypes = {
   count: PropTypes.string,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-}
+};
 
 // Carousel items data
 const carouselItems = [
@@ -491,7 +491,7 @@ const carouselItems = [
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
     filename: "pankbase-biosamples.tar.gz",
   },
-]
+];
 
 // Data Access buttons data
 const dataAccessButtons = [
@@ -513,7 +513,7 @@ const dataAccessButtons = [
     description: "Browse the PanKbase data library",
     url: "/browse",
   },
-]
+];
 
 // Resources buttons data
 const resourcesButtons = [
@@ -535,7 +535,7 @@ const resourcesButtons = [
     description: "Updates to PanKbase data library",
     url: "https://data.pankbase.org/help/news/",
   },
-]
+];
 
 export default function Home() {
   return (
@@ -546,7 +546,7 @@ export default function Home() {
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
             <p className="text-lg text-slate-600">Explore our latest and most comprehensive research data</p>
-            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <FeaturedDatasetsCarousel items={carouselItems} />
         </section>
@@ -556,7 +556,7 @@ export default function Home() {
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
             <p className="text-lg text-slate-600">Multiple ways to access and interact with our data</p>
-            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="mb-8">
             <SiteSearchTrigger isExpanded={true} />
@@ -573,7 +573,7 @@ export default function Home() {
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
             <p className="text-lg text-slate-600">Documentation and support for researchers</p>
-            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {resourcesButtons.map((button, index) => (
@@ -583,7 +583,7 @@ export default function Home() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 
-Home.propTypes = {}
+Home.propTypes = {};

@@ -1,21 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 
-import { useRouter } from "next/router"
-import { encodeUriElement } from "../lib/query-encoding"
+import { useRouter } from "next/router";
+import { encodeUriElement } from "../lib/query-encoding";
 
 function SiteSearchTrigger({ isExpanded = false }) {
-  const [searchValue, setSearchValue] = useState("")
-  const [isOpen, setIsOpen] = useState(isExpanded)
-  const router = useRouter()
+  const [searchValue, setSearchValue] = useState("");
+  const router = useRouter();
 
-  const handleSearch = (e) => {
-    e.preventDefault()
+  function handleSearch(e) {
+    e.preventDefault();
     if (searchValue.trim()) {
-      router.push(`/site-search?term=${encodeUriElement(searchValue)}`)
+      router.push(`/site-search?term=${encodeUriElement(searchValue)}`);
     }
   }
 
@@ -38,31 +37,12 @@ function SiteSearchTrigger({ isExpanded = false }) {
           </button>
         </div>
       </form>
-      {isOpen && (
-        <div className="mb-8 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl border border-teal-200">
-          <h3 className="font-bold text-slate-900 mb-4 text-lg">Quick filters</h3>
-          <div className="flex flex-wrap gap-3">
-            <button className="px-4 py-2 bg-white border-2 border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-medium">
-              scRNA-seq
-            </button>
-            <button className="px-4 py-2 bg-white border-2 border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-medium">
-              snATAC-seq
-            </button>
-            <button className="px-4 py-2 bg-white border-2 border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-medium">
-              Donor data
-            </button>
-            <button className="px-4 py-2 bg-white border-2 border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-medium">
-              Metadata
-            </button>
-          </div>
-        </div>
-      )}
     </div>
-  )
+  );
 }
 
 SiteSearchTrigger.propTypes = {
   isExpanded: PropTypes.bool,
-}
+};
 
-export default SiteSearchTrigger
+export default SiteSearchTrigger;

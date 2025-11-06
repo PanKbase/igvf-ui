@@ -234,7 +234,7 @@ export default function Browse({
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Browse Data</h2>
             <p className="text-lg text-slate-600">Explore all available data types and resources</p>
-            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dataAccessCards.map((card, index) => (
