@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import PropTypes from "prop-types";
-
 import { useRouter } from "next/router";
 import { encodeUriElement } from "../lib/query-encoding";
 
@@ -40,7 +38,5 @@ function SiteSearchTrigger() {
     </div>
   );
 }
-
-SiteSearchTrigger.propTypes = {};
 
 export default SiteSearchTrigger;
