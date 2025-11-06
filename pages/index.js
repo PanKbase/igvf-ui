@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { abbreviateNumber } from "../lib/general";
-import FetchRequest from "../lib/fetch-request";
 import SiteSearchTrigger from "../components/site-search-trigger";
 
 // SVG Icon Components
