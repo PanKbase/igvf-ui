@@ -569,7 +569,7 @@ export default function Home() {
         {/* Featured Datasets Carousel Section */}
         <section className="mb-20">
           <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
             <p className="text-lg text-slate-600">Explore our latest and most comprehensive research data</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
@@ -579,7 +579,7 @@ export default function Home() {
         {/* Data Access Section */}
         <section className="mb-20">
           <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
             <p className="text-lg text-slate-600">Multiple ways to access and interact with our data</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
@@ -596,7 +596,7 @@ export default function Home() {
         {/* Resources Section */}
         <section>
           <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
             <p className="text-lg text-slate-600">Documentation and support for researchers</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
