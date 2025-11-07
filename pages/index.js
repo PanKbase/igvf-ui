@@ -326,9 +326,15 @@ function FeaturedDatasetsCarousel({ items }) {
     });
   }
 
-  function handleItemClick(item) {
+  function handleDownload(item) {
     if (item.s3Url) {
       window.location.href = item.s3Url;
+    }
+  }
+
+  function handleBrowse(item) {
+    if (item.browseUrl) {
+      window.open(item.browseUrl, "_blank", "noopener,noreferrer");
     }
   }
 
@@ -356,12 +362,25 @@ function FeaturedDatasetsCarousel({ items }) {
           {items.map((item, index) => (
             <div
               key={index}
-              onClick={() => handleItemClick(item)}
-              className="min-w-80 bg-gradient-to-br from-teal-600 via-teal-500 to-cyan-600 rounded-xl p-7 text-white cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-teal-400/30"
+              className="min-w-80 bg-gradient-to-br from-teal-600 via-teal-500 to-cyan-600 rounded-xl p-7 text-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-teal-400/30 flex flex-col"
             >
               <div className="text-xl font-bold mb-3 text-white">{item.title}</div>
               <div className="text-sm opacity-95 leading-relaxed mb-4">{item.description}</div>
-              <div className="text-xs opacity-75 pt-4 border-t border-white/20">{item.meta}</div>
+              <div className="text-xs opacity-75 pt-4 border-t border-white/20 mb-4">{item.meta}</div>
+              <div className="flex gap-3 mt-auto">
+                <button
+                  onClick={() => handleDownload(item)}
+                  className="flex-1 px-4 py-2 bg-white text-teal-600 font-semibold rounded-lg hover:bg-teal-50 transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  Download
+                </button>
+                <button
+                  onClick={() => handleBrowse(item)}
+                  className="flex-1 px-4 py-2 bg-teal-700 text-white font-semibold rounded-lg hover:bg-teal-800 transition-all duration-200 shadow-md hover:shadow-lg border border-teal-600"
+                >
+                  Browse
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -388,6 +407,7 @@ FeaturedDatasetsCarousel.propTypes = {
       meta: PropTypes.string.isRequired,
       s3Url: PropTypes.string.isRequired,
       filename: PropTypes.string.isRequired,
+      browseUrl: PropTypes.string.isRequired,
     }),
   ).isRequired,
 };
@@ -462,6 +482,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS7658QIGY/",
   },
   {
     title: "snATAC Marker Peaks",
@@ -469,6 +490,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
     filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
+    browseUrl: "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
   },
   {
     title: "Pancreatic islet snATAC map",
@@ -476,6 +498,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS0470WCHR/",
   },
   {
     title: "Donor meta-data",
@@ -483,6 +506,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 3.7K donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS5236MJJT/",
   },
   {
     title: "Islet biosample meta-data",
@@ -490,6 +514,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 3.6K samples",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
     filename: "pankbase-biosamples.tar.gz",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1057RJYW/",
   },
 ];
 
