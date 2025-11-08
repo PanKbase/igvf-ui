@@ -219,7 +219,7 @@ export async function requestDonors(
     await request.getMultipleObjectsBulk(paths, [
       "accession",
       "aliases",
-      "sex",
+      "gender",
       "status",
       "taxa",
     ])

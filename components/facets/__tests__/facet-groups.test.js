@@ -45,7 +45,7 @@ describe("Test the `<FacetGroupButton>` component", () => {
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["life_stage", "sex"],
+      facet_fields: ["life_stage", "gender"],
     };
 
     render(
@@ -84,14 +84,14 @@ describe("Test the `<FacetGroupButton>` component", () => {
         {
           field: "type",
           term: "HumanDonor",
-          remove: "/search?sex=female",
+          remove: "/search?gender=female",
         },
       ],
     };
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["life_stage", "sex"],
+      facet_fields: ["life_stage", "gender"],
     };
 
     render(
@@ -127,24 +127,24 @@ describe("Test the `<FacetGroupButton>` component", () => {
   it("renders a non-selected facet group button with selected facet terms", () => {
     const onClick = jest.fn();
     const searchResults = {
-      "@id": "/search?type=HumanDonor&sex=female",
+      "@id": "/search?type=HumanDonor&gender=female",
       filters: [
         {
-          field: "sex",
+          field: "gender",
           term: "female",
           remove: "/search?type=HumanDonor",
         },
         {
           field: "type",
           term: "HumanDonor",
-          remove: "/search?sex=female",
+          remove: "/search?gender=female",
         },
       ],
     };
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["life_stage", "sex"],
+      facet_fields: ["life_stage", "gender"],
     };
 
     render(
@@ -177,24 +177,24 @@ describe("Test the `<FacetGroupButton>` component", () => {
   it("renders a selected facet group button with selected facet terms", () => {
     const onClick = jest.fn();
     const searchResults = {
-      "@id": "/search?type=HumanDonor&sex=female",
+      "@id": "/search?type=HumanDonor&gender=female",
       filters: [
         {
-          field: "sex",
+          field: "gender",
           term: "female",
           remove: "/search?type=HumanDonor",
         },
         {
           field: "type",
           term: "HumanDonor",
-          remove: "/search?sex=female",
+          remove: "/search?gender=female",
         },
       ],
     };
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["life_stage", "sex"],
+      facet_fields: ["life_stage", "gender"],
     };
 
     render(
@@ -239,7 +239,7 @@ describe("Test the `getFacetsInGroup()` function", () => {
           title: "Data Type",
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
         },
         {
@@ -251,13 +251,13 @@ describe("Test the `getFacetsInGroup()` function", () => {
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["life_stage", "sex"],
+      facet_fields: ["life_stage", "gender"],
     };
 
     const groupFacets = getFacetsInGroup(searchResults, facetGroup);
     expect(groupFacets.length).toBe(1);
     expect(groupFacets[0]).toEqual({
-      field: "sex",
+      field: "gender",
       title: "Sex",
     });
   });
@@ -271,7 +271,7 @@ describe("Test the `getFacetsInGroup()` function", () => {
           title: "Data Type",
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
         },
         {
@@ -284,7 +284,7 @@ describe("Test the `getFacetsInGroup()` function", () => {
     const groupFacets = getFacetsInGroup(searchResults, null);
     expect(groupFacets.length).toBe(2);
     expect(groupFacets[0]).toEqual({
-      field: "sex",
+      field: "gender",
       title: "Sex",
     });
     expect(groupFacets[1]).toEqual({
@@ -314,7 +314,7 @@ describe("Test the `<FacetGroup>` component", () => {
           ],
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
           terms: [
             {
@@ -367,7 +367,7 @@ describe("Test the `<FacetGroup>` component", () => {
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["lab.title", "sex"],
+      facet_fields: ["lab.title", "gender"],
     };
 
     render(<FacetGroup searchResults={searchResults} group={facetGroup} />);
@@ -413,21 +413,21 @@ describe("Test the `<FacetGroup>` component", () => {
 
     fireEvent.mouseDown(facetTermCheckbox);
     fireEvent.mouseUp(facetTermCheckbox);
-    expect(window.location.search).toBe("?type=HumanDonor&sex=female");
+    expect(window.location.search).toBe("?type=HumanDonor&gender=female");
 
     facetTermCheckbox = within(facetTerms[1]).getByRole("checkbox");
     fireEvent.mouseDown(facetTermCheckbox);
     await new Promise((r) => setTimeout(r, 500));
     fireEvent.mouseUp(facetTermCheckbox);
     expect(window.location.search).toBe(
-      "?type=HumanDonor&sex=female&sex!=male"
+      "?type=HumanDonor&gender=female&gender!=male"
     );
   });
 
   it("renders a single facet group with selected terms", () => {
     const searchResults = {
       "@id":
-        "/search?type=HumanDonor&sex=female&lab.title=Chongyuan+Luo%2C+UCLA",
+        "/search?type=HumanDonor&gender=female&lab.title=Chongyuan+Luo%2C+UCLA",
       facets: [
         {
           field: "type",
@@ -444,7 +444,7 @@ describe("Test the `<FacetGroup>` component", () => {
           ],
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
           terms: [
             {
@@ -488,18 +488,18 @@ describe("Test the `<FacetGroup>` component", () => {
       ],
       filters: [
         {
-          field: "sex",
+          field: "gender",
           remove: "/search?type=HumanDonor&lab.title=Chongyuan+Luo%2C+UCLA",
           term: "female",
         },
         {
           field: "lab.title",
-          remove: "/search?type=HumanDonor&sex=female",
+          remove: "/search?type=HumanDonor&gender=female",
           term: "Chongyuan Luo, UCLA",
         },
         {
           field: "type",
-          remove: "/search?sex=female&lab.title=Chongyuan+Luo%2C+UCLA",
+          remove: "/search?gender=female&lab.title=Chongyuan+Luo%2C+UCLA",
           term: "HumanDonor",
         },
       ],
@@ -507,7 +507,7 @@ describe("Test the `<FacetGroup>` component", () => {
     const facetGroup = {
       name: "HumanDonor",
       title: "Donor",
-      facet_fields: ["lab.title", "sex"],
+      facet_fields: ["lab.title", "gender"],
     };
 
     render(<FacetGroup searchResults={searchResults} group={facetGroup} />);
@@ -573,7 +573,7 @@ describe("Test the `<FacetGroup>` component", () => {
           ],
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
           terms: [
             {
@@ -685,7 +685,7 @@ describe("Test the `<FacetGroup>` component", () => {
           ],
         },
         {
-          field: "sex",
+          field: "gender",
           title: "Sex",
           terms: [
             {
@@ -767,6 +767,6 @@ describe("Test the `<FacetGroup>` component", () => {
     facetTermCheckbox = within(facetTerms[0]).getByRole("checkbox");
     fireEvent.mouseDown(facetTermCheckbox);
     fireEvent.mouseUp(facetTermCheckbox);
-    expect(window.location.search).toBe("?type=HumanDonor&sex=female");
+    expect(window.location.search).toBe("?type=HumanDonor&gender=female");
   });
 });

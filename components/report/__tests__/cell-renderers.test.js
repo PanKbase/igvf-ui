@@ -1063,21 +1063,21 @@ describe("Unknown-field cell-rendering tests", () => {
     const COLUMN_UNKNOWN = 1;
 
     const searchResults = {
-      "@id": "/multireport?type=HumanDonor&field=%40id&field=sex",
+      "@id": "/multireport?type=HumanDonor&field=%40id&field=gender",
       "@type": ["Report"],
       "@graph": [
         {
           "@id": "/human-donors/IGVFDO499FAP/",
           "@type": ["HumanDonor", "Item"],
-          sex: "female",
+          gender: "female",
         },
       ],
       result_columns: {
         "@id": {
           title: "ID",
         },
-        sex: {
-          title: "Sex",
+        gender: {
+          title: "Gender",
         },
       },
       filters: [

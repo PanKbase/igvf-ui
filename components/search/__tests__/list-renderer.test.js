@@ -619,7 +619,7 @@ describe("Test the HumanDonor component", () => {
       award: "/awards/1U01HG012079-01/",
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
-      sex: "female",
+      gender: "female",
       status: "released",
       taxa: "Homo sapiens",
       uuid: "ee99221f-a11a-4f8b-baf3-9919db92f2f9",
@@ -663,7 +663,7 @@ describe("Test the HumanDonor component", () => {
     expect(status).toHaveTextContent("released");
   });
 
-  it("renders a human donor item without ethnicities nor sex", () => {
+  it("renders a human donor item without ethnicities nor gender", () => {
     const item = {
       "@id": "/human-donors/IGVFDO856PXB/",
       "@type": ["HumanDonor", "Donor", "Item"],
@@ -703,7 +703,7 @@ describe("Test the HumanDonor component", () => {
       award: "/awards/1U01HG012079-01/",
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
-      sex: "female",
+      gender: "female",
       status: "released",
       taxa: "Homo sapiens",
       uuid: "ee99221f-a11a-4f8b-baf3-9919db92f2f9",
@@ -945,7 +945,7 @@ describe("Test the RodentDonor component", () => {
       lab: {
         title: "J. Michael Cherry, Stanford",
       },
-      sex: "male",
+      gender: "male",
       status: "released",
       strain: "some name",
       taxa: "Mus musculus",
@@ -992,7 +992,7 @@ describe("Test the RodentDonor component", () => {
       lab: {
         title: "J. Michael Cherry, Stanford",
       },
-      sex: "male",
+      gender: "male",
       status: "released",
       strain: "some name",
       taxa: "Mus musculus",
@@ -1047,7 +1047,7 @@ describe("Test the RodentDonor component", () => {
       lab: {
         title: "J. Michael Cherry, Stanford",
       },
-      sex: "male",
+      gender: "male",
       status: "released",
       strain: "some name",
       taxa: "Mus musculus",
