@@ -15,7 +15,7 @@ const columns = [
     sorter: (item) => item.accession,
   },
   {
-    id: "sex",
+    id: "gender",
     title: "Gender",
   },
   {

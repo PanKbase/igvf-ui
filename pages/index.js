@@ -4,7 +4,10 @@ import { useState } from "react";
 
 import PropTypes from "prop-types";
 
-import SiteSearchTrigger from "../components/site-search-trigger";
+import SiteSearchTrigger from "../components/site-search-trigger"
+
+
+;
 
 // SVG Icon Components
 function Users({ className }) {
@@ -570,7 +573,7 @@ export default function Home() {
         <section className="mb-20">
           <div className="mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
-            <p className="text-lg text-slate-600">Explore our latest and most comprehensive research data</p>
+            <p className="text-lg text-slate-600">Featured datasets and resources in the Pankbase data library</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <FeaturedDatasetsCarousel items={carouselItems} />
@@ -580,7 +583,7 @@ export default function Home() {
         <section className="mb-20">
           <div className="mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
-            <p className="text-lg text-slate-600">Multiple ways to access and interact with our data</p>
+            <p className="text-lg text-slate-600">Multiple ways to access and interact with the Pankbase data library</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="mb-8">
@@ -597,7 +600,7 @@ export default function Home() {
         <section>
           <div className="mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
-            <p className="text-lg text-slate-600">Documentation and support for researchers</p>
+            <p className="text-lg text-slate-600">Documentation and updates to the Pankbase data library</p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

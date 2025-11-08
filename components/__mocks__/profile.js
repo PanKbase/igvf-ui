@@ -750,7 +750,7 @@ const profiles = {
           type: "string",
         },
       },
-      sex: {
+      gender: {
         title: "Gender",
         type: "string",
       },

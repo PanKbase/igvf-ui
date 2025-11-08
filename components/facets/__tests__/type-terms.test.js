@@ -34,7 +34,7 @@ describe("Test the <TypeTerms> component", () => {
             "@id": "/labs/chongyuan-luo/",
             title: "Chongyuan Luo, UCLA",
           },
-          sex: "female",
+          gender: "female",
           status: "released",
           taxa: "Homo sapiens",
           virtual: false,
@@ -45,7 +45,7 @@ describe("Test the <TypeTerms> component", () => {
       clear_filters: "/search/?type=HumanDonor",
       facet_groups: [
         {
-          facet_fields: ["ethnicities", "sex", "virtual"],
+          facet_fields: ["ethnicities", "gender", "virtual"],
           name: "HumanDonor",
           title: "Donor",
         },
@@ -155,7 +155,7 @@ describe("Test the <TypeTerms> component", () => {
             "@id": "/labs/chongyuan-luo/",
             title: "Chongyuan Luo, UCLA",
           },
-          sex: "female",
+          gender: "female",
           status: "released",
           taxa: "Homo sapiens",
           virtual: false,
@@ -166,7 +166,7 @@ describe("Test the <TypeTerms> component", () => {
       clear_filters: "/search/?type=HumanDonor",
       facet_groups: [
         {
-          facet_fields: ["ethnicities", "sex", "virtual"],
+          facet_fields: ["ethnicities", "gender", "virtual"],
           name: "HumanDonor",
           title: "Donor",
         },
@@ -245,7 +245,7 @@ describe("Test the <TypeTerms> component", () => {
             "@id": "/labs/chongyuan-luo/",
             title: "Chongyuan Luo, UCLA",
           },
-          sex: "female",
+          gender: "female",
           status: "released",
           taxa: "Homo sapiens",
           virtual: false,
@@ -256,7 +256,7 @@ describe("Test the <TypeTerms> component", () => {
       clear_filters: "/search/?type=HumanDonor",
       facet_groups: [
         {
-          facet_fields: ["ethnicities", "sex", "virtual"],
+          facet_fields: ["ethnicities", "gender", "virtual"],
           name: "HumanDonor",
           title: "Donor",
         },
