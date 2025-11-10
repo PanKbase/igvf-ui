@@ -26,9 +26,9 @@ export const UI_VERSION = publicRuntimeConfig.UI_VERSION as string;
 /**
  * Auth0
  */
-export const AUTH0_CLIENT_ID: string = "4ShZjUOPjuhgTHFCuGnG7suSdIV1UhDP";
-export const AUTH0_ISSUER_BASE_DOMAIN: string = "pankbase-prod.us.auth0.com";
-export const AUTH0_AUDIENCE: string = "https://pankbase-prod.us.auth0.com/api/v2/";
+export const AUTH0_CLIENT_ID: string = "0Ht3cCS1Rr5dlptrK1w3PU7O0r2p0fB4";
+export const AUTH0_ISSUER_BASE_DOMAIN: string = "t2depi.auth0.com";
+export const AUTH0_AUDIENCE: string = "https://t2depi.auth0.com/api/v2/";
 
 /**
  * Site title
