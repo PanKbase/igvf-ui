@@ -6,6 +6,7 @@ import NavigationSection from "../components/navigation";
 export const pkbMenu = {
   // Menu data unchanged...
   highlightItems: [
+    { label: "Data Library", path: "/" },
     { label: "PanKgraph", path: "https://pankgraph.org/" },
     {
       label: "Integrated Cell Browser",
