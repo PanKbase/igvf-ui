@@ -72,7 +72,7 @@ export function DonorDataItems({
           )}
           {item.gender && (
             <>
-              <DataItemLabel>Self Reported Gender</DataItemLabel>
+              <DataItemLabel>Gender</DataItemLabel>
               <DataItemValue>{item.gender}</DataItemValue>
             </>
           )}

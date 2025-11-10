@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 
 import SiteSearchTrigger from "../components/site-search-trigger";
 
+
 // SVG Icon Components
 function Users({ className }) {
   return (
