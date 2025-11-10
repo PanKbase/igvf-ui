@@ -24,4 +24,3 @@ GenderTitle.propTypes = {
     title: PropTypes.string.isRequired,
   }).isRequired,
 };
-
