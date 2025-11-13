@@ -499,7 +499,7 @@ const carouselItems = [
   {
     title: "Donor meta-data",
     description: "Comprehensive donor metadata including demographics and clinical information",
-    meta: "Updated: Oct 2025 | 3.7K donors",
+    meta: "Updated: Nov 2025 | 3.7K donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS5236MJJT/",
