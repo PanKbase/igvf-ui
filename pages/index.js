@@ -334,7 +334,7 @@ function FeaturedDatasetsCarousel({ items }) {
 
   function handleBrowse(item) {
     if (item.browseUrl) {
-      window.open(item.browseUrl, "_blank", "noopener,noreferrer");
+      window.location.href = item.browseUrl;
     }
   }
 
@@ -417,8 +417,6 @@ function ResourceCard({ icon, title, description, url }) {
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
@@ -446,8 +444,6 @@ function DataAccessCard({ icon, title, count, description, url }) {
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
