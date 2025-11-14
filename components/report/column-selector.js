@@ -120,7 +120,7 @@ export default function ColumnSelector({
             <div className="border-b border-modal-border p-1 md:flex md:items-center">
               <ChangeAllControls onChangeAll={onChangeAll} />
               <Note className="md:ml-2">
-                The <i>ID</i> column cannot be hidden
+                The <i>ID</i> column cannot be hidden. Selected columns will be included in the TSV download.
               </Note>
             </div>
             <CheckboxArea>

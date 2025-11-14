@@ -2,6 +2,7 @@
 import PropTypes from "prop-types";
 // components/search-results
 import DownloadTSV from "./download-tsv";
+import ExportGuideModal from "./export-guide-modal";
 import ItemsPerPageSelector from "./items-per-page-selector";
 import { ColumnSelector } from "../report";
 import ViewSwitch from "./view-switch";
@@ -30,6 +31,7 @@ export default function SearchResultsHeader({
                 onChangeAll={reportViewExtras.onAllColumnsVisibilityChange}
               />
               <DownloadTSV searchUri={searchResults["@id"]} />
+              <ExportGuideModal />
             </div>
           )}
         </div>
