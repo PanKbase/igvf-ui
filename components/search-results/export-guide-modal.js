@@ -1,6 +1,5 @@
 // node_modules
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import PropTypes from "prop-types";
 import { useState } from "react";
 // components
 import { Button } from "../form-elements";
@@ -14,16 +13,16 @@ function ExportGuideContent() {
   return (
     <div className="prose dark:prose-invert max-w-none">
       <h3>How to Export Data as TSV</h3>
-      
+
       <h4>Quick Start</h4>
       <ol>
         <li><strong>Switch to Report View</strong>: Click the table/grid view button (tabular view) to see data in a table format</li>
-        <li><strong>Select Columns</strong>: Click the "Columns" button to choose which fields to include</li>
-        <li><strong>Download</strong>: Click "Download metadata as TSV" to export your data</li>
+        <li><strong>Select Columns</strong>: Click the &ldquo;Columns&rdquo; button to choose which fields to include</li>
+        <li><strong>Download</strong>: Click &ldquo;Download metadata as TSV&rdquo; to export your data</li>
       </ol>
 
       <h4>Step-by-Step Instructions</h4>
-      
+
       <h5>Step 1: Navigate to Report View</h5>
       <ul>
         <li>Look for the view switcher buttons in the top toolbar</li>
@@ -33,7 +32,7 @@ function ExportGuideContent() {
 
       <h5>Step 2: Customize Columns</h5>
       <ol>
-        <li><strong>Click the "Columns" button</strong> in the toolbar
+        <li><strong>Click the &ldquo;Columns&rdquo; button</strong> in the toolbar
           <ul>
             <li>The button is located next to the view switcher buttons</li>
             <li>It may show an indicator if some columns are currently hidden</li>
@@ -43,17 +42,17 @@ function ExportGuideContent() {
           <ul>
             <li>Check the boxes next to columns you want to <strong>include</strong> in your export</li>
             <li>Uncheck boxes for columns you want to <strong>exclude</strong></li>
-            <li>Use "Show All" to include all available columns</li>
-            <li>Use "Hide All" to exclude all optional columns (ID column will always remain)</li>
+            <li>Use &ldquo;Show All&rdquo; to include all available columns</li>
+            <li>Use &ldquo;Hide All&rdquo; to exclude all optional columns (ID column will always remain)</li>
             <li>Note: The <strong>ID column cannot be hidden</strong> and will always be included</li>
           </ul>
         </li>
-        <li><strong>Click "Close"</strong> when you're done selecting columns</li>
+        <li><strong>Click &ldquo;Close&rdquo;</strong> when you&apos;re done selecting columns</li>
       </ol>
 
       <h5>Step 3: Download Your Data</h5>
       <ol>
-        <li><strong>Click "Download metadata as TSV"</strong> button
+        <li><strong>Click &ldquo;Download metadata as TSV&rdquo; button</strong>
           <ul>
             <li>The button is located next to the Columns button</li>
             <li>It includes a download icon and clear text label</li>
@@ -72,7 +71,7 @@ function ExportGuideContent() {
       <ul>
         <li><strong>Only visible columns</strong> are included in the TSV export</li>
         <li>The columns you see in the table are the columns that will be exported</li>
-        <li>If you hide a column using the Columns button, it won't be in the export</li>
+        <li>If you hide a column using the Columns button, it won&apos;t be in the export</li>
         <li>The ID column is always included, even if you try to hide it</li>
       </ul>
 
@@ -80,20 +79,20 @@ function ExportGuideContent() {
       <ul>
         <li><strong>Preview before exporting</strong>: The table view shows exactly what will be exported</li>
         <li><strong>Customize for your needs</strong>: Select only the columns relevant to your analysis</li>
-        <li><strong>Save time</strong>: Use "Show All" or "Hide All" to quickly adjust column visibility</li>
+        <li><strong>Save time</strong>: Use &ldquo;Show All&rdquo; or &ldquo;Hide All&rdquo; to quickly adjust column visibility</li>
         <li><strong>Multiple exports</strong>: You can export the same data multiple times with different column selections</li>
       </ul>
 
       <h4>Troubleshooting</h4>
-      <p><strong>Q: I don't see the "Download metadata as TSV" button</strong></p>
+      <p><strong>Q: I don&apos;t see the &ldquo;Download metadata as TSV&rdquo; button</strong></p>
       <ul>
-        <li>Make sure you're in <strong>Report view</strong> (table/grid view), not List view</li>
+        <li>Make sure you&apos;re in <strong>Report view</strong> (table/grid view), not List view</li>
         <li>The download button only appears in report view</li>
       </ul>
 
-      <p><strong>Q: The exported file doesn't include the columns I selected</strong></p>
+      <p><strong>Q: The exported file doesn&apos;t include the columns I selected</strong></p>
       <ul>
-        <li>Make sure you clicked "Close" in the Columns modal after making your selections</li>
+        <li>Make sure you clicked &ldquo;Close&rdquo; in the Columns modal after making your selections</li>
         <li>Verify the columns are visible in the table before downloading</li>
       </ul>
 
@@ -149,4 +148,3 @@ export default function ExportGuideModal() {
     </>
   );
 }
-
