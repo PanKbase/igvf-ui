@@ -124,7 +124,7 @@ export function BatchDownloadActuator({
             hasIconOnly={true}
             className="h-full"
           >
-            <ArrowDownTrayIcon className="h-2 w-2" />
+            <ArrowDownTrayIcon className="h-5 w-5" />
           </Button>
         </div>
       </TooltipRef>

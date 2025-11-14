@@ -54,16 +54,18 @@ export default function ViewSwitch({ searchResults, className = null }) {
         href={listViewLink}
         type={isListSelected ? "selected" : "secondary"}
         label={`Select list view${isListSelected ? " (selected)" : ""}`}
+        hasIconOnly={true}
       >
-        <Bars4Icon className="h-4 w-4" />
+        <Bars4Icon className="h-5 w-5" />
       </ButtonLink>
       {reportViewLink && (
         <ButtonLink
           href={reportViewLink}
           type={isReportSelected ? "selected" : "secondary"}
           label={`Select report view${isReportSelected ? " (selected)" : ""}`}
+          hasIconOnly={true}
         >
-          <TableCellsIcon className="h-4 w-4" />
+          <TableCellsIcon className="h-5 w-5" />
         </ButtonLink>
       )}
     </AttachedButtons>
