@@ -481,20 +481,20 @@ const carouselItems = [
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS7658QIGY/",
   },
   {
-    title: "snATAC Marker Peaks",
-    description: "Cell type marker peaks from single-nucleus ATAC-seq analysis",
-    meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
-    filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
-    browseUrl: "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
-  },
-  {
     title: "Pancreatic islet snATAC map",
     description: "Single nuclear ATAC-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS0470WCHR/",
+  },
+  {
+    title: "Cell type peaks from snATAC",
+    description: "Cell type-specific peaks from single-nucleus ATAC-seq analysis",
+    meta: "Updated: Oct 2025",
+    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
+    filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
+    browseUrl: "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
   },
   {
     title: "Donor meta-data",
