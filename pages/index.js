@@ -478,7 +478,7 @@ const carouselItems = [
     meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
-    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS7658QIGY/",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1349YHGQ/",
   },
   {
     title: "Pancreatic islet snATAC map",
