@@ -22,7 +22,7 @@ export default function AnalysisSet({ item: analysisSet }) {
           <SearchListItemType item={analysisSet} />
           {analysisSet.accession}
         </SearchListItemUniqueId>
-        <SearchListItemTitle>{analysisSet.file_set_type}</SearchListItemTitle>
+        <SearchListItemTitle>{analysisSet.summary}</SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(analysisSet.award)
