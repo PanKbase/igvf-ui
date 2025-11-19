@@ -569,7 +569,15 @@ export default class FetchRequest {
     });
     try {
       const response = await fetch(this.pathUrl(path), options);
-      return response.json();
+      const parsed = await this.safeParseJson(response);
+      if (!response.ok) {
+        const error = {
+          ...parsed,
+          isError: true,
+        } as ErrorObject;
+        return error;
+      }
+      return parsed as DataProviderObject;
     } catch (error) {
       console.log(error);
       return NETWORK_ERROR_RESPONSE;
@@ -594,7 +602,15 @@ export default class FetchRequest {
     try {
       logRequest("putObject", path);
       const response = await fetch(this.pathUrl(path), options);
-      return response.json();
+      const parsed = await this.safeParseJson(response);
+      if (!response.ok) {
+        const error = {
+          ...parsed,
+          isError: true,
+        } as ErrorObject;
+        return error;
+      }
+      return parsed as DataProviderObject;
     } catch (error) {
       console.log(error);
       return NETWORK_ERROR_RESPONSE;
@@ -619,7 +635,15 @@ export default class FetchRequest {
     try {
       logRequest("patchObject", path);
       const response = await fetch(this.pathUrl(path), options);
-      return response.json();
+      const parsed = await this.safeParseJson(response);
+      if (!response.ok) {
+        const error = {
+          ...parsed,
+          isError: true,
+        } as ErrorObject;
+        return error;
+      }
+      return parsed as DataProviderObject;
     } catch (error) {
       console.log(error);
       return NETWORK_ERROR_RESPONSE;
