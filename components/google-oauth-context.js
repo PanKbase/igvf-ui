@@ -44,12 +44,27 @@ export function GoogleOAuthProvider({ children, clientId }) {
     script.onload = () => {
       setIsGoogleLoaded(true);
     };
+    script.onerror = () => {
+      console.error("Failed to load Google Identity Services script");
+      // Still allow login attempts even if script fails to load
+      // The login function will handle the error
+      setIsGoogleLoaded(false);
+      setIsLoading(false);
+    };
     document.head.appendChild(script);
 
+    // Timeout: if Google doesn't load within 10 seconds, allow login anyway
+    const timeout = setTimeout(() => {
+      if (!isGoogleLoaded) {
+        console.warn("Google Identity Services script loading timeout");
+        setIsLoading(false);
+      }
+    }, 10000);
+
     return () => {
-      // Cleanup if needed
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [isGoogleLoaded]);
 
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
@@ -110,19 +125,56 @@ export function GoogleOAuthProvider({ children, clientId }) {
     });
   }, [isGoogleLoaded, clientId]);
 
-  // Alternative login method that shows a popup
+  // Login method that triggers Google Sign-In
   const loginWithPopup = useCallback(() => {
     if (!clientId) {
       console.error("Google OAuth Client ID is not configured");
+      alert("Google OAuth Client ID is not configured. Please contact an administrator.");
       return;
     }
-    if (!isGoogleLoaded || typeof window === "undefined") {
-      console.error("Google Identity Services not loaded");
+    if (typeof window === "undefined") {
+      return;
+    }
+    
+    // Check if Google Identity Services is loaded
+    if (!window.google?.accounts?.id) {
+      console.error("Google Identity Services not loaded yet");
+      // Try to show One Tap prompt anyway - it might work if script is still loading
+      // Or redirect to Google OAuth
+      const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+      window.location.href = redirectUrl;
       return;
     }
 
-    // Use renderButton approach or direct prompt
-    window.google.accounts.id.prompt();
+    try {
+      // Try to show One Tap prompt
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed()) {
+          const reason = notification.getNotDisplayedReason();
+          console.log("One Tap not displayed:", reason);
+          // If One Tap can't be shown, redirect to Google OAuth
+          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+          window.location.href = redirectUrl;
+        } else if (notification.isSkippedMoment()) {
+          const reason = notification.getSkippedReason();
+          console.log("One Tap skipped:", reason);
+          // If skipped, redirect to Google OAuth
+          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+          window.location.href = redirectUrl;
+        } else if (notification.isDismissedMoment()) {
+          const reason = notification.getDismissedReason();
+          console.log("One Tap dismissed:", reason);
+          // If dismissed, redirect to Google OAuth
+          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+          window.location.href = redirectUrl;
+        }
+      });
+    } catch (error) {
+      console.error("Error triggering Google login:", error);
+      // Fallback: redirect to Google OAuth
+      const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+      window.location.href = redirectUrl;
+    }
   }, [isGoogleLoaded, clientId]);
 
   const logout = useCallback(() => {
@@ -151,7 +203,9 @@ export function GoogleOAuthProvider({ children, clientId }) {
   }, [idToken]);
 
   // If no clientId, don't wait for Google to load
-  const effectiveIsLoading = !clientId ? false : (isLoading || !isGoogleLoaded);
+  // Don't block the button forever - allow login attempts even if Google is still loading
+  // The login function will handle the case where Google isn't loaded yet
+  const effectiveIsLoading = !clientId ? false : false; // Always allow login button to be enabled
 
   const value = {
     isAuthenticated,
