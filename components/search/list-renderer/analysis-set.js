@@ -15,10 +15,13 @@ import {
 } from "./search-list-item";
 
 export default function AnalysisSet({ item: analysisSet }) {
-  // Use description if available, otherwise fall back to file_set_type + assay_title
+  // Use description if available, otherwise use summary, then fall back to file_set_type + assay_title
   function getTitle() {
     if (analysisSet.description) {
       return analysisSet.description;
+    }
+    if (analysisSet.summary) {
+      return analysisSet.summary;
     }
     const parts = [];
     if (analysisSet.file_set_type) {
@@ -27,7 +30,7 @@ export default function AnalysisSet({ item: analysisSet }) {
     if (analysisSet.assay_title) {
       parts.push(analysisSet.assay_title);
     }
-    return parts.length > 0 ? parts.join(" of ") : analysisSet.summary;
+    return parts.length > 0 ? parts.join(" of ") : "";
   }
 
   return (
