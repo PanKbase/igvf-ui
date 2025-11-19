@@ -7,6 +7,7 @@
  */
 // lib
 import { DataProviderObject } from "../globals";
+import { AUTH_ERROR_URI } from "./constants";
 import FetchRequest from "./fetch-request";
 import { ErrorObject } from "./fetch-request.d";
 
@@ -58,23 +59,19 @@ export async function getDataProviderUrl(): Promise<string | null> {
 /**
  * Log the current user into the data provider.
  * @param {object} loggedOutSession Logged-out /session object from the server
- * @param {function} getIdToken Google OAuth function to get the current ID token
+ * @param {string} idToken Google OAuth ID token
  * @returns {object} session-properties object for the signed-in user
  */
 export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
-  getIdToken: () => Promise<string | null>
+  idToken: string
 ) {
-  const idToken = await getIdToken();
-  if (!idToken) {
-    throw new Error("No ID token available");
-  }
   const request = new FetchRequest({ session: loggedOutSession });
   return request.postObject("/login", { idToken });
 }
 
 /**
- * Log the current user out of the data provider after logging out of Auth0.
+ * Log the current user out of the data provider after logging out of Google OAuth.
  * @returns {object} Empty object, because async functions have to return something
  */
 export async function logoutDataProvider(): Promise<
@@ -85,25 +82,13 @@ export async function logoutDataProvider(): Promise<
 }
 
 /**
- * Log the user into the authentication provider.
- * @param {function} login Google OAuth function to login
+ * Get a URL to return to after logging in. If we're already on the error page, just return to
+ * the home page so that the user doesn't see an authentication error page after successfully
+ * logging in.
+ * @returns {string} URL to return to after login
  */
-export async function loginAuthProvider(login: () => void) {
-  // Trigger the Google OAuth login process.
-  // Google OAuth will handle the redirect back to the current page automatically.
-  login();
-}
-
-/**
- * Log the user out of the authentication provider. Redirect to the home page by default, or to
- * the specified path.
- * @param {function} logout Google OAuth function to logout of the authentication provider
- * @param {string} altPath Optional path to redirect to after logging out; "/" by default
- */
-export function logoutAuthProvider(logout: () => void, altPath: string = "") {
-  logout();
-  // Redirect to the specified path after logout
-  if (altPath || window.location.pathname !== "/") {
-    window.location.href = altPath || "/";
-  }
+export function getReturnUrl(): string {
+  return window.location.pathname === AUTH_ERROR_URI
+    ? "/"
+    : `${window.location.pathname}${window.location.search}`;
 }

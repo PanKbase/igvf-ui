@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "../../google-oauth-context";
 import PropTypes from "prop-types";
 // components/facets/custom-facets
 import StandardTerms from "./standard-terms";
@@ -12,7 +12,7 @@ export default function InternalActionAuditTerms({
   facet,
   updateQuery,
 }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   if (isAuthenticated) {
     return (

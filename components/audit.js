@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "./google-oauth-context";
 import { AnimatePresence, motion } from "framer-motion";
 import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import _ from "lodash";
@@ -311,7 +311,7 @@ AuditLevel.propTypes = {
  * and then can also open the audit narratives for each audit level.
  */
 export function AuditDetail({ item, auditState, className = null }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   // Get the item's audit levels visible at the current authentication level.
   const auditLevels = getVisibleItemAuditLevels(item, isAuthenticated);
@@ -378,7 +378,7 @@ AuditDetail.propTypes = {
  * Displays the audit status button for an item.
  */
 export function AuditStatus({ item, auditState }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
   const itemAuditLevels = getVisibleItemAuditLevels(item, isAuthenticated);
 
   if (itemAuditLevels.length > 0) {

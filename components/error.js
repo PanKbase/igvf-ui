@@ -1,9 +1,9 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import { useContext } from "react";
 // components
+import { useGoogleAuth } from "./google-oauth-context";
 import { ButtonAsLink } from "./form-elements";
 import SessionContext from "./session-context";
 // lib
@@ -16,7 +16,7 @@ import { HTTP_STATUS_CODE } from "../lib/fetch-request";
  * Display the contents of a standard error page.
  */
 export default function Error({ statusCode = "ERROR", title = "" }) {
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, login } = useGoogleAuth();
   const { setAuthStageLogin } = useContext(SessionContext);
 
   // Login help should appear if the status code is 403 and the user has not logged in.
@@ -41,7 +41,7 @@ export default function Error({ statusCode = "ERROR", title = "" }) {
                 This object is not currently publicly released. Please{" "}
                 <ButtonAsLink
                   onClick={() => {
-                    loginAuthProvider(loginWithRedirect);
+                    loginAuthProvider(login);
                     setAuthStageLogin();
                   }}
                 >

@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "./google-oauth-context";
 import { empty } from "empty-schema";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
@@ -88,7 +88,7 @@ function schemaToName(schema) {
  * A custom label can be suplied with the `label` prop.
  */
 export function AddLink({ schema, label = null }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
   if (isAuthenticated && canEdit(schema)) {
     const schemaName = schemaToName(schema);
     if (schemaName) {
@@ -122,7 +122,7 @@ AddLink.propTypes = {
 
 export function AddInstancePage({ collection }) {
   const { profiles, session } = useContext(SessionContext);
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   /**
    * The text is the current editor text of the underlying Ace editor component.

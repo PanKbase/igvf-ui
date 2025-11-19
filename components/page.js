@@ -6,7 +6,6 @@
  */
 
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
@@ -41,6 +40,7 @@ import Modal from "./modal";
 import PageComponent from "./page-component";
 import PagePreamble from "./page-preamble";
 import SessionContext from "./session-context";
+import { useGoogleAuth } from "./google-oauth-context";
 // lib
 import FetchRequest from "../lib/fetch-request";
 import {
@@ -931,7 +931,7 @@ export default function Page({
   const [redirectToPage, setRedirectToPage] = useState("");
 
   const router = useRouter();
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
   const { session } = useContext(SessionContext);
 
   useEffect(() => {

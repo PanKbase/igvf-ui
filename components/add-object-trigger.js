@@ -3,13 +3,13 @@
  */
 
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "./google-oauth-context";
 import PropTypes from "prop-types";
 // components
 import { ButtonLink } from "./form-elements";
 
 export default function AddObjectTrigger({ addSpec = null }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
   if (addSpec) {
     return (
       <>

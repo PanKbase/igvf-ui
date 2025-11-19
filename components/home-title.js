@@ -218,7 +218,7 @@ export default function Header() {
             >
               Schema
             </a>
-            <NavigationSection />
+            <NavigationSection isHorizontal />
           </div>
           <div className="menu">
             <div className="main-menu-items">

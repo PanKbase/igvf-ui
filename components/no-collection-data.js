@@ -1,9 +1,9 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import { useContext } from "react";
 // components
+import { useGoogleAuth } from "./google-oauth-context";
 import { DataPanel } from "./data-area";
 import { ButtonAsLink } from "./form-elements";
 import GlobalContext from "./global-context";
@@ -17,7 +17,7 @@ import { LINK_INLINE_STYLE } from "../lib/constants";
  */
 export default function NoCollectionData({ pageTitle = "" }) {
   const { page } = useContext(GlobalContext);
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, login } = useGoogleAuth();
   const { setAuthStageLogin } = useContext(SessionContext);
 
   return (
@@ -28,7 +28,7 @@ export default function NoCollectionData({ pageTitle = "" }) {
           Please{" "}
           <ButtonAsLink
             onClick={() => {
-              loginAuthProvider(loginWithRedirect);
+              loginAuthProvider(login);
               setAuthStageLogin();
             }}
           >

@@ -332,6 +332,46 @@ export default class FetchRequest {
    * @returns {Promise<DataProviderObject|ErrorObject>} Requested object, error object, or
    *  `defaultErrorValue` if given and the request fails
    */
+  /**
+   * Safely parse JSON response, handling non-JSON responses gracefully.
+   * @param {Response} response Fetch response object
+   * @returns {Promise<object>} Parsed JSON object or error object if parsing fails
+   */
+  private async safeParseJson(response: Response): Promise<object> {
+    const contentType = response.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+
+    // Read response as text first (can only read body once)
+    const text = await response.text();
+
+    if (!isJson) {
+      // Response is not JSON, return error object
+      return {
+        isError: true,
+        "@type": ["Error"],
+        status: "error",
+        code: response.status,
+        title: `HTTP ${response.status} ${response.statusText}`,
+        description: text.substring(0, 200), // Limit description length
+      };
+    }
+
+    // Try to parse as JSON
+    try {
+      return JSON.parse(text);
+    } catch (parseError) {
+      // JSON parsing failed, return error with response text
+      return {
+        isError: true,
+        "@type": ["Error"],
+        status: "error",
+        code: response.status,
+        title: `Failed to parse JSON response`,
+        description: text.substring(0, 200), // Limit description length
+      };
+    }
+  }
+
   public async getObject(
     path: string,
     options = { isDbRequest: false }
@@ -345,14 +385,15 @@ export default class FetchRequest {
         this.pathUrl(path, options.isDbRequest),
         headerOptions
       );
+      const parsed = await this.safeParseJson(response);
       if (!response.ok) {
         const error = {
-          ...(await response.json()),
+          ...parsed,
           isError: true,
         } as ErrorObject;
         return err(error);
       }
-      const results = (await response.json()) as DataProviderObject;
+      const results = parsed as DataProviderObject;
       return ok(results);
     } catch (error) {
       console.log("NETWORK ERROR: ", error);
@@ -375,14 +416,15 @@ export default class FetchRequest {
     try {
       logRequest("getObjectByUrl", url);
       const response = await fetch(url, headerOptions);
+      const parsed = await this.safeParseJson(response);
       if (!response.ok) {
         const error = {
-          ...(await response.json()),
+          ...parsed,
           isError: true,
         } as ErrorObject;
         return err(error);
       }
-      const results = (await response.json()) as DataProviderObject;
+      const results = parsed as DataProviderObject;
       return ok(results);
     } catch (error) {
       console.log(error);

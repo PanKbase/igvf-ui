@@ -1,5 +1,4 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bars2Icon, MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
@@ -24,6 +23,7 @@ import Icon from "./icon";
 import SiteLogo from "./logo";
 import Modal from "./modal";
 import SessionContext from "./session-context";
+import { useGoogleAuth } from "./google-oauth-context";
 // lib
 import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
 import { UC } from "../lib/constants";
@@ -251,25 +251,82 @@ NavigationButton.propTypes = {
 };
 
 /**
- * NavigationExpanded item to handle the Sign In button.
+ * NavigationExpanded item to handle the Sign In button with Google OAuth.
  */
 function NavigationSignInItem({ id, isNarrowNav = false, children }) {
-  const { isLoading, loginWithRedirect } = useAuth0();
+  const { isLoading, login, isAuthenticated } = useGoogleAuth();
   const { setAuthStageLogin } = useContext(SessionContext);
 
+  if (isAuthenticated) {
+    return null; // Don't show sign-in button if already authenticated
+  }
+
+  function handleLogin(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    loginAuthProvider(login);
+    setAuthStageLogin();
+  }
+
+  // For narrow nav (collapsed), use the icon
+  if (isNarrowNav) {
+    return (
+      <li>
+        <NavigationButton
+          id={id}
+          onClick={handleLogin}
+          isNarrowNav={isNarrowNav}
+          isDisabled={isLoading}
+        >
+          {children}
+        </NavigationButton>
+      </li>
+    );
+  }
+
+  // For expanded nav, show Google Sign-In button
   return (
     <li>
-      <NavigationButton
+      <button
         id={id}
-        onClick={() => {
-          loginAuthProvider(loginWithRedirect);
-          setAuthStageLogin();
+        onClick={handleLogin}
+        disabled={isLoading}
+        className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+        style={{
+          fontFamily: "Roboto, sans-serif",
         }}
-        isNarrowNav={isNarrowNav}
-        isDisabled={isLoading}
       >
-        {children}
-      </NavigationButton>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 18 18"
+          xmlns="http://www.w3.org/2000/svg"
+          className="mr-1"
+        >
+          <g fill="#000" fillRule="evenodd">
+            <path
+              d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"
+              fill="#EA4335"
+            />
+            <path
+              d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.21 1.18-.84 2.18-1.79 2.85l2.75 2.13c1.66-1.52 2.72-3.76 2.72-6.48z"
+              fill="#4285F4"
+            />
+            <path
+              d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"
+              fill="#FBBC05"
+            />
+            <path
+              d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.75-2.13c-.76.53-1.78.9-3.21.9-2.38 0-4.4-1.57-5.12-3.74L.96 13.04C2.45 15.98 5.48 18 9 18z"
+              fill="#34A853"
+            />
+            <path d="M0 0h18v18H0z" fill="none" />
+          </g>
+        </svg>
+        {isLoading ? "Signing in..." : "Sign in with Google"}
+      </button>
     </li>
   );
 }
@@ -296,7 +353,7 @@ function NavigationSignOutItem({
   const [isWarningOpen, setIsWarningOpen] = useState(false);
 
   const { sessionProperties, setAuthStageLogout } = useContext(SessionContext);
-  const { logout } = useAuth0();
+  const { logout } = useGoogleAuth();
 
   /**
    * Called when the user clicks the Sign Out button. Log out of both the authentication provider
@@ -531,8 +588,8 @@ NavigationList.propTypes = {
 function NavigationExpanded({ navigationClick }) {
   // Holds the ids of the currently open parent navigation items
   const [openedParents, setOpenedParents] = React.useState([]);
-  // Current Auth0 information
-  const { isAuthenticated } = useAuth0();
+  // Current Google OAuth information
+  const { isAuthenticated } = useGoogleAuth();
   // Logged-in session-properties object
   const { sessionProperties } = useContext(SessionContext);
 
@@ -598,8 +655,81 @@ NavigationExpanded.propTypes = {
   // toggleNavCollapsed: PropTypes.func,
 };
 
+/**
+ * Horizontal auth button for top menu bar - shows full Google Sign-In button or user icon
+ */
+function HorizontalAuthButton() {
+  const { isAuthenticated, isLoading, login } = useGoogleAuth();
+  const { setAuthStageLogin } = useContext(SessionContext);
+
+  if (isAuthenticated) {
+    // Show user icon that links to profile
+    return (
+      <Link
+        href="/user-profile"
+        className="topmenu-item flex items-center justify-center"
+        aria-label="User profile"
+      >
+        <Icon.UserSignedIn className="h-6 w-6" />
+      </Link>
+    );
+  }
+
+  // Show Google Sign-In button - render just the button, not wrapped in li
+
+  function handleLogin(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    loginAuthProvider(login);
+    setAuthStageLogin();
+  }
+
+  return (
+    <button
+      id="authenticate"
+      onClick={handleLogin}
+      disabled={isLoading}
+      className="topmenu-item flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+      style={{
+        fontFamily: "Roboto, sans-serif",
+      }}
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        xmlns="http://www.w3.org/2000/svg"
+        className="mr-1"
+      >
+        <g fill="#000" fillRule="evenodd">
+          <path
+            d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"
+            fill="#EA4335"
+          />
+          <path
+            d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.21 1.18-.84 2.18-1.79 2.85l2.75 2.13c1.66-1.52 2.72-3.76 2.72-6.48z"
+            fill="#4285F4"
+          />
+          <path
+            d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"
+            fill="#FBBC05"
+          />
+          <path
+            d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.75-2.13c-.76.53-1.78.9-3.21.9-2.38 0-4.4-1.57-5.12-3.74L.96 13.04C2.45 15.98 5.48 18 9 18z"
+            fill="#34A853"
+          />
+          <path d="M0 0h18v18H0z" fill="none" />
+        </g>
+      </svg>
+      {isLoading ? "Signing in..." : "Sign in with Google"}
+    </button>
+  );
+}
+
 function NavigationCollapsed() {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   return (
     <NavigationList className="w-full [&>ul>li]:my-2 [&>ul]:flex [&>ul]:flex-col [&>ul]:items-center">
@@ -615,6 +745,11 @@ function NavigationCollapsed() {
     </NavigationList>
   );
 }
+
+NavigationSection.propTypes = {
+  // If true, renders the full sign-in button for horizontal menus instead of collapsed sidebar
+  isHorizontal: PropTypes.bool,
+};
 
 //NavigationCollapsed.propTypes = {
 // Function to call when user clicks a navigation item
@@ -645,7 +780,7 @@ NavigationLogo.propTypes = {
 /**
  * Displays the navigation bar (for mobile) or the sidebar navigation (for desktop).
  */
-export default function NavigationSection() {
+export default function NavigationSection({ isHorizontal = false }) {
   // True if user has opened the mobile menu
   const [isClient, setIsClient] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -714,7 +849,11 @@ export default function NavigationSection() {
       </div>
       {/* Render only the collapsed navigation for desktop */}
       <div className="hidden md:block">
-        <NavigationCollapsed navigationClick={navigationClick} />
+        {isHorizontal ? (
+          <HorizontalAuthButton />
+        ) : (
+          <NavigationCollapsed navigationClick={navigationClick} />
+        )}
       </div>
 
       <MobileCollapsableArea

@@ -212,6 +212,8 @@ def test_config_fill_in_calculated_config():
         tags=[('xyz', '123')],
     )
     raw_config.pop('backend_url', None)
+    # Remove google_oauth_client_id from raw_config if present (it's in demo config)
+    raw_config.pop('google_oauth_client_id', None)
     calculated_config = fill_in_calculated_config(raw_config)
     assert calculated_config == {
         'frontend': {},

@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "./google-oauth-context";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import React, { useContext, useState, useEffect } from "react";
@@ -93,7 +93,7 @@ export default function EditPage({ item }) {
 
   const path = item["@id"];
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   function editable(item) {
     // cannot edit if not logged in or object not editable

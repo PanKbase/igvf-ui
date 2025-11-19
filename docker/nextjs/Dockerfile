@@ -2,6 +2,10 @@ FROM node:20.10.0-bookworm-slim
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Accept build arguments for Next.js public environment variables
+ARG NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID
+ENV NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID}
+
 WORKDIR /docker
 
 COPY ./docker/nextjs/entrypoint.sh .

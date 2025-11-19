@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "../../google-oauth-context";
 import PropTypes from "prop-types";
 // components
 import { auditMap } from "../../audit";
@@ -9,7 +9,7 @@ import { auditMap } from "../../audit";
  * in the audit panels. This component gets used for the titles of all audit categories.
  */
 export default function AuditTitle({ facet }) {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   if (isAuthenticated || facet.field !== "audit.INTERNAL_ACTION.category") {
     // Extract the audit type from the facet field name, and use it to get the color and title.

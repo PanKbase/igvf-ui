@@ -24,11 +24,12 @@ export const BACKEND_URL = serverRuntimeConfig.BACKEND_URL as string;
 export const UI_VERSION = publicRuntimeConfig.UI_VERSION as string;
 
 /**
- * Auth0
+ * Google OAuth
+ * Set GOOGLE_OAUTH_CLIENT_ID in environment variables or update this value
  */
-export const AUTH0_CLIENT_ID: string = "A8tVvIV3RK2H3K4uYG5lPxu26wPEm8v3";
-export const AUTH0_ISSUER_BASE_DOMAIN: string = "pankbase.us.auth0.com";
-export const AUTH0_AUDIENCE: string = "https://pankbase.us.auth0.com/api/v2/";
+export const GOOGLE_OAUTH_CLIENT_ID: string =
+  (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID) ||
+  ""; // Set your Google OAuth Client ID here or via environment variable
 
 /**
  * Site title

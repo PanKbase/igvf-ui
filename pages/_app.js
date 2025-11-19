@@ -1,19 +1,17 @@
 // node_modules
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Script from "next/script";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 // lib
 import {
-  AUTH0_AUDIENCE,
-  AUTH0_CLIENT_ID,
-  AUTH0_ISSUER_BASE_DOMAIN,
+  GOOGLE_OAUTH_CLIENT_ID,
   BRAND_COLOR,
   SITE_TITLE,
 } from "../lib/constants";
+// components
+import { GoogleOAuthProvider, useGoogleAuth } from "../components/google-oauth-context";
 import DarkModeManager from "../lib/dark-mode-manager";
 // components
 import Error from "../components/error";
@@ -59,7 +57,7 @@ function TestServerWarning() {
 
 function Site({ Component, pageProps, authentication }) {
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
-  const { isLoading } = useAuth0();
+  const { isLoading } = useGoogleAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -167,29 +165,17 @@ Site.propTypes = {
 
 export default function App(props) {
   const [authTransitionPath, setAuthTransitionPath] = useState("");
-  const router = useRouter();
 
-  function onRedirectCallback(appState) {
-    if (appState?.returnTo) {
-      router.replace(appState.returnTo);
-    }
-    setAuthTransitionPath(appState?.returnTo || "");
+  if (!GOOGLE_OAUTH_CLIENT_ID) {
+    console.error("GOOGLE_OAUTH_CLIENT_ID is not set. Please configure it in environment variables or constants.ts");
   }
 
   return (
-    <Auth0Provider
-      domain={AUTH0_ISSUER_BASE_DOMAIN}
-      clientId={AUTH0_CLIENT_ID}
-      onRedirectCallback={onRedirectCallback}
-      authorizationParams={{
-        redirect_uri: typeof window !== "undefined" && window.location.origin,
-        audience: AUTH0_AUDIENCE,
-      }}
-    >
+    <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
       <Site
         {...props}
         authentication={{ authTransitionPath, setAuthTransitionPath }}
       />
-    </Auth0Provider>
+    </GoogleOAuthProvider>
   );
 }

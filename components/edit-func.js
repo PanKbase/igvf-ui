@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import { useGoogleAuth } from "./google-oauth-context";
 import findDuplicatedPropertyKeys from "find-duplicated-property-keys";
 import { PencilSquareIcon } from "@heroicons/react/20/solid";
 import _ from "lodash";
@@ -172,7 +172,7 @@ ControlButton.propTypes = {
 
 export function EditLink({ item }) {
   const { profiles } = useContext(SessionContext);
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useGoogleAuth();
 
   const itemSchema = itemToSchema(item, profiles);
   if (isAuthenticated && itemSchema && canEdit(itemSchema)) {

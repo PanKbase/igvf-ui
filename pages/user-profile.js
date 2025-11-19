@@ -1,5 +1,4 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
 import Image from "next/image";
 import PropTypes from "prop-types";
 import { useContext, useState } from "react";
@@ -13,6 +12,7 @@ import { DataPanel } from "../components/data-area";
 import PagePreamble from "../components/page-preamble";
 import SessionContext from "../components/session-context";
 import Spinner from "../components/spinner";
+import { useGoogleAuth } from "../components/google-oauth-context";
 // lib
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
@@ -23,7 +23,7 @@ export default function UserProfile({ sessionUser = null }) {
     sessionUser ? sessionUser.access_keys : []
   );
   const { session, sessionProperties } = useContext(SessionContext);
-  const { isLoading, user } = useAuth0();
+  const { isLoading, user } = useGoogleAuth();
 
   const username = sessionProperties?.user?.title || "User";
 

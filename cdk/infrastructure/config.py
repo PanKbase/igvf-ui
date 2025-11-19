@@ -53,6 +53,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
+            'google_oauth_client_id': '347389188336-glok4k0ai5kg1vmobd2l84lard95rivi.apps.googleusercontent.com',
             'tags': [
                 ('time-to-live-hours', '60'),
                 ('turn-off-on-friday-night', 'yes'),
@@ -66,6 +67,7 @@ config: Dict[str, Any] = {
                 'max_capacity': 4,
             },
             'backend_url': 'https://pankbase-dev.demo.pankbase.org',
+            'google_oauth_client_id': '347389188336-glok4k0ai5kg1vmobd2l84lard95rivi.apps.googleusercontent.com',
             'tags': [
             ],
         },
@@ -78,6 +80,7 @@ config: Dict[str, Any] = {
             },
             'backend_url': 'https://api.staging.pankbase.org',
             'use_subdomain': False,
+            'google_oauth_client_id': '347389188336-glok4k0ai5kg1vmobd2l84lard95rivi.apps.googleusercontent.com',
             'tags': [
             ],
         },
@@ -90,6 +93,7 @@ config: Dict[str, Any] = {
             },
             'backend_url': 'https://api.sandbox.pankbase.org',
             'use_subdomain': False,
+            'google_oauth_client_id': '347389188336-glok4k0ai5kg1vmobd2l84lard95rivi.apps.googleusercontent.com',
             'tags': [
             ],
         },
@@ -102,6 +106,7 @@ config: Dict[str, Any] = {
             },
             'backend_url': 'https://api.data.pankbase.org',
             'use_subdomain': False,
+            'google_oauth_client_id': '347389188336-glok4k0ai5kg1vmobd2l84lard95rivi.apps.googleusercontent.com',
             'tags': [
             ],
         },
@@ -126,6 +131,7 @@ class Config:
     tags: List[Tuple[str, str]]
     url_prefix: Optional[str] = None
     use_subdomain: bool = True
+    google_oauth_client_id: Optional[str] = None
     common: Common = field(
         default_factory=Common
     )

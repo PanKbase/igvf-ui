@@ -5,6 +5,7 @@ from constructs import Construct
 
 from aws_cdk.aws_ec2 import Port
 
+from aws_cdk.aws_ecr_assets import DockerImageAsset
 from aws_cdk.aws_ecs import AwsLogDriverMode
 from aws_cdk.aws_ecs import CfnService
 from aws_cdk.aws_ecs import ContainerImage
@@ -79,10 +80,27 @@ class Frontend(Construct):
         self._add_alarms()
 
     def _define_docker_assets(self) -> None:
-        self.application_image = ContainerImage.from_asset(
-            '../',
-            file='docker/nextjs/Dockerfile',
+        # Get Google OAuth Client ID from config
+        google_oauth_client_id = getattr(
+            self.props.config,
+            'google_oauth_client_id',
+            None
         )
+        
+        # Use DockerImageAsset to support build args for Next.js public env vars
+        build_args = {}
+        if google_oauth_client_id:
+            build_args['NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID'] = google_oauth_client_id
+        
+        docker_asset = DockerImageAsset(
+            self,
+            'NextJSImage',
+            directory='../',
+            file='docker/nextjs/Dockerfile',
+            build_args=build_args,
+        )
+        
+        self.application_image = ContainerImage.from_docker_image_asset(docker_asset)
         self.nginx_image = ContainerImage.from_asset(
             '../docker/nginx/',
         )
@@ -128,14 +146,27 @@ class Frontend(Construct):
 
     def _add_application_container_to_task(self) -> None:
         container_name = 'nextjs'
+        # Get Google OAuth Client ID from config
+        google_oauth_client_id = getattr(
+            self.props.config,
+            'google_oauth_client_id',
+            None
+        )
+        
+        environment = {
+            'NODE_ENV': 'production',
+            'BACKEND_URL': self.props.config.backend_url,
+        }
+        
+        # Add Google OAuth Client ID if available (for runtime, though it's already baked into build)
+        if google_oauth_client_id:
+            environment['NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID'] = google_oauth_client_id
+        
         self.fargate_service.task_definition.add_container(
             'ApplicationContainer',
             container_name=container_name,
             image=self.application_image,
-            environment={
-                'NODE_ENV': 'production',
-                'BACKEND_URL': self.props.config.backend_url,
-            },
+            environment=environment,
             logging=LogDriver.aws_logs(
                 stream_prefix=container_name,
                 mode=AwsLogDriverMode.NON_BLOCKING,
