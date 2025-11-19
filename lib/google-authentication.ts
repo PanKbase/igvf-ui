@@ -72,12 +72,12 @@ export async function loginDataProvider(
   // Ensure the URL doesn't have a trailing slash to avoid Next.js redirect issues
   // If dataProviderUrl points to the frontend (data.pankbase.org), convert to backend API (api.data.pankbase.org)
   let baseUrl = dataProviderUrl.endsWith('/') ? dataProviderUrl.slice(0, -1) : dataProviderUrl;
-  
+
   // Convert frontend URL to backend API URL if needed
   if (baseUrl.includes('data.pankbase.org') && !baseUrl.includes('api.data.pankbase.org')) {
     baseUrl = baseUrl.replace('data.pankbase.org', 'api.data.pankbase.org');
   }
-  
+
   const response = await fetch(`${baseUrl}/login`, {
     method: 'POST',
     headers: {
