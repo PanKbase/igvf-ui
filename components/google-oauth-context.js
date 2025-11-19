@@ -20,7 +20,6 @@ export function useGoogleAuth() {
 
 export function GoogleOAuthProvider({ children, clientId }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [idToken, setIdToken] = useState(null);
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
@@ -49,7 +48,6 @@ export function GoogleOAuthProvider({ children, clientId }) {
       // Still allow login attempts even if script fails to load
       // The login function will handle the error
       setIsGoogleLoaded(false);
-      setIsLoading(false);
     };
     document.head.appendChild(script);
 
@@ -57,7 +55,6 @@ export function GoogleOAuthProvider({ children, clientId }) {
     const timeout = setTimeout(() => {
       if (!isGoogleLoaded) {
         console.warn("Google Identity Services script loading timeout");
-        setIsLoading(false);
       }
     }, 10000);
 
@@ -85,16 +82,11 @@ export function GoogleOAuthProvider({ children, clientId }) {
         localStorage.removeItem("google_oauth_id_token");
       }
     }
-    setIsLoading(false);
   }, []);
 
   // Initialize Google Identity Services when loaded
   useEffect(() => {
     if (!isGoogleLoaded || !clientId || typeof window === "undefined") {
-      // If no clientId, just mark as not loading and allow the app to work without auth
-      if (!clientId) {
-        setIsLoading(false);
-      }
       return;
     }
 
@@ -135,7 +127,7 @@ export function GoogleOAuthProvider({ children, clientId }) {
     if (typeof window === "undefined") {
       return;
     }
-    
+
     // Check if Google Identity Services is loaded
     if (!window.google?.accounts?.id) {
       console.error("Google Identity Services not loaded yet");
