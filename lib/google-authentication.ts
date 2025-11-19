@@ -79,13 +79,13 @@ export async function loginDataProvider(
     credentials: 'include',
     body: JSON.stringify({ idToken }),
   });
-  
+
   // Parse JSON response safely
   const contentType = response.headers.get("content-type") || "";
   const isJson = contentType.includes("application/json");
   const text = await response.text();
-  
-  let parsed: any;
+
+  let parsed: DataProviderObject | ErrorObject;
   if (!isJson) {
     parsed = {
       isError: true,
@@ -109,7 +109,7 @@ export async function loginDataProvider(
       };
     }
   }
-  
+
   if (!response.ok) {
     const error = {
       ...parsed,
