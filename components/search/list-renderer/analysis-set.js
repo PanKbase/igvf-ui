@@ -16,7 +16,7 @@ import {
 
 export default function AnalysisSet({ item: analysisSet }) {
   // Use description if available, otherwise fall back to file_set_type + assay_title
-  const getTitle = () => {
+  function getTitle() {
     if (analysisSet.description) {
       return analysisSet.description;
     }
@@ -28,7 +28,7 @@ export default function AnalysisSet({ item: analysisSet }) {
       parts.push(analysisSet.assay_title);
     }
     return parts.length > 0 ? parts.join(" of ") : analysisSet.summary;
-  };
+  }
 
   return (
     <SearchListItemContent>

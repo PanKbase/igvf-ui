@@ -192,9 +192,12 @@ export default function Header() {
               href="https://pankbase.org/funding.html"
             >
               Funding Opportunities{" "}
-              <img
+              <Image
                 style={{ height: "15px", width: "15px" }}
                 src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+                alt=""
+                width={15}
+                height={15}
               />
             </a>
             <a className="topmenu-item" href="https://data.pankbase.org">
