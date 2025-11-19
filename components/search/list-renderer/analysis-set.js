@@ -15,6 +15,21 @@ import {
 } from "./search-list-item";
 
 export default function AnalysisSet({ item: analysisSet }) {
+  // Use description if available, otherwise fall back to file_set_type + assay_title
+  const getTitle = () => {
+    if (analysisSet.description) {
+      return analysisSet.description;
+    }
+    const parts = [];
+    if (analysisSet.file_set_type) {
+      parts.push(analysisSet.file_set_type);
+    }
+    if (analysisSet.assay_title) {
+      parts.push(analysisSet.assay_title);
+    }
+    return parts.length > 0 ? parts.join(" of ") : analysisSet.summary;
+  };
+
   return (
     <SearchListItemContent>
       <SearchListItemMain>
@@ -22,7 +37,7 @@ export default function AnalysisSet({ item: analysisSet }) {
           <SearchListItemType item={analysisSet} />
           {analysisSet.accession}
         </SearchListItemUniqueId>
-        <SearchListItemTitle>{analysisSet.summary}</SearchListItemTitle>
+        <SearchListItemTitle>{getTitle()}</SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(analysisSet.award)
