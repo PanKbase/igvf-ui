@@ -58,16 +58,66 @@ export async function getDataProviderUrl(): Promise<string | null> {
 
 /**
  * Log the current user into the data provider.
+ * @param {string} dataProviderUrl URL of the data provider instance
  * @param {object} loggedOutSession Logged-out /session object from the server
  * @param {string} idToken Google OAuth ID token
  * @returns {object} session-properties object for the signed-in user
  */
 export async function loginDataProvider(
+  dataProviderUrl: string,
   loggedOutSession: { _csrft_: string },
   idToken: string
-) {
-  const request = new FetchRequest({ session: loggedOutSession });
-  return request.postObject("/login", { idToken });
+): Promise<DataProviderObject | ErrorObject> {
+  // Use the full URL to ensure we're hitting the API endpoint, not the frontend
+  const response = await fetch(`${dataProviderUrl}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-Token': loggedOutSession._csrft_,
+    },
+    credentials: 'include',
+    body: JSON.stringify({ idToken }),
+  });
+  
+  // Parse JSON response safely
+  const contentType = response.headers.get("content-type") || "";
+  const isJson = contentType.includes("application/json");
+  const text = await response.text();
+  
+  let parsed: any;
+  if (!isJson) {
+    parsed = {
+      isError: true,
+      "@type": ["Error"],
+      status: "error",
+      code: response.status,
+      title: `HTTP ${response.status} ${response.statusText}`,
+      description: text.substring(0, 200),
+    };
+  } else {
+    try {
+      parsed = JSON.parse(text);
+    } catch (parseError) {
+      parsed = {
+        isError: true,
+        "@type": ["Error"],
+        status: "error",
+        code: response.status,
+        title: `Failed to parse JSON response`,
+        description: text.substring(0, 200),
+      };
+    }
+  }
+  
+  if (!response.ok) {
+    const error = {
+      ...parsed,
+      isError: true,
+    } as ErrorObject;
+    return error;
+  }
+  return parsed as DataProviderObject;
 }
 
 /**

@@ -148,7 +148,7 @@ export function Session({ authentication: _authentication, children }) {
             throw new Error("No ID token available");
           }
           // Attempt to log into igvfd.
-          return loginDataProvider(signedOutSession, idToken);
+          return loginDataProvider(dataProviderUrl, signedOutSession, idToken);
         })
         .then((sessionPropertiesResponse) => {
           if (
