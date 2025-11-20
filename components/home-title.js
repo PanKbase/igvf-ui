@@ -230,6 +230,10 @@ export default Vue.component("PkbHeader", {
 
         this.loadGoogleIdentityServices();
 
+        // Handle Google OAuth callback if token is in URL
+
+        this.handleOAuthCallback();
+
     },
 
     methods: {
@@ -316,7 +320,87 @@ export default Vue.component("PkbHeader", {
 
         },
 
+        handleOAuthCallback() {
+
+            // Handle Google OAuth callback if id_token is in URL hash
+
+            if (typeof window === "undefined") {
+
+                return;
+
+            }
+
+            const hash = window.location.hash;
+
+            if (hash && hash.includes("id_token=")) {
+
+                const params = new URLSearchParams(hash.substring(1));
+
+                const idToken = params.get("id_token");
+
+                if (idToken) {
+
+                    try {
+
+                        // Decode the credential (ID token) to get user info
+
+                        const base64Url = idToken.split(".")[1];
+
+                        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+
+                        const jsonPayload = decodeURIComponent(
+
+                            atob(base64)
+
+                                .split("")
+
+                                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+
+                                .join("")
+
+                        );
+
+                        const userInfo = JSON.parse(jsonPayload);
+
+                        // Store user info and token (same as React version)
+
+                        localStorage.setItem("google_oauth_user", JSON.stringify(userInfo));
+
+                        localStorage.setItem("google_oauth_id_token", idToken);
+
+                        // Clean up URL and reload to trigger React session context
+
+                        window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+
+                        window.location.reload();
+
+                    } catch (error) {
+
+                        console.error("Error processing Google OAuth callback:", error);
+
+                    }
+
+                }
+
+            }
+
+        },
+
         handleGoogleLogin() {
+
+            // Try to use the React GoogleOAuthProvider's login function if available
+
+            // Check if there's a global login function exposed by React context
+
+            if (window.__googleOAuthLogin) {
+
+                window.__googleOAuthLogin();
+
+                return;
+
+            }
+
+            // Otherwise, use the same Google OAuth flow as the React component
 
             const clientId = this.googleOAuthClientId || process.env.GOOGLE_OAUTH_CLIENT_ID || window.GOOGLE_OAUTH_CLIENT_ID;
 
@@ -336,83 +420,65 @@ export default Vue.component("PkbHeader", {
 
             }
 
-            // Check if Google Identity Services is loaded
+            // Use the same login flow as React GoogleOAuthProvider
 
-            if (!window.google?.accounts?.id) {
+            if (window.google?.accounts?.id) {
 
-                console.error("Google Identity Services not loaded yet");
+                try {
 
-                // Fallback: redirect to Google OAuth
+                    // Initialize Google Identity Services with the same callback as React version
 
-                const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+                    window.google.accounts.id.initialize({
 
-                window.location.href = redirectUrl;
+                        client_id: clientId,
 
-                return;
+                        callback: (response) => {
 
-            }
+                            try {
 
-            try {
+                                // Decode the credential (ID token) to get user info
 
-                // Initialize if not already done
+                                const base64Url = response.credential.split(".")[1];
 
-                window.google.accounts.id.initialize({
+                                const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
 
-                    client_id: clientId,
+                                const jsonPayload = decodeURIComponent(
 
-                    callback: (response) => {
+                                    atob(base64)
 
-                        try {
+                                        .split("")
 
-                            // Decode the credential (ID token) to get user info
+                                        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
 
-                            const base64Url = response.credential.split(".")[1];
+                                        .join("")
 
-                            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+                                );
 
-                            const jsonPayload = decodeURIComponent(
+                                const userInfo = JSON.parse(jsonPayload);
 
-                                atob(base64)
+                                // Store user info and token (same as React version)
 
-                                    .split("")
+                                localStorage.setItem("google_oauth_user", JSON.stringify(userInfo));
 
-                                    .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                                localStorage.setItem("google_oauth_id_token", response.credential);
 
-                                    .join("")
+                                // Reload to trigger React session context to pick up the login
 
-                            );
+                                window.location.reload();
 
-                            const userInfo = JSON.parse(jsonPayload);
+                            } catch (error) {
 
-                            // Store user info and token
+                                console.error("Error processing Google ID token:", error);
 
-                            localStorage.setItem("google_oauth_user", JSON.stringify(userInfo));
+                            }
 
-                            localStorage.setItem("google_oauth_id_token", response.credential);
+                        },
 
-                            // Emit event or reload page to update auth state
+                    });
 
-                            window.location.reload();
+                    // Try to show One Tap prompt (same as React version)
 
-                        } catch (error) {
-
-                            console.error("Error processing Google ID token:", error);
-
-                        }
-
-                    },
-
-                });
-
-                // Try to show One Tap prompt
-
-                window.google.accounts.id.prompt((notification) => {
-
-                    if (notification.isNotDisplayed()) {
-
-                        const reason = notification.getNotDisplayedReason();
-
-                        console.log("One Tap not displayed:", reason);
+                    window.google.accounts.id.prompt((notification) => {
 
                         // If One Tap can't be shown, redirect to Google OAuth
 
@@ -420,39 +486,23 @@ export default Vue.component("PkbHeader", {
 
                         window.location.href = redirectUrl;
 
-                    } else if (notification.isSkippedMoment()) {
+                    });
 
-                        const reason = notification.getSkippedReason();
+                } catch (error) {
 
-                        console.log("One Tap skipped:", reason);
+                    console.error("Error triggering Google login:", error);
 
-                        // If skipped, redirect to Google OAuth
+                    // Fallback: redirect to Google OAuth
 
-                        const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
+                    const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
 
-                        window.location.href = redirectUrl;
+                    window.location.href = redirectUrl;
 
-                    } else if (notification.isDismissedMoment()) {
+                }
 
-                        const reason = notification.getDismissedReason();
+            } else {
 
-                        console.log("One Tap dismissed:", reason);
-
-                        // If dismissed, redirect to Google OAuth
-
-                        const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-
-                        window.location.href = redirectUrl;
-
-                    }
-
-                });
-
-            } catch (error) {
-
-                console.error("Error triggering Google login:", error);
-
-                // Fallback: redirect to Google OAuth
+                // Google Identity Services not loaded, redirect directly to Google OAuth
 
                 const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
 
