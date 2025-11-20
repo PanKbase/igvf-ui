@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import PropTypes from "prop-types";
 import { GOOGLE_OAUTH_CLIENT_ID } from "../lib/constants";
 
 export const pkbMenu = {
@@ -123,7 +123,6 @@ function injectFont(fontUrl) {
 }
 
 export default function Header({ googleOAuthClientId }) {
-  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -145,7 +144,6 @@ export default function Header({ googleOAuthClientId }) {
 
     // Check if already loaded
     if (window.google?.accounts?.id) {
-      setIsGoogleLoaded(true);
       return;
     }
 
@@ -153,12 +151,8 @@ export default function Header({ googleOAuthClientId }) {
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.defer = true;
-    script.onload = () => {
-      setIsGoogleLoaded(true);
-    };
     script.onerror = () => {
       console.error("Failed to load Google Identity Services script");
-      setIsGoogleLoaded(false);
     };
     document.head.appendChild(script);
   }
@@ -262,7 +256,7 @@ export default function Header({ googleOAuthClientId }) {
         });
 
         // Try to show One Tap prompt (same as React version)
-        window.google.accounts.id.prompt((notification) => {
+        window.google.accounts.id.prompt((_notification) => {
           // If One Tap can't be shown, redirect to Google OAuth
           const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
             window.location.origin
@@ -289,14 +283,15 @@ export default function Header({ googleOAuthClientId }) {
   function isActive(path) {
     //compare menu item's path to current path to set active
     //but only the first instance
-    if (menuItemActive) return false;
+    if (menuItemActive) {
+      return false;
+    }
     const currentPath = window.location.pathname;
     if (path === currentPath) {
       menuItemActive = true;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   return (
@@ -554,3 +549,7 @@ export default function Header({ googleOAuthClientId }) {
     </div>
   );
 }
+
+Header.propTypes = {
+  googleOAuthClientId: PropTypes.string,
+};
