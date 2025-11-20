@@ -17,12 +17,15 @@ import {
 export default function AnalysisSet({ item: analysisSet }) {
   // Use description if available, otherwise use summary, then fall back to file_set_type + assay_title
   function getTitle() {
-    if (analysisSet.description) {
+    // Prioritize description if available in search results
+    if (analysisSet.description && analysisSet.description.trim()) {
       return analysisSet.description;
     }
-    if (analysisSet.summary) {
+    // Fall back to summary if description is not available
+    if (analysisSet.summary && analysisSet.summary.trim()) {
       return analysisSet.summary;
     }
+    // Fall back to constructing from file_set_type and assay_title
     const parts = [];
     if (analysisSet.file_set_type) {
       parts.push(analysisSet.file_set_type);
