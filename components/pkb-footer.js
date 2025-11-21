@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { pkbMenu } from "./home-title";
 
 export default function PkbFooter() {
@@ -39,6 +38,7 @@ export default function PkbFooter() {
       </div>
 
       {/* Social Media Icons Section */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <div className="f-row align-v-center logos" style={{ gap: "10px" }}>
         <a
           href="https://x.com/PanKbase"
@@ -46,6 +46,7 @@ export default function PkbFooter() {
           title="@PanKbase"
           rel="noopener noreferrer"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "20px", width: "20px" }}
             src="https://hugeampkpncms.org/sites/default/files/images/logos/external/x-black.svg"
@@ -58,6 +59,7 @@ export default function PkbFooter() {
           title="@pankbase.bsky.social"
           rel="noopener noreferrer"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "20px", width: "20px" }}
             src="https://hugeampkpncms.org/sites/default/files/images/logos/external/bluesky-black.svg"
@@ -70,6 +72,7 @@ export default function PkbFooter() {
           title="LinkedIn"
           rel="noopener noreferrer"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "20px", width: "20px" }}
             src="https://hugeampkpncms.org/sites/default/files/images/logos/external/linkedin-black.svg"
@@ -82,6 +85,7 @@ export default function PkbFooter() {
           title="GitHub"
           rel="noopener noreferrer"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "20px", width: "20px" }}
             src="https://hugeampkpncms.org/sites/default/files/images/logos/external/github-black.svg"
@@ -92,6 +96,7 @@ export default function PkbFooter() {
 
       <div className="f-row" style={{ gap: "20px" }}>
         <Link href="/">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "37px", width: "auto" }}
             src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black.svg"
@@ -109,6 +114,7 @@ export default function PkbFooter() {
           target="_blank"
           rel="noopener noreferrer"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ height: "37px", width: "auto" }}
             src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
