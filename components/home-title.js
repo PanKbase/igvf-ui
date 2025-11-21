@@ -283,6 +283,9 @@ export default function Header({ googleOAuthClientId }) {
   function isActive(path) {
     //compare menu item's path to current path to set active
     //but only the first instance
+    if (typeof window === "undefined") {
+      return false;
+    }
     if (menuItemActive) {
       return false;
     }
