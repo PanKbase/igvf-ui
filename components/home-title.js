@@ -5,7 +5,6 @@ import { GOOGLE_OAUTH_CLIENT_ID } from "../lib/constants";
 
 export const pkbMenu = {
   highlightItems: [
-    { label: "Data Library", path: "/" },
     { label: "PanKgraph", path: "https://pankgraph.org/" },
     {
       label: "Integrated Cell Browser",
@@ -21,20 +20,7 @@ export const pkbMenu = {
           label: "Donor Summary",
           path: "https://pankbase.org/donor-metadata.html",
         },
-        {
-          label: "Funding Opportunities",
-          path: "https://pankbase.org/funding.html",
-        },
         { label: "Data Library", path: "https://data.pankbase.org" },
-        {
-          label: "User Guide",
-          path: "https://data.pankbase.org/help/general-help/user-guide",
-        },
-        {
-          label: "Scripts",
-          path: "https://github.com/PanKbase/PanKbase-data-library-scripts",
-        },
-        { label: "Schema", path: "https://data.pankbase.org/profiles" },
         { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
     },
@@ -76,7 +62,7 @@ export const pkbMenu = {
       label: "About",
       path: "",
       subMenuItems: [
-        { label: "Project", path: "https://pankbase.org/projects.html" },
+        { label: "PanKbase Program", path: "https://pankbase.org/projects.html" },
         { label: "People", path: "https://pankbase.org/people.html" },
         { label: "Policies", path: "https://pankbase.org/policies.html" },
         {
@@ -84,6 +70,7 @@ export const pkbMenu = {
           path: "https://pankbase.org/programs.html",
         },
         { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
+        { label: "Funding Opportunities", path: "https://pankbase.org/funding.html" },
       ],
     },
     {
