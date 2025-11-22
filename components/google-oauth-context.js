@@ -36,39 +36,141 @@ export function GoogleOAuthProvider({ children, clientId }) {
       return;
     }
 
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      setIsGoogleLoaded(true);
-    };
-    script.onerror = () => {
-      console.error("Failed to load Google Identity Services script");
-      // Still allow login attempts even if script fails to load
-      // The login function will handle the error
-      setIsGoogleLoaded(false);
-    };
-    document.head.appendChild(script);
-
-    // Timeout: if Google doesn't load within 10 seconds, allow login anyway
-    const timeout = setTimeout(() => {
-      if (!isGoogleLoaded) {
-        console.warn("Google Identity Services script loading timeout");
+    // Check if script is already in the DOM
+    const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (existingScript) {
+      // Script exists, wait for it to load
+      if (window.google?.accounts?.id) {
+        setIsGoogleLoaded(true);
+      } else {
+        existingScript.addEventListener('load', () => {
+          setIsGoogleLoaded(true);
+        });
+        existingScript.addEventListener('error', () => {
+          console.error("Failed to load Google Identity Services script");
+          setIsGoogleLoaded(false);
+        });
       }
-    }, 10000);
+      return;
+    }
+
+    let script = null;
+    let timeout = null;
+    let retryCount = 0;
+    const maxRetries = 3;
+
+    const loadScript = () => {
+      // Remove any existing script first
+      const oldScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+      if (oldScript && oldScript !== script) {
+        oldScript.remove();
+      }
+
+      script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.crossOrigin = "anonymous";
+      
+      script.onload = () => {
+        // Double check that Google is actually available
+        if (window.google?.accounts?.id) {
+          setIsGoogleLoaded(true);
+          if (timeout) clearTimeout(timeout);
+        } else {
+          // Script loaded but Google not available, retry
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(loadScript, 1000 * retryCount);
+          } else {
+            console.error("Google Identity Services script loaded but API not available");
+            setIsGoogleLoaded(false);
+          }
+        }
+      };
+      
+      script.onerror = () => {
+        console.error(`Failed to load Google Identity Services script (attempt ${retryCount + 1}/${maxRetries + 1})`);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(loadScript, 1000 * retryCount);
+        } else {
+          setIsGoogleLoaded(false);
+          // Still allow login attempts - the login function will handle redirect
+        }
+      };
+      
+      document.head.appendChild(script);
+    };
+
+    loadScript();
+
+    // Timeout: if Google doesn't load within 15 seconds, allow login anyway
+    timeout = setTimeout(() => {
+      if (!isGoogleLoaded && window.google?.accounts?.id) {
+        setIsGoogleLoaded(true);
+      } else if (!isGoogleLoaded) {
+        console.warn("Google Identity Services script loading timeout - login will use redirect fallback");
+      }
+    }, 15000);
 
     return () => {
-      clearTimeout(timeout);
+      if (timeout) clearTimeout(timeout);
+      // Don't remove script on cleanup as it might be used by other components
     };
   }, [isGoogleLoaded]);
 
-  // Check if user is already logged in (from localStorage)
+  // Handle OAuth callback from redirect flow
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
 
+    // Check URL hash for ID token (OAuth redirect response)
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const idToken = params.get('id_token');
+      const error = params.get('error');
+      
+      if (error) {
+        console.error("Google OAuth error:", error, params.get('error_description'));
+        // Clear hash to prevent re-processing
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        return;
+      }
+      
+      if (idToken) {
+        try {
+          // Decode the ID token
+          const base64Url = idToken.split(".")[1];
+          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split("")
+              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+              .join("")
+          );
+          const userInfo = JSON.parse(jsonPayload);
+
+          setUser(userInfo);
+          setIdToken(idToken);
+          setIsAuthenticated(true);
+          localStorage.setItem("google_oauth_user", JSON.stringify(userInfo));
+          localStorage.setItem("google_oauth_id_token", idToken);
+          
+          // Clear hash to prevent re-processing
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (error) {
+          console.error("Error processing Google ID token from redirect:", error);
+          // Clear hash
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        return;
+      }
+    }
+
+    // Check if user is already logged in (from localStorage)
     const storedUser = localStorage.getItem("google_oauth_user");
     const storedToken = localStorage.getItem("google_oauth_id_token");
     if (storedUser && storedToken) {
@@ -128,46 +230,19 @@ export function GoogleOAuthProvider({ children, clientId }) {
       return;
     }
 
-    // Check if Google Identity Services is loaded
-    if (!window.google?.accounts?.id) {
-      console.error("Google Identity Services not loaded yet");
-      // Try to show One Tap prompt anyway - it might work if script is still loading
-      // Or redirect to Google OAuth
-      const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-      window.location.href = redirectUrl;
-      return;
-    }
+    // Helper function to create redirect URL
+    const createRedirectUrl = () => {
+      const nonce = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const redirectUri = encodeURIComponent(window.location.origin);
+      return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20email%20profile&nonce=${nonce}`;
+    };
 
-    try {
-      // Try to show One Tap prompt
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed()) {
-          const reason = notification.getNotDisplayedReason();
-          console.log("One Tap not displayed:", reason);
-          // If One Tap can't be shown, redirect to Google OAuth
-          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-          window.location.href = redirectUrl;
-        } else if (notification.isSkippedMoment()) {
-          const reason = notification.getSkippedReason();
-          console.log("One Tap skipped:", reason);
-          // If skipped, redirect to Google OAuth
-          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-          window.location.href = redirectUrl;
-        } else if (notification.isDismissedMoment()) {
-          const reason = notification.getDismissedReason();
-          console.log("One Tap dismissed:", reason);
-          // If dismissed, redirect to Google OAuth
-          const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-          window.location.href = redirectUrl;
-        }
-      });
-    } catch (error) {
-      console.error("Error triggering Google login:", error);
-      // Fallback: redirect to Google OAuth
-      const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=id_token&scope=openid%20email%20profile&nonce=${Math.random()}`;
-      window.location.href = redirectUrl;
-    }
-  }, [isGoogleLoaded, clientId]);
+    // Always use redirect approach - it's more reliable than One Tap
+    // One Tap can be blocked by browsers, ad blockers, or fail to load
+    // Redirect is the standard OAuth flow and works consistently
+    console.log("Initiating Google OAuth login via redirect");
+    window.location.href = createRedirectUrl();
+  }, [clientId]);
 
   const logout = useCallback(() => {
     if (typeof window !== "undefined" && window.google?.accounts?.id) {

@@ -120,8 +120,12 @@ function Site({ Component, pageProps, authentication }) {
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS"
+        strategy="afterInteractive"
+        onError={(e) => {
+          console.warn("Failed to load Google Tag Manager script:", e);
+        }}
       />
-      <Script id="google-analytics-4-script">
+      <Script id="google-analytics-4-script" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -129,6 +133,19 @@ function Site({ Component, pageProps, authentication }) {
           gtag('config', 'G-XYBYEW53TS');
         `}
       </Script>
+      <Script
+        src="https://accounts.google.com/gsi/client"
+        strategy="afterInteractive"
+        async
+        defer
+        onLoad={() => {
+          console.log("Google Identity Services script loaded successfully");
+        }}
+        onError={(e) => {
+          console.warn("Failed to load Google Identity Services script via Next.js Script:", e);
+          // The component will handle loading it via dynamic script tag as fallback
+        }}
+      />
       <TestServerWarning />
       <GlobalContext.Provider value={globalContext}>
         <Session authentication={authentication}>
