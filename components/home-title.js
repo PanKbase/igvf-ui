@@ -1,5 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import Link from "next/link";
+import { useAuth0 } from "@auth0/auth0-react";
+import { loginAuthProvider } from "../lib/authentication";
+import SessionContext from "./session-context";
 
 export const pkbMenu = {
   highlightItems: [
@@ -114,6 +117,10 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const sessionContext = useContext(SessionContext);
+  const setAuthStageLogin = sessionContext?.setAuthStageLogin;
+
   useEffect(() => {
     injectFavicon(
       "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
@@ -135,6 +142,16 @@ export default function Header() {
       }
     }
     return false;
+  }
+
+  function handleLoginClick(e) {
+    e.preventDefault();
+    if (!isLoading && loginWithRedirect) {
+      loginAuthProvider(loginWithRedirect);
+      if (setAuthStageLogin) {
+        setAuthStageLogin();
+      }
+    }
   }
 
   return (
@@ -169,14 +186,21 @@ export default function Header() {
                 />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              <a className="topmenu-item disabled">
-                Login
-                <img
-                  style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-                  alt=""
-                />
-              </a>
+              {!isAuthenticated && (
+                <a
+                  className="topmenu-item"
+                  href="#"
+                  onClick={handleLoginClick}
+                  style={{ cursor: isLoading ? "wait" : "pointer" }}
+                >
+                  Login
+                  <img
+                    style={{ height: "15px", width: "15px" }}
+                    src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
+                    alt=""
+                  />
+                </a>
+              )}
             </div>
             <div className="menu">
               <div className="main-menu-items">
