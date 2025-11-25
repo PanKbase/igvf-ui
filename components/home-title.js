@@ -169,7 +169,7 @@ export default function Header() {
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <div className="menu-wrapper">
             <div className="topmenu">
-              <a className="topmenu-item" href="/funding.html">
+              <a className="topmenu-item" href="https://pankbase.org/funding.html">
                 Funding Opportunities
                 <img
                   style={{ height: "15px", width: "15px" }}
@@ -186,12 +186,12 @@ export default function Header() {
                 />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              {!isAuthenticated && (
+              {isAuthenticated !== true && (
                 <a
                   className="topmenu-item"
                   href="#"
                   onClick={handleLoginClick}
-                  style={{ cursor: isLoading ? "wait" : "pointer" }}
+                  style={{ cursor: isLoading ? "wait" : "pointer", display: "flex" }}
                 >
                   Login
                   <img
