@@ -3,7 +3,6 @@ import Link from "next/link";
 
 export const pkbMenu = {
   highlightItems: [
-    { label: "Data Library", path: "/" },
     { label: "PanKgraph", path: "https://pankgraph.org/" },
     {
       label: "Integrated Cell Browser",
@@ -19,20 +18,7 @@ export const pkbMenu = {
           label: "Donor Summary",
           path: "https://pankbase.org/donor-metadata.html",
         },
-        {
-          label: "Funding Opportunities",
-          path: "https://pankbase.org/funding.html",
-        },
         { label: "Data Library", path: "https://data.pankbase.org" },
-        {
-          label: "User Guide",
-          path: "https://data.pankbase.org/help/general-help/user-guide",
-        },
-        {
-          label: "Scripts",
-          path: "https://github.com/PanKbase/PanKbase-data-library-scripts",
-        },
-        { label: "Schema", path: "https://data.pankbase.org/profiles" },
         { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
     },
