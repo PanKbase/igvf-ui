@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import NavigationSection from "../components/navigation";
 
 export const pkbMenu = {
-  // Menu data unchanged...
   highlightItems: [
     { label: "Data Library", path: "/" },
     { label: "PanKgraph", path: "https://pankgraph.org/" },
@@ -39,7 +36,6 @@ export const pkbMenu = {
         { label: "APIs", path: "https://pankbase.org/apis.html" },
       ],
     },
-    // Other menu items unchanged...
     {
       label: "Resources",
       path: "",
@@ -104,20 +100,13 @@ export const pkbMenu = {
   ],
 };
 
-// SiteLogo component
-function SiteLogo() {
-  return (
-    <Image
-      width={50}
-      height={50}
-      style={{ height: "50px", width: "auto" }}
-      src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
-      alt="PanKbase Logo"
-    />
-  );
-}
+// Module-level variable to track if menu item is active (matching Vue behavior)
+let menuItemActive = false;
 
 function injectFavicon(faviconUrl) {
+  if (typeof window === "undefined") {
+    return;
+  }
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
     favicon = document.createElement("link");
@@ -129,6 +118,9 @@ function injectFavicon(faviconUrl) {
 }
 
 function injectFont(fontUrl) {
+  if (typeof window === "undefined") {
+    return;
+  }
   const linkTag = document.createElement("link");
   linkTag.rel = "stylesheet";
   linkTag.href = fontUrl;
@@ -136,19 +128,15 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  // State to track if any menu item is active (used in isActive function)
-  const [menuItemActive, setMenuItemActive] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      injectFavicon(
-        "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
-      );
-      injectFont(
-        "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-      );
-    }
+    injectFavicon(
+      "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
+    );
+    injectFont(
+      "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    );
   }, []);
+
   function isActive(path) {
     if (menuItemActive) {
       return false;
@@ -156,135 +144,102 @@ export default function Header() {
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
-        setMenuItemActive(true);
+        menuItemActive = true;
         return true;
       }
     }
     return false;
   }
-  // Close menu when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (mobileMenuOpen && !event.target.closest(".pkb-nav")) {
-        setMobileMenuOpen(false);
-      }
-    }
 
-    if (typeof window !== "undefined") {
-      document.addEventListener("click", handleClickOutside);
-      return () => {
-        document.removeEventListener("click", handleClickOutside);
-      };
-    }
-  }, [mobileMenuOpen]);
   return (
-    <div className={`pkb-nav ${!mobileMenuOpen ? "mobile-menu-closed" : ""}`}>
-      <div className="logo">
-        <Link href="https://pankbase.org">
-          <SiteLogo />
-        </Link>
-      </div>
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-        <div className="menu-wrapper">
-          <div className="topmenu">
-            <a
-              className="topmenu-item"
-              href="https://pankbase.org/funding.html"
-            >
-              Funding Opportunities{" "}
-              <img
-                style={{ height: "15px", width: "15px" }}
-                src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
-              />
-            </a>
-            <a className="topmenu-item" href="https://data.pankbase.org">
-              Home
-            </a>
-            <a
-              className="topmenu-item"
-              href="https://data.pankbase.org/help/general-help/user-guide"
-            >
-              User Guide
-            </a>
-            <a
-              className="topmenu-item"
-              href="https://github.com/PanKbase/PanKbase-data-library-exploration"
-            >
-              Scripts
-            </a>
-            <a
-              className="topmenu-item"
-              href="https://data.pankbase.org/profiles"
-            >
-              Schema
-            </a>
-            <NavigationSection />
-          </div>
-          <div className="menu">
-            <div className="main-menu-items">
-              {pkbMenu.highlightItems.map((item, index) => (
+    <div style={{ width: "100%" }}>
+      <div className="pkb-nav">
+        <div className="logo">
+          <Link href="/">
+            <img
+              style={{ height: "50px" }}
+              src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
+              alt="PanKbase Logo"
+            />
+          </Link>
+        </div>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div className="menu-wrapper">
+            <div className="topmenu">
+              <a className="topmenu-item" href="/funding.html">
+                Funding Opportunities
+                <img
+                  style={{ height: "15px", width: "15px" }}
+                  src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+                  alt=""
+                />
+              </a>
+              <a className="topmenu-item disabled">
+                Search
+                <img
+                  style={{ height: "15px", width: "15px" }}
+                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
+                  alt=""
+                />
+              </a>
+              <a className="topmenu-item disabled">Analysis</a>
+              <a className="topmenu-item disabled">
+                Login
+                <img
+                  style={{ height: "15px", width: "15px" }}
+                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
+                  alt=""
+                />
+              </a>
+            </div>
+            <div className="menu">
+              <div className="main-menu-items">
+                {pkbMenu.highlightItems.map((item, index) => (
+                  <div
+                    key={`highlight-${index}`}
+                    className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
+                  >
+                    <a className="menu-item menu-item-main" href={item.path}>
+                      {item.label}
+                    </a>
+                  </div>
+                ))}
+              </div>
+              {pkbMenu.menuItems.map((item, index) => (
                 <div
-                  key={`highlight-${index}`}
+                  key={`menu-${index}`}
                   className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
                 >
-                  <a
-                    className="menu-item menu-item-main"
-                    href={item.path}
-                    target="_self"
-                    rel={
-                      item.path.startsWith("http") ? "noopener noreferrer" : ""
-                    }
-                  >
+                  <a className="menu-item" href={item.path || null}>
                     {item.label}
                   </a>
+                  {item.subMenuItems && (
+                    <div className="submenu">
+                      {item.subMenuItems.map((subItem, subIndex) => (
+                        <a
+                          key={`submenu-${index}-${subIndex}`}
+                          className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
+                          href={subItem.path || null}
+                          data-whatever={isActive(subItem.path).toString()}
+                        >
+                          {subItem.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-            {/* Regular menu items with submenus */}
-            {pkbMenu.menuItems.map((item, index) => (
-              <div
-                key={`menu-${index}`}
-                className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
-              >
-                <a className="menu-item" href={item.path || "#"}>
-                  {item.label}
-                </a>
-                {item.subMenuItems && (
-                  <div className="submenu">
-                    {item.subMenuItems.map((subItem, subIndex) => (
-                      <a
-                        key={`submenu-${index}-${subIndex}`}
-                        className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
-                        href={subItem.path || null}
-                        target="_self"
-                        rel={
-                          subItem.path && subItem.path.startsWith("http")
-                            ? "noopener noreferrer"
-                            : ""
-                        }
-                        data-whatever={isActive(subItem.path).toString()}
-                      >
-                        {subItem.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
           </div>
+          <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
+            <img
+              style={{ height: "37px" }}
+              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
+              alt="HIRN Logo"
+            />
+          </a>
         </div>
-        <a
-          href="https://hirnetwork.org/"
-          target="_self"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={37}
-            height={37}
-            src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
-            alt="HIRN Logo"
-          />
-        </a>
+        <div className="pkb-beta">beta</div>
       </div>
     </div>
   );
