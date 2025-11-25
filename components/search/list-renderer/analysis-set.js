@@ -15,6 +15,27 @@ import {
 } from "./search-list-item";
 
 export default function AnalysisSet({ item: analysisSet }) {
+  // Use description if available, otherwise use summary, then fall back to file_set_type + assay_title
+  function getTitle() {
+    // Prioritize description if available in search results
+    if (analysisSet.description && analysisSet.description.trim()) {
+      return analysisSet.description;
+    }
+    // Fall back to summary if description is not available
+    if (analysisSet.summary && analysisSet.summary.trim()) {
+      return analysisSet.summary;
+    }
+    // Fall back to constructing from file_set_type and assay_title
+    const parts = [];
+    if (analysisSet.file_set_type) {
+      parts.push(analysisSet.file_set_type);
+    }
+    if (analysisSet.assay_title) {
+      parts.push(analysisSet.assay_title);
+    }
+    return parts.length > 0 ? parts.join(" of ") : "";
+  }
+
   return (
     <SearchListItemContent>
       <SearchListItemMain>
@@ -22,7 +43,7 @@ export default function AnalysisSet({ item: analysisSet }) {
           <SearchListItemType item={analysisSet} />
           {analysisSet.accession}
         </SearchListItemUniqueId>
-        <SearchListItemTitle>{analysisSet.summary}</SearchListItemTitle>
+        <SearchListItemTitle>{getTitle()}</SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(analysisSet.award)
