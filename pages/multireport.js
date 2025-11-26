@@ -146,10 +146,7 @@ export default function MultiReport({ searchResults }) {
   const filteredDefaultColumnSpecs = defaultColumnSpecs.filter(
     (columnSpec) => !columnsToHide.includes(columnSpec.id)
   );
-  // Check query string for field parameters
-  const query = new QueryString(queryString);
 
-  const hasSpecificFields = query.getKeyValues("field").length > 0;
   // Always filter out lab, uuid, and award columns from visible columns
   const filteredVisibleColumnSpecs = visibleColumnSpecs.filter(
     (columnSpec) => !columnsToHide.includes(columnSpec.id)
