@@ -87,7 +87,7 @@ export default function FileTable({
             )}
             {finalReportLink && (
               <DataAreaTitleLink href={finalReportLink} label={label}>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 text-white">
                   <TableCellsIcon className="h-4 w-4" />
                   Report view
                 </span>
