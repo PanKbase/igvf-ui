@@ -11,7 +11,10 @@ export default function ReportLink({ href, className = null }) {
   return (
     <div className={className}>
       <ButtonLink href={href} size="sm" isInline>
-        <TableCellsIcon className="h-4 w-4" />
+        <TableCellsIcon
+          className="h-4 w-4 fill-button-primary"
+          style={{ fill: "var(--color-button-primary-label)" }}
+        />
       </ButtonLink>
     </div>
   );
