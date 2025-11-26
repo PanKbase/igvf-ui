@@ -109,10 +109,7 @@ export default function AnalysisSet({
           )}
 
           {analysisSet.donors?.length > 0 && (
-            <DonorTable
-              donors={analysisSet.donors}
-              reportLink={`/multireport/?type=Donor&file_sets.@id=${analysisSet["@id"]}`}
-            />
+            <DonorTable donors={analysisSet.donors} />
           )}
 
           {inputFileSets.length > 0 && (

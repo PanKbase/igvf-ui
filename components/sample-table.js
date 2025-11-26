@@ -107,7 +107,7 @@ export default function SampleTable({
             href={reportLink}
             label="Report of multiplexed samples that have this item as their multiplexed sample"
           >
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 text-white">
               <TableCellsIcon className="h-4 w-4" />
               Report view
             </span>
