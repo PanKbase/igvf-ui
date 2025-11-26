@@ -475,7 +475,7 @@ const carouselItems = [
   {
     title: "Pancreatic islet scRNA map",
     description: "Single cell RNA-seq from human pancreatic islets",
-    meta: "Updated: Oct 2025 | 246,856 cells & 191 donors",
+    meta: "Updated: Oct 2025 | 448,935 cells & 140 donors",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1349YHGQ/",
