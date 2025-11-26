@@ -104,7 +104,7 @@ export default function ColumnSelector({
 
     return (
       <>
-        <Button type="secondary" onClick={() => setIsOpen(true)} isDisabled={isDisabled}>
+        <Button type="primary" onClick={() => setIsOpen(true)} isDisabled={isDisabled}>
           Columns
           <HiddenColumnsIndicator isAnyColumnHidden={isAnyColumnHidden} />
         </Button>
