@@ -72,18 +72,21 @@ export default function ViewSwitch({ searchResults, className = null }) {
           href={reportViewLink}
           type={isReportSelected ? "selected" : "secondary"}
           label={`Select report view${isReportSelected ? " (selected)" : ""}`}
-          hasIconOnly={true}
+          hasIconOnly={false}
         >
-          <TableCellsIcon
-            className={`h-5 w-5 ${
-              isReportSelected ? "fill-button-selected" : "fill-button-secondary"
-            }`}
-            style={{
-              fill: isReportSelected
-                ? "var(--color-button-selected-label)"
-                : "var(--color-button-secondary-label)",
-            }}
-          />
+          <span className="flex items-center">
+            <TableCellsIcon
+              className={`h-5 w-5 mr-2 ${
+                isReportSelected ? "fill-button-selected" : "fill-button-secondary"
+              }`}
+              style={{
+                fill: isReportSelected
+                  ? "var(--color-button-selected-label)"
+                  : "var(--color-button-secondary-label)",
+              }}
+            />
+            Report view
+          </span>
         </ButtonLink>
       )}
     </AttachedButtons>
