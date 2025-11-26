@@ -60,6 +60,11 @@ export default function ViewSwitch({ searchResults, className = null }) {
           className={`h-5 w-5 ${
             isListSelected ? "fill-button-selected" : "fill-button-secondary"
           }`}
+          style={{
+            fill: isListSelected
+              ? "var(--color-button-selected-label)"
+              : "var(--color-button-secondary-label)",
+          }}
         />
       </ButtonLink>
       {reportViewLink && (
@@ -73,6 +78,11 @@ export default function ViewSwitch({ searchResults, className = null }) {
             className={`h-5 w-5 ${
               isReportSelected ? "fill-button-selected" : "fill-button-secondary"
             }`}
+            style={{
+              fill: isReportSelected
+                ? "var(--color-button-selected-label)"
+                : "var(--color-button-secondary-label)",
+            }}
           />
         </ButtonLink>
       )}
