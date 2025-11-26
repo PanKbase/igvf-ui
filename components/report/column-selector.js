@@ -104,7 +104,7 @@ export default function ColumnSelector({
 
     return (
       <>
-        <Button type="primary" onClick={() => setIsOpen(true)} isDisabled={isDisabled}>
+        <Button type="primary" onClick={() => setIsOpen(true)} isDisabled={isDisabled} className="!opacity-100 !visible block" style={{ opacity: 1, visibility: "visible" }}>
           Columns
           <HiddenColumnsIndicator isAnyColumnHidden={isAnyColumnHidden} />
         </Button>
