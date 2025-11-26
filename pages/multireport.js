@@ -215,7 +215,7 @@ export default function MultiReport({ searchResults }) {
     const items = searchResults["@graph"];
     const columns = generateColumns(
       selectedTypes,
-      visibleColumnSpecs: filteredVisibleColumnSpecs,
+      filteredVisibleColumnSpecs,
       schemaProperties
     );
 
