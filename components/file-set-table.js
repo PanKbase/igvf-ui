@@ -20,7 +20,7 @@ const fileSetColumns = [
     id: "summary",
     title: "Summary",
     sorter: (item) => item.summary.toLowerCase(),
-  }
+  },
 ];
 
 /**
