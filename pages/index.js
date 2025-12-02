@@ -378,7 +378,7 @@ function FeaturedDatasetsCarousel({ items }) {
                   onClick={() => handleBrowse(item)}
                   className="flex-1 px-4 py-2 bg-teal-700 text-white font-semibold rounded-lg hover:bg-teal-800 transition-all duration-200 shadow-md hover:shadow-lg border border-teal-600"
                 >
-                  Browse
+                  Details
                 </button>
               </div>
             </div>
