@@ -73,7 +73,10 @@ export default function FileSetTable({
             href={composedReportLink}
             label="Report of file sets that belong to this item"
           >
-            <TableCellsIcon className="h-4 w-4" />
+            <span className="flex items-center gap-1 text-white">
+              <TableCellsIcon className="h-4 w-4" />
+              Report view
+            </span>
           </DataAreaTitleLink>
         )}
       </DataAreaTitle>
