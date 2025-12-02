@@ -1,8 +1,6 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useAuth0 } from "@auth0/auth0-react";
-import { loginAuthProvider } from "../lib/authentication";
-import SessionContext from "./session-context";
+import NavigationSection from "../components/navigation";
 
 export const pkbMenu = {
   highlightItems: [
@@ -89,9 +87,6 @@ export const pkbMenu = {
   ],
 };
 
-// Module-level variable to track if menu item is active (matching Vue behavior)
-let menuItemActive = false;
-
 function injectFavicon(faviconUrl) {
   if (typeof window === "undefined") {
     return;
@@ -117,9 +112,7 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
-  const sessionContext = useContext(SessionContext);
-  const setAuthStageLogin = sessionContext?.setAuthStageLogin;
+  const [menuItemActive, setMenuItemActive] = useState(false);
 
   useEffect(() => {
     injectFavicon(
@@ -137,21 +130,11 @@ export default function Header() {
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
       if (path === currentPath) {
-        menuItemActive = true;
+        setMenuItemActive(true);
         return true;
       }
     }
     return false;
-  }
-
-  function handleLoginClick(e) {
-    e.preventDefault();
-    if (!isLoading && loginWithRedirect) {
-      loginAuthProvider(loginWithRedirect);
-      if (setAuthStageLogin) {
-        setAuthStageLogin();
-      }
-    }
   }
 
   return (
@@ -170,45 +153,18 @@ export default function Header() {
           <div className="menu-wrapper">
             <div className="topmenu">
               <a className="topmenu-item" href="https://pankbase.org/funding.html">
-                Funding Opportunities
-                <img
-                  style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
-                  alt=""
-                />
+                Funding Opportunities <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg" alt="" />
               </a>
               <a className="topmenu-item disabled">
-                Search
-                <img
-                  style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
-                  alt=""
-                />
+                Search <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg" alt="" />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              {isAuthenticated !== true && (
-                <a
-                  className="topmenu-item"
-                  href="#"
-                  onClick={handleLoginClick}
-                  style={{ cursor: isLoading ? "wait" : "pointer", display: "flex" }}
-                >
-                  Login
-                  <img
-                    style={{ height: "15px", width: "15px" }}
-                    src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg"
-                    alt=""
-                  />
-                </a>
-              )}
+              <NavigationSection />
             </div>
             <div className="menu">
               <div className="main-menu-items">
                 {pkbMenu.highlightItems.map((item, index) => (
-                  <div
-                    key={`highlight-${index}`}
-                    className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
-                  >
+                  <div key={`highlight-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
                     <a className="menu-item menu-item-main" href={item.path}>
                       {item.label}
                     </a>
@@ -216,22 +172,14 @@ export default function Header() {
                 ))}
               </div>
               {pkbMenu.menuItems.map((item, index) => (
-                <div
-                  key={`menu-${index}`}
-                  className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
-                >
+                <div key={`menu-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
                   <a className="menu-item" href={item.path || null}>
                     {item.label}
                   </a>
                   {item.subMenuItems && (
                     <div className="submenu">
                       {item.subMenuItems.map((subItem, subIndex) => (
-                        <a
-                          key={`submenu-${index}-${subIndex}`}
-                          className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
-                          href={subItem.path || null}
-                          data-whatever={isActive(subItem.path).toString()}
-                        >
+                        <a key={`submenu-${index}-${subIndex}`} className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`} href={subItem.path || null} data-whatever={isActive(subItem.path).toString()}>
                           {subItem.label}
                         </a>
                       ))}
@@ -242,11 +190,7 @@ export default function Header() {
             </div>
           </div>
           <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <img
-              style={{ height: "37px" }}
-              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
-              alt="HIRN Logo"
-            />
+            <img style={{ height: "37px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" alt="HIRN Logo" />
           </a>
         </div>
         <div className="pkb-beta">beta</div>

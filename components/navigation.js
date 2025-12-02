@@ -150,7 +150,7 @@ NavigationIcon.propTypes = {
 function navigationClasses(isNarrowNav, isChildItem) {
   if (isNarrowNav) {
     // For the collapsed-navigation case.
-    return "block h-6 w-6 text-black dark:text-gray-300";
+    return "flex flex-col items-center justify-center gap-1 text-black dark:text-gray-300";
   }
 
   // The expanded-navigation case.
@@ -606,10 +606,12 @@ function NavigationCollapsed() {
       {isAuthenticated ? (
         <NavigationSignOutItem id="sign-out" isNarrowNav>
           <Icon.UserSignedIn className="h-6 w-6" />
+          <span style={{ fontSize: '12px' }} className="whitespace-nowrap">Sign Out</span>
         </NavigationSignOutItem>
       ) : (
         <NavigationSignInItem id="authenticate" isNarrowNav>
           <Icon.UserSignedOut className="h-6 w-6" />
+          <span style={{ fontSize: '12px' }} className="whitespace-nowrap">Sign In</span>
         </NavigationSignInItem>
       )}
     </NavigationList>
