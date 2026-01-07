@@ -13,7 +13,8 @@ import {
 } from "@auth0/auth0-react";
 // lib
 import { AUTH0_CLIENT_ID, AUTH_ERROR_URI } from "./constants";
-import FetchRequest, { type ErrorObject } from "./fetch-request";
+import FetchRequest from "./fetch-request";
+import { type ErrorObject } from "./fetch-request.d";
 // root
 import type { DataProviderObject } from "../globals";
 
