@@ -49,7 +49,7 @@ const columns = [
   {
     id: "lab.title",
     title: "Lab",
-    display: ({ source }) => `${source.lab.title}`,
+    display: ({ source }) => source.lab?.title || "",
   },
   {
     id: "file_size",

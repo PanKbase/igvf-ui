@@ -103,11 +103,11 @@ export function FileModal({ node, onClose }) {
               /* @__PURE__ */ React.createElement(
                 Link,
                 {
-                  href: file.lab["@id"],
+                  href: file.lab?.["@id"],
                   target: "_blank",
                   rel: "noopener noreferrer",
                 },
-                file.lab.title
+                file.lab?.title || ''
               )
             )
           ),
