@@ -195,9 +195,12 @@ export async function getServerSideProps({ params, req, query }) {
     let fileFileSets = [];
     if (combinedFiles.length > 0) {
       const fileSetPaths = combinedFiles.reduce((acc, file) => {
-        return acc.includes(file.file_set["@id"])
-          ? acc
-          : acc.concat(file.file_set["@id"]);
+        if (file.file_set?.["@id"]) {
+          return acc.includes(file.file_set["@id"])
+            ? acc
+            : acc.concat(file.file_set["@id"]);
+        }
+        return acc;
       }, []);
       fileFileSets = await requestFileSets(fileSetPaths, request);
     }
