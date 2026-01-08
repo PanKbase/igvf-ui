@@ -1,6 +1,7 @@
 // node_modules
 import _ from "lodash";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
@@ -53,6 +54,18 @@ export default function AnalysisSet({
   attribution = null,
   isJson,
 }) {
+  useEffect(() => {
+    console.log('[AnalysisSet] Component mounted', {
+      id: analysisSet?.["@id"],
+      accession: analysisSet?.accession,
+      fileSetType: analysisSet?.file_set_type,
+      filesCount: files?.length || 0,
+      inputFileSetsCount: inputFileSets?.length || 0,
+      fileFileSetsCount: fileFileSets?.length || 0,
+      derivedFromFilesCount: derivedFromFiles?.length || 0
+    });
+  }, [analysisSet, files, inputFileSets, fileFileSets, derivedFromFiles]);
+  
   const pagePanels = usePagePanels(analysisSet["@id"]);
   return (
     <>
@@ -176,21 +189,35 @@ AnalysisSet.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query }) {
-  const isJson = isJsonFormat(query);
-  const request = new FetchRequest({ cookie: req.headers.cookie });
-  const analysisSet = (
-    await request.getObject(`/analysis-sets/${params.id}/`)
-  ).union();
-  if (FetchRequest.isResponseSuccess(analysisSet)) {
+  console.log('[AnalysisSet] getServerSideProps started', { id: params.id });
+  try {
+    const isJson = isJsonFormat(query);
+    const request = new FetchRequest({ cookie: req.headers.cookie });
+    console.log('[AnalysisSet] Fetching analysis set', { id: params.id });
+    const analysisSet = (
+      await request.getObject(`/analysis-sets/${params.id}/`)
+    ).union();
+    console.log('[AnalysisSet] Analysis set response', { 
+      success: FetchRequest.isResponseSuccess(analysisSet),
+      hasFiles: !!analysisSet?.files,
+      fileCount: analysisSet?.files?.length || 0,
+      hasInputFileSets: !!analysisSet?.input_file_sets,
+      inputFileSetCount: analysisSet?.input_file_sets?.length || 0
+    });
+    if (FetchRequest.isResponseSuccess(analysisSet)) {
     const documents = analysisSet.documents
       ? await requestDocuments(analysisSet.documents, request)
       : [];
 
     const filePaths = analysisSet.files.map((file) => file["@id"]);
+    console.log('[AnalysisSet] Processing files', { fileCount: filePaths.length });
     const files =
       filePaths.length > 0 ? await requestFiles(filePaths, request) : [];
+    console.log('[AnalysisSet] Files fetched', { filesCount: files.length });
     const derivedFromFiles = await getAllDerivedFromFiles(files, request);
+    console.log('[AnalysisSet] Derived from files', { derivedFromFilesCount: derivedFromFiles.length });
     const combinedFiles = files.concat(derivedFromFiles);
+    console.log('[AnalysisSet] Combined files', { combinedFilesCount: combinedFiles.length });
     // Get all file-set objects in every file's `file_sets` property.
     let fileFileSets = [];
     if (combinedFiles.length > 0) {
@@ -202,7 +229,9 @@ export async function getServerSideProps({ params, req, query }) {
         }
         return acc;
       }, []);
+      console.log('[AnalysisSet] File set paths extracted', { fileSetPathsCount: fileSetPaths.length });
       fileFileSets = await requestFileSets(fileSetPaths, request);
+      console.log('[AnalysisSet] File file sets fetched', { fileFileSetsCount: fileFileSets.length });
     }
     let inputFileSets = [];
     if (analysisSet.input_file_sets?.length > 0) {
@@ -211,12 +240,14 @@ export async function getServerSideProps({ params, req, query }) {
       const inputFileSetPaths = analysisSet.input_file_sets.map(
         (fileSet) => fileSet["@id"]
       );
+      console.log('[AnalysisSet] Fetching input file sets', { inputFileSetPathsCount: inputFileSetPaths.length });
       inputFileSets = await requestFileSets(inputFileSetPaths, request, [
         "applied_to_samples",
         "auxiliary_sets",
         "control_file_sets",
         "measurement_sets",
       ]);
+      console.log('[AnalysisSet] Input file sets fetched', { inputFileSetsCount: inputFileSets.length });
     }
 
     let appliedToSamples = [];
@@ -321,6 +352,7 @@ export async function getServerSideProps({ params, req, query }) {
       req.headers.cookie
     );
     const attribution = await buildAttribution(analysisSet, req.headers.cookie);
+    console.log('[AnalysisSet] getServerSideProps completed successfully', { id: params.id });
     return {
       props: {
         analysisSet,
@@ -342,5 +374,14 @@ export async function getServerSideProps({ params, req, query }) {
       },
     };
   }
+  console.error('[AnalysisSet] Analysis set fetch failed', { id: params.id, analysisSet });
   return errorObjectToProps(analysisSet);
+  } catch (error) {
+    console.error('[AnalysisSet] Error in getServerSideProps', { 
+      id: params.id, 
+      error: error.message,
+      stack: error.stack 
+    });
+    throw error;
+  }
 }
