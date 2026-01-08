@@ -62,10 +62,10 @@ export default function AnalysisSet({
       filesCount: files?.length || 0,
       inputFileSetsCount: inputFileSets?.length || 0,
       fileFileSetsCount: fileFileSets?.length || 0,
-      derivedFromFilesCount: derivedFromFiles?.length || 0
+      derivedFromFilesCount: derivedFromFiles?.length || 0,
     });
   }, [analysisSet, files, inputFileSets, fileFileSets, derivedFromFiles]);
-  
+
   const pagePanels = usePagePanels(analysisSet["@id"]);
   return (
     <>
@@ -197,12 +197,12 @@ export async function getServerSideProps({ params, req, query }) {
     const analysisSet = (
       await request.getObject(`/analysis-sets/${params.id}/`)
     ).union();
-    console.log('[AnalysisSet] Analysis set response', { 
+    console.log('[AnalysisSet] Analysis set response', {
       success: FetchRequest.isResponseSuccess(analysisSet),
       hasFiles: !!analysisSet?.files,
       fileCount: analysisSet?.files?.length || 0,
       hasInputFileSets: !!analysisSet?.input_file_sets,
-      inputFileSetCount: analysisSet?.input_file_sets?.length || 0
+      inputFileSetCount: analysisSet?.input_file_sets?.length || 0,
     });
     if (FetchRequest.isResponseSuccess(analysisSet)) {
     const documents = analysisSet.documents
@@ -377,10 +377,10 @@ export async function getServerSideProps({ params, req, query }) {
   console.error('[AnalysisSet] Analysis set fetch failed', { id: params.id, analysisSet });
   return errorObjectToProps(analysisSet);
   } catch (error) {
-    console.error('[AnalysisSet] Error in getServerSideProps', { 
-      id: params.id, 
+    console.error('[AnalysisSet] Error in getServerSideProps', {
+      id: params.id,
       error: error.message,
-      stack: error.stack 
+      stack: error.stack,
     });
     throw error;
   }
