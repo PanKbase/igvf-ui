@@ -48,13 +48,16 @@ export default function AlignmentFile({
   referenceFiles,
   isJson,
 }) {
+  if (!alignmentFile) {
+    return null;
+  }
   return (
     <>
       <Breadcrumbs />
       <EditableItem item={alignmentFile}>
         <PagePreamble>
           <AlternateAccessions
-            alternateAccessions={alignmentFile.alternate_accessions}
+            alternateAccessions={alignmentFile?.alternate_accessions || []}
           />
         </PagePreamble>
         <ObjectPageHeader item={alignmentFile} isJsonFormat={isJson}>
@@ -69,12 +72,12 @@ export default function AlignmentFile({
           <DataAreaTitle>Alignment Details</DataAreaTitle>
           <DataPanel>
             <DataArea>
-              {referenceFiles.length > 0 && (
+              {referenceFiles?.length > 0 && (
                 <>
                   <DataItemLabel>Reference Files</DataItemLabel>
                   <DataItemValue>
                     <SeparatedList isCollapsible>
-                      {referenceFiles.map((file) => (
+                      {(referenceFiles || []).filter(file => file && file["@id"]).map((file) => (
                         <Link href={file["@id"]} key={file["@id"]}>
                           {file.accession}
                         </Link>
@@ -105,7 +108,7 @@ export default function AlignmentFile({
               )}
             </DataArea>
           </DataPanel>
-          {derivedFrom.length > 0 && (
+          {derivedFrom?.length > 0 && (
             <DerivedFromTable
               derivedFrom={derivedFrom}
               derivedFromFileSets={derivedFromFileSets}
@@ -114,13 +117,13 @@ export default function AlignmentFile({
               title={`Files ${alignmentFile.accession} Derives From`}
             />
           )}
-          {fileFormatSpecifications.length > 0 && (
+          {fileFormatSpecifications?.length > 0 && (
             <DocumentTable
               documents={fileFormatSpecifications}
               title="File Format Specifications"
             />
           )}
-          {documents.length > 0 && <DocumentTable documents={documents} />}
+          {documents?.length > 0 && <DocumentTable documents={documents} />}
           <Attribution attribution={attribution} />
         </JsonDisplay>
       </EditableItem>
@@ -150,6 +153,7 @@ AlignmentFile.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
+  try {
   // Redirect to the file page if the URL is a file download link.
   const isPathForFileDownload = checkForFileDownloadPath(resolvedUrl);
   if (isPathForFileDownload) {
@@ -176,7 +180,8 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     const derivedFrom = alignmentFile.derived_from
       ? await requestFiles(alignmentFile.derived_from, request)
       : [];
-    const derivedFromFileSetPaths = derivedFrom
+    const derivedFromFileSetPaths = (derivedFrom || [])
+      .filter(file => file)
       .map((file) => file.file_set)
       .filter((fileSet) => fileSet);
     const uniqueDerivedFromFileSetPaths = [...new Set(derivedFromFileSetPaths)];
@@ -190,7 +195,7 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
           request
         )
       : [];
-    const referenceFiles = alignmentFile.reference_files
+    const referenceFiles = alignmentFile.reference_files?.length > 0
       ? await requestFiles(alignmentFile.reference_files, request)
       : [];
     const breadcrumbs = await buildBreadcrumbs(
@@ -219,4 +224,22 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     };
   }
   return errorObjectToProps(alignmentFile);
+  } catch (error) {
+    console.error('[AlignmentFile] Error in getServerSideProps', {
+      id: params.id,
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    return {
+      props: {
+        serverSideError: {
+          code: 500,
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        },
+      },
+    };
+  }
 }
