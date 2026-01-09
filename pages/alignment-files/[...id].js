@@ -48,13 +48,16 @@ export default function AlignmentFile({
   referenceFiles,
   isJson,
 }) {
+  if (!alignmentFile) {
+    return null;
+  }
   return (
     <>
       <Breadcrumbs />
       <EditableItem item={alignmentFile}>
         <PagePreamble>
           <AlternateAccessions
-            alternateAccessions={alignmentFile.alternate_accessions}
+            alternateAccessions={alignmentFile?.alternate_accessions || []}
           />
         </PagePreamble>
         <ObjectPageHeader item={alignmentFile} isJsonFormat={isJson}>
@@ -150,6 +153,7 @@ AlignmentFile.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
+  try {
   // Redirect to the file page if the URL is a file download link.
   const isPathForFileDownload = checkForFileDownloadPath(resolvedUrl);
   if (isPathForFileDownload) {
@@ -220,4 +224,22 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     };
   }
   return errorObjectToProps(alignmentFile);
+  } catch (error) {
+    console.error('[AlignmentFile] Error in getServerSideProps', {
+      id: params.id,
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    return {
+      props: {
+        serverSideError: {
+          code: 500,
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        },
+      },
+    };
+  }
 }

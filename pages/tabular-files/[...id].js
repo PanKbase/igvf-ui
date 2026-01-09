@@ -47,13 +47,16 @@ export default function TabularFile({
   attribution = null,
   isJson,
 }) {
+  if (!tabularFile) {
+    return null;
+  }
   return (
     <>
       <Breadcrumbs />
       <EditableItem item={tabularFile}>
         <PagePreamble>
           <AlternateAccessions
-            alternateAccessions={tabularFile.alternate_accessions}
+            alternateAccessions={tabularFile?.alternate_accessions || []}
           />
         </PagePreamble>
         <ObjectPageHeader item={tabularFile} isJsonFormat={isJson}>
@@ -140,6 +143,7 @@ TabularFile.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
+  try {
   // Redirect to the file page if the URL is a file download link.
   if (checkForFileDownloadPath(resolvedUrl)) {
     return {
@@ -202,4 +206,22 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     };
   }
   return errorObjectToProps(tabularFile);
+  } catch (error) {
+    console.error('[TabularFile] Error in getServerSideProps', {
+      id: params.id,
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    return {
+      props: {
+        serverSideError: {
+          code: 500,
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        },
+      },
+    };
+  }
 }
