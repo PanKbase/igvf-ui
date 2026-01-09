@@ -341,6 +341,7 @@ export async function getServerSideProps({ params, req, query }) {
       controlFileSetPaths = [...new Set(controlFileSetPaths)];
       controlFileSets = await requestFileSets(controlFileSetPaths, request);
     }
+    */
     /* eslint-enable */
 
     // Temporarily disabled - depends on inputFileSets
@@ -364,15 +365,16 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-        // Temporarily disabled - depends on inputFileSetSamples
-    // let constructLibrarySets = [];
-    //     if (inputFileSetSamples.length > 0) {
-    //       let constructLibrarySetPaths = inputFileSetSamples.reduce(
-    //         (acc, sample) => {
-    //           if (sample?.construct_library_sets?.length > 0) {
-    //             const filtered = sample.construct_library_sets.filter(item => item);
-    //             return acc.concat(filtered);
-    //           }
+    // Temporarily disabled - depends on inputFileSetSamples
+    let constructLibrarySets = [];
+    /*
+    if (inputFileSetSamples.length > 0) {
+      let constructLibrarySetPaths = inputFileSetSamples.reduce(
+        (acc, sample) => {
+          if (sample?.construct_library_sets?.length > 0) {
+            const filtered = sample.construct_library_sets.filter(item => item);
+            return acc.concat(filtered);
+          }
           return acc;
         },
         []
@@ -392,6 +394,7 @@ export async function getServerSideProps({ params, req, query }) {
         );
       }
     }
+    */
 
     const breadcrumbs = await buildBreadcrumbs(
       analysisSet,
