@@ -19,7 +19,7 @@ import DonorTable from "../../components/donor-table";
 import { EditableItem } from "../../components/edit";
 import { FileGraph } from "../../components/file-graph";
 import FileTable from "../../components/file-table";
-import InputFileSets from "../../components/input-file-sets";
+// Temporarily disabled: import InputFileSets from "../../components/input-file-sets";
 import JsonDisplay from "../../components/json-display";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
@@ -65,7 +65,7 @@ export default function AnalysisSet({
       fileFileSetsCount: fileFileSets?.length || 0,
       derivedFromFilesCount: derivedFromFiles?.length || 0,
     });
-  }, [analysisSet, files, inputFileSets, fileFileSets, derivedFromFiles]);
+  }, [analysisSet, files, fileFileSets, derivedFromFiles]); // inputFileSets removed
 
   const pagePanels = usePagePanels(analysisSet?.["@id"] || "");
 
@@ -130,6 +130,7 @@ export default function AnalysisSet({
             <DonorTable donors={analysisSet.donors} />
           )}
 
+          {/* Temporarily disabled Input File Sets to debug 500 error
           {inputFileSets.length > 0 && (
             <InputFileSets
               thisFileSet={analysisSet}
@@ -142,6 +143,7 @@ export default function AnalysisSet({
               constructLibrarySets={constructLibrarySets}
             />
           )}
+          */}
 
           {files.length > 0 && (
             <>
@@ -243,7 +245,9 @@ export async function getServerSideProps({ params, req, query }) {
       fileFileSets = await requestFileSets(fileSetPaths, request);
       console.log('[AnalysisSet] File file sets fetched', { fileFileSetsCount: fileFileSets.length });
     }
+    // Temporarily disabled Input File Sets fetching to debug 500 error
     let inputFileSets = [];
+    /*
     if (analysisSet.input_file_sets?.length > 0) {
       // The embedded `input_file_sets` in the analysis set don't have enough properties to display
       // in the table, so we have to request them.
@@ -264,18 +268,20 @@ export async function getServerSideProps({ params, req, query }) {
       }
       console.log('[AnalysisSet] Input file sets fetched', { inputFileSetsCount: inputFileSets.length });
     }
+    */
 
-    let appliedToSamples = [];
-    let auxiliarySets = [];
-    let controlFileSets = [];
-    let measurementSets = [];
-    if (inputFileSets.length > 0) {
-      // Retrieve the input file sets' applied to samples.
-      appliedToSamples = inputFileSets.reduce((acc, fileSet) => {
-        if (fileSet?.applied_to_samples?.length > 0) {
-          const filtered = fileSet.applied_to_samples.filter(item => item);
-          return acc.concat(filtered);
-        }
+        // Temporarily disabled - depends on inputFileSets
+    // let appliedToSamples = [];
+    //     let auxiliarySets = [];
+    //     let controlFileSets = [];
+    //     let measurementSets = [];
+    //     if (inputFileSets.length > 0) {
+    //       // Retrieve the input file sets' applied to samples.
+    //       appliedToSamples = inputFileSets.reduce((acc, fileSet) => {
+    //         if (fileSet?.applied_to_samples?.length > 0) {
+    //           const filtered = fileSet.applied_to_samples.filter(item => item);
+    //           return acc.concat(filtered);
+    //         }
         return acc;
       }, []);
       let appliedToSamplePaths = appliedToSamples
@@ -333,6 +339,9 @@ export async function getServerSideProps({ params, req, query }) {
       controlFileSets = await requestFileSets(controlFileSetPaths, request);
     }
 
+    // Temporarily disabled - depends on inputFileSets
+    const embeddedSamples = [];
+    /*
     const embeddedSamples = inputFileSets.reduce((acc, inputFileSet) => {
       if (inputFileSet?.samples?.length > 0) {
         const filtered = inputFileSet.samples.filter(item => item);
@@ -340,22 +349,26 @@ export async function getServerSideProps({ params, req, query }) {
       }
       return acc;
     }, []);
+    */
 
     let inputFileSetSamples = [];
+    /*
     if (embeddedSamples.length > 0) {
       let samplePaths = embeddedSamples.filter(sample => sample).map((sample) => sample["@id"]);
       samplePaths = [...new Set(samplePaths)];
       inputFileSetSamples = await requestSamples(samplePaths, request);
     }
+    */
 
-    let constructLibrarySets = [];
-    if (inputFileSetSamples.length > 0) {
-      let constructLibrarySetPaths = inputFileSetSamples.reduce(
-        (acc, sample) => {
-          if (sample?.construct_library_sets?.length > 0) {
-            const filtered = sample.construct_library_sets.filter(item => item);
-            return acc.concat(filtered);
-          }
+        // Temporarily disabled - depends on inputFileSetSamples
+    // let constructLibrarySets = [];
+    //     if (inputFileSetSamples.length > 0) {
+    //       let constructLibrarySetPaths = inputFileSetSamples.reduce(
+    //         (acc, sample) => {
+    //           if (sample?.construct_library_sets?.length > 0) {
+    //             const filtered = sample.construct_library_sets.filter(item => item);
+    //             return acc.concat(filtered);
+    //           }
           return acc;
         },
         []
