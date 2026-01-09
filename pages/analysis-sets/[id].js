@@ -30,7 +30,6 @@ import {
   requestDocuments,
   requestFileSets,
   requestFiles,
-  requestSamples,
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
@@ -45,11 +44,17 @@ export default function AnalysisSet({
   fileFileSets = [],
   derivedFromFiles = [],
   inputFileSets = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   inputFileSetSamples = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   controlFileSets = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   appliedToSamples = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   auxiliarySets = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   measurementSets = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructLibrarySets = [],
   attribution = null,
   isJson = false,
@@ -246,7 +251,7 @@ export async function getServerSideProps({ params, req, query }) {
       console.log('[AnalysisSet] File file sets fetched', { fileFileSetsCount: fileFileSets.length });
     }
     // Temporarily disabled Input File Sets fetching to debug 500 error
-    let inputFileSets = [];
+    const inputFileSets = [];
     /*
     if (analysisSet.input_file_sets?.length > 0) {
       // The embedded `input_file_sets` in the analysis set don't have enough properties to display
@@ -270,12 +275,12 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-    // Temporarily disabled - depends on inputFileSets  
+    // Temporarily disabled - depends on inputFileSets
     // All Input File Sets processing code is disabled below
-    let appliedToSamples = [];
-    let auxiliarySets = [];
-    let controlFileSets = [];
-    let measurementSets = [];
+    const appliedToSamples = [];
+    const auxiliarySets = [];
+    const controlFileSets = [];
+    const measurementSets = [];
     /* eslint-disable */
     /*
     if (inputFileSets.length > 0) {
@@ -345,7 +350,7 @@ export async function getServerSideProps({ params, req, query }) {
     /* eslint-enable */
 
     // Temporarily disabled - depends on inputFileSets
-    const embeddedSamples = [];
+    const _embeddedSamples = [];
     /*
     const embeddedSamples = inputFileSets.reduce((acc, inputFileSet) => {
       if (inputFileSet?.samples?.length > 0) {
@@ -356,7 +361,7 @@ export async function getServerSideProps({ params, req, query }) {
     }, []);
     */
 
-    let inputFileSetSamples = [];
+    const inputFileSetSamples = [];
     /*
     if (embeddedSamples.length > 0) {
       let samplePaths = embeddedSamples.filter(sample => sample).map((sample) => sample["@id"]);
@@ -366,7 +371,7 @@ export async function getServerSideProps({ params, req, query }) {
     */
 
     // Temporarily disabled - depends on inputFileSetSamples
-    let constructLibrarySets = [];
+    const constructLibrarySets = [];
     /*
     if (inputFileSetSamples.length > 0) {
       let constructLibrarySetPaths = inputFileSetSamples.reduce(
