@@ -270,18 +270,21 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-        // Temporarily disabled - depends on inputFileSets
-    // let appliedToSamples = [];
-    //     let auxiliarySets = [];
-    //     let controlFileSets = [];
-    //     let measurementSets = [];
-    //     if (inputFileSets.length > 0) {
-    //       // Retrieve the input file sets' applied to samples.
-    //       appliedToSamples = inputFileSets.reduce((acc, fileSet) => {
-    //         if (fileSet?.applied_to_samples?.length > 0) {
-    //           const filtered = fileSet.applied_to_samples.filter(item => item);
-    //           return acc.concat(filtered);
-    //         }
+    // Temporarily disabled - depends on inputFileSets  
+    // All Input File Sets processing code is disabled below
+    let appliedToSamples = [];
+    let auxiliarySets = [];
+    let controlFileSets = [];
+    let measurementSets = [];
+    /* eslint-disable */
+    /*
+    if (inputFileSets.length > 0) {
+      // Retrieve the input file sets' applied to samples.
+      appliedToSamples = inputFileSets.reduce((acc, fileSet) => {
+        if (fileSet?.applied_to_samples?.length > 0) {
+          const filtered = fileSet.applied_to_samples.filter(item => item);
+          return acc.concat(filtered);
+        }
         return acc;
       }, []);
       let appliedToSamplePaths = appliedToSamples
@@ -338,6 +341,7 @@ export async function getServerSideProps({ params, req, query }) {
       controlFileSetPaths = [...new Set(controlFileSetPaths)];
       controlFileSets = await requestFileSets(controlFileSetPaths, request);
     }
+    /* eslint-enable */
 
     // Temporarily disabled - depends on inputFileSets
     const embeddedSamples = [];
