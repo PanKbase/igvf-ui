@@ -54,6 +54,10 @@ export default function AnalysisSet({
   attribution = null,
   isJson,
 }) {
+  if (!analysisSet) {
+    return null;
+  }
+
   useEffect(() => {
     console.log('[AnalysisSet] Component mounted', {
       id: analysisSet?.["@id"],
@@ -66,7 +70,7 @@ export default function AnalysisSet({
     });
   }, [analysisSet, files, inputFileSets, fileFileSets, derivedFromFiles]);
 
-  const pagePanels = usePagePanels(analysisSet["@id"]);
+  const pagePanels = usePagePanels(analysisSet?.["@id"] || "");
   return (
     <>
       <Breadcrumbs />
@@ -117,7 +121,7 @@ export default function AnalysisSet({
           {analysisSet.samples?.length > 0 && (
             <SampleTable
               samples={analysisSet.samples}
-              reportLink={`/multireport/?type=Sample&file_sets.@id=${analysisSet["@id"]}`}
+              reportLink={`/multireport/?type=Sample&file_sets.@id=${analysisSet?.["@id"] || ""}`}
             />
           )}
 
@@ -209,7 +213,7 @@ export async function getServerSideProps({ params, req, query }) {
       ? await requestDocuments(analysisSet.documents, request)
       : [];
 
-    const filePaths = analysisSet.files.map((file) => file["@id"]);
+    const filePaths = (analysisSet.files || []).filter(file => file).map((file) => file["@id"]);
     console.log('[AnalysisSet] Processing files', { fileCount: filePaths.length });
     const files =
       filePaths.length > 0 ? await requestFiles(filePaths, request) : [];
@@ -237,9 +241,9 @@ export async function getServerSideProps({ params, req, query }) {
     if (analysisSet.input_file_sets?.length > 0) {
       // The embedded `input_file_sets` in the analysis set don't have enough properties to display
       // in the table, so we have to request them.
-      const inputFileSetPaths = analysisSet.input_file_sets.map(
-        (fileSet) => fileSet["@id"]
-      );
+      const inputFileSetPaths = (analysisSet.input_file_sets || [])
+        .filter(fileSet => fileSet)
+        .map((fileSet) => fileSet["@id"]);
       console.log('[AnalysisSet] Fetching input file sets', { inputFileSetPathsCount: inputFileSetPaths.length });
       inputFileSets = await requestFileSets(inputFileSetPaths, request, [
         "applied_to_samples",
@@ -261,9 +265,9 @@ export async function getServerSideProps({ params, req, query }) {
           ? acc.concat(fileSet.applied_to_samples)
           : acc;
       }, []);
-      let appliedToSamplePaths = appliedToSamples.map(
-        (sample) => sample["@id"]
-      );
+      let appliedToSamplePaths = appliedToSamples
+        .filter(sample => sample)
+        .map((sample) => sample["@id"]);
       appliedToSamplePaths = [...new Set(appliedToSamplePaths)];
       appliedToSamples =
         appliedToSamplePaths.length > 0
@@ -274,7 +278,7 @@ export async function getServerSideProps({ params, req, query }) {
       let auxiliarySetsPaths = inputFileSets.reduce((acc, fileSet) => {
         return fileSet.auxiliary_sets?.length > 0
           ? acc.concat(
-              fileSet.auxiliary_sets.map((auxiliarySet) => auxiliarySet["@id"])
+              (fileSet.auxiliary_sets || []).filter(auxiliarySet => auxiliarySet).map((auxiliarySet) => auxiliarySet["@id"])
             )
           : acc;
       }, []);
@@ -290,9 +294,9 @@ export async function getServerSideProps({ params, req, query }) {
           ? acc.concat(fileSet.measurement_sets)
           : acc;
       }, []);
-      let measurementSetPaths = measurementSets.map(
-        (measurementSet) => measurementSet["@id"]
-      );
+      let measurementSetPaths = measurementSets
+        .filter(measurementSet => measurementSet)
+        .map((measurementSet) => measurementSet["@id"]);
       measurementSetPaths = [...new Set(measurementSetPaths)];
       measurementSets =
         measurementSetPaths.length > 0
@@ -305,9 +309,9 @@ export async function getServerSideProps({ params, req, query }) {
           ? acc.concat(fileSet.control_file_sets)
           : acc;
       }, []);
-      let controlFileSetPaths = controlFileSets.map(
-        (controlFileSet) => controlFileSet["@id"]
-      );
+      let controlFileSetPaths = controlFileSets
+        .filter(controlFileSet => controlFileSet)
+        .map((controlFileSet) => controlFileSet["@id"]);
       controlFileSetPaths = [...new Set(controlFileSetPaths)];
       controlFileSets = await requestFileSets(controlFileSetPaths, request);
     }
@@ -320,7 +324,7 @@ export async function getServerSideProps({ params, req, query }) {
 
     let inputFileSetSamples = [];
     if (embeddedSamples.length > 0) {
-      let samplePaths = embeddedSamples.map((sample) => sample["@id"]);
+      let samplePaths = embeddedSamples.filter(sample => sample).map((sample) => sample["@id"]);
       samplePaths = [...new Set(samplePaths)];
       inputFileSetSamples = await requestSamples(samplePaths, request);
     }
