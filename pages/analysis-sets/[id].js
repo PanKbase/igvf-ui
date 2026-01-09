@@ -54,10 +54,7 @@ export default function AnalysisSet({
   attribution = null,
   isJson,
 }) {
-  if (!analysisSet) {
-    return null;
-  }
-
+  // Hooks must be called unconditionally at the top level
   useEffect(() => {
     console.log('[AnalysisSet] Component mounted', {
       id: analysisSet?.["@id"],
@@ -71,6 +68,10 @@ export default function AnalysisSet({
   }, [analysisSet, files, inputFileSets, fileFileSets, derivedFromFiles]);
 
   const pagePanels = usePagePanels(analysisSet?.["@id"] || "");
+
+  if (!analysisSet) {
+    return null;
+  }
   return (
     <>
       <Breadcrumbs />
