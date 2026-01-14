@@ -73,7 +73,34 @@ export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
   getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
 ) {
-  const accessToken = await getAccessTokenSilently();
+  // Request token for userinfo endpoint
+  // The /userinfo endpoint requires openid scope
+  // Note: Management API audience tokens may not work with /userinfo
+  // We need to explicitly request without audience for userinfo compatibility
+  let accessToken: string;
+  try {
+    // Try to get token without the Management API audience for userinfo
+    // The userinfo endpoint works with default OIDC tokens, not Management API tokens
+    accessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        scope: "openid profile email",
+        audience: undefined, // Explicitly remove audience for userinfo endpoint
+      },
+      cacheMode: "off", // Force new token request without audience
+    });
+  } catch (error) {
+    // If removing audience fails, the Auth0Provider's audience might be hardcoded
+    // In that case, we'll use whatever token we get and let the backend handle the error
+    console.warn(
+      "Could not get token without audience, using default token:",
+      error
+    );
+    accessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        scope: "openid profile email",
+      },
+    });
+  }
   const request = new FetchRequest({ session: loggedOutSession });
   return request.postObject("/login", { accessToken });
 }

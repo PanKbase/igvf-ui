@@ -164,10 +164,17 @@ export function Session({ authentication, children }) {
               sessionPropertiesResponse.code >= 400);
 
           if (isError) {
-            // Log the error for debugging
+            // Log the error for debugging with full details
             console.error(
-              "Failed to authenticate with backend:",
-              sessionPropertiesResponse
+              "Failed to authenticate with backend. Error details:",
+              {
+                status: sessionPropertiesResponse?.status,
+                code: sessionPropertiesResponse?.code,
+                title: sessionPropertiesResponse?.title,
+                description: sessionPropertiesResponse?.description,
+                detail: sessionPropertiesResponse?.detail,
+                fullResponse: sessionPropertiesResponse,
+              }
             );
             // Auth0 authenticated successfully, but we couldn't authenticate with igvfd. Log back
             // out of Auth0 and go to an error page.
