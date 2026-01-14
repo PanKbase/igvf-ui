@@ -162,7 +162,7 @@ export function Session({ authentication, children }) {
             sessionPropertiesResponse.isError === true ||
             (sessionPropertiesResponse.code &&
               sessionPropertiesResponse.code >= 400);
-          
+
           if (isError) {
             // Log the error for debugging
             console.error(
