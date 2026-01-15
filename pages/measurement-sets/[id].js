@@ -75,7 +75,8 @@ function composeRelatedDatasetReportLink(measurementSet) {
 function AssayDetails({ measurementSet }) {
   if (
     measurementSet.library_construction_platform ||
-    measurementSet.sequencing_library_types?.length > 0
+    measurementSet.sequencing_library_types?.length > 0 ||
+    measurementSet.sequencing_chemistry?.length > 0
   ) {
     return (
       <>
@@ -103,6 +104,14 @@ function AssayDetails({ measurementSet }) {
                 <DataItemLabel>Sequencing Library Types</DataItemLabel>
                 <DataItemValue>
                   {measurementSet.sequencing_library_types.join(", ")}
+                </DataItemValue>
+              </>
+            )}
+            {measurementSet.sequencing_chemistry?.length > 0 && (
+              <>
+                <DataItemLabel>Sequencing Chemistry</DataItemLabel>
+                <DataItemValue>
+                  {measurementSet.sequencing_chemistry.join(", ")}
                 </DataItemValue>
               </>
             )}
