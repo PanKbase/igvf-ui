@@ -376,6 +376,35 @@ export function DonorDataItems({
       <DataAreaTitle>Supplementary Information</DataAreaTitle>
       <DataPanel>
         <DataArea>
+          {item.genetic_risk_score?.length > 0 && (
+            <>
+              <DataAreaTitle>Genetic Risk Score</DataAreaTitle>
+              <DataPanel>
+                <DataArea>
+                  {item.genetic_risk_score.map((grsObj, index) => (
+                    <div key={index}>
+                      <DataItemLabel>{grsObj.method}</DataItemLabel>
+                      <DataItemValue>
+                        <div>
+                          <strong>Overall Score:</strong> {grsObj.overall_score}
+                        </div>
+                        {grsObj.mhc_only !== undefined && (
+                          <div>
+                            <strong>MHC-only:</strong> {grsObj.mhc_only}
+                          </div>
+                        )}
+                        {grsObj.non_mhc_only !== undefined && (
+                          <div>
+                            <strong>Non-MHC-only:</strong> {grsObj.non_mhc_only}
+                          </div>
+                        )}
+                      </DataItemValue>
+                    </div>
+                  ))}
+                </DataArea>
+              </DataPanel>
+            </>
+          )}
           {/* Additional Biological Information */}
           {item.data_available?.length > 0 && (
             <>
@@ -385,7 +414,6 @@ export function DonorDataItems({
                   <div key={index}>
                     <strong>{dataObj.dataset}</strong> ({dataObj.dataset_tissue}
                     )
-      }
                     {dataObj.dataset_link && (
                       <>
                         {" - "}
@@ -403,18 +431,7 @@ export function DonorDataItems({
               </DataItemValue>
             </>
           )}
-          {item.genetic_risk_score?.length > 0 && (
-            <>
-              <DataItemLabel>Genetic Risk Score</DataItemLabel>
-              <DataItemValue>
-                {item.genetic_risk_score.map((grsObj, index) => (
-                  <div key={index}>
-                    <strong>{grsObj.method}</strong>: {grsObj.score}
-                  </div>
-                ))}
-              </DataItemValue>
-            </>
-          )}
+
       {item.publication_data?.length > 0 && (
         <>
           <DataItemLabel>Publication Data</DataItemLabel>
