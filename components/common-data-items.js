@@ -106,6 +106,7 @@ export function DonorDataItems({
                         : ""}{" "}
                     </span>
                   )
+      }
                 )}
               </DataItemValue>
             </>
@@ -361,6 +362,17 @@ export function DonorDataItems({
           </DataPanel>
         </>
       )}
+      {item.hla_status !== undefined && (
+        <>
+          <DataAreaTitle>HLA Status</DataAreaTitle>
+          <DataPanel>
+            <DataArea>
+              <DataItemLabel>HLA Status</DataItemLabel>
+              <DataItemValue>{item.hla_status}</DataItemValue>
+            </DataArea>
+          </DataPanel>
+        </>
+      )}
       <DataAreaTitle>Supplementary Information</DataAreaTitle>
       <DataPanel>
         <DataArea>
@@ -373,6 +385,7 @@ export function DonorDataItems({
                   <div key={index}>
                     <strong>{dataObj.dataset}</strong> ({dataObj.dataset_tissue}
                     )
+      }
                     {dataObj.dataset_link && (
                       <>
                         {" - "}
@@ -385,6 +398,18 @@ export function DonorDataItems({
                         </a>
                       </>
                     )}
+                  </div>
+                ))}
+              </DataItemValue>
+            </>
+          )}
+          {item.genetic_risk_score?.length > 0 && (
+            <>
+              <DataItemLabel>Genetic Risk Score</DataItemLabel>
+              <DataItemValue>
+                {item.genetic_risk_score.map((grsObj, index) => (
+                  <div key={index}>
+                    <strong>{grsObj.method}</strong>: {grsObj.score}
                   </div>
                 ))}
               </DataItemValue>
@@ -525,6 +550,8 @@ DonorDataItems.commonProperties = [
   "aab_znt8_assay",
   "hla_typing",
   "phenotypic_features",
+  "hla_status",
+  "genetic_risk_score",
   "description",
   "collections",
   "dbxrefs",
