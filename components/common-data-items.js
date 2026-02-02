@@ -106,7 +106,6 @@ export function DonorDataItems({
                         : ""}{" "}
                     </span>
                   )
-      }
                 )}
               </DataItemValue>
             </>
