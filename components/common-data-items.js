@@ -361,7 +361,7 @@ export function DonorDataItems({
           </DataPanel>
         </>
       )}
-      {item.hla_status !== undefined && (
+      {item.hla_status && (
         <>
           <DataAreaTitle>HLA Status</DataAreaTitle>
           <DataPanel>
