@@ -117,6 +117,7 @@ export async function requestFiles(
       "upload_status",
       "version",
       "note",
+      "release_timestamp",
     ])
   ).unwrap_or([]);
 }

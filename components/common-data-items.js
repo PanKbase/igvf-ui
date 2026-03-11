@@ -1006,6 +1006,18 @@ export function FileDataItems({ item, fileSet = null, children }) {
           <DataItemValue>{item.validation_error_detail}</DataItemValue>
         </>
       )}
+      {item.version && (
+        <>
+          <DataItemLabel>Version</DataItemLabel>
+          <DataItemValue>{item.version}</DataItemValue>
+        </>
+      )}
+      {item.note && (
+        <>
+          <DataItemLabel>Note</DataItemLabel>
+          <DataItemValue>{item.note}</DataItemValue>
+        </>
+      )}
       {children}
     </>
   );
@@ -1028,6 +1040,8 @@ FileDataItems.commonProperties = [
   "md5sum",
   "submitted_file_name",
   "validation_error_detail",
+  "version",
+  "note",
 ];
 
 /**

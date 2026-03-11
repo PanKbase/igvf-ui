@@ -9,6 +9,7 @@ import SortableGrid from "./sortable-grid";
 import Status from "./status";
 // lib
 import { FileSetController } from "../lib/batch-download";
+import { formatDate } from "../lib/dates";
 import { dataSize, truthyOrZero } from "../lib/general";
 
 const filesColumns = [
@@ -39,16 +40,16 @@ const filesColumns = [
     display: ({ source }) => source.note || "",
   },
   {
-    id: "lab",
-    title: "Lab",
-    display: ({ source }) => source.lab?.title,
-    sorter: (item) => (item.lab?.title ? item.lab.title.toLowerCase() : ""),
-  },
-  {
     id: "file_size",
     title: "File Size",
     display: ({ source }) =>
       truthyOrZero(source.file_size) ? dataSize(source.file_size) : "",
+  },
+  {
+    id: "release_timestamp",
+    title: "Release Timestamp",
+    display: ({ source }) => formatDate(source.release_timestamp) || "",
+    sorter: (item) => item.release_timestamp || "",
   },
   {
     id: "upload_status",
