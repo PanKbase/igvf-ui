@@ -115,6 +115,8 @@ export async function requestFiles(
       "sequencing_run",
       "status",
       "upload_status",
+      "version",
+      "note",
     ])
   ).unwrap_or([]);
 }
