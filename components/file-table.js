@@ -28,6 +28,17 @@ const filesColumns = [
     sorter: (item) => item.content_type.toLowerCase(),
   },
   {
+    id: "version",
+    title: "Version",
+    display: ({ source }) => source.version || "",
+    sorter: (item) => (item.version || "").toLowerCase(),
+  },
+  {
+    id: "note",
+    title: "Note",
+    display: ({ source }) => source.note || "",
+  },
+  {
     id: "lab",
     title: "Lab",
     display: ({ source }) => source.lab?.title,
