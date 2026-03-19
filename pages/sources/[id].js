@@ -13,7 +13,6 @@ import JsonDisplay from "../../components/json-display";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 // lib
-import AliasList from "../../components/alias-list";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
@@ -29,8 +28,6 @@ export default function Source({ source, isJson }) {
         <JsonDisplay item={source} isJsonFormat={isJson}>
           <DataPanel>
             <DataArea>
-              <DataItemLabel>Title</DataItemLabel>
-              <DataItemValue>{source.title}</DataItemValue>
               {source.description && (
                 <>
                   <DataItemLabel>Description</DataItemLabel>
@@ -44,14 +41,6 @@ export default function Source({ source, isJson }) {
                     <a href={source.url} target="_blank" rel="noreferrer">
                       {source.url}
                     </a>
-                  </DataItemValue>
-                </>
-              )}
-              {source.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={source.aliases} />
                   </DataItemValue>
                 </>
               )}
@@ -82,7 +71,7 @@ export async function getServerSideProps({ params, req, query }) {
     return {
       props: {
         source,
-        pageContext: { title: source.name },
+        pageContext: { title: source.title },
         breadcrumbs,
         isJson,
       },

@@ -28,7 +28,6 @@ import {
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
-import AliasList from "../../components/alias-list";
 import buildAttribution from "../../lib/attribution";
 import { isJsonFormat } from "../../lib/query-utils";
 
@@ -70,14 +69,6 @@ export default function Workflow({
                   {workflow.source_url}
                 </a>
               </DataItemValueUrl>
-              {workflow.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={workflow.aliases} />
-                  </DataItemValue>
-                </>
-              )}
               {workflow.standards_page && (
                 <>
                   <DataItemLabel>Standards Page</DataItemLabel>
@@ -163,7 +154,11 @@ export async function getServerSideProps({ params, req, query }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const workflow = (await request.getObject(`/workflow/${params.id}/`)).union();
   if (FetchRequest.isResponseSuccess(workflow)) {
-    const award = (await request.getObject(workflow.award["@id"])).optional();
+    const award = workflow.award
+      ? Array.isArray(workflow.award)
+        ? await Promise.all(workflow.award.map(a => request.getObject(a["@id"]).optional()))
+        : [(await request.getObject(workflow.award["@id"])).optional()]
+      : [];
     const lab = (await request.getObject(workflow.lab["@id"])).optional();
     const documents = workflow.documents
       ? await requestDocuments(workflow.documents, request)

@@ -9,6 +9,7 @@ import SortableGrid from "./sortable-grid";
 import Status from "./status";
 // lib
 import { FileSetController } from "../lib/batch-download";
+import { formatDate } from "../lib/dates";
 import { dataSize, truthyOrZero } from "../lib/general";
 
 const filesColumns = [
@@ -28,16 +29,27 @@ const filesColumns = [
     sorter: (item) => item.content_type.toLowerCase(),
   },
   {
-    id: "lab",
-    title: "Lab",
-    display: ({ source }) => source.lab?.title,
-    sorter: (item) => (item.lab ? item.lab.title.toLowerCase() : ""),
+    id: "version",
+    title: "Version",
+    display: ({ source }) => source.version || "",
+    sorter: (item) => (item.version || "").toLowerCase(),
+  },
+  {
+    id: "note",
+    title: "Note",
+    display: ({ source }) => source.note || "",
   },
   {
     id: "file_size",
     title: "File Size",
     display: ({ source }) =>
       truthyOrZero(source.file_size) ? dataSize(source.file_size) : "",
+  },
+  {
+    id: "release_timestamp",
+    title: "Release Timestamp",
+    display: ({ source }) => formatDate(source.release_timestamp) || "",
+    sorter: (item) => item.release_timestamp || "",
   },
   {
     id: "upload_status",
@@ -87,7 +99,10 @@ export default function FileTable({
             )}
             {finalReportLink && (
               <DataAreaTitleLink href={finalReportLink} label={label}>
-                <TableCellsIcon className="h-4 w-4" />
+                <span className="flex items-center gap-1 text-white">
+                  <TableCellsIcon className="h-4 w-4" />
+                  Report view
+                </span>
               </DataAreaTitleLink>
             )}
           </div>

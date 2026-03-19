@@ -1,11 +1,7 @@
 // node_modules
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Bars2Icon,
-  MinusIcon,
-  PlusIcon,
-} from "@heroicons/react/20/solid";
+import { Bars2Icon, MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React, {
@@ -25,8 +21,6 @@ import { useSessionStorage } from "./browser-storage";
 import { Button } from "./form-elements";
 import GlobalContext from "./global-context";
 import Icon from "./icon";
-import IndexerState from "./indexer-state";
-import { Email, Twitter } from "./site-info";
 import SiteLogo from "./logo";
 import Modal from "./modal";
 import SessionContext from "./session-context";
@@ -156,7 +150,7 @@ NavigationIcon.propTypes = {
 function navigationClasses(isNarrowNav, isChildItem) {
   if (isNarrowNav) {
     // For the collapsed-navigation case.
-    return "block h-8 w-8 text-black dark:text-gray-300";
+    return "flex flex-col items-center justify-center gap-1 text-black dark:text-gray-300";
   }
 
   // The expanded-navigation case.
@@ -465,13 +459,6 @@ NavigationGroupItem.propTypes = {
 };
 
 /**
- * Wraps a generic navigation item in an <li> tag.
- */
-function NavigationItem({ children }) {
-  return <li>{children}</li>;
-}
-
-/**
  * Handles the button to expand or collapse the sidebar navigation.
  */
 function NavigationCollapseButton({ toggleNavCollapsed, isNavCollapsed }) {
@@ -565,63 +552,7 @@ function NavigationExpanded({ navigationClick }) {
 
   return (
     <>
-        <NavigationList className="p-4">
-        <NavigationGroupItem
-          id="methods"
-          title="Methods"
-          icon={<Icon.Methodology />}
-          isGroupOpened={openedParents.includes("methods")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="schemas"
-            href="/profiles"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Schemas
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="donor-meta-data"
-            href="/methods/donor_meta_data"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Donor meta-data
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="data-processing"
-            href="/methods/data_processing"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data processing
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="external-resources"
-            href="/methods/external_resources"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            External resources
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="file-formats"
-            href="/methods/file_formats"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            File formats
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="audits"
-            href="/audits"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Audit Documentation
-          </NavigationHrefItem>
-        </NavigationGroupItem>
+      <NavigationList className="p-4">
         {isAuthenticated ? (
           <NavigationGroupItem
             id="authenticate"
@@ -653,19 +584,8 @@ function NavigationExpanded({ navigationClick }) {
             </NavigationSignOutItem>
           </NavigationGroupItem>
         ) : (
-          <NavigationSignInItem id="authenticate">
-            Sign In
-          </NavigationSignInItem>
+          <NavigationSignInItem id="authenticate">Sign In</NavigationSignInItem>
         )}
-        <NavigationItem>
-          <IndexerState />
-        </NavigationItem>
-        <NavigationItem>
-          <div className="flex justify-center gap-2">
-            <Email />
-            <Twitter />
-          </div>
-        </NavigationItem>
       </NavigationList>
     </>
   );
@@ -678,59 +598,32 @@ NavigationExpanded.propTypes = {
   // toggleNavCollapsed: PropTypes.func,
 };
 
-function NavigationCollapsed({ navigationClick }) {
+function NavigationCollapsed() {
   const { isAuthenticated } = useAuth0();
 
   return (
     <NavigationList className="w-full [&>ul>li]:my-2 [&>ul]:flex [&>ul]:flex-col [&>ul]:items-center">
-      <NavigationHrefItem
-        id="home"
-        href="/"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <Icon.Brand />
-        </NavigationIcon>
-      </NavigationHrefItem>
-      <NavigationHrefItem
-        id="schemas"
-        href="/profiles"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <Icon.Data />
-        </NavigationIcon>
-      </NavigationHrefItem>
       {isAuthenticated ? (
         <NavigationSignOutItem id="sign-out" isNarrowNav>
-          <Icon.UserSignedIn className="h-8 w-8" />
+          <Icon.UserSignedIn className="h-6 w-6" />
+          <span style={{ fontSize: '12px' }} className="whitespace-nowrap">Sign Out</span>
         </NavigationSignOutItem>
       ) : (
         <NavigationSignInItem id="authenticate" isNarrowNav>
-          <Icon.UserSignedOut className="h-8 w-8" />
+          <Icon.UserSignedOut className="h-6 w-6" />
+          <span style={{ fontSize: '12px' }} className="whitespace-nowrap">Sign In</span>
         </NavigationSignInItem>
       )}
-      <NavigationItem>
-        <IndexerState isCollapsed />
-      </NavigationItem>
-      <NavigationItem>
-        <Email />
-      </NavigationItem>
-      <NavigationItem>
-        <Twitter />
-      </NavigationItem>
     </NavigationList>
   );
 }
 
-NavigationCollapsed.propTypes = {
-  // Function to call when user clicks a navigation item
-  navigationClick: PropTypes.func.isRequired,
-  // Function to call when user clicks the collapse button
-  // toggleNavCollapsed: PropTypes.func.isRequired,
-};
+//NavigationCollapsed.propTypes = {
+// Function to call when user clicks a navigation item
+//navigationClick: PropTypes.func.isRequired,
+// Function to call when user clicks the collapse button
+// toggleNavCollapsed: PropTypes.func.isRequired,
+//};
 
 /**
  * Displays the full IGVF logo and the sidebar navigation collapse button.
@@ -739,9 +632,7 @@ function NavigationLogo({ isNavCollapsed }) {
   return (
     <div className="flex">
       <SiteLogo />
-      <NavigationCollapseButton
-        isNavCollapsed={isNavCollapsed}
-      />
+      <NavigationCollapseButton isNavCollapsed={isNavCollapsed} />
     </div>
   );
 }
@@ -758,12 +649,16 @@ NavigationLogo.propTypes = {
  */
 export default function NavigationSection() {
   // True if user has opened the mobile menu
+  const [isClient, setIsClient] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   // True if user has collapsed the sidebar menu
   const [isNavCollapsed, setIsNavCollapsed] = useSessionStorage(
     "nav-collapsed",
     false
   );
+  useEffect(() => {
+    setIsClient(true); // Ensure rendering only happens on the client-side
+  }, []);
 
   /**
    * Called when the user clicks a navigation menu item.
@@ -804,15 +699,13 @@ export default function NavigationSection() {
       document.removeEventListener("keydown", handleCollapseKeypress);
     };
   }, [toggleNavCollapsed]);
-
+  // Render nothing until client-side rendering is confirmed
+  if (!isClient) {
+    return <div style={{ visibility: "hidden" }} />;
+  }
   return (
-    <section
-      className={`bg-brand md:sticky md:top-0 md:h-screen md:shrink-0 md:grow-0 md:overflow-y-auto md:bg-transparent ${
-        isNavCollapsed ? "md:w-12" : "md:w-72"
-      }`}
-    >
+    <section>
       <div className="flex h-14 items-center justify-between p-2 md:hidden">
-        <SiteLogo />
         <button
           data-testid="mobile-navigation-trigger"
           className="stroke-white md:hidden"
@@ -822,11 +715,9 @@ export default function NavigationSection() {
         </button>
       </div>
       {/* Render only the collapsed navigation for desktop */}
-        <div className="hidden md:block">
-            <NavigationCollapsed
-              navigationClick={navigationClick}
-            />
-        </div>
+      <div className="hidden md:block">
+        <NavigationCollapsed navigationClick={navigationClick} />
+      </div>
 
       <MobileCollapsableArea
         isOpen={isMobileNavOpen}

@@ -23,10 +23,13 @@ export function FileDownload({ file, className = "" }) {
     file.controlled_access && file.anvil_url
   );
 
+  // Use file_url if available, otherwise fallback to the original href with API_URL
+  const downloadUrl = file.file_url || `${API_URL}${file.href}`;
+
   return (
     <ButtonLink
       label={`Download file ${file.accession}`}
-      href={`${API_URL}${file.href}`}
+      href={downloadUrl}
       type="secondary"
       size="sm"
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}
@@ -67,12 +70,13 @@ FileHeaderDownload.propTypes = {
 /**
  * Display a file's accession and download link on one row.
  */
-export function FileAccessionAndDownload({ file }) {
+export function FileAccessionAndDownload({ file, isTargetBlank = false }) {
   return (
     <div>
       <div className="flex items-center gap-1">
-        <LinkedIdAndStatus item={file}>{file.accession}</LinkedIdAndStatus>
-        <FileDownload file={file} />
+        <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
+          {file.accession}
+        </LinkedIdAndStatus>
       </div>
     </div>
   );
@@ -81,4 +85,5 @@ export function FileAccessionAndDownload({ file }) {
 FileAccessionAndDownload.propTypes = {
   // File to link to and download
   file: PropTypes.object.isRequired,
+  isTargetBlank: PropTypes.bool,
 };

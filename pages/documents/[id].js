@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import AliasList from "../../components/alias-list";
 import AttachmentThumbnail from "../../components/attachment-thumbnail";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
@@ -50,14 +49,6 @@ export default function Document({ document, attribution = null, isJson }) {
                 <>
                   <DataItemLabel>Submitter Comment</DataItemLabel>
                   <DataItemValue>{document.submitter_comment}</DataItemValue>
-                </>
-              )}
-              {document.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={document.aliases} />
-                  </DataItemValue>
                 </>
               )}
               {document.urls?.length > 0 && (

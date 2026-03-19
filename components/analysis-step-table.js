@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 import { DataAreaTitle, DataAreaTitleLink } from "./data-area";
 import LinkedIdAndStatus from "./linked-id-and-status";
 import SortableGrid from "./sortable-grid";
-import { AliasesCell } from "./table-cells";
 
 const analysisStepColumns = [
   {
@@ -25,12 +24,6 @@ const analysisStepColumns = [
   {
     id: "step_label",
     title: "Step Label",
-  },
-  {
-    id: "aliases",
-    title: "Aliases",
-    display: ({ source }) => <AliasesCell source={source} />,
-    isSortable: false,
   },
   {
     id: "input_content_types",

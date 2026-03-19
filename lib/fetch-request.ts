@@ -527,7 +527,30 @@ export default class FetchRequest {
     });
     try {
       const response = await fetch(this.pathUrl(path), options);
-      return response.json();
+      if (!response.ok) {
+        // Try to parse JSON error response, fallback to network error if not JSON
+        try {
+          const error = {
+            ...(await response.json()),
+            isError: true,
+          } as ErrorObject;
+          return error;
+        } catch (jsonError) {
+          // Response is not JSON (e.g., 404 HTML page)
+          const error: ErrorObject = {
+            isError: true,
+            "@type": ["NetworkError", "Error"],
+            status: "error",
+            code: response.status,
+            title: `HTTP ${response.status} Error`,
+            description: `Request to ${path} failed with status ${response.status}`,
+            detail: `Request to ${path} failed with status ${response.status}`,
+          };
+          return error;
+        }
+      }
+      const results = (await response.json()) as DataProviderObject;
+      return results;
     } catch (error) {
       console.log(error);
       return NETWORK_ERROR_RESPONSE;

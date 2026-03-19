@@ -174,14 +174,14 @@ const profiles = {
         description:
           "The collection of biological data related to a single initiative, originating from a consortium.",
         type: "string",
-          enum: ["community", "ENCODE", "IGVF", "PanKbase"],
+        enum: ["community", "ENCODE", "IGVF", "PanKbase"],
       },
       viewing_group: {
         title: "View Access Group",
         description:
           "The group that determines which set of data the user has permission to view.",
         type: "string",
-          enum: ["community", "IGVF", "PanKbase"],
+        enum: ["community", "IGVF", "PanKbase"],
       },
       component: {
         title: "Project Component",
@@ -750,8 +750,8 @@ const profiles = {
           type: "string",
         },
       },
-      sex: {
-        title: "Sex",
+      gender: {
+        title: "Gender",
         type: "string",
       },
       "@id": {
@@ -766,6 +766,54 @@ const profiles = {
           type: "string",
         },
         notSubmittable: true,
+      },
+    },
+  },
+
+  HumanBetaCellLines: {
+    title: "Human Beta Cell Lines",
+    $id: "/profiles/human_beta_cell_line.json",
+    required: ["award", "lab", "source", "donors", "taxa", "sample_terms"],
+    identifyingProperties: [
+      "uuid",
+      "accession",
+      "alternate_accessions",
+      "aliases",
+    ],
+    properties: {
+      "@id": {
+        title: "ID",
+        type: "string",
+        notSubmittable: true,
+      },
+      "@type": {
+        title: "Type",
+        type: "array",
+        items: {
+          type: "string",
+        },
+        notSubmittable: true,
+      },
+      sample_terms: {
+        title: "Sample Terms",
+        description: "Ontology term identifying a biosample.",
+        type: "string",
+        linkTo: "SampleTerm",
+      },
+      donors: {
+        title: "Donors",
+        description: "Donor(s). Any contributing donor.",
+        type: "array",
+        minItems: 1,
+        uniqueItems: true,
+        items: {
+          title: "Donor",
+          description: "Donor(s).",
+          comment:
+            "See concrete class human_donor.json or rodent_donor.json for available identifiers.",
+          type: "string",
+          linkTo: "Donor",
+        },
       },
     },
   },
@@ -3540,7 +3588,7 @@ const profiles = {
         items: {
           title: "Published By",
           type: "string",
-            enum: ["community", "IGVF", "PanKbase", "ENCODE"],
+          enum: ["community", "IGVF", "PanKbase", "ENCODE"],
         },
       },
       "@id": {

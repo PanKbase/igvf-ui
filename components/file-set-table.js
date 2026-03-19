@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { DataAreaTitle, DataAreaTitleLink } from "./data-area";
 import LinkedIdAndStatus from "./linked-id-and-status";
 import SortableGrid from "./sortable-grid";
-import { AliasesCell } from "./table-cells";
 // lib
 import { encodeUriElement } from "../lib/query-encoding";
 
@@ -21,17 +20,6 @@ const fileSetColumns = [
     id: "summary",
     title: "Summary",
     sorter: (item) => item.summary.toLowerCase(),
-  },
-  {
-    id: "aliases",
-    title: "Aliases",
-    display: ({ source }) => <AliasesCell source={source} />,
-  },
-  {
-    id: "lab",
-    title: "Lab",
-    display: ({ source }) => source.lab?.title || null,
-    sorter: (item) => (item.lab?.title ? item.lab.title.toLowerCase() : ""),
   },
 ];
 
@@ -73,7 +61,7 @@ export default function FileSetTable({
         reportLinkSpecs.identifierProp
       }=${encodeUriElement(
         reportLinkSpecs.itemIdentifier
-      )}&field=%40id&field=accession&field=samples&field=lab&field=status&field=aliases`
+      )}&field=%40id&field=accession&field=samples&field=status&field=aliases`
     : reportLink;
 
   return (
@@ -85,7 +73,10 @@ export default function FileSetTable({
             href={composedReportLink}
             label="Report of file sets that belong to this item"
           >
-            <TableCellsIcon className="h-4 w-4" />
+            <span className="flex items-center gap-1 text-white">
+              <TableCellsIcon className="h-4 w-4" />
+              Report view
+            </span>
           </DataAreaTitleLink>
         )}
       </DataAreaTitle>

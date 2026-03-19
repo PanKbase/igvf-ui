@@ -15,7 +15,6 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 // components
-import AliasList from "./alias-list";
 import {
   DataPanel,
   DataArea,
@@ -26,7 +25,7 @@ import {
   DataItemValueUrl,
 } from "./data-area";
 import DbxrefList from "./dbxref-list";
-import ProductInfo from "./product-info";
+import { FileDownload } from "./file-download";
 import SeparatedList from "./separated-list";
 // lib
 import { formatDate } from "../lib/dates";
@@ -35,333 +34,486 @@ import { dataSize, truthyOrZero } from "../lib/general";
 /**
  * Display the data items common to all donor-derived objects.
  */
-export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], children }) {
+export function DonorDataItems({
+  item,
+  diabetesStatus = [],
+  otherTissue = [],
+  children,
+}) {
   return (
     <>
       {/* Donor Identification */}
       <DataAreaTitle>Donor Identification</DataAreaTitle>
       <DataPanel>
-      <DataArea>
-      {item.rrid && (
-        <>
-          <DataItemLabel>RRID</DataItemLabel>
-          <DataItemValue>{item.rrid}</DataItemValue>
-        </>
-      )}
-      {item.center_donor_id && (
-        <>
-          <DataItemLabel>Center Donor ID</DataItemLabel>
-          <DataItemValue>{item.center_donor_id}</DataItemValue>
-        </>
-      )}
-      </DataArea>
+        <DataArea>
+          {item.rrid && (
+            <>
+              <DataItemLabel>RRID</DataItemLabel>
+              <DataItemValue>{item.rrid}</DataItemValue>
+            </>
+          )}
+          {item.center_donor_id && (
+            <>
+              <DataItemLabel>Program Donor ID</DataItemLabel>
+              <DataItemValue>{item.center_donor_id}</DataItemValue>
+            </>
+          )}
+        </DataArea>
       </DataPanel>
       {/* Basic Information */}
       <DataAreaTitle>Demographics</DataAreaTitle>
       <DataPanel>
-      <DataArea>
-      {item.biological_sex && (
-        <>
-          <DataItemLabel>Genetic Sex</DataItemLabel>
-          <DataItemValue>
-            {item.biological_sex}
-          </DataItemValue>
-        </>
-      )}
-      {item.sex && (
-        <>
-          <DataItemLabel>Self-Reported Sex</DataItemLabel>
-          <DataItemValue>{item.sex}</DataItemValue>
-              </>
-      )}
-      {item.age > 0 && (
-        <>
-          <DataItemLabel>Age (years)</DataItemLabel>
-          <DataItemValue>{item.age}</DataItemValue>
-        </>
-      )}
-      {item.bmi > 0 && (
-        <>
-          <DataItemLabel>BMI</DataItemLabel>
-          <DataItemValue>{item.bmi}</DataItemValue>
-        </>
-      )}
-      {/* Genetic and Ethnic Information */}
-      {item.genetic_ethnicities?.length > 0 && (
-        <>
-          <DataItemLabel>Predicted Genetic Ancestry</DataItemLabel>
-              <DataItemValue>{item.genetic_ethnicities.map((ethnicityObj, index) => ( <span key={index}> {ethnicityObj.ethnicity} {ethnicityObj.percentage !== undefined ? ` (${ethnicityObj.percentage}%)` : ""} {index < item.genetic_ethnicities.length - 1 ? ", " : ""} </span>))}</DataItemValue>
-        </>
-      )}
-      {item.ethnicities?.length > 0 && (
-        <>
-          <DataItemLabel>Self-Reported Ethnicity</DataItemLabel>
-          <DataItemValue>{item.ethnicities.join(", ")}</DataItemValue>
-        </>
-      )}
-      </DataArea>
+        <DataArea>
+          {item.biological_sex && (
+            <>
+              <DataItemLabel>Genetic Sex</DataItemLabel>
+              <DataItemValue>{item.biological_sex}</DataItemValue>
+            </>
+          )}
+          {item.gender && (
+            <>
+              <DataItemLabel>Gender</DataItemLabel>
+              <DataItemValue>{item.gender}</DataItemValue>
+            </>
+          )}
+          {item.age > 0 && (
+            <>
+              <DataItemLabel>Age (years)</DataItemLabel>
+              <DataItemValue>{item.age}</DataItemValue>
+            </>
+          )}
+          {item.bmi > 0 && (
+            <>
+              <DataItemLabel>BMI</DataItemLabel>
+              <DataItemValue>{item.bmi}</DataItemValue>
+            </>
+          )}
+          {/* Genetic and Ethnic Information */}
+          {item.genetic_predicted_ethnicities?.length > 0 && (
+            <>
+              <DataItemLabel>Predicted Genetic Ancestry</DataItemLabel>
+              <DataItemValue>
+                {item.genetic_predicted_ethnicities.map(
+                  (ethnicityObj, index) => (
+                    <span key={index}>
+                      {" "}
+                      {ethnicityObj.ethnicity}{" "}
+                      {ethnicityObj.percentage !== undefined
+                        ? ` (${ethnicityObj.percentage}%)`
+                        : ""}{" "}
+                      {index < item.genetic_predicted_ethnicities.length - 1
+                        ? ", "
+                        : ""}{" "}
+                    </span>
+                  )
+                )}
+              </DataItemValue>
+            </>
+          )}
+          {item.self_reported_ethnicities?.length > 0 && (
+            <>
+              <DataItemLabel>Reported Ethnicity</DataItemLabel>
+              <DataItemValue>
+                {item.self_reported_ethnicities.join(", ")}
+              </DataItemValue>
+            </>
+          )}
+        </DataArea>
       </DataPanel>
       {/* Health Status */}
       <DataAreaTitle>Medical and Clinical Information</DataAreaTitle>
       <DataPanel>
-      <DataArea>
-      {item.diabetes_duration !== undefined && (
-        <>
-          <DataItemLabel>Diabetes Duration (years)</DataItemLabel>
-          <DataItemValue>{item.diabetes_duration}</DataItemValue>
-        </>
-      )}
-      {item.family_history_of_diabetes !== undefined && (
-        <>
-          <DataItemLabel>Family History of Diabetes</DataItemLabel>
-          <DataItemValue>{item.family_history_of_diabetes}</DataItemValue>
-        </>
-      )}
-      {item.family_history_of_diabetes_relationship?.length > 0 && (
-        <>
-          <DataItemLabel>Relationship Type</DataItemLabel>
-              <DataItemValue>{item.family_history_of_diabetes_relationship.join(",")}</DataItemValue>
-        </>
-      )}
-      {item.living_donor !== undefined && (
-        <>
-          <DataItemLabel>Living Donor</DataItemLabel>
-          <DataItemValue>{item.living_donor ? "true" : "false"}</DataItemValue>
-        </>
-      )}
-      {Array.isArray(diabetesStatus) && diabetesStatus?.length > 0 ? (
-        <>
-          <DataItemLabel>Diabetes Status</DataItemLabel>
-          <DataItemValue>
-          <SeparatedList>
-          {diabetesStatus.map((status) => (
-          <Link key={status["@id"]} href={status["@id"]}>
-            {status.term_id}
-          </Link>
-        ))}
-      </SeparatedList>
-      </DataItemValue>
-      </>
-      ) : (
-      <>
-      <DataItemLabel>Diabetes Status</DataItemLabel>
-      <DataItemValue>No ontology term available</DataItemValue>
-      </>
-      )}
-      {item.diabetes_status_description && (
-        <>
-          <DataItemLabel>Diabetes Status Description</DataItemLabel>
-          <DataItemValue>{item.diabetes_status_description}</DataItemValue>
-        </>
-      )}
-      {item.diabetes_status_hba1c !== undefined && (
-        <>
-          <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
-          <DataItemValue>{item.diabetes_status_hba1c}</DataItemValue>
-        </>
-      )}
-      {item.hba1c !== undefined && (
-        <>
-          <DataItemLabel>HbA1C (percentage)</DataItemLabel>
-          <DataItemValue>{item.hba1c}</DataItemValue>
-        </>
-      )}
-      {item.c_peptide !== undefined && (
-        <>
-          <DataItemLabel>C Peptide (ng/ml)</DataItemLabel>
-          <DataItemValue>{item.c_peptide}</DataItemValue>
-        </>
-      )}
-      {item.cause_of_death !== undefined && (
-        <>
-          <DataItemLabel>Cause of Death</DataItemLabel>
-          <DataItemValue>{item.cause_of_death}</DataItemValue>
-        </>
-      )}
-      {item.glucose_loweing_theraphy?.length > 0  && (
-        <>
-          <DataItemLabel>Glucose Lowering Therapy</DataItemLabel>
-              <DataItemValue>{item.glucose_loweing_theraphy.join(", ")}</DataItemValue>
-        </>
-      )}
-      {item.hospital_stay !== undefined && (
-        <>
-          <DataItemLabel>Hospital Stay (hours)</DataItemLabel>
-          <DataItemValue>{item.hospital_stay}</DataItemValue>
-        </>
-      )}
-      {item.donation_type !== undefined && (
-        <>
-          <DataItemLabel>Donation Type</DataItemLabel>
-          <DataItemValue>{item.donation_type}</DataItemValue>
-        </>
-      )}
-      </DataArea>
+        <DataArea>
+          {item.diabetes_duration !== undefined && (
+            <>
+              <DataItemLabel>Diabetes Duration (years)</DataItemLabel>
+              <DataItemValue>{item.diabetes_duration}</DataItemValue>
+            </>
+          )}
+          {item.family_history_of_diabetes !== undefined && (
+            <>
+              <DataItemLabel>Family History of Diabetes</DataItemLabel>
+              <DataItemValue>{item.family_history_of_diabetes}</DataItemValue>
+            </>
+          )}
+          {item.family_history_of_diabetes_relationship?.length > 0 && (
+            <>
+              <DataItemLabel>Relationship Type</DataItemLabel>
+              <DataItemValue>
+                {item.family_history_of_diabetes_relationship.join(",")}
+              </DataItemValue>
+            </>
+          )}
+          {item.other_disease_states?.length > 0 && (
+            <>
+              <DataItemLabel>Other Disease States</DataItemLabel>
+              <DataItemValue>
+                {item.other_disease_states.join(",")}
+              </DataItemValue>
+            </>
+          )}
+          {item.living_donor !== undefined && (
+            <>
+              <DataItemLabel>Living Donor</DataItemLabel>
+              <DataItemValue>
+                {item.living_donor ? "true" : "false"}
+              </DataItemValue>
+            </>
+          )}
+          {Array.isArray(diabetesStatus) && diabetesStatus?.length > 0 ? (
+            <>
+              <DataItemLabel>Diabetes Ontology Classification</DataItemLabel>
+              <DataItemValue>
+                <SeparatedList>
+                  {diabetesStatus.map((status) => (
+                    <Link key={status["@id"]} href={status["@id"]}>
+                      {status.term_id}
+                    </Link>
+                  ))}
+                </SeparatedList>
+              </DataItemValue>
+            </>
+          ) : (
+            <>
+              <DataItemLabel>Diabetes Status</DataItemLabel>
+              <DataItemValue>No ontology term available</DataItemValue>
+            </>
+          )}
+          {item.diabetes_status_description && (
+            <>
+              <DataItemLabel>Clinical Diagnosis of Diabetes</DataItemLabel>
+              <DataItemValue>{item.diabetes_status_description}</DataItemValue>
+            </>
+          )}
+          {item.t1d_stage && (
+            <>
+              <DataItemLabel>T1D Stage</DataItemLabel>
+              <DataItemValue>{item.t1d_stage}</DataItemValue>
+            </>
+          )}
+          {item.derived_diabetes_status && (
+            <>
+              <DataItemLabel>Derived diabetes status</DataItemLabel>
+              <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
+            </>
+          )}
+          {item.diabetes_status_hba1c !== undefined && (
+            <>
+              <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
+              <DataItemValue>{item.diabetes_status_hba1c}</DataItemValue>
+            </>
+          )}
+          {item.hba1c !== undefined && (
+            <>
+              <DataItemLabel>HbA1C (percentage)</DataItemLabel>
+              <DataItemValue>{item.hba1c}</DataItemValue>
+            </>
+          )}
+          {item.c_peptide !== undefined && (
+            <>
+              <DataItemLabel>C Peptide (ng/ml)</DataItemLabel>
+              <DataItemValue>{item.c_peptide}</DataItemValue>
+            </>
+          )}
+          {item.cause_of_death !== undefined && (
+            <>
+              <DataItemLabel>Cause of Death</DataItemLabel>
+              <DataItemValue>{item.cause_of_death}</DataItemValue>
+            </>
+          )}
+          {item.glucose_loweing_theraphy?.length > 0 && (
+            <>
+              <DataItemLabel>Glucose Lowering Therapy</DataItemLabel>
+              <DataItemValue>
+                {item.glucose_loweing_theraphy.join(", ")}
+              </DataItemValue>
+            </>
+          )}
+          {item.other_theraphy?.length > 0 && (
+            <>
+              <DataItemLabel>Medication</DataItemLabel>
+              <DataItemValue>{item.other_theraphy.join(", ")}</DataItemValue>
+            </>
+          )}
+          {item.hospital_stay !== undefined && (
+            <>
+              <DataItemLabel>Hospital Stay (hours)</DataItemLabel>
+              <DataItemValue>{item.hospital_stay}</DataItemValue>
+            </>
+          )}
+          {item.donation_type !== undefined && (
+            <>
+              <DataItemLabel>Donation Type</DataItemLabel>
+              <DataItemValue>{item.donation_type}</DataItemValue>
+            </>
+          )}
+        </DataArea>
       </DataPanel>
       {/* Immunological Information */}
-      {(item.aab_gada_value !== undefined || item.aab_gada !== undefined ||
-      item.aab_ia2_value !== undefined || item.aab_ia2 !== undefined ||
-      item.aab_znt8_value !== undefined || item.aab_znt8 !== undefined) && (
-      <>
-      <DataAreaTitle>Auto Antibodies</DataAreaTitle>
-      <DataPanel>
-      <DataArea>
-      {item.aab_gada_value !== undefined && (
+      {(item.aab_gada_value !== undefined ||
+        item.aab_gada !== undefined ||
+        item.aab_ia2_value !== undefined ||
+        item.aab_ia2 !== undefined ||
+        item.aab_iaa_value !== undefined ||
+        item.aab_iaa !== undefined ||
+        item.aab_znt8_value !== undefined ||
+        item.aab_znt8 !== undefined) && (
         <>
-          <DataItemLabel>AAB GADA Value (unit/ml)</DataItemLabel>
-          <DataItemValue>{item.aab_gada_value}</DataItemValue>
-        </>
-      )}
-      {item.aab_gada !== undefined && (
-        <>
-          <DataItemLabel>AAB GADA Positive</DataItemLabel>
-          <DataItemValue>{item.aab_gada ? "true" : "false"}</DataItemValue>
-        </>
-      )}
-      {item.aab_ia2_value !== undefined && (
-        <>
-          <DataItemLabel>AAB IA2 Value (unit/ml)</DataItemLabel>
-          <DataItemValue>{item.aab_ia2_value}</DataItemValue>
-        </>
-      )}
-      {item.aab_ia2 !== undefined && (
-        <>
-          <DataItemLabel>AAB IA2 Positive</DataItemLabel>
-          <DataItemValue>{item.aab_ia2 ? "true" : "false"}</DataItemValue>
-        </>
-      )}
-      {item.aab_znt8_value !== undefined && (
-        <>
-          <DataItemLabel>AAB ZNT8 Value (unit/ml)</DataItemLabel>
-          <DataItemValue>{item.aab_znt8_value}</DataItemValue>
-        </>
-      )}
-      {item.aab_znt8 !== undefined && (
-        <>
-          <DataItemLabel>AAB ZNT8 Positive</DataItemLabel>
-          <DataItemValue>{item.aab_znt8 ? "true" : "false"}</DataItemValue>
-        </>
-      )}
-      </DataArea>
-      </DataPanel>
+          <DataAreaTitle>Auto Antibodies</DataAreaTitle>
+          <DataPanel>
+            <DataArea>
+              {item.aab_gada_value !== undefined && (
+                <>
+                  <DataItemLabel>AAB GADA Value (unit/ml)</DataItemLabel>
+                  <DataItemValue>{item.aab_gada_value}</DataItemValue>
+                </>
+              )}
+              {item.aab_gada_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB GADA Assay</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_gada_assay.join(", ")}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_gada !== undefined && (
+                <>
+                  <DataItemLabel>AAB GADA Positive</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_gada ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_ia2_value !== undefined && (
+                <>
+                  <DataItemLabel>AAB IA2 Value (unit/ml)</DataItemLabel>
+                  <DataItemValue>{item.aab_ia2_value}</DataItemValue>
+                </>
+              )}
+              {item.aab_ia2 !== undefined && (
+                <>
+                  <DataItemLabel>AAB IA2 Positive</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_ia2 ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_ia2_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB IA2 Assay</DataItemLabel>
+                  <DataItemValue>{item.aab_ia2_assay.join(", ")}</DataItemValue>
+                </>
+              )}
+              {item.aab_iaa_value !== undefined && (
+                <>
+                  <DataItemLabel>AAB IAA Value (unit/ml)</DataItemLabel>
+                  <DataItemValue>{item.aab_iaa_value}</DataItemValue>
+                </>
+              )}
+              {item.aab_iaa_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB IAA Assay</DataItemLabel>
+                  <DataItemValue>{item.aab_iaa_assay.join(", ")}</DataItemValue>
+                </>
+              )}
+              {item.aab_iaa !== undefined && (
+                <>
+                  <DataItemLabel>AAB IAA Positive</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_iaa ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_znt8_value !== undefined && (
+                <>
+                  <DataItemLabel>AAB ZNT8 Value (unit/ml)</DataItemLabel>
+                  <DataItemValue>{item.aab_znt8_value}</DataItemValue>
+                </>
+              )}
+              {item.aab_znt8_assay?.length > 0 && (
+                <>
+                  <DataItemLabel>AAB ZNT8 Assay</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_znt8_assay.join(", ")}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_znt8 !== undefined && (
+                <>
+                  <DataItemLabel>AAB ZNT8 Positive</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_znt8 ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+            </DataArea>
+          </DataPanel>
         </>
       )}
       {item.hla_typing !== undefined && (
-      <>
-      <DataAreaTitle>HLA Typing</DataAreaTitle>
-      <DataPanel>
-      <DataArea>
-          <DataItemLabel>HLA Typing</DataItemLabel>
-          <DataItemValue>{item.hla_typing}</DataItemValue>
-      </DataArea>
-      </DataPanel>
-      </>
+        <>
+          <DataAreaTitle>HLA Typing</DataAreaTitle>
+          <DataPanel>
+            <DataArea>
+              <DataItemLabel>HLA Typing</DataItemLabel>
+              <DataItemValue>{item.hla_typing}</DataItemValue>
+            </DataArea>
+          </DataPanel>
+        </>
+      )}
+      {item.hla_status && (
+        <>
+          <DataAreaTitle>HLA Status</DataAreaTitle>
+          <DataPanel>
+            <DataArea>
+              <DataItemLabel>HLA Status</DataItemLabel>
+              <DataItemValue>{item.hla_status}</DataItemValue>
+            </DataArea>
+          </DataPanel>
+        </>
       )}
       <DataAreaTitle>Supplementary Information</DataAreaTitle>
       <DataPanel>
-      <DataArea>
-      {/* Additional Biological Information */}
-      {item.data_available?.length > 0 && (
-      <>
-      <DataItemLabel>Data Available</DataItemLabel>
-      <DataItemValue>
-      {item.data_available.map((dataObj, index) => (
-        <div key={index}>
-          <strong>{dataObj.dataset}</strong> ({dataObj.dataset_tissue})
-          {dataObj.dataset_link && (
+        <DataArea>
+          {item.genetic_risk_score?.length > 0 && (
             <>
-              {" - "}
-              <a href={dataObj.dataset_link} target="_blank" rel="noopener noreferrer">
-                Access Dataset
-              </a>
+              <DataAreaTitle>Genetic Risk Score</DataAreaTitle>
+              <DataPanel>
+                <DataArea>
+                  {item.genetic_risk_score.map((grsObj, index) => (
+                    <div key={index}>
+                      <DataItemLabel>{grsObj.method}</DataItemLabel>
+                      <DataItemValue>
+                        <div>
+                          <strong>Overall Score:</strong> {grsObj.overall_score}
+                        </div>
+                        {grsObj.mhc_only !== undefined && (
+                          <div>
+                            <strong>MHC-only:</strong> {grsObj.mhc_only}
+                          </div>
+                        )}
+                        {grsObj.non_mhc_only !== undefined && (
+                          <div>
+                            <strong>Non-MHC-only:</strong> {grsObj.non_mhc_only}
+                          </div>
+                        )}
+                      </DataItemValue>
+                    </div>
+                  ))}
+                </DataArea>
+              </DataPanel>
             </>
           )}
-        </div>
-      ))}
-      </DataItemValue>
-      </>
-      )}
-      {item.pancreas_tissue_available !== undefined && (
-        <>
-          <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
-          <DataItemValue>
-            {item.pancreas_tissue_available ? "true" : "false"}
-          </DataItemValue>
-        </>
-      )}
-      {Array.isArray(otherTissue) && otherTissue?.length > 0 ? (
-        <>
-        <DataItemLabel>Other Tissues Available</DataItemLabel>
-        <DataItemValue>
-        <SeparatedList>
-         {otherTissue.map((tissue) => (
-          <Link key={tissue["@id"]} href={tissue["@id"]}>
-            {tissue.term_id}
-          </Link>
-        ))}
-        </SeparatedList>
-        </DataItemValue>
-        </>
-        ) : (
-       <>
-       <DataItemLabel>Other Tissues Available</DataItemLabel>
-       <DataItemValue>No ontology term</DataItemValue>
-       </>
-      )}
-      {/* Supplementary Information */}
-      {item.phenotypic_features?.length > 0 && (
-        <>
-          <DataItemLabel>Phenotypic Features</DataItemLabel>
-              <DataItemValue>{item.phenotypic_features.join(", ")}</DataItemValue>
-        </>
-      )}
-      {item.description !== undefined && (
-        <>
-          <DataItemLabel>Description</DataItemLabel>
-          <DataItemValue>{item.description}</DataItemValue>
-        </>
-      )}
-      {item.collections?.length > 0 && (
-        <>
-          <DataItemLabel>Collections</DataItemLabel>
-          <DataItemValue>{item.collections.join(", ")}</DataItemValue>
-        </>
-      )}
-      {item.dbxrefs?.length > 0 && (
-        <>
-          <DataItemLabel>External Resources</DataItemLabel>
-          <DataItemValue>
-            <DbxrefList dbxrefs={item.dbxrefs} isCollapsible />
-          </DataItemValue>
-        </>
-      )}
+          {/* Additional Biological Information */}
+          {item.data_available?.length > 0 && (
+            <>
+              <DataItemLabel>Data Available</DataItemLabel>
+              <DataItemValue>
+                {item.data_available.map((dataObj, index) => (
+                  <div key={index}>
+                    <strong>{dataObj.dataset}</strong> ({dataObj.dataset_tissue}
+                    )
+                    {dataObj.dataset_link && (
+                      <>
+                        {" - "}
+                        <a
+                          href={dataObj.dataset_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Access Dataset
+                        </a>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </DataItemValue>
+            </>
+          )}
 
-      {/* Metadata and External Links */}
-      {item.aliases?.length > 0 && (
+      {item.publication_data?.length > 0 && (
         <>
-          <DataItemLabel>Aliases</DataItemLabel>
+          <DataItemLabel>Publication Data</DataItemLabel>
           <DataItemValue>
-            <AliasList aliases={item.aliases} />
+            <DbxrefList dbxrefs={item.publication_data} isCollapsible />
           </DataItemValue>
         </>
       )}
-      {item.identifiers?.length > 0 && (
-        <>
-          <DataItemLabel>Identifiers</DataItemLabel>
-          <DataItemValue>{item.identifiers.join(", ")}</DataItemValue>
-        </>
-      )}
-      {item.url !== undefined && (
-        <>
-          <DataItemLabel>URL</DataItemLabel>
-          <DataItemValueUrl>
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
-              {item.url}
-            </a>
-          </DataItemValueUrl>
-        </>
-      )}
-      </DataArea>
+          {item.pancreas_tissue_available !== undefined && (
+            <>
+              <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
+              <DataItemValue>
+                {item.pancreas_tissue_available ? "true" : "false"}
+              </DataItemValue>
+            </>
+          )}
+          {Array.isArray(otherTissue) && otherTissue?.length > 0 ? (
+            <>
+              <DataItemLabel>Other Tissues Available</DataItemLabel>
+              <DataItemValue>
+                <SeparatedList>
+                  {otherTissue.map((tissue) => (
+                    <Link key={tissue["@id"]} href={tissue["@id"]}>
+                      {tissue.term_id}
+                    </Link>
+                  ))}
+                </SeparatedList>
+              </DataItemValue>
+            </>
+          ) : (
+            <>
+              <DataItemLabel>Other Tissues Available</DataItemLabel>
+              <DataItemValue>No ontology term</DataItemValue>
+            </>
+          )}
+          {/* Supplementary Information */}
+          {item.phenotypic_features?.length > 0 && (
+            <>
+              <DataItemLabel>Phenotypic Features</DataItemLabel>
+              <DataItemValue>
+                {item.phenotypic_features.join(", ")}
+              </DataItemValue>
+            </>
+          )}
+          {item.description !== undefined && (
+            <>
+              <DataItemLabel>Description</DataItemLabel>
+              <DataItemValue>{item.description}</DataItemValue>
+            </>
+          )}
+          {item.collections?.length > 0 && (
+            <>
+              <DataItemLabel>Collections</DataItemLabel>
+              <DataItemValue>{item.collections.join(", ")}</DataItemValue>
+            </>
+          )}
+          {item.dbxrefs?.length > 0 && (
+            <>
+              <DataItemLabel>External Resources</DataItemLabel>
+              <DataItemValue>
+                <DbxrefList dbxrefs={item.dbxrefs} isCollapsible />
+              </DataItemValue>
+            </>
+          )}
+
+          {/* Metadata and External Links */}
+          {item.identifiers?.length > 0 && (
+            <>
+              <DataItemLabel>Identifiers</DataItemLabel>
+              <DataItemValue>{item.identifiers.join(", ")}</DataItemValue>
+            </>
+          )}
+          {item.url !== undefined && (
+            <>
+              <DataItemLabel>URL</DataItemLabel>
+              <DataItemValueUrl>
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  {item.url}
+                </a>
+              </DataItemValueUrl>
+            </>
+          )}
+        </DataArea>
       </DataPanel>
       {children}
     </>
@@ -369,9 +521,9 @@ export function DonorDataItems({ item, diabetesStatus = [], otherTissue = [], ch
 }
 
 DonorDataItems.propTypes = {
-   item: PropTypes.object.isRequired,
-   diabetesStatus: PropTypes.arrayOf(PropTypes.object),
-   otherTissue: PropTypes.arrayOf(PropTypes.object),
+  item: PropTypes.object.isRequired,
+  diabetesStatus: PropTypes.arrayOf(PropTypes.object),
+  otherTissue: PropTypes.arrayOf(PropTypes.object),
 };
 DonorDataItems.defaultProps = {
   diabetesStatus: [], // Default to empty array if not provided
@@ -384,33 +536,44 @@ DonorDataItems.commonProperties = [
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "age",
-  "sex",
+  "gender",
   "bmi",
   "living_donor",
+  "other_disease_states",
   "diabetes_status_description",
+  "t1d_stage",
+  "derived_diabetes_status",
   "diabetes_duration",
   "diabetes_status_hba1c",
   "hba1c",
   "c_peptide",
+  "other_theraphy",
   "glucose_loweing_theraphy",
-  "genetic_ethnicities",
-  "ethnicities",
+  "genetic_predicted_ethnicities",
+  "self_reported_ethnicities",
   "cause_of_death",
   "hospital_stay",
   "donation_type",
   "pancreas_tissue_available",
   "aab_gada_value",
   "aab_gada",
+  "aab_gada_assay",
   "aab_ia2_value",
   "aab_ia2",
+  "aab_ia2_assay",
+  "aab_iaa_value",
+  "aab_iaa",
+  "aab_iaa_assay",
   "aab_znt8_value",
   "aab_znt8",
+  "aab_znt8_assay",
   "hla_typing",
   "phenotypic_features",
+  "hla_status",
+  "genetic_risk_score",
   "description",
   "collections",
   "dbxrefs",
-  "aliases",
   "identifiers",
   "url",
 ];
@@ -418,12 +581,7 @@ DonorDataItems.commonProperties = [
 /**
  * Display data items common to all sample-derived objects.
  */
-export function SampleDataItems({
-  item,
-  sources = null,
-  constructLibrarySets = [],
-  children,
-}) {
+export function SampleDataItems({ item, constructLibrarySets = [], children }) {
   return (
     <>
       <DataItemLabel>Summary</DataItemLabel>
@@ -461,18 +619,6 @@ export function SampleDataItems({
         <>
           <DataItemLabel>Description</DataItemLabel>
           <DataItemValue>{item.description}</DataItemValue>
-        </>
-      )}
-      {(item.lot_id || sources) && (
-        <>
-          <DataItemLabel>Sources</DataItemLabel>
-          <DataItemValue>
-            <ProductInfo
-              lotId={item.lot_id}
-              productId={item.product_id}
-              sources={sources}
-            />
-          </DataItemValue>
         </>
       )}
       {truthyOrZero(item.starting_amount) && (
@@ -535,14 +681,6 @@ export function SampleDataItems({
           <DataItemValue>{item.revoke_detail}</DataItemValue>
         </>
       )}
-      {item.aliases && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.publication_identifiers && (
         <>
           <DataItemLabel>Publication Identifiers</DataItemLabel>
@@ -578,13 +716,11 @@ SampleDataItems.propTypes = {
   // Object derived from the sample.json schema
   item: PropTypes.object.isRequired,
   // Source lab or source for this sample
-  sources: PropTypes.arrayOf(PropTypes.object),
   // Construct library sets for this sample
   constructLibrarySets: PropTypes.arrayOf(PropTypes.object),
 };
 
 SampleDataItems.commonProperties = [
-  "aliases",
   "date_obtained",
   "dbxrefs",
   "description",
@@ -616,11 +752,7 @@ export function BiosampleDataItems({
   children,
 }) {
   return (
-    <SampleDataItems
-      item={item}
-      constructLibrarySets={constructLibrarySets}
-      sources={sources}
-    >
+    <SampleDataItems item={item} constructLibrarySets={constructLibrarySets}>
       {sampleTerms?.length > 0 && (
         <>
           <DataItemLabel>Sample Terms</DataItemLabel>
@@ -653,16 +785,6 @@ export function BiosampleDataItems({
           <DataItemValue>{item.cellular_sub_pool}</DataItemValue>
         </>
       )}
-      {item.originated_from && (
-        <>
-          <DataItemLabel>Originated From Sample</DataItemLabel>
-          <DataItemValue>
-            <Link href={item.originated_from["@id"]}>
-              {item.originated_from.accession}
-            </Link>
-          </DataItemValue>
-        </>
-      )}
       {partOf && (
         <>
           <DataItemLabel>Part of Sample</DataItemLabel>
@@ -691,6 +813,20 @@ export function BiosampleDataItems({
           <DataItemValue>{item.nih_institutional_certification}</DataItemValue>
         </>
       )}
+      {sources?.length > 0 && (
+        <>
+          <DataItemLabel>Sources</DataItemLabel>
+          <DataItemValue>
+            <SeparatedList>
+              {sources.map((source) => (
+                <Link href={source["@id"]} key={source["@id"]}>
+                  {source.title}
+                </Link>
+              ))}
+            </SeparatedList>
+          </DataItemValue>
+        </>
+      )}
       {children}
     </SampleDataItems>
   );
@@ -709,7 +845,7 @@ BiosampleDataItems.propTypes = {
   partOf: PropTypes.object,
   // Sample ontology for the biosample
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
-  // Source lab or source for this biosample
+  // Sources for this biosample
   sources: PropTypes.arrayOf(PropTypes.object),
 };
 
@@ -717,7 +853,7 @@ BiosampleDataItems.commonProperties = [
   "cellular_sub_pool",
   "embryonic",
   "nih_institutional_certification",
-  "sex",
+  "gender",
 ];
 
 /**
@@ -752,14 +888,6 @@ export function OntologyTermDataItems({ item, isA, children }) {
           <DataItemValue>{item.synonyms.join(", ")}</DataItemValue>
         </>
       )}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {children}
       {item.submitter_comment && (
         <>
@@ -779,7 +907,6 @@ OntologyTermDataItems.propTypes = {
 };
 
 OntologyTermDataItems.commonProperties = [
-  "aliases",
   "submitter_comment",
   "synonyms",
   "term_id",
@@ -819,14 +946,6 @@ export function FileDataItems({ item, fileSet = null, children }) {
           <DataItemValue>{item.content_summary}</DataItemValue>
         </>
       )}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.dbxrefs?.length > 0 && (
         <>
           <DataItemLabel>External Resources</DataItemLabel>
@@ -861,11 +980,12 @@ export function FileDataItems({ item, fileSet = null, children }) {
       )}
       {item.file_url && (
         <>
-          <DataItemLabel>File Url</DataItemLabel>
+          <DataItemLabel>File Download</DataItemLabel>
           <DataItemValue>
-            <a href={item.file_url} target="_blank" rel="noopener noreferrer">
-              {item.file_url}
-            </a>
+            <div className="flex items-center gap-2">
+              <FileDownload file={item} />
+              <span className="text-sm text-gray-600">{item.file_url}</span>
+            </div>
           </DataItemValue>
         </>
       )}
@@ -889,6 +1009,18 @@ export function FileDataItems({ item, fileSet = null, children }) {
           <DataItemValue>{item.validation_error_detail}</DataItemValue>
         </>
       )}
+      {item.version && (
+        <>
+          <DataItemLabel>Version</DataItemLabel>
+          <DataItemValue>{item.version}</DataItemValue>
+        </>
+      )}
+      {item.note && (
+        <>
+          <DataItemLabel>Note</DataItemLabel>
+          <DataItemValue>{item.note}</DataItemValue>
+        </>
+      )}
       {children}
     </>
   );
@@ -902,7 +1034,6 @@ FileDataItems.propTypes = {
 };
 
 FileDataItems.commonProperties = [
-  "aliases",
   "content_md5sum",
   "content_type",
   "content_summary",
@@ -912,6 +1043,8 @@ FileDataItems.commonProperties = [
   "md5sum",
   "submitted_file_name",
   "validation_error_detail",
+  "version",
+  "note",
 ];
 
 /**
@@ -939,14 +1072,6 @@ export function FileSetDataItems({ item, children }) {
         </>
       )}
       {children}
-      {item.aliases?.length > 0 && (
-        <>
-          <DataItemLabel>Aliases</DataItemLabel>
-          <DataItemValue>
-            <AliasList aliases={item.aliases} />
-          </DataItemValue>
-        </>
-      )}
       {item.url && (
         <>
           <DataItemLabel>URL</DataItemLabel>
@@ -998,7 +1123,6 @@ FileSetDataItems.commonProperties = [
   "file_set_type",
   "summary",
   "description",
-  "aliases",
   "url",
   "submitter_comment",
   "revoke_detail",

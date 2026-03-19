@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 import { AttachedButtons, ButtonLink, TextField } from "./form-elements";
 // lib
 import { SEARCH_MODE_TITLE } from "../lib/profiles";
-
 /**
  * Displays a search field for highlighting elements of a schema or list of schemas.
  */
@@ -20,27 +19,29 @@ export function SchemaSearchField({
   className = "",
 }) {
   return (
-    <div className={`relative grow ${className}`}>
-      <TextField
-        name="schema-search"
-        value={searchTerm}
-        type="search"
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="[&>input]:pr-7"
-        isSpellCheckDisabled
-        isMessageAllowed={false}
-      />
-      <button
-        onClick={() => setSearchTerm("")}
-        className="absolute right-0 top-0 flex h-full w-8 cursor-pointer items-center justify-center"
-        aria-label={
-          searchMode === SEARCH_MODE_TITLE
-            ? "Clear schema title search"
-            : "Clear schema property search"
-        }
-      >
-        <XCircleIcon className="h-4 w-4" />
-      </button>
+    <div className="md:flex">
+      <div className={`relative grow ${className}`}>
+        <TextField
+          name="schema-search"
+          value={searchTerm}
+          type="search"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="[&>input]:pr-7"
+          isSpellCheckDisabled
+          isMessageAllowed={false}
+        />
+        <button
+          onClick={() => setSearchTerm("")}
+          className="absolute right-0 top-0 flex h-full w-8 cursor-pointer items-center justify-center"
+          aria-label={
+            searchMode === SEARCH_MODE_TITLE
+              ? "Clear schema title search"
+              : "Clear schema property search"
+          }
+        >
+          <XCircleIcon className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

@@ -154,7 +154,10 @@ export default function SequencingFileTable({
             href={reportLink}
             label="Report of files that have this item as their file set"
           >
-            <TableCellsIcon className="h-4 w-4" />
+            <span className="flex items-center gap-1 text-white">
+              <TableCellsIcon className="h-4 w-4" />
+              Report view
+            </span>
           </DataAreaTitleLink>
         )}
       </DataAreaTitle>

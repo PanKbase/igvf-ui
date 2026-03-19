@@ -20,8 +20,8 @@ import {
 export default function HumanDonor({ item: humanDonor }) {
   const ethnicities =
     humanDonor.ethnicities?.length > 0 ? humanDonor.ethnicities.join(", ") : "";
-  const sex = humanDonor.sex || "";
-  const title = [ethnicities, sex].filter(Boolean);
+  const gender = humanDonor.gender || "";
+  const title = [ethnicities, gender].filter(Boolean);
   const collections =
     humanDonor.collections?.length > 0 ? humanDonor.collections.join(", ") : "";
   let phenotypicFeatures = humanDonor.phenotypic_features
@@ -46,7 +46,12 @@ export default function HumanDonor({ item: humanDonor }) {
           {title.length > 0 ? title.join(" ") : humanDonor["@id"]}
         </SearchListItemTitle>
         <SearchListItemMeta>
-          <span key="lab">{humanDonor.lab.title}</span>
+          <span key="lab">
+            {Array.isArray(humanDonor.award)
+              ? humanDonor.award.map(award => award.title).join(", ")
+              : humanDonor.award.title
+            }
+          </span>
         </SearchListItemMeta>
         {isSupplementVisible && (
           <SearchListItemSupplement>
