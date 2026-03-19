@@ -101,7 +101,7 @@ export async function getServerSideProps({ params, req, query }) {
   const isJson = isJsonFormat(query);
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const sampleOntologyTerm = (
-    await request.getObject(`/sample-terms//${params.name}/`)
+    await request.getObject(`/sample-terms/${params.name}/`)
   ).union();
   if (FetchRequest.isResponseSuccess(sampleOntologyTerm)) {
     const isA = sampleOntologyTerm.is_a
@@ -116,7 +116,7 @@ export async function getServerSideProps({ params, req, query }) {
       props: {
         sampleOntologyTerm,
         isA,
-        pageContext: { title: sampleOntologyTerm.term_id },
+        pageContext: { title: sampleOntologyTerm.term_name || sampleOntologyTerm.term_id },
         breadcrumbs,
         isJson,
       },

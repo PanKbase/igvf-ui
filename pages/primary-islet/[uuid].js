@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
-import BiomarkerTable from "../../components/biomarker-table";
 import Breadcrumbs from "../../components/breadcrumbs";
 import { BiosampleDataItems } from "../../components/common-data-items";
 import {
@@ -27,7 +26,6 @@ import TreatmentTable from "../../components/treatment-table";
 import buildAttribution from "../../lib/attribution";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
 import {
-  requestBiomarkers,
   requestBiosamples,
   requestDocuments,
   requestDonors,
@@ -39,11 +37,9 @@ import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
 import { truthyOrZero } from "../../lib/general";
 import { isJsonFormat } from "../../lib/query-utils";
-import { Ok } from "../../lib/result";
 
 export default function PrimaryIslet({
   primaryIslet,
-  biomarkers,
   constructLibrarySets,
   diseaseTerms,
   documents,
@@ -53,7 +49,6 @@ export default function PrimaryIslet({
   pooledFrom,
   pooledIn,
   sortedFractions,
-  sources,
   treatments,
   multiplexedInSamples,
   attribution = null,
@@ -78,7 +73,6 @@ export default function PrimaryIslet({
                 diseaseTerms={diseaseTerms}
                 partOf={partOf}
                 sampleTerms={primaryIslet.sample_terms}
-                sources={sources}
                 options={{
                   dateObtainedTitle: "Date Harvested",
                 }}
@@ -91,26 +85,28 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.isolation_center && (
                   <>
-                    <DataItemLabel>Isolation Center</DataItemLabel>
+                    <DataItemLabel>Islet Isolation Center</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.isolation_center}
                     </DataItemValue>
                   </>
                 )}
+                {primaryIslet.resources && (
+                  <>
+                    <DataItemLabel>Resources</DataItemLabel>
+                    <DataItemValue>{primaryIslet.resources}</DataItemValue>
+                  </>
+                )}
                 {primaryIslet.pmi && (
                   <>
                     <DataItemLabel>Post-mortem Interval</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.pmi}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.pmi}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.rrid && (
                   <>
                     <DataItemLabel>rrid</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.rrid}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.rrid}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.cold_ischaemia_time && (
@@ -124,22 +120,20 @@ export default function PrimaryIslet({
                 {primaryIslet.organ_source && (
                   <>
                     <DataItemLabel>Organ Source</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.organ_source}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.organ_source}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.prep_viability && (
                   <>
-                    <DataItemLabel>Prep Viability (percentage)</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.prep_viability}
-                    </DataItemValue>
+                    <DataItemLabel>Pre-Shipment Islet Viability (percentage)</DataItemLabel>
+                    <DataItemValue>{primaryIslet.prep_viability}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.warm_ischaemia_duration && (
                   <>
-                    <DataItemLabel>Warm Ischaemia Duration/Down Time (hours)</DataItemLabel>
+                    <DataItemLabel>
+                      Warm Ischemia Duration/Down Time (hours)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.warm_ischaemia_duration}
                     </DataItemValue>
@@ -147,15 +141,23 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.purity?.length > 0 && (
                   <>
-                    <DataItemLabel>Purity</DataItemLabel>
+                    <DataItemLabel>Pre-Shipment Islet Purity</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.purity.join(", ")}
                     </DataItemValue>
                   </>
                 )}
+                {primaryIslet.purity_assay?.length > 0 && (
+                  <>
+                    <DataItemLabel>Purity Assay</DataItemLabel>
+                    <DataItemValue>
+                      {primaryIslet.purity_assay.join(", ")}
+                    </DataItemValue>
+                  </>
+                )}
                 {primaryIslet.hand_picked && (
                   <>
-                    <DataItemLabel>Hand Picked</DataItemLabel>
+                    <DataItemLabel>Hand-Picked</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.hand_picked ? "Yes" : "No"}
                     </DataItemValue>
@@ -163,7 +165,9 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.pre_shipment_culture_time && (
                   <>
-                    <DataItemLabel>Pre-Shipment Culture Time (hours)</DataItemLabel>
+                    <DataItemLabel>
+                      Pre-Shipment Culture Time (hours)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.pre_shipment_culture_time}
                     </DataItemValue>
@@ -179,10 +183,8 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.digest_time && (
                   <>
-                    <DataItemLabel>Digest Time (hours)</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.digest_time}
-                    </DataItemValue>
+                    <DataItemLabel>Pancreas Digest Time (hours)</DataItemLabel>
+                    <DataItemValue>{primaryIslet.digest_time}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.percentage_trapped && (
@@ -196,14 +198,12 @@ export default function PrimaryIslet({
                 {primaryIslet.islet_yield && (
                   <>
                     <DataItemLabel>Islet Yield</DataItemLabel>
-                    <DataItemValue>
-                      {primaryIslet.islet_yield}
-                    </DataItemValue>
+                    <DataItemValue>{primaryIslet.islet_yield}</DataItemValue>
                   </>
                 )}
                 {primaryIslet.pancreas_weight && (
                   <>
-                    <DataItemLabel>IEQ/Pancreas Weight</DataItemLabel>
+			<DataItemLabel>IEQ/Pancreas Weight (grams)</DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.pancreas_weight}
                     </DataItemValue>
@@ -211,7 +211,9 @@ export default function PrimaryIslet({
                 )}
                 {primaryIslet.post_shipment_islet_viability && (
                   <>
-                    <DataItemLabel>Post-Shipment islet viability (%)</DataItemLabel>
+                    <DataItemLabel>
+                      Pre-Shipment islet viability (%)
+                    </DataItemLabel>
                     <DataItemValue>
                       {primaryIslet.post_shipment_islet_viability}
                     </DataItemValue>
@@ -244,7 +246,9 @@ export default function PrimaryIslet({
                 {primaryIslet.preservation_method && (
                   <>
                     <DataItemLabel>Preservation Method</DataItemLabel>
-                    <DataItemValue>{primaryIslet.preservation_method}</DataItemValue>
+                    <DataItemValue>
+                      {Array.isArray(primaryIslet.preservation_method) ? primaryIslet.preservation_method.join(", ") : primaryIslet.preservation_method}
+                    </DataItemValue>
                   </>
                 )}
                 {primaryIslet.ccf_id && (
@@ -259,8 +263,8 @@ export default function PrimaryIslet({
                     </Link>
                   </>
                 )}
-          </BiosampleDataItems>
-          </DataArea>
+              </BiosampleDataItems>
+            </DataArea>
           </DataPanel>
           {donors.length > 0 && <DonorTable donors={donors} />}
           {primaryIslet.file_sets.length > 0 && (
@@ -315,13 +319,6 @@ export default function PrimaryIslet({
               title="Sorted Fractions of Sample"
             />
           )}
-          {biomarkers.length > 0 && (
-            <BiomarkerTable
-              biomarkers={biomarkers}
-              reportLink={`/multireport/?type=Biomarker&biomarker_for=${primaryIslet["@id"]}`}
-              reportLabel={`Report of biological markers that are associated with biosample ${primaryIslet.accession}`}
-            />
-          )}
           {treatments.length > 0 && (
             <TreatmentTable
               treatments={treatments}
@@ -340,8 +337,6 @@ export default function PrimaryIslet({
 PrimaryIslet.propTypes = {
   // Primary-islet sample to display
   primaryIslet: PropTypes.object.isRequired,
-  // Biomarkers of the sample
-  biomarkers: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Construct library sets associated with the sample
   constructLibrarySets: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Disease ontology for this sample
@@ -361,7 +356,7 @@ PrimaryIslet.propTypes = {
   // Sorted fractions sample
   sortedFractions: PropTypes.arrayOf(PropTypes.object),
   // Source lab or source for this sample
-  sources: PropTypes.arrayOf(PropTypes.object),
+  // sources: PropTypes.arrayOf(PropTypes.object),
   // Treatments associated with the sample
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Multiplexed in samples
@@ -379,10 +374,6 @@ export async function getServerSideProps({ params, req, query }) {
     await request.getObject(`/primary-islet/${params.uuid}/`)
   ).union();
   if (FetchRequest.isResponseSuccess(primaryIslet)) {
-    const biomarkers =
-      primaryIslet.biomarkers?.length > 0
-        ? await requestBiomarkers(primaryIslet.biomarkers, request)
-        : [];
     let diseaseTerms = [];
     if (primaryIslet.disease_terms?.length > 0) {
       const diseaseTermPaths = primaryIslet.disease_terms.map(
@@ -415,15 +406,6 @@ export async function getServerSideProps({ params, req, query }) {
       primaryIslet.sorted_fractions?.length > 0
         ? await requestBiosamples(primaryIslet.sorted_fractions, request)
         : [];
-    let sources = [];
-    if (primaryIslet.sources?.length > 0) {
-      const sourcePaths = primaryIslet.sources.map((source) => source["@id"]);
-      sources = Ok.all(
-        await request.getMultipleObjects(sourcePaths, {
-          filterErrors: true,
-        })
-      );
-    }
     let treatments = [];
     if (primaryIslet.treatments?.length > 0) {
       const treatmentPaths = primaryIslet.treatments.map(
@@ -449,11 +431,13 @@ export async function getServerSideProps({ params, req, query }) {
       primaryIslet.accession,
       req.headers.cookie
     );
-    const attribution = await buildAttribution(primaryIslet, req.headers.cookie);
+    const attribution = await buildAttribution(
+      primaryIslet,
+      req.headers.cookie
+    );
     return {
       props: {
         primaryIslet,
-        biomarkers,
         constructLibrarySets,
         diseaseTerms,
         documents,
@@ -463,7 +447,6 @@ export async function getServerSideProps({ params, req, query }) {
         pooledFrom,
         pooledIn,
         sortedFractions,
-        sources,
         treatments,
         multiplexedInSamples,
         pageContext: {

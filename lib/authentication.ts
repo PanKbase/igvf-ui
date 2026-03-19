@@ -12,10 +12,11 @@ import {
   LogoutOptions,
 } from "@auth0/auth0-react";
 // lib
-import { DataProviderObject } from "../globals";
 import { AUTH0_CLIENT_ID, AUTH_ERROR_URI } from "./constants";
 import FetchRequest from "./fetch-request";
-import { ErrorObject } from "./fetch-request.d";
+import { type ErrorObject } from "./fetch-request.d";
+// root
+import type { DataProviderObject } from "../globals";
 
 /**
  * Request the session object from the server, which contains the browser CSRF token.
@@ -58,7 +59,7 @@ export async function getSessionProperties(
  */
 export async function getDataProviderUrl(): Promise<string | null> {
   const request = new FetchRequest({ backend: true });
-  const response = (await request.getObject("/api/data-provider")).optional();
+  const response = (await request.getObject("/api/data-provider/")).optional();
   return (response?.dataProviderUrl as string) || null;
 }
 
@@ -72,7 +73,34 @@ export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
   getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
 ) {
-  const accessToken = await getAccessTokenSilently();
+  // Request token for userinfo endpoint
+  // The /userinfo endpoint requires openid scope
+  // Note: Management API audience tokens may not work with /userinfo
+  // We need to explicitly request without audience for userinfo compatibility
+  let accessToken: string;
+  try {
+    // Try to get token without the Management API audience for userinfo
+    // The userinfo endpoint works with default OIDC tokens, not Management API tokens
+    accessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        scope: "openid profile email",
+        audience: undefined, // Explicitly remove audience for userinfo endpoint
+      },
+      cacheMode: "off", // Force new token request without audience
+    });
+  } catch (error) {
+    // If removing audience fails, the Auth0Provider's audience might be hardcoded
+    // In that case, we'll use whatever token we get and let the backend handle the error
+    console.warn(
+      "Could not get token without audience, using default token:",
+      error
+    );
+    accessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        scope: "openid profile email",
+      },
+    });
+  }
   const request = new FetchRequest({ session: loggedOutSession });
   return request.postObject("/login", { accessToken });
 }
@@ -98,10 +126,9 @@ export async function loginAuthProvider(
   // Get a URL to return to after logging in. If we're already on the error page, just return to
   // the home page so that the user doesn't see an authentication error page after successfully
   // logging in.
-  const returnUrl =
-    window.location.pathname === AUTH_ERROR_URI
-      ? "/"
-      : `${window.location.pathname}${window.location.search}`;
+  const returnUrl = checkAuthErrorUri(window.location.pathname)
+    ? "/"
+    : `${window.location.pathname}${window.location.search}`;
 
   // Trigger the login process. Pass the current URL as the returnTo parameter so that Auth0
   // redirects back to the current page after login.
@@ -128,4 +155,14 @@ export function logoutAuthProvider(
       returnTo: `${window.location.origin}${altPath}`,
     },
   });
+}
+
+/**
+ * Check if the given path is the same as the authentication error path. This matches regardless of
+ * whether the path has a trailing slash or not.
+ * @param path Path to check for the authentication error path
+ * @returns True if the path is the same as the AUTH_ERROR_URI constant
+ */
+export function checkAuthErrorUri(path: string): boolean {
+  return path.replace(/\/$/, "") === AUTH_ERROR_URI.replace(/\/$/, "");
 }

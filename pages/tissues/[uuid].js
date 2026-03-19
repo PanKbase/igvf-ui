@@ -102,7 +102,7 @@ export default function Tissue({
                 {tissue.preservation_method && (
                   <>
                     <DataItemLabel>Preservation Method</DataItemLabel>
-                    <DataItemValue>{tissue.preservation_method}</DataItemValue>
+                    <DataItemValue>{Array.isArray(tissue.preservation_method) ? tissue.preservation_method.join(", ") : tissue.preservation_method}</DataItemValue>
                   </>
                 )}
                 {tissue.ccf_id && (

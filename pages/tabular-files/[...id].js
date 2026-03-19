@@ -47,13 +47,16 @@ export default function TabularFile({
   attribution = null,
   isJson,
 }) {
+  if (!tabularFile) {
+    return null;
+  }
   return (
     <>
       <Breadcrumbs />
       <EditableItem item={tabularFile}>
         <PagePreamble>
           <AlternateAccessions
-            alternateAccessions={tabularFile.alternate_accessions}
+            alternateAccessions={tabularFile?.alternate_accessions || []}
           />
         </PagePreamble>
         <ObjectPageHeader item={tabularFile} isJsonFormat={isJson}>
@@ -88,7 +91,7 @@ export default function TabularFile({
               </DataPanel>
             </>
           )}
-          {derivedFrom.length > 0 && (
+          {derivedFrom?.length > 0 && (
             <DerivedFromTable
               derivedFrom={derivedFrom}
               derivedFromFileSets={derivedFromFileSets}
@@ -97,20 +100,20 @@ export default function TabularFile({
               title={`Files ${tabularFile.accession} Derives From`}
             />
           )}
-          {integratedIn.length > 0 && (
+          {integratedIn?.length > 0 && (
             <FileSetTable
               fileSets={integratedIn}
               title="Integrated In"
               reportLink={`/multireport/?type=ConstructLibrarySet&integrated_content_files=${tabularFile["@id"]}`}
             />
           )}
-          {fileFormatSpecifications.length > 0 && (
+          {fileFormatSpecifications?.length > 0 && (
             <DocumentTable
               documents={fileFormatSpecifications}
               title="File Format Specifications"
             />
           )}
-          {documents.length > 0 && <DocumentTable documents={documents} />}
+          {documents?.length > 0 && <DocumentTable documents={documents} />}
           <Attribution attribution={attribution} />
         </JsonDisplay>
       </EditableItem>
@@ -140,6 +143,7 @@ TabularFile.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
+  try {
   // Redirect to the file page if the URL is a file download link.
   if (checkForFileDownloadPath(resolvedUrl)) {
     return {
@@ -163,7 +167,8 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     const derivedFrom = tabularFile.derived_from
       ? await requestFiles(tabularFile.derived_from, request)
       : [];
-    const derivedFromFileSetPaths = derivedFrom
+    const derivedFromFileSetPaths = (derivedFrom || [])
+      .filter(file => file)
       .map((file) => file.file_set)
       .filter((fileSet) => fileSet);
     const uniqueDerivedFromFileSetPaths = [...new Set(derivedFromFileSetPaths)];
@@ -175,7 +180,7 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
       ? await requestDocuments(tabularFile.file_format_specifications, request)
       : [];
     const integratedIn =
-      tabularFile.integrated_in.length > 0
+      tabularFile.integrated_in?.length > 0
         ? await requestFileSets(tabularFile.integrated_in, request)
         : [];
     const breadcrumbs = await buildBreadcrumbs(
@@ -201,4 +206,22 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     };
   }
   return errorObjectToProps(tabularFile);
+  } catch (error) {
+    console.error('[TabularFile] Error in getServerSideProps', {
+      id: params.id,
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    return {
+      props: {
+        serverSideError: {
+          code: 500,
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        },
+      },
+    };
+  }
 }

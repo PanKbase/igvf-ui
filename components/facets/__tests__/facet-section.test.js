@@ -417,21 +417,21 @@ describe("Test <FacetSection> component", () => {
             "@id": "/labs/j-michael-cherry/",
             title: "J. Michael Cherry, Stanford",
           },
-          sex: "female",
+          gender: "female",
           status: "released",
           taxa: "Homo sapiens",
           uuid: "38d6630f-5b87-47a1-ae7d-174eab5758d2",
           virtual: false,
         },
       ],
-      "@id": "/search/?type=HumanDonor&sex=female",
+      "@id": "/search/?type=HumanDonor&gender=female",
       "@type": ["Search"],
       clear_filters: "/search/?type=HumanDonor",
       facet_groups: [],
       facets: [
         {
           appended: false,
-          field: "sex",
+          field: "gender",
           open_on_load: false,
           terms: [
             {
@@ -450,13 +450,13 @@ describe("Test <FacetSection> component", () => {
       ],
       filters: [
         {
-          field: "sex",
+          field: "gender",
           remove: "/search/?type=HumanDonor",
           term: "female",
         },
         {
           field: "type",
-          remove: "/search/?sex=female",
+          remove: "/search/?gender=female",
           term: "HumanDonor",
         },
       ],

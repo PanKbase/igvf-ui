@@ -17,25 +17,18 @@ import {
 import DarkModeManager from "../lib/dark-mode-manager";
 // components
 import Error from "../components/error";
+//import NavigationSection from "../components/navigation";
 import GlobalContext from "../components/global-context";
-import NavigationSection from "../components/navigation";
-import ScrollToTop from "../components/scroll-to-top";
+import HomeTitle from "../components/home-title";
+import PkbFooter from "../components/pkb-footer";
 import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
+// import dynamic from "next/dynamic";
 
-/**
- * List of domains for servers that contain test data and should display a warning banner to users.
- * To confirm this banner continues to have the ability to appear, also show this banner on
- * localhost.
- */
 const testServerDomains = ["staging.pankbase.org", "localhost"];
 
-/**
- * Display a warning banner to users when they browse the sandbox server. Allow the user to close
- * the banner if they choose to.
- */
 function TestServerWarning() {
   const [isTestWarningVisible, setIsTestWarningVisible] = useState(false);
 
@@ -50,8 +43,8 @@ function TestServerWarning() {
     return (
       <div className="flex justify-center gap-1 border-b border-red-700 bg-red-600 p-1 text-sm text-white dark:border-red-700 dark:bg-red-800 dark:text-gray-100">
         <div>
-          This is the PanKbase Sandbox for testing submissions. All files submitted
-          here will be deleted after 30 days.
+          This is the PanKbase Sandbox for testing submissions. All files
+          submitted here will be deleted after 30 days.
         </div>
         <button
           onClick={() => setIsTestWarningVisible(false)}
@@ -65,18 +58,14 @@ function TestServerWarning() {
 }
 
 function Site({ Component, pageProps, authentication }) {
-  // Flag to indicate if <Link> components should cause page reload
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
   const { isLoading } = useAuth0();
-  // Keep track of current dark mode settings
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    // Install the dark-mode event listener to react to dark-mode changes.
     const darkModeManager = new DarkModeManager(setIsDarkMode);
     darkModeManager.installDarkModeListener();
     darkModeManager.setCurrentDarkMode();
-
     return () => {
       darkModeManager.removeDarkModeListener();
     };
@@ -84,9 +73,7 @@ function Site({ Component, pageProps, authentication }) {
 
   const globalContext = useMemo(() => {
     return {
-      site: {
-        title: SITE_TITLE,
-      },
+      site: { title: SITE_TITLE },
       page: {
         title: pageProps.pageContext?.title || "",
         type: pageProps.pageContext?.type || "",
@@ -96,9 +83,7 @@ function Site({ Component, pageProps, authentication }) {
         isEnabled: isLinkReloadEnabled,
         setIsEnabled: setIsLinkReloadEnabled,
       },
-      darkMode: {
-        enabled: isDarkMode,
-      },
+      darkMode: { enabled: isDarkMode },
     };
   }, [
     pageProps.breadcrumbs,
@@ -112,10 +97,7 @@ function Site({ Component, pageProps, authentication }) {
     <ViewportOverlay isEnabled={isLoading}>
       <Head>
         <title>{SITE_TITLE}</title>
-        <meta
-          name="description"
-          content="Portal for the PanKbase consortium"
-        />
+        <meta name="description" content="Portal for the PanKbase consortium" />
         <meta name="theme-color" content={BRAND_COLOR} />
         <link
           rel="apple-touch-icon"
@@ -139,24 +121,22 @@ function Site({ Component, pageProps, authentication }) {
       </Head>
       <Script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=G-E2PEXFFGYR"
+        src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS"
       />
       <Script id="google-analytics-4-script">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-
-          gtag('config', 'G-E2PEXFFGYR');
+          gtag('config', 'G-XYBYEW53TS');
         `}
       </Script>
       <TestServerWarning />
-      <div className="md:container">
-        <ScrollToTop />
-        <GlobalContext.Provider value={globalContext}>
-          <Session authentication={authentication}>
+      <GlobalContext.Provider value={globalContext}>
+        <Session authentication={authentication}>
+          <HomeTitle />
+          <div className="md:container">
             <div className="md:flex">
-              <NavigationSection />
               <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
                 {pageProps.serverSideError ? (
                   <Error
@@ -168,46 +148,31 @@ function Site({ Component, pageProps, authentication }) {
                 )}
               </div>
             </div>
-          </Session>
-        </GlobalContext.Provider>
-      </div>
+          </div>
+        </Session>
+      </GlobalContext.Provider>
+      <PkbFooter />
     </ViewportOverlay>
   );
 }
 
 Site.propTypes = {
-  // Component to render for the page, as determined by nextjs router
   Component: PropTypes.elementType.isRequired,
-  // Properties associated with the page to pass to `Component`
   pageProps: PropTypes.object.isRequired,
-  // Auth0 authentication state and transition setter
   authentication: PropTypes.exact({
-    // True if Auth0 has authenticated but we haven't yet logged into igvfd
     authTransitionPath: PropTypes.string.isRequired,
-    // Sets the `authTransitionPath` state
     setAuthTransitionPath: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 export default function App(props) {
-  // Path user viewed when they logged in; also indicates Auth0 has auth'd but igvfd hasn't yet
   const [authTransitionPath, setAuthTransitionPath] = useState("");
-
   const router = useRouter();
 
-  /**
-   * Called after the user signs in and auth0 redirects back to the application. We set the
-   * `appState` parameter with the URL the user viewed when they logged in, so we can redirect
-   * them back to that page after they log in here.
-   * @param {object} appState Contains the URL to redirect to after signing in
-   */
   function onRedirectCallback(appState) {
     if (appState?.returnTo) {
       router.replace(appState.returnTo);
     }
-
-    // Indicate that Auth0 has completed authentication so Session context can log into igvfd, and
-    // reload this path if needed to see the authenticated content.
     setAuthTransitionPath(appState?.returnTo || "");
   }
 
@@ -223,10 +188,7 @@ export default function App(props) {
     >
       <Site
         {...props}
-        authentication={{
-          authTransitionPath,
-          setAuthTransitionPath,
-        }}
+        authentication={{ authTransitionPath, setAuthTransitionPath }}
       />
     </Auth0Provider>
   );

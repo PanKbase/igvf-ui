@@ -17,26 +17,31 @@ import Link from "next/link";
  * The graphic within the 105x70 box should have a maximum width of 95px and a maximum height of
  * 60px.
  */
-const LOGO_WIDTH = 162;
-const LOGO_HEIGHT = 55;
-
+const LOGO_WIDTH = 225;
+const LOGO_HEIGHT = 69;
+// node_modules
 export function Logo() {
   return (
     <div className="logo-container">
-      {/* Add your logo content here */}
-     <Image
-     src={`/collections/pkb-4.svg`}
-     width={LOGO_WIDTH}
-     height={LOGO_HEIGHT}
-     alt={`PanKbase Logo`}
-     />
-     </div>
+      <Image
+        src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
+        width={LOGO_WIDTH}
+        height={LOGO_HEIGHT}
+        alt="PanKbase Logo"
+        priority
+      />
+    </div>
   );
 }
 
 export default function SiteLogo() {
   return (
-    <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
+    <Link
+      href="https://pankbase.org"
+      className="block w-10 py-2 md:h-auto md:w-auto md:px-8"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <Logo />
       <span className="sr-only">Home</span>
     </Link>

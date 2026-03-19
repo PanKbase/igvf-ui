@@ -28,7 +28,10 @@ export default function IdSearchTrigger() {
         placeholder="Enter identifier (e.g. accession, uuid)"
         className="border rounded p-2 w-full"
       />
-      <button type="submit" className="ml-2 p-2 rounded bg-green-500 text-white">
+      <button
+        type="submit"
+        className="ml-2 p-2 rounded bg-green-500 text-white"
+      >
         Search ID
       </button>
     </form>

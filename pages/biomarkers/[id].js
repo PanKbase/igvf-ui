@@ -2,7 +2,6 @@
 import PropTypes from "prop-types";
 import Link from "next/link";
 // components
-import AliasList from "../../components/alias-list";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
 import {
@@ -70,14 +69,6 @@ export default function Biomarker({
                     <SeparatedList isCollapsible>
                       {biomarker.synonyms}
                     </SeparatedList>
-                  </DataItemValue>
-                </>
-              )}
-              {biomarker.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={biomarker.aliases} />
                   </DataItemValue>
                 </>
               )}

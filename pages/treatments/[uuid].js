@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import AliasList from "../../components/alias-list";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
 import {
@@ -110,14 +109,6 @@ export default function Treatment({
                 <>
                   <DataItemLabel>Submitter Comment</DataItemLabel>
                   <DataItemValue>{treatment.submitter_comment}</DataItemValue>
-                </>
-              )}
-              {treatment.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={treatment.aliases} />
-                  </DataItemValue>
                 </>
               )}
               {(treatment.lot_id ||

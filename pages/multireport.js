@@ -141,6 +141,22 @@ export default function MultiReport({ searchResults }) {
   const visibleColumnSpecs = columnsToColumnSpecs(searchResults.result_columns);
   const allColumnSpecs = getReportTypeColumnSpecs(selectedTypes, profiles);
 
+  // Filter out lab, uuid, and award columns from default columns
+  const columnsToHide = ['lab', 'uuid', 'award'];
+  const filteredDefaultColumnSpecs = defaultColumnSpecs.filter(
+    (columnSpec) => !columnsToHide.includes(columnSpec.id)
+  );
+
+  // Always filter out lab, uuid, and award columns from visible columns
+  const filteredVisibleColumnSpecs = visibleColumnSpecs.filter(
+    (columnSpec) => !columnsToHide.includes(columnSpec.id)
+  );
+
+  // Filter out lab, uuid, and award columns from all column specs (for column selector)
+  const filteredAllColumnSpecs = allColumnSpecs.filter(
+    (columnSpec) => !columnsToHide.includes(columnSpec.id)
+  );
+
   /**
    * Navigate to the same page but with the "sort=" query parameter set to the column that was
    * clicked. This also handles reverse sorting when the user clicks on the currently sorted
@@ -167,7 +183,7 @@ export default function MultiReport({ searchResults }) {
       queryString,
       columnId,
       isVisible,
-      defaultColumnSpecs
+      filteredDefaultColumnSpecs
     );
     router.push(`${path}?${updatedQueryString}`);
   }
@@ -181,7 +197,7 @@ export default function MultiReport({ searchResults }) {
     const updatedQueryString = updateAllColumnsVisibilityQuery(
       queryString,
       isAllVisible,
-      allColumnSpecs
+      filteredAllColumnSpecs
     );
     router.push(`${path}?${updatedQueryString}`);
   }
@@ -195,7 +211,7 @@ export default function MultiReport({ searchResults }) {
     const items = searchResults["@graph"];
     const columns = generateColumns(
       selectedTypes,
-      visibleColumnSpecs,
+      filteredVisibleColumnSpecs,
       schemaProperties
     );
 
@@ -219,8 +235,8 @@ export default function MultiReport({ searchResults }) {
               <SearchResultsHeader
                 searchResults={searchResults}
                 reportViewExtras={{
-                  allColumnSpecs,
-                  visibleColumnSpecs,
+                  allColumnSpecs: filteredAllColumnSpecs,
+                  visibleColumnSpecs: filteredVisibleColumnSpecs,
                   onColumnVisibilityChange,
                   onAllColumnsVisibilityChange,
                 }}

@@ -41,7 +41,7 @@ export default function RodentDonor({ item: rodentDonor }) {
           {rodentDonor.accession}
         </SearchListItemUniqueId>
         <SearchListItemTitle>
-          {rodentDonor.strain} {rodentDonor.sex}
+          {rodentDonor.strain} {rodentDonor.gender}
         </SearchListItemTitle>
         <SearchListItemMeta>
           <span key="lab">{lab.title}</span>

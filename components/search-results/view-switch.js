@@ -54,16 +54,39 @@ export default function ViewSwitch({ searchResults, className = null }) {
         href={listViewLink}
         type={isListSelected ? "selected" : "secondary"}
         label={`Select list view${isListSelected ? " (selected)" : ""}`}
+        hasIconOnly={true}
       >
-        <Bars4Icon className="h-4 w-4" />
+        <Bars4Icon
+          className={`h-5 w-5 ${
+            isListSelected ? "fill-button-selected" : "fill-button-secondary"
+          }`}
+          style={{
+            fill: isListSelected
+              ? "var(--color-button-selected-label)"
+              : "var(--color-button-secondary-label)",
+          }}
+        />
       </ButtonLink>
       {reportViewLink && (
         <ButtonLink
           href={reportViewLink}
           type={isReportSelected ? "selected" : "secondary"}
           label={`Select report view${isReportSelected ? " (selected)" : ""}`}
+          hasIconOnly={false}
         >
-          <TableCellsIcon className="h-4 w-4" />
+          <span className="flex items-center">
+            <TableCellsIcon
+              className={`h-5 w-5 mr-2 ${
+                isReportSelected ? "fill-button-selected" : "fill-button-secondary"
+              }`}
+              style={{
+                fill: isReportSelected
+                  ? "var(--color-button-selected-label)"
+                  : "var(--color-button-secondary-label)",
+              }}
+            />
+            Report view
+          </span>
         </ButtonLink>
       )}
     </AttachedButtons>

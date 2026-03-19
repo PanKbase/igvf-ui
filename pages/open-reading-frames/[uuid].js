@@ -16,7 +16,6 @@ import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import SeparatedList from "../../components/separated-list";
 // lib
-import AliasList from "../../components/alias-list";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
@@ -92,14 +91,6 @@ export default function OpenReadingFrame({ orf, isJson }) {
                     Percentage of Ensembl Protein Covered by ORF
                   </DataItemLabel>
                   <DataItemValue>{orf.pct_coverage_orf}</DataItemValue>
-                </>
-              )}
-              {orf.aliases?.length > 0 && (
-                <>
-                  <DataItemLabel>Aliases</DataItemLabel>
-                  <DataItemValue>
-                    <AliasList aliases={orf.aliases} />
-                  </DataItemValue>
                 </>
               )}
               {orf.submitter_comment && (

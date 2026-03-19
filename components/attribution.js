@@ -10,7 +10,7 @@ import {
   DataItemValue,
   DataPanel,
 } from "./data-area";
-import SeparatedList from "./separated-list";
+//import SeparatedList from "./separated-list";
 
 /**
  * Displays the attribution properties of an item in its own data panel, typically from a data
@@ -27,48 +27,25 @@ export default function Attribution({ attribution = null }) {
             itemType={attribution.type}
           />
           <DataArea>
-            {attribution.award && (
+            {attribution.award && attribution.award.length > 0 && (
               <>
-                <DataItemLabel>Award</DataItemLabel>
+                <DataItemLabel>Funding</DataItemLabel>
                 <DataItemValue>
-                  <Link href={attribution.award["@id"]}>
-                    {attribution.award.name}
-                  </Link>
-                </DataItemValue>
-              </>
-            )}
-            {attribution.pis && (
-              <>
-                <DataItemLabel>Principal Investigator(s)</DataItemLabel>
-                <DataItemValue>
-                  <SeparatedList isCollapsible>
-                    {attribution.pis.map((pi) => (
-                      <Link href={pi["@id"]} key={pi["@id"]}>
-                        {pi.title}
+                  {attribution.award.map((award, index) => (
+                    <span key={award["@id"]}>
+                      <Link href={award["@id"]}>
+                        {award.name}
                       </Link>
-                    ))}
-                  </SeparatedList>
+                      {index < attribution.award.length - 1 && ", "}
+                    </span>
+                  ))}
                 </DataItemValue>
               </>
             )}
-            {attribution.contactPi && (
+            {attribution.title && (
               <>
-                <DataItemLabel>Contact P.I.</DataItemLabel>
-                <DataItemValue>
-                  <Link href={attribution.contactPi["@id"]}>
-                    {attribution.contactPi.title}
-                  </Link>
-                </DataItemValue>
-              </>
-            )}
-            {attribution.lab && (
-              <>
-                <DataItemLabel>Lab</DataItemLabel>
-                <DataItemValue>
-                  <Link href={attribution.lab["@id"]}>
-                    {attribution.lab.title}
-                  </Link>
-                </DataItemValue>
+                <DataItemLabel>Title</DataItemLabel>
+                <DataItemValue>{attribution.title}</DataItemValue>
               </>
             )}
           </DataArea>

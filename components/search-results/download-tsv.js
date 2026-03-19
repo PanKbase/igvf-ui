@@ -22,16 +22,20 @@ export default function DownloadTSV({ searchUri }) {
         <div>
           <ButtonLink
             href={link}
-            hasIconOnly={true}
             label="Download report as TSV"
+            type="secondary"
+            size="md"
             className="h-full"
           >
-            <DocumentArrowDownIcon strokeWidth={2} />
+            <div className="flex items-center gap-1">
+              <DocumentArrowDownIcon className="h-4 w-4" strokeWidth={2} />
+              <span>Download metadata as TSV</span>
+            </div>
           </ButtonLink>
         </div>
       </TooltipRef>
       <Tooltip tooltipAttr={tooltipAttr}>
-        Download the report as a TSV file.
+        Download the report as a TSV file. Use the Columns button to customize which fields are included in the export.
       </Tooltip>
     </>
   );

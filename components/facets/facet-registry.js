@@ -1,5 +1,6 @@
 // components/facets/custom-facets
 import AuditTitle from "./custom-facets/audit-title";
+import GenderTitle from "./custom-facets/gender-title";
 import InternalActionAuditTerms from "./custom-facets/audit-internal-action-terms";
 import StandardTagLabel from "./custom-facets/standard-tag-label";
 import StandardTermLabel from "./custom-facets/standard-term-label";
@@ -43,6 +44,7 @@ const facetRegistry = {
     "audit.INTERNAL_ACTION.category": AuditTitle,
     "audit.NOT_COMPLIANT.category": AuditTitle,
     "audit.WARNING.category": AuditTitle,
+    gender: GenderTitle,
     standard: StandardTitle,
   },
 };
