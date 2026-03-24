@@ -4,7 +4,7 @@ from shared_infrastructure.igvf_dev.connection import CodeStarConnection
 from shared_infrastructure.igvf_dev.environment import US_WEST_2 as US_WEST_2
 from shared_infrastructure.igvf_dev.domain import DemoDomain
 from shared_infrastructure.igvf_dev.secret import DockerHubCredentials
-from shared_infrastructure.igvf_dev.network import DemoNetwork
+from infrastructure.constructs.existing.igvf_dev_network import DemoNetwork
 from shared_infrastructure.igvf_dev.notification import Notification
 from shared_infrastructure.igvf_dev.bus import Bus
 from shared_infrastructure.igvf_dev.secret import PortalCredentials

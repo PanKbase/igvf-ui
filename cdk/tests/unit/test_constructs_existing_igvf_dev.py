@@ -7,7 +7,7 @@ def test_constructs_existing_initialize_igvf_dev_construct():
     from infrastructure.constructs.existing.igvf_dev import Resources
     from shared_infrastructure.igvf_dev.domain import DemoDomain
     from shared_infrastructure.igvf_dev.secret import DockerHubCredentials
-    from shared_infrastructure.igvf_dev.network import DemoNetwork
+    from infrastructure.constructs.existing.igvf_dev_network import DemoNetwork
     stack = Stack(
         env=Environment(
             region='us-east-1',
