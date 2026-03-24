@@ -542,19 +542,19 @@ const resourcesButtons = [
     icon: <FileText className="w-6 h-6" />,
     title: "Data standards",
     description: "Standards used for meta-data and data processing in the PanKbase data library",
-    url: "https://data.pankbase.org/standards/",
+    url: "/standards/",
   },
   {
     icon: <BookOpen className="w-6 h-6" />,
     title: "User guide",
     description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
-    url: "https://data.pankbase.org/help/general-help/user-guide",
+    url: "/help/general-help/user-guide/",
   },
   {
     icon: <Newspaper className="w-6 h-6" />,
     title: "News",
     description: "Updates to PanKbase data library",
-    url: "https://data.pankbase.org/help/news/",
+    url: "/help/news/",
   },
 ];
 
