@@ -136,8 +136,6 @@ function DataAccessCard({ icon, title, count, description, url }) {
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="group block bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-teal-600 hover:border-teal-700 bg-gradient-to-br from-white to-slate-50"
     >
       {typeof icon === "string" ? (
@@ -179,28 +177,28 @@ export default function Browse({
       title: "Donor meta-data",
       count: abbreviateNumber(donorCount),
       description: "Human donors of a pancreatic biosample",
-      url: "https://data.pankbase.org/search/?type=HumanDonor",
+      url: "/search/?type=HumanDonor",
     },
     {
       icon: <Flask className="w-6 h-6" />,
       title: "Islet biosample meta-data",
       count: abbreviateNumber(biosampleCount),
       description: "Pancreatic biosamples obtained from a donor",
-      url: "https://data.pankbase.org/search/?type=Biosample",
+      url: "/search/?type=Biosample",
     },
     {
       icon: <Microscope className="w-6 h-6" />,
       title: "Measurement Sets",
       count: abbreviateNumber(assayCount),
       description: "Experimental assays performed on a biosample",
-      url: "https://data.pankbase.org/search/?type=MeasurementSet",
+      url: "/search/?type=MeasurementSet",
     },
     {
       icon: <ChartBar className="w-6 h-6" />,
       title: "Intermediate Analysis Results",
       count: abbreviateNumber(processedCount),
       description: "Standardized processing of data generated from an assay",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
+      url: "/search/?type=AnalysisSet&file_set_type=intermediate+analysis",
     },
     {
       icon: <Package className="w-6 h-6" />,
@@ -208,7 +206,7 @@ export default function Browse({
       count: abbreviateNumber(resourceAnalysisCount),
       description:
         "Resource used to perform a principal analysis such as a donor x gene count matrix",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=resource+analysis",
+      url: "/search/?type=AnalysisSet&file_set_type=resource+analysis",
     },
     {
       icon: <ChartBar className="w-6 h-6" />,
@@ -216,14 +214,14 @@ export default function Browse({
       count: abbreviateNumber(analysisCount),
       description:
         "End result of analyzing data such as differential expression or peak calls",
-      url: "https://data.pankbase.org/search/?type=AnalysisSet&file_set_type=principal+analysis",
+      url: "/search/?type=AnalysisSet&file_set_type=principal+analysis",
     },
     {
       icon: <Settings className="w-6 h-6" />,
       title: "Workflows",
       count: abbreviateNumber(workflowCount),
       description: "Analysis workflows used to processed data and create resources",
-      url: "https://data.pankbase.org/search/?type=Workflow",
+      url: "/search/?type=Workflow",
     },
   ];
 
