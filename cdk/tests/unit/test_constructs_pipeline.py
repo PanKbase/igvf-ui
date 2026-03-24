@@ -260,7 +260,7 @@ def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(s
 def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocker, pipeline_config):
     from aws_cdk import Stack
     from aws_cdk.aws_secretsmanager import Secret
-    from aws_cdk.aws_chatbot import SlackChannelConfiguration
+    from aws_cdk.aws_sns import Topic
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import DemoDeploymentPipeline
     from infrastructure.constructs.pipeline import DemoDeploymentPipelineProps
@@ -274,12 +274,10 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
         stack,
         'TestSecret',
     )
-    existing_resources.notification.encode_dcc_chatbot = SlackChannelConfiguration(
+    existing_resources.notification.alarm_notification_topic = Topic.from_topic_arn(
         stack,
-        'TestChatbot',
-        slack_channel_configuration_name='some-config-name',
-        slack_channel_id='some-channel-id',
-        slack_workspace_id='some-workspace-id',
+        'TestAlarmTopic',
+        'arn:aws:sns:us-west-2:123456789012:alarm-topic',
     )
     pipeline = DemoDeploymentPipeline(
         stack,
@@ -551,7 +549,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
 def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker, pipeline_config):
     from aws_cdk import Stack
     from aws_cdk.aws_secretsmanager import Secret
-    from aws_cdk.aws_chatbot import SlackChannelConfiguration
+    from aws_cdk.aws_sns import Topic
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import DevDeploymentPipeline
     from infrastructure.constructs.pipeline import DevDeploymentPipelineProps
@@ -565,12 +563,10 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
         stack,
         'TestSecret',
     )
-    existing_resources.notification.encode_dcc_chatbot = SlackChannelConfiguration(
+    existing_resources.notification.alarm_notification_topic = Topic.from_topic_arn(
         stack,
-        'TestChatbot',
-        slack_channel_configuration_name='some-config-name',
-        slack_channel_id='some-channel-id',
-        slack_workspace_id='some-workspace-id',
+        'TestAlarmTopic',
+        'arn:aws:sns:us-west-2:123456789012:alarm-topic',
     )
     pipeline = DevDeploymentPipeline(
         stack,
@@ -844,7 +840,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
 def test_constructs_pipeline_initialize_production_deployment_pipeline_construct(mocker, production_pipeline_config):
     from aws_cdk import Stack
     from aws_cdk.aws_secretsmanager import Secret
-    from aws_cdk.aws_chatbot import SlackChannelConfiguration
+    from aws_cdk.aws_sns import Topic
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import ProductionDeploymentPipeline
     from infrastructure.constructs.pipeline import ProductionDeploymentPipelineProps
@@ -858,12 +854,10 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
         stack,
         'TestSecret',
     )
-    existing_resources.notification.encode_dcc_chatbot = SlackChannelConfiguration(
+    existing_resources.notification.alarm_notification_topic = Topic.from_topic_arn(
         stack,
-        'TestChatbot',
-        slack_channel_configuration_name='some-config-name',
-        slack_channel_id='some-channel-id',
-        slack_workspace_id='some-workspace-id',
+        'TestAlarmTopic',
+        'arn:aws:sns:us-west-2:123456789012:alarm-topic',
     )
     pipeline = ProductionDeploymentPipeline(
         stack,
