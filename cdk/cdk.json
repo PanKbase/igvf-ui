@@ -15,6 +15,24 @@
         ]
     },
     "context": {
+        "igvfDemoVpcAttributes": {
+            "vpcId": "vpc-04c8432aa0425779b",
+            "availabilityZones": [
+                "us-west-2a",
+                "us-west-2b",
+                "us-west-2c"
+            ],
+            "publicSubnetIds": [
+                "subnet-0a2cc6dab9ebcdd53",
+                "subnet-00939ccdecc716409",
+                "subnet-031fc389bfbcfe2cb"
+            ],
+            "isolatedSubnetIds": [
+                "subnet-040edfc17903fc6c0",
+                "subnet-0296c65f7bed8a4af",
+                "subnet-08a6311b537ad8bbf"
+            ]
+        },
         "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
         "@aws-cdk/core:stackRelativeExports": true,
         "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
