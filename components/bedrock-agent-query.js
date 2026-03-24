@@ -35,7 +35,7 @@ Sparkles.propTypes = { className: PropTypes.string };
 function LoadingSpinner() {
   return (
     <div className="flex items-center gap-2 text-teal-600">
-      <div className="animate-spin rounded-full h-4 w-4 border-2 border-teal-600 border-t-transparent"></div>
+      <div className="animate-spin rounded-full h-4 w-4 border-2 border-teal-600 border-t-transparent" />
       <span className="text-sm">Thinking...</span>
     </div>
   );
@@ -58,7 +58,9 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!query.trim() || isLoading) return;
+    if (!query.trim() || isLoading) {
+      return;
+    }
 
     setIsLoading(true);
     setError("");
@@ -96,7 +98,6 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
     setQuery(exampleQuery);
   }
 
-
   return (
     <div className="bg-gradient-to-br from-teal-50 via-white to-cyan-50 rounded-2xl shadow-xl border border-teal-200 p-8 md:p-10">
       {/* Header */}
@@ -118,7 +119,7 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
           <div className="text-sm text-slate-900 whitespace-pre-wrap">{response}</div>
         </div>
       )}
-      
+
       {isLoading && (
         <div className="mb-6 bg-white rounded-lg p-4 border border-slate-200">
           <LoadingSpinner />
@@ -143,7 +144,7 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
           >
             {isLoading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
                 <span>Ask</span>
               </>
             ) : (

@@ -12,6 +12,7 @@ module.exports = {
       "avatars.githubusercontent.com",
       "s.gravatar.com",
       "localhost",
+      "hugeampkpncms.org",
     ],
   },
   serverRuntimeConfig: {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import NavigationSection from "../components/navigation";
 
@@ -142,10 +143,13 @@ export default function Header() {
       <div className="pkb-nav">
         <div className="logo">
           <Link href="/">
-            <img
-              style={{ height: "50px" }}
+            <Image
+              style={{ height: "50px", width: "auto" }}
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
               alt="PanKbase Logo"
+              width={240}
+              height={50}
+              unoptimized
             />
           </Link>
         </div>
@@ -153,10 +157,26 @@ export default function Header() {
           <div className="menu-wrapper">
             <div className="topmenu">
               <a className="topmenu-item" href="https://pankbase.org/funding.html">
-                Funding Opportunities <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg" alt="" />
+                Funding Opportunities{" "}
+                <Image
+                  style={{ height: "15px", width: "15px" }}
+                  src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+                  alt=""
+                  width={15}
+                  height={15}
+                  unoptimized
+                />
               </a>
               <a className="topmenu-item disabled">
-                Search <img style={{ height: "15px", width: "15px" }} src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg" alt="" />
+                Search{" "}
+                <Image
+                  style={{ height: "15px", width: "15px" }}
+                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
+                  alt=""
+                  width={15}
+                  height={15}
+                  unoptimized
+                />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
               <NavigationSection />
@@ -190,7 +210,14 @@ export default function Header() {
             </div>
           </div>
           <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <img style={{ height: "37px" }} src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg" alt="HIRN Logo" />
+            <Image
+              style={{ height: "37px", width: "auto" }}
+              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
+              alt="HIRN Logo"
+              width={120}
+              height={37}
+              unoptimized
+            />
           </a>
         </div>
         <div className="pkb-beta">beta</div>
