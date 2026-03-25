@@ -1,17 +1,10 @@
 // node_modules
 import PropTypes from "prop-types";
-import { Fragment } from "react";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
-import { DonorDataItems } from "../../components/common-data-items";
-import {
-  DataArea,
-  DataItemLabel,
-  DataItemValue,
-  DataPanel,
-} from "../../components/data-area";
+import HumanDonorClinicalDashboard from "../../components/human-donor-clinical-dashboard";
 import { requestOntologyTerms } from "../../lib/common-requests";
 import DocumentTable from "../../components/document-table";
 import { EditableItem } from "../../components/edit";
@@ -20,7 +13,6 @@ import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import PhenotypicFeatureTable from "../../components/phenotypic-feature-table";
 import RelatedDonorsTable from "../../components/related-donors-table";
-import SeparatedList from "../../components/separated-list";
 // lib
 import buildAttribution from "../../lib/attribution";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
@@ -47,34 +39,22 @@ export default function HumanDonor({
     <>
       <Breadcrumbs />
       <EditableItem item={donor}>
-        <PagePreamble>
+        <PagePreamble
+          pageTitle={donor.accession}
+          titleClassName="sr-only"
+        >
           <AlternateAccessions
             alternateAccessions={donor.alternate_accessions}
           />
         </PagePreamble>
         <ObjectPageHeader item={donor} isJsonFormat={isJson} />
         <JsonDisplay item={donor} isJsonFormat={isJson}>
-          <DataPanel>
-            <DataArea>
-              <DonorDataItems
-                item={donor}
-                diabetesStatus={diabetesStatus}
-                otherTissue={otherTissue}
-              />
-              {donor.human_donor_identifiers?.length > 0 && (
-                <>
-                  <DataItemLabel>Identifiers</DataItemLabel>
-                  <DataItemValue>
-                    <SeparatedList isCollapsible>
-                      {donor.human_donor_identifiers.map((identifier) => (
-                        <Fragment key={identifier}>{identifier}</Fragment>
-                      ))}
-                    </SeparatedList>
-                  </DataItemValue>
-                </>
-              )}
-            </DataArea>
-          </DataPanel>
+          <HumanDonorClinicalDashboard
+            item={donor}
+            diabetesStatus={diabetesStatus}
+            otherTissue={otherTissue}
+            humanDonorIdentifiers={donor.human_donor_identifiers ?? []}
+          />
           {phenotypicFeatures.length > 0 && (
             <PhenotypicFeatureTable phenotypicFeatures={phenotypicFeatures} />
           )}
@@ -147,11 +127,11 @@ export async function getServerSideProps({ params, req, query }) {
     );
     const attribution = await buildAttribution(donor, req.headers.cookie);
     const diabetesStatus =
-      donor.diabetes_status.length > 0
+      donor.diabetes_status?.length > 0
         ? await requestOntologyTerms(donor.diabetes_status, request)
         : [];
     const otherTissue =
-      donor.other_tissues_available.length > 0
+      donor.other_tissues_available?.length > 0
         ? await requestOntologyTerms(donor.other_tissues_available, request)
         : [];
     return {
