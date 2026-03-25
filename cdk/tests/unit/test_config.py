@@ -57,6 +57,7 @@ def test_config_pipeline_config_dataclass():
         ('abc', '123'),
         ('xyz', '321'),
     ]
+    assert config.enable_slack_pipeline_notifications is True
 
 
 def test_config_build_config_from_name():
@@ -130,6 +131,11 @@ def test_config_build_pipeline_config_from_name():
     assert config.name == 'dev'
     assert isinstance(config.account_and_region, Environment)
     assert config.existing_resources_class == igvf_dev.Resources
+    prod = build_pipeline_config_from_name(
+        'production',
+        branch='main',
+    )
+    assert prod.enable_slack_pipeline_notifications is False
 
 
 def test_config_build_config_from_branch():
