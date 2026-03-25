@@ -41,6 +41,10 @@ config: Dict[str, Any] = {
             'cross_account_keys': True,
             'existing_resources_class': igvf_prod.Resources,
             'account_and_region': igvf_prod.US_WEST_2,
+            # CodeStar NotificationRule updates often fail with InvalidRequest when the
+            # SNS / Chatbot target ARN is stale or policies block codestar-notifications.
+            # Set True again after fixing the target in shared_infrastructure + AWS.
+            'enable_slack_pipeline_notifications': False,
             'tags': [
             ],
         },
@@ -140,6 +144,8 @@ class PipelineConfig:
     account_and_region: Environment
     tags: List[Tuple[str, str]]
     cross_account_keys: bool = False
+    #: When False, skip CodeStarNotifications::NotificationRule on the pipeline.
+    enable_slack_pipeline_notifications: bool = True
     common: Common = field(
         default_factory=Common
     )

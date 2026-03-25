@@ -173,6 +173,7 @@ def production_pipeline_config():
         existing_resources_class=igvf_dev.Resources,
         account_and_region=igvf_dev.US_WEST_2,
         cross_account_keys=True,
+        enable_slack_pipeline_notifications=True,
         tags=[
             ('test', 'tag'),
         ]
