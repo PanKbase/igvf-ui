@@ -7,16 +7,6 @@ import DbxrefList from "./dbxref-list";
 import SeparatedList from "./separated-list";
 import Status from "./status";
 
-const NAV = [
-  { href: "#human-donor-summary", label: "Summary" },
-  { href: "#human-donor-demographics", label: "Demographics & Clinical" },
-  { href: "#human-donor-autoantibodies", label: "Autoantibodies" },
-  { href: "#human-donor-hla", label: "HLA Typing" },
-  { href: "#human-donor-grs", label: "Genetic Risk Score" },
-  { href: "#human-donor-data-available", label: "Data Available" },
-  { href: "#human-donor-supplementary", label: "Supplementary" },
-];
-
 /** Split comma-separated HLA row into locus / alleles / method (per schema examples). */
 export function parseHlaRow(row) {
   if (typeof row !== "string") {
@@ -454,42 +444,10 @@ export default function HumanDonorClinicalDashboard({
     : [];
 
   return (
-    <div className="flex gap-8 bg-white dark:bg-gray-950">
-      <nav
-        aria-label="Section navigation"
-        className="sticky top-4 hidden h-fit w-44 shrink-0 space-y-0.5 self-start border-r border-gray-200 pr-4 text-sm dark:border-gray-800 md:block"
-      >
-        {NAV.map(({ href, label }) => (
-          <a
-            key={href}
-            href={href}
-            className="block rounded px-2 py-1.5 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-100"
-          >
-            {label}
-          </a>
-        ))}
-      </nav>
-
-      <div className="min-w-0 flex-1 space-y-10 pb-12">
-        <div
-          className="sticky top-0 z-10 -mx-1 flex gap-1 overflow-x-auto border-b border-gray-200 bg-white py-2 text-xs md:hidden dark:border-gray-800 dark:bg-gray-950"
-          aria-label="Section navigation (compact)"
-        >
-          {NAV.map(({ href, label }) => (
-            <a
-              key={href}
-              href={href}
-              className="shrink-0 rounded-full border border-gray-200 px-2.5 py-1 text-gray-700 dark:border-gray-700 dark:text-gray-300"
-            >
-              {label}
-            </a>
-          ))}
-        </div>
+    <div className="bg-white dark:bg-gray-950">
+      <div className="mx-auto max-w-6xl space-y-10 px-4 pb-12 sm:px-6 lg:px-8">
         {/* HEADER BAND */}
-        <header
-          id="human-donor-header"
-          className="border-b border-gray-200 pb-6 dark:border-gray-800"
-        >
+        <header className="border-b border-gray-200 pb-6 dark:border-gray-800">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <h1 className="font-mono text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
@@ -533,11 +491,10 @@ export default function HumanDonorClinicalDashboard({
         </header>
 
         {/* SUMMARY STATS */}
-        <section
-          id="human-donor-summary"
-          className="scroll-mt-20"
-        >
-          <h2 className="sr-only">Clinical summary</h2>
+        <section>
+          <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            Clinical summary
+          </h2>
           <div className="flex flex-wrap gap-3">
             <MetricCard label="Age (y)" value={ageDisplay} />
             <MetricCard
@@ -565,10 +522,7 @@ export default function HumanDonorClinicalDashboard({
         </section>
 
         {/* DEMOGRAPHICS & CLINICAL */}
-        <section
-          id="human-donor-demographics"
-          className="scroll-mt-20"
-        >
+        <section>
           <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
             Demographics &amp; Clinical
           </h2>
@@ -695,10 +649,7 @@ export default function HumanDonorClinicalDashboard({
 
         {/* AUTOANTIBODIES */}
         {hasAab ? (
-          <section
-            id="human-donor-autoantibodies"
-            className="scroll-mt-20"
-          >
+          <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Autoantibodies
             </h2>
@@ -733,7 +684,7 @@ export default function HumanDonorClinicalDashboard({
 
         {/* HLA */}
         {(hlaRows.length > 0 || item.hla_status) && (
-          <section id="human-donor-hla" className="scroll-mt-20">
+          <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
               HLA typing
             </h2>
@@ -785,7 +736,7 @@ export default function HumanDonorClinicalDashboard({
 
         {/* GENETIC RISK SCORE */}
         {item.genetic_risk_score?.length > 0 ? (
-          <section id="human-donor-grs" className="scroll-mt-20">
+          <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Genetic risk score
             </h2>
@@ -799,10 +750,7 @@ export default function HumanDonorClinicalDashboard({
 
         {/* DATA AVAILABLE */}
         {item.data_available?.length > 0 ? (
-          <section
-            id="human-donor-data-available"
-            className="scroll-mt-20"
-          >
+          <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Data available
             </h2>
@@ -841,12 +789,9 @@ export default function HumanDonorClinicalDashboard({
         ) : null}
 
         {/* SUPPLEMENTARY */}
-        <section
-          id="human-donor-supplementary"
-          className="scroll-mt-20"
-        >
+        <section>
           <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
-            Supplementary &amp; attribution
+            Supplementary
           </h2>
           <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
             {item.collections?.length > 0 ? (
@@ -857,7 +802,7 @@ export default function HumanDonorClinicalDashboard({
                     <span
                       key={c}
                       title="Collection"
-                      className={`rounded border px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-wider ${
+                      className={`rounded border px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
                         isHpap
                           ? "border-amber-500 bg-amber-50 text-amber-950 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-200"
                           : "border-gray-300 bg-gray-100 text-gray-800 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
@@ -903,31 +848,8 @@ export default function HumanDonorClinicalDashboard({
             ) : null}
 
             {item.publication_identifiers?.length > 0 ? (
-              <FieldPair label="Publication identifiers" monoValue>
+              <FieldPair label="Publication identifiers">
                 {item.publication_identifiers.join(", ")}
-              </FieldPair>
-            ) : null}
-
-            {item.lab ? (
-              <FieldPair label="Lab">
-                {typeof item.lab === "object" && item.lab["@id"] ? (
-                  <Link href={item.lab["@id"]} className="font-mono text-blue-700 dark:text-blue-400">
-                    {item.lab.title || item.lab.accession || item.lab["@id"]}
-                  </Link>
-                ) : (
-                  item.lab
-                )}
-              </FieldPair>
-            ) : null}
-            {item.award ? (
-              <FieldPair label="Award">
-                {typeof item.award === "object" && item.award["@id"] ? (
-                  <Link href={item.award["@id"]} className="font-mono text-blue-700 dark:text-blue-400">
-                    {item.award.name || item.award["@id"]}
-                  </Link>
-                ) : (
-                  item.award
-                )}
               </FieldPair>
             ) : null}
 
@@ -945,13 +867,13 @@ export default function HumanDonorClinicalDashboard({
                 <DbxrefList dbxrefs={item.dbxrefs} isCollapsible />
               </div>
             ) : null}
-            <FieldPair label="Identifiers (item)" monoValue>
+            <FieldPair label="Identifiers (item)">
               {item.identifiers?.length > 0
                 ? item.identifiers.join(", ")
                 : null}
             </FieldPair>
             {item.url ? (
-              <FieldPair label="URL" monoValue>
+              <FieldPair label="URL">
                 <a
                   href={item.url}
                   target="_blank"
@@ -1047,6 +969,4 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "dbxrefs",
   "identifiers",
   "url",
-  "lab",
-  "award",
 ];
