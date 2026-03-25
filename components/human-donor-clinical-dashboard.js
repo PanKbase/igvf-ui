@@ -7,45 +7,43 @@ import DbxrefList from "./dbxref-list";
 import SeparatedList from "./separated-list";
 import Status from "./status";
 
-/** Split comma-separated HLA row into locus / alleles / method (per schema examples). */
 export function parseHlaRow(row) {
-  if (typeof row !== "string") {
-    return null;
+  if (typeof row !== "string") return null;
+
+  const parts = row.split(",").map((p) => p.trim()).filter(Boolean);
+
+  const KNOWN_METHODS = new Set(["OPO", "NGS", "RT-PCR", "SSO", "."]);
+  const isBlob = parts.length > 3 && KNOWN_METHODS.has(parts[2]);
+
+  if (isBlob) {
+    const rows = [];
+    for (let i = 0; i + 2 < parts.length; i += 3) {
+      const locus = parts[i];
+      const allelePart = parts[i + 1];
+      const method = parts[i + 2];
+      const [a1, a2] = allelePart.split("-");
+      rows.push({
+        locus,
+        allele1: !a1 || a1 === "." ? "—" : a1,
+        allele2: !a2 || a2 === "." ? "—" : a2,
+        method: method === "." ? "—" : method,
+      });
+    }
+    return rows;
   }
-  const parts = row
-    .split(",")
-    .map((p) => p.trim())
-    .filter(Boolean);
-  if (parts.length >= 4) {
-    return {
-      locus: parts[0],
-      allele1: parts[1],
-      allele2: parts[2],
-      method: parts.slice(3).join(", "),
-    };
+
+  if (parts.length >= 3) {
+    const [locus, allelePart, ...methodParts] = parts;
+    const [a1, a2] = allelePart.split("-");
+    return [{
+      locus,
+      allele1: !a1 || a1 === "." ? "—" : a1,
+      allele2: !a2 || a2 === "." ? "—" : a2,
+      method: methodParts.join(", ") || "—",
+    }];
   }
-  if (parts.length === 3) {
-    return {
-      locus: parts[0],
-      allele1: parts[1],
-      allele2: "—",
-      method: parts[2],
-    };
-  }
-  if (parts.length === 2) {
-    return {
-      locus: parts[0],
-      allele1: parts[1],
-      allele2: "—",
-      method: "—",
-    };
-  }
-  return {
-    locus: parts[0] || row,
-    allele1: "",
-    allele2: "",
-    method: "",
-  };
+
+  return null;
 }
 
 function formatDiabetesChipText(description) {
@@ -440,7 +438,7 @@ export default function HumanDonorClinicalDashboard({
     item.aab_znt8 !== undefined;
 
   const hlaRows = Array.isArray(item.hla_typing)
-    ? item.hla_typing.map(parseHlaRow).filter(Boolean)
+    ? item.hla_typing.flatMap((row) => parseHlaRow(row) ?? [])
     : [];
 
   return (
