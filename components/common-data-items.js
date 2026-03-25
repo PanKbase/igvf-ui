@@ -385,18 +385,87 @@ export function DonorDataItems({
                       <DataItemLabel>{grsObj.method}</DataItemLabel>
                       <DataItemValue>
                         <div>
-                          <strong>Overall Score:</strong> {grsObj.overall_score}
+                          <strong>Overall score:</strong> {grsObj.overall_score}
                         </div>
-                        {grsObj.mhc_only !== undefined && (
-                          <div>
-                            <strong>MHC-only:</strong> {grsObj.mhc_only}
+                        {grsObj.sub_scores?.length > 0 && (
+                          <div className="mt-2 space-y-1">
+                            <strong>Sub-scores</strong>
+                            {grsObj.sub_scores.map((sub, subIndex) => (
+                              <div key={subIndex}>
+                                <strong>
+                                  {sub.label.replace(/_/g, " ")}:
+                                </strong>{" "}
+                                {sub.value}
+                                {sub.description && (
+                                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    {sub.description}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
                           </div>
                         )}
-                        {grsObj.non_mhc_only !== undefined && (
-                          <div>
-                            <strong>Non-MHC-only:</strong> {grsObj.non_mhc_only}
-                          </div>
-                        )}
+                        {(!grsObj.sub_scores ||
+                          grsObj.sub_scores.length === 0) &&
+                          grsObj.mhc_only !== undefined && (
+                            <div>
+                              <strong>MHC-only:</strong> {grsObj.mhc_only}
+                            </div>
+                          )}
+                        {(!grsObj.sub_scores ||
+                          grsObj.sub_scores.length === 0) &&
+                          grsObj.non_mhc_only !== undefined && (
+                            <div>
+                              <strong>Non-MHC-only:</strong>{" "}
+                              {grsObj.non_mhc_only}
+                            </div>
+                          )}
+                        {grsObj.metadata &&
+                          (grsObj.metadata.publication ||
+                            grsObj.metadata.version ||
+                            grsObj.metadata.ancestry ||
+                            Object.keys(grsObj.metadata).length > 0) && (
+                            <div className="mt-2 space-y-1">
+                              <strong>Metadata</strong>
+                              {grsObj.metadata.publication && (
+                                <div>
+                                  <strong>Publication:</strong>{" "}
+                                  {grsObj.metadata.publication}
+                                </div>
+                              )}
+                              {grsObj.metadata.version && (
+                                <div>
+                                  <strong>Version:</strong>{" "}
+                                  {grsObj.metadata.version}
+                                </div>
+                              )}
+                              {grsObj.metadata.ancestry && (
+                                <div>
+                                  <strong>Ancestry:</strong>{" "}
+                                  {grsObj.metadata.ancestry}
+                                </div>
+                              )}
+                              {Object.entries(grsObj.metadata)
+                                .filter(
+                                  ([key]) =>
+                                    ![
+                                      "publication",
+                                      "version",
+                                      "ancestry",
+                                    ].includes(key)
+                                )
+                                .map(([key, value]) => (
+                                  <div key={key}>
+                                    <strong>
+                                      {key.replace(/_/g, " ")}:
+                                    </strong>{" "}
+                                    {typeof value === "object"
+                                      ? JSON.stringify(value)
+                                      : String(value)}
+                                  </div>
+                                ))}
+                            </div>
+                          )}
                       </DataItemValue>
                     </div>
                   ))}

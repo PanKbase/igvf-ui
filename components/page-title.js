@@ -7,12 +7,18 @@ import GlobalContext from "./global-context";
 /**
  * Show a standard page title for the top of any page.
  */
-export default function PageTitle({ pageTitle = "", children }) {
+export default function PageTitle({
+  pageTitle = "",
+  children,
+  titleClassName = "",
+}) {
   const { page } = useContext(GlobalContext);
 
   return (
     <div className="mb-5">
-      <h1 className="text-3xl font-medium text-gray-700 dark:text-gray-300">
+      <h1
+        className={`text-3xl font-medium text-gray-700 dark:text-gray-300 ${titleClassName}`.trim()}
+      >
         {pageTitle || page.title}
       </h1>
       {children}
@@ -23,4 +29,6 @@ export default function PageTitle({ pageTitle = "", children }) {
 PageTitle.propTypes = {
   // Page title for pages in which the server doesn't supply one
   pageTitle: PropTypes.string,
+  // Optional extra classes for the title (e.g. sr-only when the page supplies its own visible heading)
+  titleClassName: PropTypes.string,
 };
