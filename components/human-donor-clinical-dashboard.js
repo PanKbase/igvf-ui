@@ -8,7 +8,9 @@ import SeparatedList from "./separated-list";
 import Status from "./status";
 
 export function parseHlaRow(row) {
-  if (typeof row !== "string") return null;
+  if (typeof row !== "string") {
+    return null;
+  }
 
   const parts = row.split(",").map((p) => p.trim()).filter(Boolean);
 
