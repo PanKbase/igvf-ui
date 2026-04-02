@@ -499,16 +499,7 @@ export default function HumanDonorClinicalDashboard({
           </h2>
           <div className="flex flex-wrap gap-3">
             {chipText ? (
-              <div className="min-w-[7.5rem] flex-1 rounded-lg border border-gray-200 bg-gray-50/80 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-900/50">
-                <div className="text-sm font-semibold text-data-label dark:text-gray-400">
-                  Diabetes status
-                </div>
-                <div className="mt-1">
-                  <span className="inline-flex rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-950 dark:border-amber-700 dark:bg-amber-950/50 dark:text-amber-200">
-                    {chipText}
-                  </span>
-                </div>
-              </div>
+              <MetricCard label="Diabetes status" value={chipText} />
             ) : null}
             <MetricCard label="BMI" value={bmiDisplay} />
             <MetricCard
