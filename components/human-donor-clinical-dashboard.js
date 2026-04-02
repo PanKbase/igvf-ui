@@ -55,6 +55,18 @@ function formatDiabetesChipText(description) {
   return description.replace(/\s+/g, " ").trim();
 }
 
+/** Placeholder / missing dataset_tissue groups genotyping-style rows under one heading. */
+function dataAvailableTissueHeading(datasetTissue) {
+  if (datasetTissue === undefined || datasetTissue === null) {
+    return "Genetics";
+  }
+  const s = String(datasetTissue).trim();
+  if (s === "" || s === "-" || s === "—") {
+    return "Genetics";
+  }
+  return s;
+}
+
 function hba1cStatusClass(hba1c) {
   if (hba1c === undefined || hba1c === null || Number.isNaN(hba1c)) {
     return "";
@@ -71,16 +83,16 @@ function hba1cStatusClass(hba1c) {
 function MetricCard({ label, value, valueClass = "", sub }) {
   return (
     <div className="min-w-[7.5rem] flex-1 rounded-lg border border-gray-200 bg-gray-50/80 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-900/50">
-      <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+      <div className="text-sm font-semibold text-data-label dark:text-gray-400">
         {label}
       </div>
       <div
-        className={`mt-1 font-mono text-lg tabular-nums text-gray-900 dark:text-gray-100 ${valueClass}`}
+        className={`mt-1 text-base font-medium tabular-nums text-data-value ${valueClass}`}
       >
         {value}
       </div>
       {sub ? (
-        <div className="mt-0.5 text-[0.65rem] text-gray-500 dark:text-gray-400">
+        <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
           {sub}
         </div>
       ) : null}
@@ -101,11 +113,11 @@ function FieldPair({ label, children, monoValue = false }) {
   }
   return (
     <div className="grid grid-cols-1 gap-1 sm:grid-cols-[10rem_1fr] sm:gap-4">
-      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
         {label}
       </dt>
       <dd
-        className={`text-sm text-gray-900 dark:text-gray-100 ${monoValue ? "font-mono" : ""}`}
+        className={`text-sm font-medium text-data-value ${monoValue ? "tabular-nums" : ""}`}
       >
         {children}
       </dd>
@@ -123,15 +135,15 @@ function AutoantibodyCard({ name, positive, value, assay }) {
   const isPos = positive === true;
   const isNeg = positive === false;
   const badge = isPos ? (
-    <span className="rounded px-1.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300">
+    <span className="rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300">
       Positive
     </span>
   ) : isNeg ? (
-    <span className="rounded px-1.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+    <span className="rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
       Negative
     </span>
   ) : (
-    <span className="rounded px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+    <span className="rounded px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wide bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
       N/A
     </span>
   );
@@ -145,15 +157,17 @@ function AutoantibodyCard({ name, positive, value, assay }) {
         {badge}
       </div>
       {value !== undefined && value !== null ? (
-        <div className="mt-2 font-mono text-sm tabular-nums text-gray-800 dark:text-gray-200">
+        <div className="mt-2 text-sm font-medium tabular-nums text-data-value">
           {value}{" "}
-          <span className="text-xs font-sans text-gray-500">unit/ml</span>
+          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            unit/ml
+          </span>
         </div>
       ) : (
         <div className="mt-2 text-xs text-gray-400">No value</div>
       )}
       {assay?.length > 0 ? (
-        <div className="mt-1.5 text-[0.65rem] leading-snug text-gray-500 dark:text-gray-400">
+        <div className="mt-1.5 text-xs leading-snug text-gray-500 dark:text-gray-400">
           {assay.join(", ")}
         </div>
       ) : null}
@@ -217,10 +231,10 @@ function GrsMethodCard({ entry }) {
     <details className="group rounded-lg border border-gray-200 bg-white open:shadow-md dark:border-gray-700 dark:bg-gray-900">
       <summary className="cursor-pointer list-none rounded-lg px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded border border-gray-300 bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-800 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">
+          <span className="rounded border border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-800 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">
             {method}
           </span>
-          <span className="font-mono text-2xl font-semibold tabular-nums text-gray-900 dark:text-gray-100">
+          <span className="text-2xl font-light tabular-nums text-gray-900 dark:text-gray-100">
             {overall}
           </span>
           {isT1d && barPct !== null ? (
@@ -247,14 +261,14 @@ function GrsMethodCard({ entry }) {
                 key={s.label}
                 className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40"
               >
-                <div className="text-[0.65rem] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
                   {String(s.label).replace(/_/g, " ")}
                 </div>
-                <div className="font-mono text-sm tabular-nums text-gray-900 dark:text-gray-100">
+                <div className="text-sm font-medium tabular-nums text-data-value">
                   {s.value}
                 </div>
                 {s.description ? (
-                  <div className="mt-0.5 text-[0.65rem] text-gray-500 dark:text-gray-400">
+                  <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                     {s.description}
                   </div>
                 ) : null}
@@ -267,18 +281,20 @@ function GrsMethodCard({ entry }) {
           <div className="grid gap-2 sm:grid-cols-2">
             {legacyMhc !== null ? (
               <div className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40">
-                <div className="text-[0.65rem] font-medium uppercase tracking-wide text-gray-500">
+                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
                   MHC-only
                 </div>
-                <div className="font-mono text-sm tabular-nums">{legacyMhc}</div>
+                <div className="text-sm font-medium tabular-nums text-data-value">
+                  {legacyMhc}
+                </div>
               </div>
             ) : null}
             {legacyNonMhc !== null ? (
               <div className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40">
-                <div className="text-[0.65rem] font-medium uppercase tracking-wide text-gray-500">
+                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
                   Non-MHC-only
                 </div>
-                <div className="font-mono text-sm tabular-nums">
+                <div className="text-sm font-medium tabular-nums text-data-value">
                   {legacyNonMhc}
                 </div>
               </div>
@@ -288,7 +304,7 @@ function GrsMethodCard({ entry }) {
 
         {isPT2d && clusterSubs.length > 0 ? (
           <div>
-            <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <div className="mb-1.5 text-sm font-semibold text-data-label dark:text-gray-400">
               Clusters
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -303,10 +319,10 @@ function GrsMethodCard({ entry }) {
                         : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-950/40"
                     }`}
                   >
-                    <div className="text-[0.65rem] font-medium text-gray-600 dark:text-gray-400">
+                    <div className="text-xs font-semibold text-data-label dark:text-gray-400">
                       {String(s.label).replace(/_/g, " ")}
                     </div>
-                    <div className="font-mono text-sm font-semibold tabular-nums text-gray-900 dark:text-gray-100">
+                    <div className="text-sm font-semibold tabular-nums text-data-value">
                       {s.value}
                     </div>
                   </div>
@@ -321,7 +337,7 @@ function GrsMethodCard({ entry }) {
           metadata.version ||
           metadata.ancestry ||
           Object.keys(metadata).length > 0) ? (
-          <footer className="border-t border-gray-100 pt-2 text-[0.7rem] leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400">
+          <footer className="border-t border-gray-100 pt-2 text-xs leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400">
             {metadata.publication ? (
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-300">
@@ -406,11 +422,6 @@ export default function HumanDonorClinicalDashboard({
       ? String(item.diabetes_duration)
       : "—";
 
-  const bmiFlag =
-    typeof item.bmi === "number" && item.bmi >= 30
-      ? "Elevated BMI"
-      : undefined;
-
   const chipText = formatDiabetesChipText(item.diabetes_status_description);
 
   const dataByTissue = useMemo(() => {
@@ -419,7 +430,7 @@ export default function HumanDonorClinicalDashboard({
     }
     const map = {};
     for (const row of item.data_available) {
-      const t = row.dataset_tissue || "—";
+      const t = dataAvailableTissueHeading(row.dataset_tissue);
       if (!map[t]) {
         map[t] = [];
       }
@@ -448,65 +459,58 @@ export default function HumanDonorClinicalDashboard({
       <div className="mx-auto max-w-6xl space-y-10 px-4 pb-12 sm:px-6 lg:px-8">
         {/* HEADER BAND */}
         <header className="border-b border-gray-200 pb-6 dark:border-gray-800">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-              <h1 className="font-mono text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
-                {item.accession || "—"}
-              </h1>
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600 dark:text-gray-400">
-                {item.status ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Status status={item.status} />
-                    {item.status === "released" ? null : (
-                      <span className="sr-only">{item.status}</span>
-                    )}
-                  </span>
-                ) : null}
-                {item.rrid ? (
-                  <span>
-                    <span className="text-gray-500">RRID</span>{" "}
-                    <span className="font-mono text-gray-900 dark:text-gray-200">
-                      {item.rrid}
-                    </span>
-                  </span>
-                ) : null}
-                {item.center_donor_id ? (
-                  <span>
-                    <span className="text-gray-500">Program Donor ID</span>{" "}
-                    <span className="font-mono text-gray-900 dark:text-gray-200">
-                      {item.center_donor_id}
-                    </span>
-                  </span>
-                ) : null}
-              </div>
-            </div>
-            {chipText ? (
-              <div className="shrink-0">
-                <span className="inline-flex rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-950 dark:border-amber-700 dark:bg-amber-950/50 dark:text-amber-200">
-                  {chipText}
+          <div>
+            <h1 className="text-2xl font-light text-gray-900 dark:text-gray-100">
+              {item.accession || "—"}
+            </h1>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600 dark:text-gray-400">
+              {item.status ? (
+                <span className="inline-flex items-center gap-2">
+                  <Status status={item.status} />
+                  {item.status === "released" ? null : (
+                    <span className="sr-only">{item.status}</span>
+                  )}
                 </span>
-              </div>
-            ) : null}
+              ) : null}
+              {item.rrid ? (
+                <span>
+                  <span className="text-gray-500">RRID</span>{" "}
+                  <span className="font-medium text-data-value">
+                    {item.rrid}
+                  </span>
+                </span>
+              ) : null}
+              {item.center_donor_id ? (
+                <span>
+                  <span className="text-gray-500">Program Donor ID</span>{" "}
+                  <span className="font-medium text-data-value">
+                    {item.center_donor_id}
+                  </span>
+                </span>
+              ) : null}
+            </div>
           </div>
         </header>
 
         {/* SUMMARY STATS */}
         <section>
-          <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+          <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
             Clinical summary
           </h2>
           <div className="flex flex-wrap gap-3">
-            <MetricCard label="Age (y)" value={ageDisplay} />
-            <MetricCard
-              label="BMI"
-              value={bmiDisplay}
-              valueClass={
-                typeof item.bmi === "number" && item.bmi >= 30
-                  ? "text-amber-700 dark:text-amber-400"
-                  : ""
-              }
-              sub={bmiFlag}
-            />
+            {chipText ? (
+              <div className="min-w-[7.5rem] flex-1 rounded-lg border border-gray-200 bg-gray-50/80 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-900/50">
+                <div className="text-sm font-semibold text-data-label dark:text-gray-400">
+                  Diabetes status
+                </div>
+                <div className="mt-1">
+                  <span className="inline-flex rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-950 dark:border-amber-700 dark:bg-amber-950/50 dark:text-amber-200">
+                    {chipText}
+                  </span>
+                </div>
+              </div>
+            ) : null}
+            <MetricCard label="BMI" value={bmiDisplay} />
             <MetricCard
               label="HbA1c %"
               value={hbaDisplay}
@@ -515,63 +519,50 @@ export default function HumanDonorClinicalDashboard({
             <MetricCard
               label="C-Peptide (ng/ml)"
               value={cPeptideDisplay}
-              valueClass="font-mono"
             />
             <MetricCard label="Diabetes duration" value={dmDurDisplay} />
           </div>
         </section>
 
-        {/* DEMOGRAPHICS & CLINICAL */}
+        {/* DEMOGRAPHICS */}
         <section>
-          <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
-            Demographics &amp; Clinical
+          <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            Demographics
           </h2>
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                Identity
-              </h3>
-              <dl className="space-y-3">
-                <FieldPair label="Taxa" monoValue>
-                  {item.taxa}
-                </FieldPair>
-                <FieldPair label="Gender">{item.gender}</FieldPair>
-                <FieldPair label="Genetic sex">{item.biological_sex}</FieldPair>
-                {humanDonorIdentifiers?.length > 0 ? (
-                  <FieldPair label="Identifiers">
-                    <SeparatedList isCollapsible>
-                      {humanDonorIdentifiers.map((id) => (
-                        <span key={id}>{id}</span>
-                      ))}
-                    </SeparatedList>
-                  </FieldPair>
-                ) : null}
-                {ge.length > 0 ? (
-                  <FieldPair label="Predicted genetic ancestry">
-                    {ge.map((eth, i) => (
-                      <span key={i}>
-                        {eth.ethnicity}
-                        {eth.percentage !== undefined
-                          ? ` (${eth.percentage}%)`
-                          : ""}
-                        {i < ge.length - 1 ? ", " : ""}
-                      </span>
-                    ))}
-                  </FieldPair>
-                ) : null}
-                {item.self_reported_ethnicities?.length > 0 ? (
-                  <FieldPair label="Reported ethnicity">
-                    {item.self_reported_ethnicities.join(", ")}
-                  </FieldPair>
-                ) : null}
-              </dl>
-            </div>
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                Clinical
-              </h3>
-              <dl className="space-y-3">
-                <FieldPair label="Diabetes (ontology)">
+          <dl className="space-y-3">
+            <FieldPair label="Age (y)" monoValue>
+              {ageDisplay}
+            </FieldPair>
+            <FieldPair label="Gender">{item.gender}</FieldPair>
+            <FieldPair label="Genetic sex">{item.biological_sex}</FieldPair>
+            {ge.length > 0 ? (
+              <FieldPair label="Predicted genetic ancestry">
+                {ge.map((eth, i) => (
+                  <span key={i}>
+                    {eth.ethnicity}
+                    {eth.percentage !== undefined
+                      ? ` (${eth.percentage}%)`
+                      : ""}
+                    {i < ge.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </FieldPair>
+            ) : null}
+            {item.self_reported_ethnicities?.length > 0 ? (
+              <FieldPair label="Reported ethnicity">
+                {item.self_reported_ethnicities.join(", ")}
+              </FieldPair>
+            ) : null}
+          </dl>
+        </section>
+
+        {/* ADDITIONAL CLINICAL */}
+        <section>
+          <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            Additional clinical
+          </h2>
+          <dl className="space-y-3">
+            <FieldPair label="Diabetes (ontology)">
                   {Array.isArray(diabetesStatus) && diabetesStatus.length > 0 ? (
                     <SeparatedList>
                       {diabetesStatus.map((status) => (
@@ -642,15 +633,13 @@ export default function HumanDonorClinicalDashboard({
                     {item.other_theraphy.join(", ")}
                   </FieldPair>
                 ) : null}
-              </dl>
-            </div>
-          </div>
+          </dl>
         </section>
 
         {/* AUTOANTIBODIES */}
         {hasAab ? (
           <section>
-            <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Autoantibodies
             </h2>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -685,7 +674,7 @@ export default function HumanDonorClinicalDashboard({
         {/* HLA */}
         {(hlaRows.length > 0 || item.hla_status) && (
           <section>
-            <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               HLA typing
             </h2>
             {item.hla_status ? (
@@ -700,11 +689,11 @@ export default function HumanDonorClinicalDashboard({
               <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
                 <table className="min-w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">
-                      <th className="px-3 py-2 font-semibold">Locus</th>
-                      <th className="px-3 py-2 font-semibold">Allele 1</th>
-                      <th className="px-3 py-2 font-semibold">Allele 2</th>
-                      <th className="px-3 py-2 font-semibold">Method</th>
+                    <tr className="border-b border-gray-200 bg-gray-50 text-sm font-semibold text-data-label dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">
+                      <th className="px-3 py-2">Locus</th>
+                      <th className="px-3 py-2">Allele 1</th>
+                      <th className="px-3 py-2">Allele 2</th>
+                      <th className="px-3 py-2">Method</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -713,16 +702,16 @@ export default function HumanDonorClinicalDashboard({
                         key={`${r.locus}-${i}`}
                         className="bg-white dark:bg-gray-950"
                       >
-                        <td className="px-3 py-2 font-mono text-gray-900 dark:text-gray-100">
+                        <td className="px-3 py-2 text-sm font-medium text-data-value">
                           {r.locus}
                         </td>
-                        <td className="px-3 py-2 font-mono tabular-nums text-gray-900 dark:text-gray-100">
+                        <td className="px-3 py-2 text-sm font-medium tabular-nums text-data-value">
                           {r.allele1 || "—"}
                         </td>
-                        <td className="px-3 py-2 font-mono tabular-nums text-gray-900 dark:text-gray-100">
+                        <td className="px-3 py-2 text-sm font-medium tabular-nums text-data-value">
                           {r.allele2 || "—"}
                         </td>
-                        <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
+                        <td className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                           {r.method || "—"}
                         </td>
                       </tr>
@@ -737,7 +726,7 @@ export default function HumanDonorClinicalDashboard({
         {/* GENETIC RISK SCORE */}
         {item.genetic_risk_score?.length > 0 ? (
           <section>
-            <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Genetic risk score
             </h2>
             <div className="space-y-3">
@@ -751,13 +740,13 @@ export default function HumanDonorClinicalDashboard({
         {/* DATA AVAILABLE */}
         {item.data_available?.length > 0 ? (
           <section>
-            <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+            <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Data available
             </h2>
             <div className="space-y-5">
               {Object.entries(dataByTissue).map(([tissue, rows]) => (
                 <div key={tissue}>
-                  <h3 className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+                  <h3 className="mb-2 text-sm font-semibold text-data-label dark:text-gray-400">
                     {tissue}
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -774,7 +763,7 @@ export default function HumanDonorClinicalDashboard({
                             href={row.dataset_link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-mono text-xs font-semibold text-blue-700 underline dark:text-blue-400"
+                            className="text-xs font-semibold text-blue-700 underline dark:text-blue-400"
                           >
                             Access dataset
                           </a>
@@ -790,7 +779,7 @@ export default function HumanDonorClinicalDashboard({
 
         {/* SUPPLEMENTARY */}
         <section>
-          <h2 className="mb-4 border-b border-gray-200 pb-2 text-lg font-semibold text-gray-900 dark:border-gray-800 dark:text-gray-100">
+          <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
             Supplementary
           </h2>
           <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
@@ -813,6 +802,16 @@ export default function HumanDonorClinicalDashboard({
                   );
                 })}
               </div>
+            ) : null}
+
+            {humanDonorIdentifiers?.length > 0 ? (
+              <FieldPair label="Identifiers">
+                <SeparatedList isCollapsible>
+                  {humanDonorIdentifiers.map((id) => (
+                    <span key={id}>{id}</span>
+                  ))}
+                </SeparatedList>
+              </FieldPair>
             ) : null}
 
             <dl className="grid gap-3 sm:grid-cols-2">
@@ -840,7 +839,7 @@ export default function HumanDonorClinicalDashboard({
 
             {item.publication_data?.length > 0 ? (
               <div>
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">
                   Publication data
                 </div>
                 <DbxrefList dbxrefs={item.publication_data} isCollapsible />
@@ -861,7 +860,7 @@ export default function HumanDonorClinicalDashboard({
             <FieldPair label="Description">{item.description}</FieldPair>
             {item.dbxrefs?.length > 0 ? (
               <div>
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">
                   External resources
                 </div>
                 <DbxrefList dbxrefs={item.dbxrefs} isCollapsible />
@@ -917,7 +916,6 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "status",
   "rrid",
   "center_donor_id",
-  "taxa",
   "gender",
   "biological_sex",
   "human_donor_identifiers",

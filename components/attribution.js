@@ -1,5 +1,4 @@
 // node_modules
-import Link from "next/link";
 import PropTypes from "prop-types";
 // components
 import Collections from "./collections";
@@ -26,29 +25,12 @@ export default function Attribution({ attribution = null }) {
             collections={attribution.collections}
             itemType={attribution.type}
           />
-          <DataArea>
-            {attribution.award && attribution.award.length > 0 && (
-              <>
-                <DataItemLabel>Funding</DataItemLabel>
-                <DataItemValue>
-                  {attribution.award.map((award, index) => (
-                    <span key={award["@id"]}>
-                      <Link href={award["@id"]}>
-                        {award.name}
-                      </Link>
-                      {index < attribution.award.length - 1 && ", "}
-                    </span>
-                  ))}
-                </DataItemValue>
-              </>
-            )}
-            {attribution.title && (
-              <>
-                <DataItemLabel>Title</DataItemLabel>
-                <DataItemValue>{attribution.title}</DataItemValue>
-              </>
-            )}
-          </DataArea>
+          {attribution.title ? (
+            <DataArea>
+              <DataItemLabel>Title</DataItemLabel>
+              <DataItemValue>{attribution.title}</DataItemValue>
+            </DataArea>
+          ) : null}
         </DataPanel>
       </>
     );
