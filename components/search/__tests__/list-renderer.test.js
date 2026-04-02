@@ -1688,7 +1688,7 @@ describe("Test the MeasurementSet component", () => {
     expect(title).toHaveTextContent(/^imaging assay \(yN2H\)$/);
 
     const meta = screen.getByTestId("search-list-item-meta");
-    expect(meta).toHaveTextContent("J. Michael Cherry, Stanford");
+    expect(meta).toHaveTextContent("STARR-seq");
 
     const status = screen.getByTestId("search-list-item-quality");
     expect(status).toHaveTextContent("released");
@@ -1765,7 +1765,7 @@ describe("Test the MeasurementSet component", () => {
     expect(title).toHaveTextContent(/^imaging assay \(yN2H\)$/);
 
     const meta = screen.getByTestId("search-list-item-meta");
-    expect(meta).toHaveTextContent("J. Michael Cherry, Stanford");
+    expect(meta).toHaveTextContent("STARR-seq");
 
     const status = screen.getByTestId("search-list-item-quality");
     expect(status).toHaveTextContent("released");
@@ -1804,7 +1804,7 @@ describe("Test the MeasurementSet component", () => {
     expect(title).toHaveTextContent(/^imaging assay \(yN2H\)$/);
 
     const meta = screen.getByTestId("search-list-item-meta");
-    expect(meta).toHaveTextContent("J. Michael Cherry, Stanford");
+    expect(meta).toHaveTextContent("STARR-seq");
 
     const status = screen.getByTestId("search-list-item-quality");
     expect(status).toHaveTextContent("released");
