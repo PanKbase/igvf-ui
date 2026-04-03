@@ -525,7 +525,14 @@ export default function HumanDonorClinicalDashboard({
               {ageDisplay}
             </FieldPair>
             <FieldPair label="Gender">{item.gender}</FieldPair>
-            <FieldPair label="Genetic sex">{item.biological_sex}</FieldPair>
+            <FieldPair label="Genetic Sex">
+              {item.genetic_sex ?? item.biological_sex}
+            </FieldPair>
+            {item.ethnicities?.length > 0 ? (
+              <FieldPair label="Ethnicity">
+                {item.ethnicities.join(", ")}
+              </FieldPair>
+            ) : null}
             {ge.length > 0 ? (
               <FieldPair label="Predicted genetic ancestry">
                 {ge.map((eth, i) => (
@@ -908,8 +915,10 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "rrid",
   "center_donor_id",
   "gender",
+  "genetic_sex",
   "biological_sex",
   "human_donor_identifiers",
+  "ethnicities",
   "genetic_predicted_ethnicities",
   "genetic_ethnicities",
   "self_reported_ethnicities",
