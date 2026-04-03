@@ -64,16 +64,24 @@ export function DonorDataItems({
       <DataAreaTitle>Demographics</DataAreaTitle>
       <DataPanel>
         <DataArea>
-          {item.biological_sex && (
+          {(item.genetic_sex || item.biological_sex) && (
             <>
               <DataItemLabel>Genetic Sex</DataItemLabel>
-              <DataItemValue>{item.biological_sex}</DataItemValue>
+              <DataItemValue>
+                {item.genetic_sex ?? item.biological_sex}
+              </DataItemValue>
             </>
           )}
           {item.gender && (
             <>
               <DataItemLabel>Gender</DataItemLabel>
               <DataItemValue>{item.gender}</DataItemValue>
+            </>
+          )}
+          {item.ethnicities?.length > 0 && (
+            <>
+              <DataItemLabel>Ethnicity</DataItemLabel>
+              <DataItemValue>{item.ethnicities.join(", ")}</DataItemValue>
             </>
           )}
           {item.age > 0 && (
@@ -602,6 +610,7 @@ DonorDataItems.commonProperties = [
   "rrid",
   "center_donor_id",
   "biological_sex",
+  "genetic_sex",
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "age",
@@ -618,6 +627,7 @@ DonorDataItems.commonProperties = [
   "c_peptide",
   "other_theraphy",
   "glucose_loweing_theraphy",
+  "ethnicities",
   "genetic_predicted_ethnicities",
   "self_reported_ethnicities",
   "cause_of_death",
