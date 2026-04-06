@@ -23,6 +23,17 @@ import {
   primaryIsletBiosampleTypeDisplay,
 } from "../lib/primary-islet-phase";
 
+/** Post-shipment keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
+const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
+  "post_shipment_islet_viability",
+  "post_shipment_viability_qualitative",
+  "post_shipment_viability_quantitative",
+  "post_shipment_purity",
+  "post_shipment_culture_time",
+  "post_shipment_culture_media",
+  "post_shipment_culture_temperature",
+]);
+
 const HUBMAP_CCF_BASE =
   "https://portal.hubmapconsortium.org/browse/sample/";
 
@@ -76,9 +87,16 @@ export default function PrimaryIsletClinicalDashboard({
     ? item.preservation_method.join(", ")
     : item.preservation_method;
 
-  const postShipmentExtraKeys = Object.keys(item).filter((k) =>
-    k.startsWith("post_shipment_")
+  const postShipmentExtraKeys = Object.keys(item).filter(
+    (k) =>
+      k.startsWith("post_shipment_") && !EXPLICIT_POST_SHIPMENT_KEYS.has(k)
   );
+
+  const hasShipmentTransit =
+    item.islets_shipped !== undefined ||
+    item.shipping_temperature !== undefined ||
+    item.shipping_media !== undefined ||
+    item.transit_time !== undefined;
 
   return (
     <div className="bg-white dark:bg-gray-950">
@@ -174,6 +192,12 @@ export default function PrimaryIsletClinicalDashboard({
                   <FieldPair label="Pre-Shipment Culture Time (hours)">
                     {item.pre_shipment_culture_time}
                   </FieldPair>
+                  <FieldPair label="Pre-Shipment Culture Media">
+                    {item.pre_shipment_culture_media}
+                  </FieldPair>
+                  <FieldPair label="Pre-Shipment Culture Temperature (ºC)">
+                    {item.pre_shipment_culture_temperature}
+                  </FieldPair>
                   <FieldPair label="FACS Purification">
                     <FacsLinks urls={item.facs_purification} />
                   </FieldPair>
@@ -213,6 +237,30 @@ export default function PrimaryIsletClinicalDashboard({
             ) : null}
           </div>
         </section>
+
+        {hasShipmentTransit ? (
+          <section>
+            <DashboardSectionTitle>Shipment &amp; transit</DashboardSectionTitle>
+            <dl className="space-y-3">
+              {item.islets_shipped !== undefined &&
+              item.islets_shipped !== null ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
+                    Were the Islets Shipped?
+                  </dt>
+                  <dd>
+                    <YesNoBadge value={item.islets_shipped} />
+                  </dd>
+                </div>
+              ) : null}
+              <FieldPair label="Shipping Temperature (ºC)">
+                {item.shipping_temperature}
+              </FieldPair>
+              <FieldPair label="Shipping Media">{item.shipping_media}</FieldPair>
+              <FieldPair label="Transit Time (hours)">{item.transit_time}</FieldPair>
+            </dl>
+          </section>
+        ) : null}
 
         <section>
           <DashboardSectionTitle>Quality &amp; morphology</DashboardSectionTitle>
@@ -270,11 +318,41 @@ export default function PrimaryIsletClinicalDashboard({
                   ? item.post_shipment_islet_viability
                   : null}
               </FieldPair>
+              <FieldPair label="Post-Shipment Viability (imaging / qualitative)">
+                {item.post_shipment_viability_qualitative ? (
+                  /^https?:\/\//i.test(
+                    String(item.post_shipment_viability_qualitative).trim()
+                  ) ? (
+                    <a
+                      href={String(item.post_shipment_viability_qualitative).trim()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 dark:text-blue-400"
+                    >
+                      {item.post_shipment_viability_qualitative}
+                    </a>
+                  ) : (
+                    item.post_shipment_viability_qualitative
+                  )
+                ) : null}
+              </FieldPair>
+              <FieldPair label="Post-Shipment Viability (quantitative %)">
+                {item.post_shipment_viability_quantitative}
+              </FieldPair>
+              <FieldPair label="Post-Shipment Islet Purity (%)">
+                {item.post_shipment_purity}
+              </FieldPair>
+              <FieldPair label="Post-Shipment Culture Time (hours)">
+                {item.post_shipment_culture_time}
+              </FieldPair>
+              <FieldPair label="Post-Shipment Culture Media">
+                {item.post_shipment_culture_media}
+              </FieldPair>
+              <FieldPair label="Post-Shipment Culture Temperature">
+                {item.post_shipment_culture_temperature}
+              </FieldPair>
               {postShipmentExtraKeys
-                .filter(
-                  (k) =>
-                    k !== "post_shipment_islet_viability" && !k.startsWith("@")
-                )
+                .filter((k) => !k.startsWith("@"))
                 .map((key) => {
                   const v = item[key];
                   let display = null;
