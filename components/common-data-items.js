@@ -96,6 +96,18 @@ export function DonorDataItems({
               <DataItemValue>{item.bmi}</DataItemValue>
             </>
           )}
+          {item.height !== undefined && item.height !== null && item.height > 0 && (
+            <>
+              <DataItemLabel>Height (cm)</DataItemLabel>
+              <DataItemValue>{item.height}</DataItemValue>
+            </>
+          )}
+          {item.weight !== undefined && item.weight !== null && item.weight > 0 && (
+            <>
+              <DataItemLabel>Weight (kg)</DataItemLabel>
+              <DataItemValue>{item.weight}</DataItemValue>
+            </>
+          )}
           {/* Genetic and Ethnic Information */}
           {item.genetic_predicted_ethnicities?.length > 0 && (
             <>
@@ -582,6 +594,8 @@ DonorDataItems.commonProperties = [
   "age",
   "gender",
   "bmi",
+  "height",
+  "weight",
   "living_donor",
   "other_disease_states",
   "diabetes_status_description",

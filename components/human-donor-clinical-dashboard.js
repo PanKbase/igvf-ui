@@ -312,6 +312,16 @@ export default function HumanDonorClinicalDashboard({
       ? `${item.bmi}`
       : "—";
 
+  const heightDisplay =
+    item.height !== undefined && item.height !== null && item.height > 0
+      ? `${item.height}`
+      : "—";
+
+  const weightDisplay =
+    item.weight !== undefined && item.weight !== null && item.weight > 0
+      ? `${item.weight}`
+      : "—";
+
   const hba1cVal =
     item.hba1c !== undefined && item.hba1c !== null ? Number(item.hba1c) : null;
   const hbaDisplay = hba1cVal !== null && !Number.isNaN(hba1cVal) ? hba1cItemDisplay(hba1cVal) : "—";
@@ -406,6 +416,8 @@ export default function HumanDonorClinicalDashboard({
               <MetricCard label="Diabetes status" value={chipText} />
             ) : null}
             <MetricCard label="BMI" value={bmiDisplay} />
+            <MetricCard label="Height (cm)" value={heightDisplay} />
+            <MetricCard label="Weight (kg)" value={weightDisplay} />
             <MetricCard
               label="HbA1c %"
               value={hbaDisplay}
@@ -829,6 +841,8 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "diabetes_status_description",
   "age",
   "bmi",
+  "height",
+  "weight",
   "hba1c",
   "c_peptide",
   "diabetes_duration",

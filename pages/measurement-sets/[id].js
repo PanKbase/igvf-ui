@@ -23,6 +23,7 @@ import { EditableItem } from "../../components/edit";
 import FileSetTable from "../../components/file-set-table";
 import FileTable from "../../components/file-table";
 import JsonDisplay from "../../components/json-display";
+import MeasurementSetIsletAssayDetails from "../../components/measurement-set-islet-assay-details";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import SampleTable from "../../components/sample-table";
@@ -271,6 +272,7 @@ export default function MeasurementSet({
             <DonorTable donors={measurementSet.donors} />
           )}
           <AssayDetails measurementSet={measurementSet} />
+          <MeasurementSetIsletAssayDetails measurementSet={measurementSet} />
           {filesWithReadType.length > 0 && (
             <SequencingFileTable
               files={filesWithReadType}
