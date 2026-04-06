@@ -182,49 +182,49 @@ AutoantibodyCard.propTypes = {
   assay: PropTypes.arrayOf(PropTypes.string),
 };
 
-const T1D_METHODS = new Set(["GRS2", "T1GRS"]);
+/** Display order for GRS2 HLA partition sub-scores (schema: human_donor genetic_risk_score). */
+const GRS_SUB_SCORE_ORDER = [
+  "hla_drdq",
+  "hla_class_1",
+  "hla_class_2",
+  "non_hla",
+];
+
+function sortGrsSubScores(subs) {
+  if (!Array.isArray(subs)) {
+    return [];
+  }
+  return [...subs].sort((a, b) => {
+    const ai = GRS_SUB_SCORE_ORDER.indexOf(a.label);
+    const bi = GRS_SUB_SCORE_ORDER.indexOf(b.label);
+    if (ai === -1 && bi === -1) {
+      return String(a.label).localeCompare(String(b.label));
+    }
+    if (ai === -1) {
+      return 1;
+    }
+    if (bi === -1) {
+      return -1;
+    }
+    return ai - bi;
+  });
+}
 
 function GrsMethodCard({ entry }) {
-  const { method, overall_score: overall, sub_scores: subs, metadata } = entry;
-  const isT1d = T1D_METHODS.has(method);
-  const isPT2d = method === "pT2D_deCorpio";
-  const barPct =
-    typeof overall === "number" && isT1d
-      ? Math.round(Math.min(100, Math.max(0, overall * 100)))
-      : null;
+  const {
+    method,
+    overall_score: overall,
+    normalized_score: normalized,
+    sub_scores: subs,
+  } = entry;
 
-  const clusterSubs = useMemo(() => {
-    if (!Array.isArray(subs)) {
-      return [];
-    }
-    return subs.filter((s) =>
-      String(s.label).toLowerCase().includes("cluster")
-    );
-  }, [subs]);
+  const orderedSubs = useMemo(() => sortGrsSubScores(subs), [subs]);
 
-  const dominantCluster =
-    clusterSubs.length === 0
-      ? null
-      : clusterSubs.reduce(
-          (best, s) =>
-            best === null || Number(s.value) > Number(best.value) ? s : best,
-          null
-        );
-
-  const nonClusterSubs = useMemo(() => {
-    if (!Array.isArray(subs)) {
-      return [];
-    }
-    return subs.filter(
-      (s) => !String(s.label).toLowerCase().includes("cluster")
-    );
-  }, [subs]);
-
-  const legacyMhc =
-    !subs?.length && entry.mhc_only !== undefined ? entry.mhc_only : null;
-  const legacyNonMhc =
-    !subs?.length && entry.non_mhc_only !== undefined
-      ? entry.non_mhc_only
+  const normBarPct =
+    typeof normalized === "number" &&
+    normalized >= 0 &&
+    normalized <= 1
+      ? Math.round(Math.min(100, Math.max(0, normalized * 100)))
       : null;
 
   return (
@@ -237,145 +237,49 @@ function GrsMethodCard({ entry }) {
           <span className="text-2xl font-light tabular-nums text-gray-900 dark:text-gray-100">
             {overall}
           </span>
-          {isT1d && barPct !== null ? (
-            <span className="ml-auto hidden text-xs text-gray-500 sm:inline">
-              0–1 scale
+          {typeof normalized === "number" ? (
+            <span className="ml-auto text-xs tabular-nums text-gray-500 dark:text-gray-400">
+              Normalized: {normalized}
             </span>
           ) : null}
         </div>
-        {isT1d && barPct !== null ? (
-          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-gray-200 dark:bg-gray-800">
-            <div
-              className="h-full rounded bg-gray-800 dark:bg-gray-200"
-              style={{ width: `${barPct}%` }}
-              title={`${barPct}%`}
-            />
-          </div>
+        {normBarPct !== null ? (
+          <>
+            <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              Normalized score (0–1 scale)
+            </div>
+            <div className="mt-2 h-2 w-full overflow-hidden rounded bg-gray-200 dark:bg-gray-800">
+              <div
+                className="h-full rounded bg-gray-800 dark:bg-gray-200"
+                style={{ width: `${normBarPct}%` }}
+                title={`${normBarPct}%`}
+              />
+            </div>
+          </>
         ) : null}
       </summary>
       <div className="space-y-3 border-t border-gray-100 px-4 pb-4 pt-3 dark:border-gray-800">
-        {nonClusterSubs.length > 0 ? (
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {nonClusterSubs.map((s) => (
-              <div
-                key={s.label}
-                className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40"
-              >
-                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
-                  {String(s.label).replace(/_/g, " ")}
-                </div>
-                <div className="text-sm font-medium tabular-nums text-data-value">
-                  {s.value}
-                </div>
-                {s.description ? (
-                  <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    {s.description}
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        {legacyMhc !== null || legacyNonMhc !== null ? (
-          <div className="grid gap-2 sm:grid-cols-2">
-            {legacyMhc !== null ? (
-              <div className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40">
-                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
-                  MHC-only
-                </div>
-                <div className="text-sm font-medium tabular-nums text-data-value">
-                  {legacyMhc}
-                </div>
-              </div>
-            ) : null}
-            {legacyNonMhc !== null ? (
-              <div className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40">
-                <div className="text-xs font-semibold text-data-label dark:text-gray-400">
-                  Non-MHC-only
-                </div>
-                <div className="text-sm font-medium tabular-nums text-data-value">
-                  {legacyNonMhc}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
-        {isPT2d && clusterSubs.length > 0 ? (
+        {orderedSubs.length > 0 ? (
           <div>
-            <div className="mb-1.5 text-sm font-semibold text-data-label dark:text-gray-400">
-              Clusters
+            <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-data-label dark:text-gray-400">
+              HLA partitions
             </div>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {clusterSubs.map((s) => {
-                const isDom = dominantCluster && s.label === dominantCluster.label;
-                return (
-                  <div
-                    key={s.label}
-                    className={`rounded-md border px-2 py-2 text-center ${
-                      isDom
-                        ? "border-amber-400 bg-amber-50 dark:border-amber-700 dark:bg-amber-950/30"
-                        : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-950/40"
-                    }`}
-                  >
-                    <div className="text-xs font-semibold text-data-label dark:text-gray-400">
-                      {String(s.label).replace(/_/g, " ")}
-                    </div>
-                    <div className="text-sm font-semibold tabular-nums text-data-value">
-                      {s.value}
-                    </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {orderedSubs.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded border border-gray-100 bg-gray-50/80 px-2.5 py-2 dark:border-gray-800 dark:bg-gray-950/40"
+                >
+                  <div className="text-xs font-semibold text-data-label dark:text-gray-400">
+                    {String(s.label).replace(/_/g, " ")}
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
-
-        {metadata &&
-        (metadata.publication ||
-          metadata.version ||
-          metadata.ancestry ||
-          Object.keys(metadata).length > 0) ? (
-          <footer className="border-t border-gray-100 pt-2 text-xs leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400">
-            {metadata.publication ? (
-              <div>
-                <span className="font-medium text-gray-600 dark:text-gray-300">
-                  Publication:
-                </span>{" "}
-                {metadata.publication}
-              </div>
-            ) : null}
-            {metadata.version ? (
-              <div>
-                <span className="font-medium text-gray-600 dark:text-gray-300">
-                  Version:
-                </span>{" "}
-                {metadata.version}
-              </div>
-            ) : null}
-            {metadata.ancestry ? (
-              <div>
-                <span className="font-medium text-gray-600 dark:text-gray-300">
-                  Ancestry:
-                </span>{" "}
-                {metadata.ancestry}
-              </div>
-            ) : null}
-            {Object.entries(metadata)
-              .filter(
-                ([key]) =>
-                  !["publication", "version", "ancestry"].includes(key)
-              )
-              .map(([key, val]) => (
-                <div key={key}>
-                  <span className="font-medium text-gray-600 dark:text-gray-300">
-                    {key.replace(/_/g, " ")}:
-                  </span>{" "}
-                  {typeof val === "object" ? JSON.stringify(val) : String(val)}
+                  <div className="text-sm font-medium tabular-nums text-data-value">
+                    {s.value}
+                  </div>
                 </div>
               ))}
-          </footer>
+            </div>
+          </div>
         ) : null}
       </div>
     </details>
