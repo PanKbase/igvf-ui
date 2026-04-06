@@ -16,7 +16,7 @@ const columns = [
   },
   {
     id: "gender",
-    title: "Gender",
+    title: "Sex",
   },
   {
     id: "taxa",

@@ -4,13 +4,6 @@ import PropTypes from "prop-types";
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
-import { BiosampleDataItems } from "../../components/common-data-items";
-import {
-  DataArea,
-  DataItemLabel,
-  DataItemValue,
-  DataPanel,
-} from "../../components/data-area";
 import DocumentTable from "../../components/document-table";
 import DonorTable from "../../components/donor-table";
 import { EditableItem } from "../../components/edit";
@@ -19,8 +12,8 @@ import JsonDisplay from "../../components/json-display";
 import ModificationTable from "../../components/modification-table";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
+import PrimaryCellClinicalDashboard from "../../components/primary-cell-clinical-dashboard";
 import SampleTable from "../../components/sample-table";
-import TreatmentTable from "../../components/treatment-table";
 // lib
 import buildAttribution from "../../lib/attribution";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
@@ -28,19 +21,30 @@ import {
   requestBiosamples,
   requestDocuments,
   requestDonors,
-  requestFileSets,
   requestOntologyTerms,
   requestTreatments,
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
 import FetchRequest from "../../lib/fetch-request";
-import { truthyOrZero } from "../../lib/general";
 import { isJsonFormat } from "../../lib/query-utils";
 import { Ok } from "../../lib/result";
 
+async function fetchSortedFromSample(item, request) {
+  if (!item?.sorted_from) {
+    return null;
+  }
+  const ref =
+    typeof item.sorted_from === "string"
+      ? item.sorted_from
+      : item.sorted_from["@id"];
+  if (!ref) {
+    return null;
+  }
+  return (await request.getObject(ref)).optional();
+}
+
 export default function PrimaryCell({
   primaryCell,
-  constructLibrarySets,
   diseaseTerms,
   documents,
   donors,
@@ -49,6 +53,7 @@ export default function PrimaryCell({
   pooledFrom,
   pooledIn,
   sortedFractions,
+  sortedFromSample,
   sources,
   treatments,
   multiplexedInSamples,
@@ -59,45 +64,28 @@ export default function PrimaryCell({
     <>
       <Breadcrumbs />
       <EditableItem item={primaryCell}>
-        <PagePreamble>
+        <PagePreamble
+          pageTitle={primaryCell.accession}
+          titleClassName="sr-only"
+        >
           <AlternateAccessions
             alternateAccessions={primaryCell.alternate_accessions}
           />
         </PagePreamble>
         <ObjectPageHeader item={primaryCell} isJsonFormat={isJson} />
         <JsonDisplay item={primaryCell} isJsonFormat={isJson}>
-          <DataPanel>
-            <DataArea>
-              <BiosampleDataItems
-                item={primaryCell}
-                constructLibrarySets={constructLibrarySets}
-                diseaseTerms={diseaseTerms}
-                partOf={partOf}
-                sampleTerms={primaryCell.sample_terms}
-                sources={sources}
-                options={{
-                  dateObtainedTitle: "Date Harvested",
-                }}
-              >
-                {truthyOrZero(primaryCell.passage_number) && (
-                  <>
-                    <DataItemLabel>Passage Number</DataItemLabel>
-                    <DataItemValue>{primaryCell.passage_number}</DataItemValue>
-                  </>
-                )}
-              </BiosampleDataItems>
-            </DataArea>
-          </DataPanel>
+          <PrimaryCellClinicalDashboard
+            item={primaryCell}
+            diseaseTerms={diseaseTerms}
+            partOf={partOf}
+            sampleTerms={primaryCell.sample_terms ?? []}
+            sortedFrom={sortedFromSample}
+            sources={sources}
+            treatments={treatments}
+          />
           {donors.length > 0 && <DonorTable donors={donors} />}
-          {primaryCell.file_sets.length > 0 && (
-            <FileSetTable
-              fileSets={primaryCell.file_sets}
-              reportLinkSpecs={{
-                fileSetType: "FileSet",
-                identifierProp: "samples.accession",
-                itemIdentifier: primaryCell.accession,
-              }}
-            />
+          {primaryCell.file_sets?.length > 0 && (
+            <FileSetTable fileSets={primaryCell.file_sets} />
           )}
           {multiplexedInSamples.length > 0 && (
             <SampleTable
@@ -141,13 +129,6 @@ export default function PrimaryCell({
               title="Sorted Fractions of Sample"
             />
           )}
-          {treatments.length > 0 && (
-            <TreatmentTable
-              treatments={treatments}
-              reportLink={`/multireport/?type=Treatment&biosamples_treated=${primaryCell["@id"]}`}
-              reportLabel={`Report of treatments applied to the biosample ${primaryCell.accession}`}
-            />
-          )}
           {documents.length > 0 && <DocumentTable documents={documents} />}
           <Attribution attribution={attribution} />
         </JsonDisplay>
@@ -157,35 +138,20 @@ export default function PrimaryCell({
 }
 
 PrimaryCell.propTypes = {
-  // Primary-cell sample to display
   primaryCell: PropTypes.object.isRequired,
-  // Construct library sets associated with the sample
-  constructLibrarySets: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Disease ontology for this sample
   diseaseTerms: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Documents associated with the sample
   documents: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Donors associated with the sample
   donors: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Part of Sample
   partOf: PropTypes.object,
-  // Sample parts
   parts: PropTypes.arrayOf(PropTypes.object),
-  // Pooled from sample
   pooledFrom: PropTypes.arrayOf(PropTypes.object),
-  // Pooled in sample
   pooledIn: PropTypes.arrayOf(PropTypes.object),
-  // Sorted fractions sample
   sortedFractions: PropTypes.arrayOf(PropTypes.object),
-  // Source lab or source for this sample
+  sortedFromSample: PropTypes.object,
   sources: PropTypes.arrayOf(PropTypes.object),
-  // Treatments associated with the sample
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Multiplexed in samples
   multiplexedInSamples: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Attribution for this sample
   attribution: PropTypes.object,
-  // Is the format JSON?
   isJson: PropTypes.bool.isRequired,
 };
 
@@ -212,6 +178,7 @@ export async function getServerSideProps({ params, req, query }) {
     const partOf = primaryCell.part_of
       ? (await request.getObject(primaryCell.part_of)).optional()
       : null;
+    const sortedFromSample = await fetchSortedFromSample(primaryCell, request);
     const parts =
       primaryCell.parts?.length > 0
         ? await requestBiosamples(primaryCell.parts, request)
@@ -244,11 +211,8 @@ export async function getServerSideProps({ params, req, query }) {
       );
       treatments = await requestTreatments(treatmentPaths, request);
     }
-    const constructLibrarySets = primaryCell.construct_library_sets
-      ? await requestFileSets(primaryCell.construct_library_sets, request)
-      : [];
     let multiplexedInSamples = [];
-    if (primaryCell.multiplexed_in.length > 0) {
+    if (primaryCell.multiplexed_in?.length > 0) {
       const multiplexedInPaths = primaryCell.multiplexed_in.map(
         (sample) => sample["@id"]
       );
@@ -266,7 +230,6 @@ export async function getServerSideProps({ params, req, query }) {
     return {
       props: {
         primaryCell,
-        constructLibrarySets,
         diseaseTerms,
         documents,
         donors,
@@ -275,11 +238,12 @@ export async function getServerSideProps({ params, req, query }) {
         pooledFrom,
         pooledIn,
         sortedFractions,
+        sortedFromSample,
         sources,
         treatments,
         multiplexedInSamples,
         pageContext: {
-          title: `${primaryCell.sample_terms[0].term_name} — ${primaryCell.accession}`,
+          title: `${primaryCell.sample_terms?.[0]?.term_name ?? primaryCell.accession} — ${primaryCell.accession}`,
         },
         breadcrumbs,
         attribution,

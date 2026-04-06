@@ -388,95 +388,61 @@ export function DonorDataItems({
               <DataAreaTitle>Genetic Risk Score</DataAreaTitle>
               <DataPanel>
                 <DataArea>
-                  {item.genetic_risk_score.map((grsObj, index) => (
-                    <div key={index}>
-                      <DataItemLabel>{grsObj.method}</DataItemLabel>
-                      <DataItemValue>
-                        <div>
-                          <strong>Overall score:</strong> {grsObj.overall_score}
-                        </div>
-                        {grsObj.sub_scores?.length > 0 && (
-                          <div className="mt-2 space-y-1">
-                            <strong>Sub-scores</strong>
-                            {grsObj.sub_scores.map((sub, subIndex) => (
-                              <div key={subIndex}>
-                                <strong>
-                                  {sub.label.replace(/_/g, " ")}:
-                                </strong>{" "}
-                                {sub.value}
-                                {sub.description && (
-                                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                                    {sub.description}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
+                  {item.genetic_risk_score.map((grsObj, index) => {
+                    const subs = Array.isArray(grsObj.sub_scores)
+                      ? [...grsObj.sub_scores].sort((a, b) => {
+                          const order = [
+                            "hla_drdq",
+                            "hla_class_1",
+                            "hla_class_2",
+                            "non_hla",
+                          ];
+                          const ai = order.indexOf(a.label);
+                          const bi = order.indexOf(b.label);
+                          if (ai === -1 && bi === -1) {
+                            return String(a.label).localeCompare(String(b.label));
+                          }
+                          if (ai === -1) {
+                            return 1;
+                          }
+                          if (bi === -1) {
+                            return -1;
+                          }
+                          return ai - bi;
+                        })
+                      : [];
+                    return (
+                      <div key={`${grsObj.method}-${index}`}>
+                        <DataItemLabel>{grsObj.method}</DataItemLabel>
+                        <DataItemValue>
+                          <div>
+                            <strong>Overall score:</strong>{" "}
+                            {grsObj.overall_score}
                           </div>
-                        )}
-                        {(!grsObj.sub_scores ||
-                          grsObj.sub_scores.length === 0) &&
-                          grsObj.mhc_only !== undefined && (
-                            <div>
-                              <strong>MHC-only:</strong> {grsObj.mhc_only}
-                            </div>
-                          )}
-                        {(!grsObj.sub_scores ||
-                          grsObj.sub_scores.length === 0) &&
-                          grsObj.non_mhc_only !== undefined && (
-                            <div>
-                              <strong>Non-MHC-only:</strong>{" "}
-                              {grsObj.non_mhc_only}
-                            </div>
-                          )}
-                        {grsObj.metadata &&
-                          (grsObj.metadata.publication ||
-                            grsObj.metadata.version ||
-                            grsObj.metadata.ancestry ||
-                            Object.keys(grsObj.metadata).length > 0) && (
+                          {grsObj.normalized_score !== undefined &&
+                            grsObj.normalized_score !== null && (
+                              <div>
+                                <strong>Normalized score:</strong>{" "}
+                                {grsObj.normalized_score}
+                              </div>
+                            )}
+                          {subs.length > 0 && (
                             <div className="mt-2 space-y-1">
-                              <strong>Metadata</strong>
-                              {grsObj.metadata.publication && (
-                                <div>
-                                  <strong>Publication:</strong>{" "}
-                                  {grsObj.metadata.publication}
+                              <strong>HLA partitions</strong>
+                              {subs.map((sub) => (
+                                <div key={sub.label}>
+                                  <strong>
+                                    {String(sub.label).replace(/_/g, " ")}:
+                                  </strong>{" "}
+                                  {sub.value}
                                 </div>
-                              )}
-                              {grsObj.metadata.version && (
-                                <div>
-                                  <strong>Version:</strong>{" "}
-                                  {grsObj.metadata.version}
-                                </div>
-                              )}
-                              {grsObj.metadata.ancestry && (
-                                <div>
-                                  <strong>Ancestry:</strong>{" "}
-                                  {grsObj.metadata.ancestry}
-                                </div>
-                              )}
-                              {Object.entries(grsObj.metadata)
-                                .filter(
-                                  ([key]) =>
-                                    ![
-                                      "publication",
-                                      "version",
-                                      "ancestry",
-                                    ].includes(key)
-                                )
-                                .map(([key, value]) => (
-                                  <div key={key}>
-                                    <strong>
-                                      {key.replace(/_/g, " ")}:
-                                    </strong>{" "}
-                                    {typeof value === "object"
-                                      ? JSON.stringify(value)
-                                      : String(value)}
-                                  </div>
-                                ))}
+                              ))}
                             </div>
                           )}
-                      </DataItemValue>
-                    </div>
-                  ))}
+                        </DataItemValue>
+                      </div>
+                    );
+                  })}
                 </DataArea>
               </DataPanel>
             </>
