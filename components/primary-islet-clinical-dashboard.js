@@ -423,15 +423,6 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
-  if (sampleTerms?.length > 0 && (!diseaseTerms || diseaseTerms.length === 0)) {
-    identityRows.push(
-      <FieldPair key="dt_empty" label="Disease Terms">
-        <span className="text-gray-500 dark:text-gray-400">
-          No ontology term
-        </span>
-      </FieldPair>
-    );
-  }
   if (diseaseTerms?.length > 0) {
     identityRows.push(
       <FieldPair key="dt" label="Disease Terms">
@@ -671,23 +662,26 @@ export default function PrimaryIsletClinicalDashboard({
         </section>
 
         <section>
-          <DashboardSectionTitle>Isolation Metrics</DashboardSectionTitle>
-          <SubsectionHint>Data captured at time of isolation</SubsectionHint>
-          {isolationRows.length === 0 ? (
-            <SectionEmptyHint text="No data recorded yet" />
-          ) : (
-            <dl className="space-y-3">{isolationRows}</dl>
-          )}
-        </section>
-
-        <section>
-          <DashboardSectionTitle>Pre-Assay Metrics</DashboardSectionTitle>
-          <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
-          {postTransferRows.length === 0 ? (
-            <SectionEmptyHint text="No pre-assay data recorded yet" />
-          ) : (
-            <dl className="space-y-3">{postTransferRows}</dl>
-          )}
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div>
+              <DashboardSectionTitle>Isolation Metrics</DashboardSectionTitle>
+              <SubsectionHint>Data captured at time of isolation</SubsectionHint>
+              {isolationRows.length === 0 ? (
+                <SectionEmptyHint text="No data recorded yet" />
+              ) : (
+                <dl className="space-y-3">{isolationRows}</dl>
+              )}
+            </div>
+            <div>
+              <DashboardSectionTitle>Pre-Assay Metrics</DashboardSectionTitle>
+              <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
+              {postTransferRows.length === 0 ? (
+                <SectionEmptyHint text="No pre-assay data recorded yet" />
+              ) : (
+                <dl className="space-y-3">{postTransferRows}</dl>
+              )}
+            </div>
+          </div>
         </section>
 
         <section>
