@@ -16,7 +16,7 @@ import {
 } from "./clinical-dashboard-primitives";
 // lib
 import { formatDate } from "../lib/dates";
-import { hasTaxaDisplay, truthyOrZero } from "../lib/general";
+import { truthyOrZero } from "../lib/general";
 
 function hasPassageNumber(v) {
   if (v === undefined || v === null) {
@@ -33,6 +33,7 @@ export default function HumanBetaCellLineClinicalDashboard({
   sampleTerms = [],
   sortedFrom = null,
   treatments = [],
+  children = null,
 }) {
   const diagnosisChip = formatDiagnosisChipText(item.diabetes_status_description);
   const lotProductSubtitle = [
@@ -71,7 +72,7 @@ export default function HumanBetaCellLineClinicalDashboard({
         </header>
 
         <section>
-          <DashboardSectionTitle>Sample summary</DashboardSectionTitle>
+          <DashboardSectionTitle>Biosample summary</DashboardSectionTitle>
           <div className="flex flex-wrap gap-3">
             <MetricCard label="Sample Name" value={item.sample_name || "—"} />
             <MetricCard
@@ -88,11 +89,8 @@ export default function HumanBetaCellLineClinicalDashboard({
         <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <PanelColumnTitle>Identity</PanelColumnTitle>
+              <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
-                {hasTaxaDisplay(item.taxa) ? (
-                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
-                ) : null}
                 <FieldPair label="Sex">{item.gender}</FieldPair>
                 <FieldPair label="Age">{item.age}</FieldPair>
                 {hasPassageNumber(item.passage_number) ? (
@@ -117,17 +115,6 @@ export default function HumanBetaCellLineClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical &amp; culture</PanelColumnTitle>
               <dl className="space-y-3">
-                {diseaseTerms?.length > 0 ? (
-                  <FieldPair label="Disease Terms">
-                    <SeparatedList>
-                      {diseaseTerms.map((t) => (
-                        <Link key={t["@id"]} href={t["@id"]}>
-                          {t.term_name}
-                        </Link>
-                      ))}
-                    </SeparatedList>
-                  </FieldPair>
-                ) : null}
                 <FieldPair label="Growth Medium">{item.growth_medium}</FieldPair>
                 <FieldPair label="Coating Condition">
                   {item.coating_condition}
@@ -151,17 +138,6 @@ export default function HumanBetaCellLineClinicalDashboard({
                   {sources.map((s) => (
                     <Link key={s["@id"]} href={s["@id"]}>
                       {s.title}
-                    </Link>
-                  ))}
-                </SeparatedList>
-              ) : null}
-            </FieldPair>
-            <FieldPair label="Sample Terms">
-              {sampleTerms?.length > 0 ? (
-                <SeparatedList>
-                  {sampleTerms.map((t) => (
-                    <Link key={t["@id"]} href={t["@id"]}>
-                      {t.term_name}
                     </Link>
                   ))}
                 </SeparatedList>
@@ -197,6 +173,7 @@ export default function HumanBetaCellLineClinicalDashboard({
         </section>
 
         <BiosampleTreatmentsSection treatments={treatments} />
+        {children}
 
         <section>
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
@@ -298,6 +275,7 @@ HumanBetaCellLineClinicalDashboard.propTypes = {
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
   sortedFrom: PropTypes.object,
   treatments: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
 };
 
 HumanBetaCellLineClinicalDashboard.defaultProps = {
@@ -307,4 +285,5 @@ HumanBetaCellLineClinicalDashboard.defaultProps = {
   sampleTerms: [],
   sortedFrom: null,
   treatments: [],
+  children: null,
 };

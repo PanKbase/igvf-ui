@@ -87,82 +87,83 @@ export default function HumanBetaCellLines({
             sampleTerms={humanBetaCellLines.sample_terms ?? []}
             sortedFrom={sortedFromSample}
             treatments={treatments}
-          />
-          {donors?.length > 0 && <DonorTable donors={donors} />}
-          {humanBetaCellLines.file_sets?.length > 0 && (
-            <FileSetTable
-              fileSets={humanBetaCellLines.file_sets}
-              reportLinkSpecs={{
-                fileSetType: "FileSet",
-                identifierProp: "samples.accession",
-                itemIdentifier: humanBetaCellLines.accession,
-              }}
-            />
-          )}
-          {multiplexedInSamples?.length > 0 && (
-            <SampleTable
-              samples={multiplexedInSamples}
-              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${humanBetaCellLines["@id"]}`}
-              title="Multiplexed In Samples"
-            />
-          )}
-          {pooledFrom?.length > 0 && (
-            <SampleTable
-              samples={pooledFrom}
-              reportLink={`/multireport/?type=Sample&pooled_in=${humanBetaCellLines["@id"]}`}
-              title="Biosamples Pooled From"
-            />
-          )}
-          {pooledIn?.length > 0 && (
-            <SampleTable
-              samples={pooledIn}
-              reportLink={`/multireport/?type=Biosample&pooled_from=${humanBetaCellLines["@id"]}`}
-              title="Pooled In"
-            />
-          )}
-          {parts?.length > 0 && (
-            <SampleTable
-              samples={parts}
-              reportLink={`/multireport/?type=Biosample&part_of=${humanBetaCellLines["@id"]}`}
-              title="Sample Parts"
-            />
-          )}
-          {humanBetaCellLines.modifications?.length > 0 && (
-            <ModificationTable
-              modifications={humanBetaCellLines.modifications}
-              reportLink={`/multireport/?type=Modification&biosamples_modified=${humanBetaCellLines["@id"]}`}
-              reportLabel={`Report of genetic modifications for ${humanBetaCellLines.accession}`}
-            />
-          )}
-          {sortedFractions?.length > 0 && (
-            <SampleTable
-              samples={sortedFractions}
-              reportLink={`/multireport/?type=Sample&sorted_from.@id=${humanBetaCellLines["@id"]}`}
-              title="Sorted Fractions of Sample"
-            />
-          )}
-          {biomarkers?.length > 0 && (
-            <BiomarkerTable
-              biomarkers={biomarkers}
-              reportLink={`/multireport/?type=Biomarker&biomarker_for=${humanBetaCellLines["@id"]}`}
-              reportLabel={`Report of biological markers that are associated with biosample ${humanBetaCellLines.accession}`}
-            />
-          )}
-          {demultiplexedTo?.length > 0 && (
-            <SampleTable
-              samples={demultiplexedTo}
-              reportLink={`/multireport/?type=Biosample&demultiplexed_from=${humanBetaCellLines["@id"]}`}
-              title="Demultiplexed To"
-            />
-          )}
-          {originOf?.length > 0 && (
-            <SampleTable
-              samples={originOf}
-              reportLink={`/multireport/?type=Biosample&originated_from.@id=${humanBetaCellLines["@id"]}`}
-              title="Origin Sample Of"
-            />
-          )}
-          {documents?.length > 0 && <DocumentTable documents={documents} />}
+          >
+            {donors?.length > 0 && <DonorTable donors={donors} />}
+            {humanBetaCellLines.file_sets?.length > 0 && (
+              <FileSetTable
+                fileSets={humanBetaCellLines.file_sets}
+                reportLinkSpecs={{
+                  fileSetType: "FileSet",
+                  identifierProp: "samples.accession",
+                  itemIdentifier: humanBetaCellLines.accession,
+                }}
+              />
+            )}
+            {multiplexedInSamples?.length > 0 && (
+              <SampleTable
+                samples={multiplexedInSamples}
+                reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${humanBetaCellLines["@id"]}`}
+                title="Multiplexed In Samples"
+              />
+            )}
+            {pooledFrom?.length > 0 && (
+              <SampleTable
+                samples={pooledFrom}
+                reportLink={`/multireport/?type=Sample&pooled_in=${humanBetaCellLines["@id"]}`}
+                title="Biosamples Pooled From"
+              />
+            )}
+            {pooledIn?.length > 0 && (
+              <SampleTable
+                samples={pooledIn}
+                reportLink={`/multireport/?type=Biosample&pooled_from=${humanBetaCellLines["@id"]}`}
+                title="Pooled In"
+              />
+            )}
+            {parts?.length > 0 && (
+              <SampleTable
+                samples={parts}
+                reportLink={`/multireport/?type=Biosample&part_of=${humanBetaCellLines["@id"]}`}
+                title="Sample Parts"
+              />
+            )}
+            {humanBetaCellLines.modifications?.length > 0 && (
+              <ModificationTable
+                modifications={humanBetaCellLines.modifications}
+                reportLink={`/multireport/?type=Modification&biosamples_modified=${humanBetaCellLines["@id"]}`}
+                reportLabel={`Report of genetic modifications for ${humanBetaCellLines.accession}`}
+              />
+            )}
+            {sortedFractions?.length > 0 && (
+              <SampleTable
+                samples={sortedFractions}
+                reportLink={`/multireport/?type=Sample&sorted_from.@id=${humanBetaCellLines["@id"]}`}
+                title="Sorted Fractions of Sample"
+              />
+            )}
+            {biomarkers?.length > 0 && (
+              <BiomarkerTable
+                biomarkers={biomarkers}
+                reportLink={`/multireport/?type=Biomarker&biomarker_for=${humanBetaCellLines["@id"]}`}
+                reportLabel={`Report of biological markers that are associated with biosample ${humanBetaCellLines.accession}`}
+              />
+            )}
+            {demultiplexedTo?.length > 0 && (
+              <SampleTable
+                samples={demultiplexedTo}
+                reportLink={`/multireport/?type=Biosample&demultiplexed_from=${humanBetaCellLines["@id"]}`}
+                title="Demultiplexed To"
+              />
+            )}
+            {originOf?.length > 0 && (
+              <SampleTable
+                samples={originOf}
+                reportLink={`/multireport/?type=Biosample&originated_from.@id=${humanBetaCellLines["@id"]}`}
+                title="Origin Sample Of"
+              />
+            )}
+            {documents?.length > 0 && <DocumentTable documents={documents} />}
+          </HumanBetaCellLineClinicalDashboard>
           <Attribution attribution={attribution} />
         </JsonDisplay>
       </EditableItem>
