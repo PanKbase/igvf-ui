@@ -37,6 +37,16 @@ const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
 const HUBMAP_CCF_BASE =
   "https://portal.hubmapconsortium.org/browse/sample/";
 
+function isPresent(value) {
+  if (value === undefined || value === null || value === "") {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+  return true;
+}
+
 function FacsLinks({ urls }) {
   if (!urls?.length) {
     return null;
@@ -92,6 +102,28 @@ export default function PrimaryIsletClinicalDashboard({
       k.startsWith("post_shipment_") && !EXPLICIT_POST_SHIPMENT_KEYS.has(k)
   );
 
+  const hasPostShipmentMetrics =
+    isPresent(item.post_shipment_islet_viability) ||
+    isPresent(item.post_shipment_viability_qualitative) ||
+    isPresent(item.post_shipment_viability_quantitative) ||
+    isPresent(item.post_shipment_purity) ||
+    isPresent(item.post_shipment_culture_time) ||
+    isPresent(item.post_shipment_culture_media) ||
+    isPresent(item.post_shipment_culture_temperature) ||
+    postShipmentExtraKeys.some(
+      (k) => !k.startsWith("@") && isPresent(item[k])
+    );
+
+  const hasQualityMorphology =
+    (item.islet_morphology !== undefined &&
+      item.islet_morphology !== null) ||
+    (item.islet_histology !== undefined && item.islet_histology !== null) ||
+    (item.islet_function_available !== undefined &&
+      item.islet_function_available !== null) ||
+    (item.hand_picked !== undefined && item.hand_picked !== null) ||
+    isPresent(item.purity_assay) ||
+    isPresent(preservationDisplay);
+
   const hasShipmentTransit =
     item.islets_shipped !== undefined ||
     item.shipping_temperature !== undefined ||
@@ -139,7 +171,9 @@ export default function PrimaryIsletClinicalDashboard({
             <div>
               <PanelColumnTitle>Identity</PanelColumnTitle>
               <dl className="space-y-3">
-                <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                {item.taxa ? (
+                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                ) : null}
                 <FieldPair label="Sample Terms">
                   {sampleTerms?.length > 0 ? (
                     <SeparatedList>
@@ -151,8 +185,8 @@ export default function PrimaryIsletClinicalDashboard({
                     </SeparatedList>
                   ) : null}
                 </FieldPair>
-                <FieldPair label="Disease Terms">
-                  {diseaseTerms?.length > 0 ? (
+                {diseaseTerms?.length > 0 ? (
+                  <FieldPair label="Disease Terms">
                     <SeparatedList>
                       {diseaseTerms.map((t) => (
                         <Link key={t["@id"]} href={t["@id"]}>
@@ -160,10 +194,8 @@ export default function PrimaryIsletClinicalDashboard({
                         </Link>
                       ))}
                     </SeparatedList>
-                  ) : (
-                    <span className="text-gray-500">No ontology term</span>
-                  )}
-                </FieldPair>
+                  </FieldPair>
+                ) : null}
               </dl>
             </div>
             {showPreShipment ? (
@@ -262,53 +294,66 @@ export default function PrimaryIsletClinicalDashboard({
           </section>
         ) : null}
 
-        <section>
-          <DashboardSectionTitle>Quality &amp; morphology</DashboardSectionTitle>
-          <dl className="space-y-3">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
-                Islet Morphology
-              </dt>
-              <dd>
-                <YesNoBadge value={item.islet_morphology} />
-              </dd>
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
-                Islet Histology
-              </dt>
-              <dd>
-                <YesNoBadge value={item.islet_histology} />
-              </dd>
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
-                Islet Function Available
-              </dt>
-              <dd>
-                <YesNoBadge value={item.islet_function_available} />
-              </dd>
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
-                Hand-Picked
-              </dt>
-              <dd>
-                <YesNoBadge value={item.hand_picked} />
-              </dd>
-            </div>
-            <FieldPair label="Purity Assay">
-              {item.purity_assay?.length > 0
-                ? item.purity_assay.join(", ")
-                : null}
-            </FieldPair>
-            <FieldPair label="Preservation Method">
-              {preservationDisplay || null}
-            </FieldPair>
-          </dl>
-        </section>
+        {hasQualityMorphology ? (
+          <section>
+            <DashboardSectionTitle>Quality &amp; morphology</DashboardSectionTitle>
+            <dl className="space-y-3">
+              {item.islet_morphology !== undefined &&
+              item.islet_morphology !== null ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
+                    Islet Morphology
+                  </dt>
+                  <dd>
+                    <YesNoBadge value={item.islet_morphology} />
+                  </dd>
+                </div>
+              ) : null}
+              {item.islet_histology !== undefined &&
+              item.islet_histology !== null ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
+                    Islet Histology
+                  </dt>
+                  <dd>
+                    <YesNoBadge value={item.islet_histology} />
+                  </dd>
+                </div>
+              ) : null}
+              {item.islet_function_available !== undefined &&
+              item.islet_function_available !== null ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
+                    Islet Function Available
+                  </dt>
+                  <dd>
+                    <YesNoBadge value={item.islet_function_available} />
+                  </dd>
+                </div>
+              ) : null}
+              {item.hand_picked !== undefined && item.hand_picked !== null ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="text-sm font-semibold text-data-label dark:text-gray-400">
+                    Hand-Picked
+                  </dt>
+                  <dd>
+                    <YesNoBadge value={item.hand_picked} />
+                  </dd>
+                </div>
+              ) : null}
+              <FieldPair label="Purity Assay">
+                {item.purity_assay?.length > 0
+                  ? item.purity_assay.join(", ")
+                  : null}
+              </FieldPair>
+              <FieldPair label="Preservation Method">
+                {preservationDisplay || null}
+              </FieldPair>
+            </dl>
+          </section>
+        ) : null}
 
-        {showPostShipment ? (
+        {showPostShipment && hasPostShipmentMetrics ? (
           <section>
             <DashboardSectionTitle>Post-shipment metrics</DashboardSectionTitle>
             <dl className="space-y-3">
@@ -358,7 +403,7 @@ export default function PrimaryIsletClinicalDashboard({
                   let display = null;
                   if (v !== undefined && v !== null) {
                     if (Array.isArray(v)) {
-                      display = v.join(", ");
+                      display = v.length > 0 ? v.join(", ") : null;
                     } else if (typeof v === "object") {
                       display = JSON.stringify(v);
                     } else {
