@@ -776,9 +776,9 @@ export function BiosampleDataItems({
   item,
   classifications = null,
   constructLibrarySets = [],
-  diseaseTerms = null,
+  diseaseTerms: _diseaseTerms = null,
   partOf = null,
-  sampleTerms = null,
+  sampleTerms: _sampleTerms = null,
   sources = null,
   children,
 }) {

@@ -17,7 +17,7 @@ import { truthyOrZero } from "../lib/general";
 
 export default function PrimaryCellClinicalDashboard({
   item,
-  diseaseTerms = [],
+  diseaseTerms: _diseaseTerms = [],
   partOf = null,
   sampleTerms = [],
   sortedFrom = null,
