@@ -164,7 +164,11 @@ export default function PrimaryIsletClinicalDashboard({
 
   const facsPurificationUrls = Array.isArray(item.facs_purification)
     ? item.facs_purification.filter(
-        (u) => u != null && String(u).trim() !== "" && String(u).trim() !== "—"
+        (u) =>
+          u !== null &&
+          u !== undefined &&
+          String(u).trim() !== "" &&
+          String(u).trim() !== "—"
       )
     : [];
 

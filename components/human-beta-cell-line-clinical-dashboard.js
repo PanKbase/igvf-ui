@@ -27,10 +27,10 @@ function hasPassageNumber(v) {
 
 export default function HumanBetaCellLineClinicalDashboard({
   item,
-  diseaseTerms = [],
+  diseaseTerms: _diseaseTerms = [],
   sources = [],
   partOf = null,
-  sampleTerms = [],
+  sampleTerms: _sampleTerms = [],
   sortedFrom = null,
   treatments = [],
   children = null,
