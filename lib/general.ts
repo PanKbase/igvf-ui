@@ -185,6 +185,19 @@ export function truthyOrZero(value: number | null | undefined): boolean {
 }
 
 /**
+ * True if a biosample `taxa` value should be displayed (present and non-empty when string).
+ */
+export function hasTaxaDisplay(taxa: unknown): boolean {
+  if (taxa === undefined || taxa === null) {
+    return false;
+  }
+  if (typeof taxa === "string") {
+    return taxa.trim() !== "";
+  }
+  return true;
+}
+
+/**
  * Maximum number of characters to display for a JSON object in a cell.
  */
 const MAX_CELL_JSON_LENGTH = 200;
