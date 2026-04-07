@@ -20,7 +20,7 @@ import {
 import { formatDate } from "../lib/dates";
 import { hasValue } from "../lib/general";
 
-/** Post-shipment keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
+/** `post_shipment_*` keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
 const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
   "post_shipment_islet_viability",
   "post_shipment_viability_qualitative",
@@ -293,7 +293,7 @@ export default function PrimaryIsletClinicalDashboard({
     postTransferRows.push(
       <FieldPair
         key="ps_via"
-        label="Post-Shipment Islet Viability (%)"
+        label="Pre-Assay Islet Viability (%)"
       >
         {item.post_shipment_islet_viability}
       </FieldPair>
@@ -302,7 +302,7 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.post_shipment_viability_qualitative)) {
     const q = String(item.post_shipment_viability_qualitative).trim();
     postTransferRows.push(
-      <FieldPair key="ps_vq" label="Post-Shipment Viability (imaging / qualitative)">
+      <FieldPair key="ps_vq" label="Pre-Assay Viability (imaging / qualitative)">
         {/^https?:\/\//i.test(q) ? (
           <a
             href={q}
@@ -322,7 +322,7 @@ export default function PrimaryIsletClinicalDashboard({
     postTransferRows.push(
       <FieldPair
         key="ps_vquant"
-        label="Post-Shipment Viability (quantitative %)"
+        label="Pre-Assay Viability (quantitative %)"
       >
         {item.post_shipment_viability_quantitative}
       </FieldPair>
@@ -330,28 +330,28 @@ export default function PrimaryIsletClinicalDashboard({
   }
   if (hasValue(item.post_shipment_purity)) {
     postTransferRows.push(
-      <FieldPair key="ps_pur" label="Post-Shipment Islet Purity (%)">
+      <FieldPair key="ps_pur" label="Pre-Assay Islet Purity (%)">
         {item.post_shipment_purity}
       </FieldPair>
     );
   }
   if (hasValue(item.post_shipment_culture_time)) {
     postTransferRows.push(
-      <FieldPair key="ps_ct" label="Post-Shipment Culture Time (hours)">
+      <FieldPair key="ps_ct" label="Pre-Assay Culture Time (hours)">
         {item.post_shipment_culture_time}
       </FieldPair>
     );
   }
   if (hasValue(item.post_shipment_culture_media)) {
     postTransferRows.push(
-      <FieldPair key="ps_cm" label="Post-Shipment Culture Media">
+      <FieldPair key="ps_cm" label="Pre-Assay Culture Media">
         {item.post_shipment_culture_media}
       </FieldPair>
     );
   }
   if (hasValue(item.post_shipment_culture_temperature)) {
     postTransferRows.push(
-      <FieldPair key="ps_ctemp" label="Post-Shipment Culture Temperature">
+      <FieldPair key="ps_ctemp" label="Pre-Assay Culture Temperature">
         {item.post_shipment_culture_temperature}
       </FieldPair>
     );
@@ -677,10 +677,10 @@ export default function PrimaryIsletClinicalDashboard({
         </section>
 
         <section>
-          <DashboardSectionTitle>Post-Transfer Metrics</DashboardSectionTitle>
+          <DashboardSectionTitle>Pre-Assay Metrics</DashboardSectionTitle>
           <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
           {postTransferRows.length === 0 ? (
-            <SectionEmptyHint text="No post-transfer data recorded yet" />
+            <SectionEmptyHint text="No pre-assay data recorded yet" />
           ) : (
             <dl className="space-y-3">{postTransferRows}</dl>
           )}
