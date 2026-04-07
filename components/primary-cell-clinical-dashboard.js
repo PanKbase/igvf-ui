@@ -54,7 +54,9 @@ export default function PrimaryCellClinicalDashboard({
         <section>
           <DashboardSectionTitle>Sample summary</DashboardSectionTitle>
           <div className="flex flex-wrap gap-3">
-            <MetricCard label="Taxa" value={item.taxa || "—"} />
+            {item.taxa ? (
+              <MetricCard label="Taxa" value={item.taxa} />
+            ) : null}
             <MetricCard
               label="Sample Term"
               value={
@@ -78,7 +80,9 @@ export default function PrimaryCellClinicalDashboard({
             <div>
               <PanelColumnTitle>Identity</PanelColumnTitle>
               <dl className="space-y-3">
-                <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                {item.taxa ? (
+                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                ) : null}
                 <FieldPair label="Sample Terms">
                   {sampleTerms?.length > 0 ? (
                     <SeparatedList>
@@ -118,8 +122,8 @@ export default function PrimaryCellClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical</PanelColumnTitle>
               <dl className="space-y-3">
-                <FieldPair label="Disease Terms">
-                  {diseaseTerms?.length > 0 ? (
+                {diseaseTerms?.length > 0 ? (
+                  <FieldPair label="Disease Terms">
                     <SeparatedList>
                       {diseaseTerms.map((t) => (
                         <Link key={t["@id"]} href={t["@id"]}>
@@ -127,10 +131,8 @@ export default function PrimaryCellClinicalDashboard({
                         </Link>
                       ))}
                     </SeparatedList>
-                  ) : (
-                    <span className="text-gray-500">No ontology term</span>
-                  )}
-                </FieldPair>
+                  </FieldPair>
+                ) : null}
                 <FieldPair label="Sources">
                   {sources?.length > 0 ? (
                     <SeparatedList>
