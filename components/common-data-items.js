@@ -648,18 +648,6 @@ export function SampleDataItems({ item, constructLibrarySets = [], children }) {
           </DataItemList>
         </>
       )}
-      {item.virtual && (
-        <>
-          <DataItemLabel>Virtual</DataItemLabel>
-          <DataItemValue>True</DataItemValue>
-        </>
-      )}
-      {item.taxa && (
-        <>
-          <DataItemLabel>Taxa</DataItemLabel>
-          <DataItemValue>{item.taxa}</DataItemValue>
-        </>
-      )}
       {item.description && (
         <>
           <DataItemLabel>Description</DataItemLabel>
@@ -778,9 +766,7 @@ SampleDataItems.commonProperties = [
   "starting_amount_units",
   "submitter_comment",
   "summary",
-  "taxa",
   "url",
-  "virtual",
 ];
 
 /**
@@ -798,30 +784,10 @@ export function BiosampleDataItems({
 }) {
   return (
     <SampleDataItems item={item} constructLibrarySets={constructLibrarySets}>
-      {sampleTerms?.length > 0 && (
-        <>
-          <DataItemLabel>Sample Terms</DataItemLabel>
-          <DataItemValue>
-            <SeparatedList>
-              {sampleTerms.map((sampleTerm) => (
-                <Link href={sampleTerm["@id"]} key={sampleTerm["@id"]}>
-                  {sampleTerm.term_name}
-                </Link>
-              ))}
-            </SeparatedList>
-          </DataItemValue>
-        </>
-      )}
       {classifications?.length > 0 && (
         <>
           <DataItemLabel>Classification</DataItemLabel>
           <DataItemValue>{classifications.join(", ")}</DataItemValue>
-        </>
-      )}
-      {item.embryonic && (
-        <>
-          <DataItemLabel>Embryonic</DataItemLabel>
-          <DataItemValue>True</DataItemValue>
         </>
       )}
       {item.cellular_sub_pool && (
@@ -835,20 +801,6 @@ export function BiosampleDataItems({
           <DataItemLabel>Part of Sample</DataItemLabel>
           <DataItemValue>
             <Link href={partOf["@id"]}>{partOf.accession}</Link>
-          </DataItemValue>
-        </>
-      )}
-      {diseaseTerms?.length > 0 && (
-        <>
-          <DataItemLabel>Disease Terms</DataItemLabel>
-          <DataItemValue>
-            <SeparatedList isCollapsible>
-              {diseaseTerms.map((diseaseTerm) => (
-                <Link href={diseaseTerm["@id"]} key={diseaseTerm["@id"]}>
-                  {diseaseTerm.term_name}
-                </Link>
-              ))}
-            </SeparatedList>
           </DataItemValue>
         </>
       )}
@@ -896,9 +848,14 @@ BiosampleDataItems.propTypes = {
 
 BiosampleDataItems.commonProperties = [
   "cellular_sub_pool",
-  "embryonic",
   "nih_institutional_certification",
   "gender",
+  // Listed so UnknownTypePanel omits them from generic properties; not shown in the biosample UI.
+  "disease_terms",
+  "embryonic",
+  "sample_terms",
+  "taxa",
+  "virtual",
 ];
 
 /**

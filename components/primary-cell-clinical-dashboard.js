@@ -9,12 +9,11 @@ import Status from "./status";
 import {
   DashboardSectionTitle,
   FieldPair,
-  MetricCard,
   PanelColumnTitle,
 } from "./clinical-dashboard-primitives";
 // lib
 import { formatDate } from "../lib/dates";
-import { hasTaxaDisplay, truthyOrZero } from "../lib/general";
+import { truthyOrZero } from "../lib/general";
 
 export default function PrimaryCellClinicalDashboard({
   item,
@@ -24,6 +23,7 @@ export default function PrimaryCellClinicalDashboard({
   sortedFrom = null,
   sources = [],
   treatments = [],
+  children = null,
 }) {
   const primaryTerm = sampleTerms?.[0];
   const subtitle = [item.taxa, primaryTerm?.term_name]
@@ -52,48 +52,10 @@ export default function PrimaryCellClinicalDashboard({
         </header>
 
         <section>
-          <DashboardSectionTitle>Sample summary</DashboardSectionTitle>
-          <div className="flex flex-wrap gap-3">
-            {hasTaxaDisplay(item.taxa) ? (
-              <MetricCard label="Taxa" value={item.taxa} />
-            ) : null}
-            <MetricCard
-              label="Sample Term"
-              value={
-                primaryTerm ? (
-                  <Link
-                    className="text-blue-700 dark:text-blue-400"
-                    href={primaryTerm["@id"]}
-                  >
-                    {primaryTerm.term_name}
-                  </Link>
-                ) : (
-                  "—"
-                )
-              }
-            />
-          </div>
-        </section>
-
-        <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <PanelColumnTitle>Identity</PanelColumnTitle>
+              <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
-                {hasTaxaDisplay(item.taxa) ? (
-                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
-                ) : null}
-                <FieldPair label="Sample Terms">
-                  {sampleTerms?.length > 0 ? (
-                    <SeparatedList>
-                      {sampleTerms.map((t) => (
-                        <Link key={t["@id"]} href={t["@id"]}>
-                          {t.term_name}
-                        </Link>
-                      ))}
-                    </SeparatedList>
-                  ) : null}
-                </FieldPair>
                 {truthyOrZero(item.passage_number) ? (
                   <FieldPair label="Passage Number" monoValue>
                     {item.passage_number}
@@ -122,17 +84,6 @@ export default function PrimaryCellClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical</PanelColumnTitle>
               <dl className="space-y-3">
-                {diseaseTerms?.length > 0 ? (
-                  <FieldPair label="Disease Terms">
-                    <SeparatedList>
-                      {diseaseTerms.map((t) => (
-                        <Link key={t["@id"]} href={t["@id"]}>
-                          {t.term_name}
-                        </Link>
-                      ))}
-                    </SeparatedList>
-                  </FieldPair>
-                ) : null}
                 <FieldPair label="Sources">
                   {sources?.length > 0 ? (
                     <SeparatedList>
@@ -163,6 +114,7 @@ export default function PrimaryCellClinicalDashboard({
         </section>
 
         <BiosampleTreatmentsSection treatments={treatments} />
+        {children}
 
         <section>
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
@@ -221,6 +173,7 @@ PrimaryCellClinicalDashboard.propTypes = {
   sortedFrom: PropTypes.object,
   sources: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
 };
 
 PrimaryCellClinicalDashboard.defaultProps = {
@@ -230,4 +183,5 @@ PrimaryCellClinicalDashboard.defaultProps = {
   sortedFrom: null,
   sources: [],
   treatments: [],
+  children: null,
 };
