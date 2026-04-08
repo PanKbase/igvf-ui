@@ -243,10 +243,10 @@ export function DonorDataItems({
               </DataItemValue>
             </>
           )}
-          {item.other_theraphy?.length > 0 && (
+          {item.other_therapy?.length > 0 && (
             <>
               <DataItemLabel>Medication</DataItemLabel>
-              <DataItemValue>{item.other_theraphy.join(", ")}</DataItemValue>
+              <DataItemValue>{item.other_therapy.join(", ")}</DataItemValue>
             </>
           )}
           {item.hospital_stay !== undefined && (
@@ -598,7 +598,7 @@ DonorDataItems.commonProperties = [
   "diabetes_duration",
   "hba1c",
   "c_peptide",
-  "other_theraphy",
+  "other_therapy",
   "glucose_loweing_theraphy",
   "ethnicities",
   "genetic_predicted_ethnicities",
