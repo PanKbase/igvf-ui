@@ -511,9 +511,6 @@ export default function HumanDonorClinicalDashboard({
                     </span>
                   ) : null}
                 </FieldPair>
-                <FieldPair label="Diabetes status (HbA1c adjusted)">
-                  {item.diabetes_status_hba1c}
-                </FieldPair>
                 <FieldPair label="Family history of diabetes">
                   {item.family_history_of_diabetes}
                 </FieldPair>
@@ -849,7 +846,6 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "diabetes_status",
   "t1d_stage",
   "derived_diabetes_status",
-  "diabetes_status_hba1c",
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "other_disease_states",

@@ -217,12 +217,6 @@ export function DonorDataItems({
               <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
             </>
           )}
-          {item.diabetes_status_hba1c !== undefined && (
-            <>
-              <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
-              <DataItemValue>{item.diabetes_status_hba1c}</DataItemValue>
-            </>
-          )}
           {item.hba1c !== undefined && (
             <>
               <DataItemLabel>HbA1C (percentage)</DataItemLabel>
@@ -602,7 +596,6 @@ DonorDataItems.commonProperties = [
   "t1d_stage",
   "derived_diabetes_status",
   "diabetes_duration",
-  "diabetes_status_hba1c",
   "hba1c",
   "c_peptide",
   "other_theraphy",
