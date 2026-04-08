@@ -664,7 +664,7 @@ export default function PrimaryIsletClinicalDashboard({
         <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <DashboardSectionTitle>Isolation Metrics</DashboardSectionTitle>
+              <DashboardSectionTitle>Pre-shipment Metrics</DashboardSectionTitle>
               <SubsectionHint>Data captured at time of isolation</SubsectionHint>
               {isolationRows.length === 0 ? (
                 <SectionEmptyHint text="No data recorded yet" />
@@ -673,7 +673,7 @@ export default function PrimaryIsletClinicalDashboard({
               )}
             </div>
             <div>
-              <DashboardSectionTitle>Pre-Assay Metrics</DashboardSectionTitle>
+              <DashboardSectionTitle>Post-shipment Metrics</DashboardSectionTitle>
               <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
               {postTransferRows.length === 0 ? (
                 <SectionEmptyHint text="No pre-assay data recorded yet" />
