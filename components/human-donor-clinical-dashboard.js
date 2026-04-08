@@ -539,9 +539,9 @@ export default function HumanDonorClinicalDashboard({
                     {item.glucose_loweing_theraphy.join(", ")}
                   </FieldPair>
                 ) : null}
-                {item.other_theraphy?.length > 0 ? (
+                {item.other_therapy?.length > 0 ? (
                   <FieldPair label="Medication">
-                    {item.other_theraphy.join(", ")}
+                    {item.other_therapy.join(", ")}
                   </FieldPair>
                 ) : null}
           </dl>
@@ -854,7 +854,7 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "donation_type",
   "hospital_stay",
   "glucose_loweing_theraphy",
-  "other_theraphy",
+  "other_therapy",
   "aab_gada",
   "aab_gada_value",
   "aab_gada_assay",
