@@ -60,6 +60,7 @@ export default function PrimaryIslet({
           <PrimaryIsletClinicalDashboard
             item={primaryIslet}
             diseaseTerms={diseaseTerms}
+            donors={donors}
             partOf={partOf}
             sampleTerms={primaryIslet.sample_terms ?? []}
             treatments={treatments}
