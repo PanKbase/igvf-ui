@@ -19,6 +19,10 @@ import {
 // lib
 import { formatDate } from "../lib/dates";
 import { hasValue } from "../lib/general";
+import {
+  getPrimaryIsletPhase,
+  primaryIsletBiosampleTypeDisplay,
+} from "../lib/primary-islet-phase";
 
 /** `post_shipment_*` keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
 const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
@@ -148,6 +152,7 @@ function postShipmentExtraDisplay(v) {
 export default function PrimaryIsletClinicalDashboard({
   item,
   diseaseTerms = [],
+  donors = [],
   partOf = null,
   sampleTerms = [],
   treatments = [],
@@ -596,8 +601,19 @@ export default function PrimaryIsletClinicalDashboard({
   const headerDiseasePills =
     diseaseTerms?.filter((t) => hasValue(t.term_name)) ?? [];
 
-  const showSampleSummaryCard =
-    hasValue(item.isolation_center) || hasValue(item.organ_source);
+  const primaryIsletPhase = getPrimaryIsletPhase(item);
+  const biosampleTypeLabel = primaryIsletBiosampleTypeDisplay(
+    item,
+    primaryIsletPhase
+  );
+  const hasBiosampleTypeInfo =
+    primaryIsletPhase !== null || hasValue(item.biosample_type);
+
+  const showBiosampleSummary =
+    hasValue(item.isolation_center) ||
+    hasValue(item.organ_source) ||
+    (Array.isArray(donors) && donors.length > 0) ||
+    hasBiosampleTypeInfo;
 
   return (
     <div className="bg-white dark:bg-gray-950">
@@ -635,9 +651,9 @@ export default function PrimaryIsletClinicalDashboard({
           </div>
         </header>
 
-        {showSampleSummaryCard ? (
+        {showBiosampleSummary ? (
           <section>
-            <DashboardSectionTitle>Sample Summary</DashboardSectionTitle>
+            <DashboardSectionTitle>Biosample Summary</DashboardSectionTitle>
             <div className="flex flex-wrap gap-3">
               {hasValue(item.isolation_center) ? (
                 <MetricCard
@@ -647,6 +663,32 @@ export default function PrimaryIsletClinicalDashboard({
               ) : null}
               {hasValue(item.organ_source) ? (
                 <MetricCard label="Organ Source" value={item.organ_source} />
+              ) : null}
+              {Array.isArray(donors) && donors.length > 0 ? (
+                <MetricCard
+                  label={
+                    donors.length > 1 ? "Donor accessions" : "Donor accession"
+                  }
+                  value={
+                    <SeparatedList>
+                      {donors.map((d) => (
+                        <Link
+                          key={d["@id"]}
+                          href={d["@id"]}
+                          className="text-blue-700 dark:text-blue-400"
+                        >
+                          {d.accession ?? d["@id"]}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  }
+                />
+              ) : null}
+              {hasBiosampleTypeInfo ? (
+                <MetricCard
+                  label="Biosample type"
+                  value={biosampleTypeLabel}
+                />
               ) : null}
             </div>
           </section>
@@ -726,6 +768,7 @@ export default function PrimaryIsletClinicalDashboard({
 PrimaryIsletClinicalDashboard.propTypes = {
   item: PropTypes.object.isRequired,
   diseaseTerms: PropTypes.arrayOf(PropTypes.object),
+  donors: PropTypes.arrayOf(PropTypes.object),
   partOf: PropTypes.object,
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object),
@@ -734,6 +777,7 @@ PrimaryIsletClinicalDashboard.propTypes = {
 
 PrimaryIsletClinicalDashboard.defaultProps = {
   diseaseTerms: [],
+  donors: [],
   partOf: null,
   sampleTerms: [],
   treatments: [],
