@@ -158,6 +158,17 @@ export default function PrimaryIsletClinicalDashboard({
   treatments = [],
   children = null,
 }) {
+  const embeddedItemDonors =
+    Array.isArray(item.donors) &&
+    item.donors.length > 0 &&
+    item.donors.every(
+      (d) => d && typeof d === "object" && typeof d["@id"] === "string"
+    )
+      ? item.donors
+      : [];
+  const donorsForDisplay =
+    donors.length > 0 ? donors : embeddedItemDonors;
+
   const prepViabilityClass = viabilityHighClass(item.prep_viability);
   const coldClass = coldIschaemiaClass(item.cold_ischaemia_time);
   const warmIschemiaClass = coldIschaemiaClass(item.warm_ischaemia_duration);
@@ -609,10 +620,18 @@ export default function PrimaryIsletClinicalDashboard({
   const hasBiosampleTypeInfo =
     primaryIsletPhase !== null || hasValue(item.biosample_type);
 
+  const donorLinkPaths =
+    Array.isArray(item.donors) && item.donors.length > 0
+      ? item.donors
+          .map((d) => (typeof d === "string" ? d : d?.["@id"]))
+          .filter(Boolean)
+      : [];
+
   const showBiosampleSummary =
     hasValue(item.isolation_center) ||
     hasValue(item.organ_source) ||
-    (Array.isArray(donors) && donors.length > 0) ||
+    donorsForDisplay.length > 0 ||
+    donorLinkPaths.length > 0 ||
     hasBiosampleTypeInfo;
 
   return (
@@ -664,26 +683,47 @@ export default function PrimaryIsletClinicalDashboard({
               {hasValue(item.organ_source) ? (
                 <MetricCard label="Organ Source" value={item.organ_source} />
               ) : null}
-              {Array.isArray(donors) && donors.length > 0 ? (
+              {donorsForDisplay.length > 0 ? (
                 <MetricCard
                   label={
-                    donors.length > 1 ? "Donor accessions" : "Donor accession"
+                    donorsForDisplay.length > 1 ? "Human donors" : "Human donor"
                   }
                   value={
                     <SeparatedList>
-                      {donors.map((d) => (
+                      {donorsForDisplay.map((d) => (
                         <Link
                           key={d["@id"]}
                           href={d["@id"]}
                           className="text-blue-700 dark:text-blue-400"
                         >
-                          {d.accession ?? d["@id"]}
+                          {d.accession ?? d.summary ?? d["@id"]}
                         </Link>
                       ))}
                     </SeparatedList>
                   }
                 />
-              ) : null}
+              ) : donorLinkPaths.length > 0 ? (
+                <MetricCard
+                  label={
+                    donorLinkPaths.length > 1 ? "Human donors" : "Human donor"
+                  }
+                  value={
+                    <SeparatedList>
+                      {donorLinkPaths.map((href) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="text-blue-700 dark:text-blue-400"
+                        >
+                          {href}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  }
+                />
+              ) : (
+                <MetricCard label="Human donor" value="—" />
+              )}
               {hasBiosampleTypeInfo ? (
                 <MetricCard
                   label="Biosample type"
@@ -718,7 +758,7 @@ export default function PrimaryIsletClinicalDashboard({
               <DashboardSectionTitle>Post-shipment Metrics</DashboardSectionTitle>
               <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
               {postTransferRows.length === 0 ? (
-                <SectionEmptyHint text="No pre-assay data recorded yet" />
+                <SectionEmptyHint text="No post-shipment data recorded yet" />
               ) : (
                 <dl className="space-y-3">{postTransferRows}</dl>
               )}

@@ -153,9 +153,26 @@ export async function getServerSideProps({ params, req, query }) {
     const documents = primaryIslet.documents
       ? await requestDocuments(primaryIslet.documents, request)
       : [];
-    const donors = primaryIslet.donors
-      ? await requestDonors(primaryIslet.donors, request)
+    const rawDonors = Array.isArray(primaryIslet.donors)
+      ? primaryIslet.donors
       : [];
+    let donors = [];
+    if (rawDonors.length > 0) {
+      const donorsAreEmbeddedLinks = rawDonors.every(
+        (d) => d && typeof d === "object" && typeof d["@id"] === "string"
+      );
+      if (donorsAreEmbeddedLinks) {
+        donors = rawDonors;
+      } else {
+        const donorPaths = rawDonors
+          .map((d) => (typeof d === "string" ? d : d?.["@id"]))
+          .filter(Boolean);
+        donors =
+          donorPaths.length > 0
+            ? await requestDonors(donorPaths, request)
+            : [];
+      }
+    }
     const partOf = primaryIslet.part_of
       ? (await request.getObject(primaryIslet.part_of)).optional()
       : null;
