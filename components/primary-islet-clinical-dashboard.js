@@ -365,13 +365,6 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
-  if (isBoolDefined(item.islets_shipped)) {
-    postTransferRows.push(
-      <FieldPair key="shipped" label="Were the Islets Shipped?">
-        <YesNoBadge value={item.islets_shipped} />
-      </FieldPair>
-    );
-  }
   if (hasValue(item.shipping_temperature)) {
     postTransferRows.push(
       <FieldPair key="ship_temp" label="Shipping Temperature (ºC)">
@@ -713,7 +706,7 @@ export default function PrimaryIsletClinicalDashboard({
         <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <DashboardSectionTitle>Pre-shipment Metrics</DashboardSectionTitle>
+              <DashboardSectionTitle>Isolation Metrics</DashboardSectionTitle>
               <SubsectionHint>Data captured at time of isolation</SubsectionHint>
               {isolationRows.length === 0 ? (
                 <SectionEmptyHint text="No data recorded yet" />
