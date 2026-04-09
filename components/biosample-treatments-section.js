@@ -50,7 +50,7 @@ const dashboardTreatmentColumns = [
 /**
  * Named "Treatments" section for biosample clinical dashboards (heading + grid only).
  */
-export default function BiosampleTreatmentsSection({ treatments }) {
+export default function BiosampleTreatmentsSection({ treatments = [] }) {
   if (!treatments?.length) {
     return null;
   }
@@ -70,5 +70,9 @@ export default function BiosampleTreatmentsSection({ treatments }) {
 }
 
 BiosampleTreatmentsSection.propTypes = {
-  treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  treatments: PropTypes.arrayOf(PropTypes.object),
+};
+
+BiosampleTreatmentsSection.defaultProps = {
+  treatments: [],
 };

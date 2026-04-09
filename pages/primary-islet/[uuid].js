@@ -60,57 +60,59 @@ export default function PrimaryIslet({
           <PrimaryIsletClinicalDashboard
             item={primaryIslet}
             diseaseTerms={diseaseTerms}
+            donors={donors}
             partOf={partOf}
             sampleTerms={primaryIslet.sample_terms ?? []}
             treatments={treatments}
-          />
-          {donors.length > 0 && <DonorTable donors={donors} />}
-          {primaryIslet.file_sets?.length > 0 && (
-            <FileSetTable fileSets={primaryIslet.file_sets} />
-          )}
-          {multiplexedInSamples.length > 0 && (
-            <SampleTable
-              samples={multiplexedInSamples}
-              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${primaryIslet["@id"]}`}
-              title="Multiplexed In Samples"
-            />
-          )}
-          {pooledFrom.length > 0 && (
-            <SampleTable
-              samples={pooledFrom}
-              reportLink={`/multireport/?type=Sample&pooled_in=${primaryIslet["@id"]}`}
-              title="Biosamples Pooled From"
-            />
-          )}
-          {pooledIn.length > 0 && (
-            <SampleTable
-              samples={pooledIn}
-              reportLink={`/multireport/?type=Biosample&pooled_from=${primaryIslet["@id"]}`}
-              title="Pooled In"
-            />
-          )}
-          {parts.length > 0 && (
-            <SampleTable
-              samples={parts}
-              reportLink={`/multireport/?type=Biosample&part_of=${primaryIslet["@id"]}`}
-              title="Sample Parts"
-            />
-          )}
-          {primaryIslet.modifications?.length > 0 && (
-            <ModificationTable
-              modifications={primaryIslet.modifications}
-              reportLink={`/multireport/?type=Modification&biosamples_modified=${primaryIslet["@id"]}`}
-              reportLabel={`Report of genetic modifications for ${primaryIslet.accession}`}
-            />
-          )}
-          {sortedFractions.length > 0 && (
-            <SampleTable
-              samples={sortedFractions}
-              reportLink={`/multireport/?type=Sample&sorted_from.@id=${primaryIslet["@id"]}`}
-              title="Sorted Fractions of Sample"
-            />
-          )}
-          {documents.length > 0 && <DocumentTable documents={documents} />}
+          >
+            {donors.length > 0 && <DonorTable donors={donors} />}
+            {primaryIslet.file_sets?.length > 0 && (
+              <FileSetTable fileSets={primaryIslet.file_sets} />
+            )}
+            {multiplexedInSamples.length > 0 && (
+              <SampleTable
+                samples={multiplexedInSamples}
+                reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${primaryIslet["@id"]}`}
+                title="Multiplexed In Samples"
+              />
+            )}
+            {pooledFrom.length > 0 && (
+              <SampleTable
+                samples={pooledFrom}
+                reportLink={`/multireport/?type=Sample&pooled_in=${primaryIslet["@id"]}`}
+                title="Biosamples Pooled From"
+              />
+            )}
+            {pooledIn.length > 0 && (
+              <SampleTable
+                samples={pooledIn}
+                reportLink={`/multireport/?type=Biosample&pooled_from=${primaryIslet["@id"]}`}
+                title="Pooled In"
+              />
+            )}
+            {parts.length > 0 && (
+              <SampleTable
+                samples={parts}
+                reportLink={`/multireport/?type=Biosample&part_of=${primaryIslet["@id"]}`}
+                title="Sample Parts"
+              />
+            )}
+            {primaryIslet.modifications?.length > 0 && (
+              <ModificationTable
+                modifications={primaryIslet.modifications}
+                reportLink={`/multireport/?type=Modification&biosamples_modified=${primaryIslet["@id"]}`}
+                reportLabel={`Report of genetic modifications for ${primaryIslet.accession}`}
+              />
+            )}
+            {sortedFractions.length > 0 && (
+              <SampleTable
+                samples={sortedFractions}
+                reportLink={`/multireport/?type=Sample&sorted_from.@id=${primaryIslet["@id"]}`}
+                title="Sorted Fractions of Sample"
+              />
+            )}
+            {documents.length > 0 && <DocumentTable documents={documents} />}
+          </PrimaryIsletClinicalDashboard>
           <Attribution attribution={attribution} />
         </JsonDisplay>
       </EditableItem>

@@ -82,54 +82,55 @@ export default function PrimaryCell({
             sortedFrom={sortedFromSample}
             sources={sources}
             treatments={treatments}
-          />
-          {donors.length > 0 && <DonorTable donors={donors} />}
-          {primaryCell.file_sets?.length > 0 && (
-            <FileSetTable fileSets={primaryCell.file_sets} />
-          )}
-          {multiplexedInSamples.length > 0 && (
-            <SampleTable
-              samples={multiplexedInSamples}
-              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${primaryCell["@id"]}`}
-              title="Multiplexed In Samples"
-            />
-          )}
-          {pooledFrom.length > 0 && (
-            <SampleTable
-              samples={pooledFrom}
-              reportLink={`/multireport/?type=Sample&pooled_in=${primaryCell["@id"]}`}
-              title="Biosamples Pooled From"
-            />
-          )}
-          {pooledIn.length > 0 && (
-            <SampleTable
-              samples={pooledIn}
-              reportLink={`/multireport/?type=Biosample&pooled_from=${primaryCell["@id"]}`}
-              title="Pooled In"
-            />
-          )}
-          {parts.length > 0 && (
-            <SampleTable
-              samples={parts}
-              reportLink={`/multireport/?type=Biosample&part_of=${primaryCell["@id"]}`}
-              title="Sample Parts"
-            />
-          )}
-          {primaryCell.modifications?.length > 0 && (
-            <ModificationTable
-              modifications={primaryCell.modifications}
-              reportLink={`/multireport/?type=Modification&biosamples_modified=${primaryCell["@id"]}`}
-              reportLabel={`Report of genetic modifications for ${primaryCell.accession}`}
-            />
-          )}
-          {sortedFractions.length > 0 && (
-            <SampleTable
-              samples={sortedFractions}
-              reportLink={`/multireport/?type=Sample&sorted_from.@id=${primaryCell["@id"]}`}
-              title="Sorted Fractions of Sample"
-            />
-          )}
-          {documents.length > 0 && <DocumentTable documents={documents} />}
+          >
+            {donors.length > 0 && <DonorTable donors={donors} />}
+            {primaryCell.file_sets?.length > 0 && (
+              <FileSetTable fileSets={primaryCell.file_sets} />
+            )}
+            {multiplexedInSamples.length > 0 && (
+              <SampleTable
+                samples={multiplexedInSamples}
+                reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${primaryCell["@id"]}`}
+                title="Multiplexed In Samples"
+              />
+            )}
+            {pooledFrom.length > 0 && (
+              <SampleTable
+                samples={pooledFrom}
+                reportLink={`/multireport/?type=Sample&pooled_in=${primaryCell["@id"]}`}
+                title="Biosamples Pooled From"
+              />
+            )}
+            {pooledIn.length > 0 && (
+              <SampleTable
+                samples={pooledIn}
+                reportLink={`/multireport/?type=Biosample&pooled_from=${primaryCell["@id"]}`}
+                title="Pooled In"
+              />
+            )}
+            {parts.length > 0 && (
+              <SampleTable
+                samples={parts}
+                reportLink={`/multireport/?type=Biosample&part_of=${primaryCell["@id"]}`}
+                title="Sample Parts"
+              />
+            )}
+            {primaryCell.modifications?.length > 0 && (
+              <ModificationTable
+                modifications={primaryCell.modifications}
+                reportLink={`/multireport/?type=Modification&biosamples_modified=${primaryCell["@id"]}`}
+                reportLabel={`Report of genetic modifications for ${primaryCell.accession}`}
+              />
+            )}
+            {sortedFractions.length > 0 && (
+              <SampleTable
+                samples={sortedFractions}
+                reportLink={`/multireport/?type=Sample&sorted_from.@id=${primaryCell["@id"]}`}
+                title="Sorted Fractions of Sample"
+              />
+            )}
+            {documents.length > 0 && <DocumentTable documents={documents} />}
+          </PrimaryCellClinicalDashboard>
           <Attribution attribution={attribution} />
         </JsonDisplay>
       </EditableItem>
