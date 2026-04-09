@@ -20,7 +20,6 @@ import buildBreadcrumbs from "../../lib/breadcrumbs";
 import {
   requestBiosamples,
   requestDocuments,
-  requestDonors,
   requestOntologyTerms,
   requestTreatments,
 } from "../../lib/common-requests";
@@ -145,10 +144,12 @@ export async function getServerSideProps({ params, req, query }) {
   if (FetchRequest.isResponseSuccess(primaryIslet)) {
     let diseaseTerms = [];
     if (primaryIslet.disease_terms?.length > 0) {
-      const diseaseTermPaths = primaryIslet.disease_terms.map(
-        (diseaseTerm) => diseaseTerm["@id"]
-      );
-      diseaseTerms = await requestOntologyTerms(diseaseTermPaths, request);
+      const diseaseTermPaths = primaryIslet.disease_terms
+        .map((t) => (typeof t === "string" ? t : t?.["@id"]))
+        .filter(Boolean);
+      if (diseaseTermPaths.length > 0) {
+        diseaseTerms = await requestOntologyTerms(diseaseTermPaths, request);
+      }
     }
     const documents = primaryIslet.documents
       ? await requestDocuments(primaryIslet.documents, request)
@@ -167,10 +168,12 @@ export async function getServerSideProps({ params, req, query }) {
         const donorPaths = rawDonors
           .map((d) => (typeof d === "string" ? d : d?.["@id"]))
           .filter(Boolean);
-        donors =
-          donorPaths.length > 0
-            ? await requestDonors(donorPaths, request)
-            : [];
+        if (donorPaths.length > 0) {
+          const donorResults = await request.getMultipleObjects(donorPaths, {
+            filterErrors: true,
+          });
+          donors = donorResults.map((r) => r.unwrap());
+        }
       }
     }
     const partOf = primaryIslet.part_of
@@ -194,20 +197,24 @@ export async function getServerSideProps({ params, req, query }) {
         : [];
     let treatments = [];
     if (primaryIslet.treatments?.length > 0) {
-      const treatmentPaths = primaryIslet.treatments.map(
-        (treatment) => treatment["@id"]
-      );
-      treatments = await requestTreatments(treatmentPaths, request);
+      const treatmentPaths = primaryIslet.treatments
+        .map((t) => (typeof t === "string" ? t : t?.["@id"]))
+        .filter(Boolean);
+      if (treatmentPaths.length > 0) {
+        treatments = await requestTreatments(treatmentPaths, request);
+      }
     }
     let multiplexedInSamples = [];
     if (primaryIslet.multiplexed_in?.length > 0) {
-      const multiplexedInPaths = primaryIslet.multiplexed_in.map(
-        (sample) => sample["@id"]
-      );
-      multiplexedInSamples = await requestBiosamples(
-        multiplexedInPaths,
-        request
-      );
+      const multiplexedInPaths = primaryIslet.multiplexed_in
+        .map((s) => (typeof s === "string" ? s : s?.["@id"]))
+        .filter(Boolean);
+      if (multiplexedInPaths.length > 0) {
+        multiplexedInSamples = await requestBiosamples(
+          multiplexedInPaths,
+          request
+        );
+      }
     }
     const breadcrumbs = await buildBreadcrumbs(
       primaryIslet,
