@@ -27,12 +27,13 @@ function hasPassageNumber(v) {
 
 export default function HumanBetaCellLineClinicalDashboard({
   item,
-  diseaseTerms = [],
+  diseaseTerms: _diseaseTerms = [],
   sources = [],
   partOf = null,
-  sampleTerms = [],
+  sampleTerms: _sampleTerms = [],
   sortedFrom = null,
   treatments = [],
+  children = null,
 }) {
   const diagnosisChip = formatDiagnosisChipText(item.diabetes_status_description);
   const lotProductSubtitle = [
@@ -71,7 +72,7 @@ export default function HumanBetaCellLineClinicalDashboard({
         </header>
 
         <section>
-          <DashboardSectionTitle>Sample summary</DashboardSectionTitle>
+          <DashboardSectionTitle>Biosample summary</DashboardSectionTitle>
           <div className="flex flex-wrap gap-3">
             <MetricCard label="Sample Name" value={item.sample_name || "—"} />
             <MetricCard
@@ -88,7 +89,7 @@ export default function HumanBetaCellLineClinicalDashboard({
         <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <PanelColumnTitle>Identity</PanelColumnTitle>
+              <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
                 {item.taxa ? (
                   <FieldPair label="Taxa">{item.taxa}</FieldPair>
@@ -117,10 +118,10 @@ export default function HumanBetaCellLineClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical &amp; culture</PanelColumnTitle>
               <dl className="space-y-3">
-                {diseaseTerms?.length > 0 ? (
+                {_diseaseTerms?.length > 0 ? (
                   <FieldPair label="Disease Terms">
                     <SeparatedList>
-                      {diseaseTerms.map((t) => (
+                      {_diseaseTerms.map((t) => (
                         <Link key={t["@id"]} href={t["@id"]}>
                           {t.term_name}
                         </Link>
@@ -156,17 +157,6 @@ export default function HumanBetaCellLineClinicalDashboard({
                 </SeparatedList>
               ) : null}
             </FieldPair>
-            <FieldPair label="Sample Terms">
-              {sampleTerms?.length > 0 ? (
-                <SeparatedList>
-                  {sampleTerms.map((t) => (
-                    <Link key={t["@id"]} href={t["@id"]}>
-                      {t.term_name}
-                    </Link>
-                  ))}
-                </SeparatedList>
-              ) : null}
-            </FieldPair>
             <FieldPair label="Part of Sample">
               {partOf ? (
                 <Link href={partOf["@id"]}>{partOf.accession}</Link>
@@ -197,6 +187,7 @@ export default function HumanBetaCellLineClinicalDashboard({
         </section>
 
         <BiosampleTreatmentsSection treatments={treatments} />
+        {children}
 
         <section>
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
@@ -298,6 +289,7 @@ HumanBetaCellLineClinicalDashboard.propTypes = {
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
   sortedFrom: PropTypes.object,
   treatments: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
 };
 
 HumanBetaCellLineClinicalDashboard.defaultProps = {
@@ -307,4 +299,5 @@ HumanBetaCellLineClinicalDashboard.defaultProps = {
   sampleTerms: [],
   sortedFrom: null,
   treatments: [],
+  children: null,
 };

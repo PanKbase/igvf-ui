@@ -18,12 +18,13 @@ import { truthyOrZero } from "../lib/general";
 
 export default function PrimaryCellClinicalDashboard({
   item,
-  diseaseTerms = [],
+  diseaseTerms: _diseaseTerms = [],
   partOf = null,
   sampleTerms = [],
   sortedFrom = null,
   sources = [],
   treatments = [],
+  children = null,
 }) {
   const primaryTerm = sampleTerms?.[0];
   const subtitle = [item.taxa, primaryTerm?.term_name]
@@ -52,7 +53,7 @@ export default function PrimaryCellClinicalDashboard({
         </header>
 
         <section>
-          <DashboardSectionTitle>Sample summary</DashboardSectionTitle>
+          <DashboardSectionTitle>Biosample summary</DashboardSectionTitle>
           <div className="flex flex-wrap gap-3">
             {item.taxa ? (
               <MetricCard label="Taxa" value={item.taxa} />
@@ -78,7 +79,7 @@ export default function PrimaryCellClinicalDashboard({
         <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <PanelColumnTitle>Identity</PanelColumnTitle>
+              <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
                 {item.taxa ? (
                   <FieldPair label="Taxa">{item.taxa}</FieldPair>
@@ -122,10 +123,10 @@ export default function PrimaryCellClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical</PanelColumnTitle>
               <dl className="space-y-3">
-                {diseaseTerms?.length > 0 ? (
+                {_diseaseTerms?.length > 0 ? (
                   <FieldPair label="Disease Terms">
                     <SeparatedList>
-                      {diseaseTerms.map((t) => (
+                      {_diseaseTerms.map((t) => (
                         <Link key={t["@id"]} href={t["@id"]}>
                           {t.term_name}
                         </Link>
@@ -163,6 +164,7 @@ export default function PrimaryCellClinicalDashboard({
         </section>
 
         <BiosampleTreatmentsSection treatments={treatments} />
+        {children}
 
         <section>
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
@@ -221,6 +223,7 @@ PrimaryCellClinicalDashboard.propTypes = {
   sortedFrom: PropTypes.object,
   sources: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
 };
 
 PrimaryCellClinicalDashboard.defaultProps = {
@@ -230,4 +233,5 @@ PrimaryCellClinicalDashboard.defaultProps = {
   sortedFrom: null,
   sources: [],
   treatments: [],
+  children: null,
 };

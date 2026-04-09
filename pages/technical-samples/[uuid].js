@@ -1,5 +1,4 @@
 // node_modules
-import Link from "next/link";
 import PropTypes from "prop-types";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
@@ -62,12 +61,6 @@ export default function TechnicalSample({
               >
                 <DataItemLabel>Sample Material</DataItemLabel>
                 <DataItemValue>{sample.sample_material}</DataItemValue>
-                <DataItemLabel>Sample Terms</DataItemLabel>
-                <DataItemValue>
-                  <Link href={sample.sample_terms[0]["@id"]}>
-                    {sample.sample_terms[0].term_name}
-                  </Link>
-                </DataItemValue>
               </SampleDataItems>
             </DataArea>
           </DataPanel>
