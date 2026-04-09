@@ -19,10 +19,6 @@ import {
 // lib
 import { formatDate } from "../lib/dates";
 import { hasValue } from "../lib/general";
-import {
-  getPrimaryIsletPhase,
-  primaryIsletBiosampleTypeDisplay,
-} from "../lib/primary-islet-phase";
 
 /** `post_shipment_*` keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
 const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
@@ -149,43 +145,14 @@ function postShipmentExtraDisplay(v) {
   return String(v);
 }
 
-/** Accession-first label for donor links; avoids rendering non-text `summary` values. */
-function primaryIsletDonorLinkText(d) {
-  if (!d || typeof d !== "object") {
-    return "—";
-  }
-  if (hasValue(d.accession)) {
-    return String(d.accession);
-  }
-  if (typeof d.summary === "string" && hasValue(d.summary)) {
-    return d.summary;
-  }
-  if (typeof d["@id"] === "string") {
-    return d["@id"];
-  }
-  return "—";
-}
-
 export default function PrimaryIsletClinicalDashboard({
   item,
   diseaseTerms = [],
-  donors = [],
   partOf = null,
   sampleTerms = [],
   treatments = [],
   children = null,
 }) {
-  const embeddedItemDonors =
-    Array.isArray(item.donors) &&
-    item.donors.length > 0 &&
-    item.donors.every(
-      (d) => d && typeof d === "object" && typeof d["@id"] === "string"
-    )
-      ? item.donors
-      : [];
-  const donorsForDisplay =
-    donors.length > 0 ? donors : embeddedItemDonors;
-
   const prepViabilityClass = viabilityHighClass(item.prep_viability);
   const coldClass = coldIschaemiaClass(item.cold_ischaemia_time);
   const warmIschemiaClass = coldIschaemiaClass(item.warm_ischaemia_duration);
@@ -629,27 +596,8 @@ export default function PrimaryIsletClinicalDashboard({
   const headerDiseasePills =
     diseaseTerms?.filter((t) => hasValue(t.term_name)) ?? [];
 
-  const primaryIsletPhase = getPrimaryIsletPhase(item);
-  const biosampleTypeLabel = primaryIsletBiosampleTypeDisplay(
-    item,
-    primaryIsletPhase
-  );
-  const hasBiosampleTypeInfo =
-    primaryIsletPhase !== null || hasValue(item.biosample_type);
-
-  const donorLinkPaths =
-    Array.isArray(item.donors) && item.donors.length > 0
-      ? item.donors
-          .map((d) => (typeof d === "string" ? d : d?.["@id"]))
-          .filter(Boolean)
-      : [];
-
-  const showBiosampleSummary =
-    hasValue(item.isolation_center) ||
-    hasValue(item.organ_source) ||
-    donorsForDisplay.length > 0 ||
-    donorLinkPaths.length > 0 ||
-    hasBiosampleTypeInfo;
+  const showSampleSummaryCard =
+    hasValue(item.isolation_center) || hasValue(item.organ_source);
 
   return (
     <div className="bg-white dark:bg-gray-950">
@@ -687,9 +635,9 @@ export default function PrimaryIsletClinicalDashboard({
           </div>
         </header>
 
-        {showBiosampleSummary ? (
+        {showSampleSummaryCard ? (
           <section>
-            <DashboardSectionTitle>Biosample Summary</DashboardSectionTitle>
+            <DashboardSectionTitle>Sample Summary</DashboardSectionTitle>
             <div className="flex flex-wrap gap-3">
               {hasValue(item.isolation_center) ? (
                 <MetricCard
@@ -699,66 +647,6 @@ export default function PrimaryIsletClinicalDashboard({
               ) : null}
               {hasValue(item.organ_source) ? (
                 <MetricCard label="Organ Source" value={item.organ_source} />
-              ) : null}
-              {donorsForDisplay.length > 0 ? (
-                <MetricCard
-                  label={
-                    donorsForDisplay.length > 1 ? "Human donors" : "Human donor"
-                  }
-                  value={
-                    <SeparatedList>
-                      {donorsForDisplay.map((d, idx) => {
-                        const href =
-                          d && typeof d["@id"] === "string" ? d["@id"] : "";
-                        const text = primaryIsletDonorLinkText(d);
-                        if (href) {
-                          return (
-                            <Link
-                              key={href}
-                              href={href}
-                              className="text-blue-700 dark:text-blue-400"
-                            >
-                              {text}
-                            </Link>
-                          );
-                        }
-                        return (
-                          <span
-                            key={`donor-fallback-${idx}`}
-                            className="text-data-value"
-                          >
-                            {text}
-                          </span>
-                        );
-                      })}
-                    </SeparatedList>
-                  }
-                />
-              ) : donorLinkPaths.length > 0 ? (
-                <MetricCard
-                  label={
-                    donorLinkPaths.length > 1 ? "Human donors" : "Human donor"
-                  }
-                  value={
-                    <SeparatedList>
-                      {donorLinkPaths.map((href) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          className="text-blue-700 dark:text-blue-400"
-                        >
-                          {href}
-                        </Link>
-                      ))}
-                    </SeparatedList>
-                  }
-                />
-              ) : null}
-              {hasBiosampleTypeInfo ? (
-                <MetricCard
-                  label="Biosample type"
-                  value={biosampleTypeLabel}
-                />
               ) : null}
             </div>
           </section>
@@ -788,7 +676,7 @@ export default function PrimaryIsletClinicalDashboard({
               <DashboardSectionTitle>Post-shipment Metrics</DashboardSectionTitle>
               <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
               {postTransferRows.length === 0 ? (
-                <SectionEmptyHint text="No post-shipment data recorded yet" />
+                <SectionEmptyHint text="No pre-assay data recorded yet" />
               ) : (
                 <dl className="space-y-3">{postTransferRows}</dl>
               )}
@@ -838,7 +726,6 @@ export default function PrimaryIsletClinicalDashboard({
 PrimaryIsletClinicalDashboard.propTypes = {
   item: PropTypes.object.isRequired,
   diseaseTerms: PropTypes.arrayOf(PropTypes.object),
-  donors: PropTypes.arrayOf(PropTypes.object),
   partOf: PropTypes.object,
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object),
@@ -847,7 +734,6 @@ PrimaryIsletClinicalDashboard.propTypes = {
 
 PrimaryIsletClinicalDashboard.defaultProps = {
   diseaseTerms: [],
-  donors: [],
   partOf: null,
   sampleTerms: [],
   treatments: [],
