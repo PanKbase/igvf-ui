@@ -154,6 +154,8 @@ export default function PrimaryIsletClinicalDashboard({
   diseaseTerms = [],
   donors = [],
   partOf = null,
+  originatedFrom = null,
+  originOf = [],
   sampleTerms = [],
   treatments = [],
   children = null,
@@ -525,6 +527,17 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
+  if (originatedFrom?.["@id"]) {
+    provenanceRows.push(
+      <FieldPair key="orig" label="Originated From">
+        <Link href={originatedFrom["@id"]}>
+          {hasValue(originatedFrom.accession)
+            ? originatedFrom.accession
+            : originatedFrom["@id"]}
+        </Link>
+      </FieldPair>
+    );
+  }
   if (hasValue(institutionalDisplay)) {
     provenanceRows.push(
       <FieldPair key="inst" label="Institutional Certificates">
@@ -613,7 +626,9 @@ export default function PrimaryIsletClinicalDashboard({
     hasValue(item.isolation_center) ||
     hasValue(item.organ_source) ||
     (Array.isArray(donors) && donors.length > 0) ||
-    hasBiosampleTypeInfo;
+    hasBiosampleTypeInfo ||
+    Boolean(originatedFrom?.["@id"]) ||
+    (Array.isArray(originOf) && originOf.length > 0);
 
   return (
     <div className="bg-white dark:bg-gray-950">
@@ -688,6 +703,43 @@ export default function PrimaryIsletClinicalDashboard({
                 <MetricCard
                   label="Biosample type"
                   value={biosampleTypeLabel}
+                />
+              ) : null}
+              {originatedFrom?.["@id"] ? (
+                <MetricCard
+                  label="Originated from"
+                  value={
+                    <Link
+                      href={originatedFrom["@id"]}
+                      className="text-blue-700 dark:text-blue-400"
+                    >
+                      {hasValue(originatedFrom.accession)
+                        ? originatedFrom.accession
+                        : originatedFrom["@id"]}
+                    </Link>
+                  }
+                />
+              ) : null}
+              {Array.isArray(originOf) && originOf.length > 0 ? (
+                <MetricCard
+                  label={
+                    originOf.length > 1
+                      ? "Origin samples of"
+                      : "Origin sample of"
+                  }
+                  value={
+                    <SeparatedList>
+                      {originOf.map((s) => (
+                        <Link
+                          key={s["@id"]}
+                          href={s["@id"]}
+                          className="text-blue-700 dark:text-blue-400"
+                        >
+                          {hasValue(s.accession) ? s.accession : s["@id"]}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  }
                 />
               ) : null}
             </div>
@@ -770,6 +822,8 @@ PrimaryIsletClinicalDashboard.propTypes = {
   diseaseTerms: PropTypes.arrayOf(PropTypes.object),
   donors: PropTypes.arrayOf(PropTypes.object),
   partOf: PropTypes.object,
+  originatedFrom: PropTypes.object,
+  originOf: PropTypes.arrayOf(PropTypes.object),
   sampleTerms: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.node,
@@ -779,6 +833,8 @@ PrimaryIsletClinicalDashboard.defaultProps = {
   diseaseTerms: [],
   donors: [],
   partOf: null,
+  originatedFrom: null,
+  originOf: [],
   sampleTerms: [],
   treatments: [],
   children: null,
