@@ -9,8 +9,10 @@ import {
   DataItemValue,
   DataPanel,
 } from "./data-area";
+import { YesNoBadge } from "./clinical-dashboard-primitives";
 
 const ISLET_ASSAY_FIELDS = [
+  ["islets_shipped", "Were the Islets Shipped?"],
   ["islet_purification_method", "Islet Purification for Functional Assay"],
   ["total_islets_for_assay", "Total Number of Islets for Functional Assay"],
   ["islet_diameter", "Islet Size/Diameter (μm)"],
@@ -48,10 +50,14 @@ function linkIfUrl(value) {
  * Renders perifunctional / islet assay metadata from measurement_set when any field is present.
  */
 export default function MeasurementSetIsletAssayDetails({ measurementSet }) {
-  const hasAny = ISLET_ASSAY_FIELDS.some(
-    ([key]) =>
-      measurementSet[key] !== undefined && measurementSet[key] !== null
-  );
+  const hasIsletsShipped =
+    typeof measurementSet.islets_shipped === "boolean";
+  const hasAny =
+    hasIsletsShipped ||
+    ISLET_ASSAY_FIELDS.filter(([key]) => key !== "islets_shipped").some(
+      ([key]) =>
+        measurementSet[key] !== undefined && measurementSet[key] !== null
+    );
   const hasHormones =
     measurementSet.hormone_assays?.length > 0;
   const hasDataUrl =
@@ -68,6 +74,16 @@ export default function MeasurementSetIsletAssayDetails({ measurementSet }) {
         <DataArea>
           {ISLET_ASSAY_FIELDS.map(([key, label]) => {
             const v = measurementSet[key];
+            if (key === "islets_shipped") {
+              if (!hasIsletsShipped) {
+                return null;
+              }
+              return (
+                <FragmentRow key={key} label={label}>
+                  <YesNoBadge value={v} />
+                </FragmentRow>
+              );
+            }
             if (v === undefined || v === null || v === "") {
               return null;
             }
