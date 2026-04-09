@@ -220,6 +220,7 @@ export async function requestDonors(
 ): Promise<Array<DataProviderObject>> {
   return (
     await request.getMultipleObjectsBulk(paths, [
+      "@id",
       "accession",
       "aliases",
       "gender",

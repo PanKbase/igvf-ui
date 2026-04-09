@@ -149,6 +149,23 @@ function postShipmentExtraDisplay(v) {
   return String(v);
 }
 
+/** Accession-first label for donor links; avoids rendering non-text `summary` values. */
+function primaryIsletDonorLinkText(d) {
+  if (!d || typeof d !== "object") {
+    return "—";
+  }
+  if (hasValue(d.accession)) {
+    return String(d.accession);
+  }
+  if (typeof d.summary === "string" && hasValue(d.summary)) {
+    return d.summary;
+  }
+  if (typeof d["@id"] === "string") {
+    return d["@id"];
+  }
+  return "—";
+}
+
 export default function PrimaryIsletClinicalDashboard({
   item,
   diseaseTerms = [],
@@ -690,15 +707,30 @@ export default function PrimaryIsletClinicalDashboard({
                   }
                   value={
                     <SeparatedList>
-                      {donorsForDisplay.map((d) => (
-                        <Link
-                          key={d["@id"]}
-                          href={d["@id"]}
-                          className="text-blue-700 dark:text-blue-400"
-                        >
-                          {d.accession ?? d.summary ?? d["@id"]}
-                        </Link>
-                      ))}
+                      {donorsForDisplay.map((d, idx) => {
+                        const href =
+                          d && typeof d["@id"] === "string" ? d["@id"] : "";
+                        const text = primaryIsletDonorLinkText(d);
+                        if (href) {
+                          return (
+                            <Link
+                              key={href}
+                              href={href}
+                              className="text-blue-700 dark:text-blue-400"
+                            >
+                              {text}
+                            </Link>
+                          );
+                        }
+                        return (
+                          <span
+                            key={`donor-fallback-${idx}`}
+                            className="text-data-value"
+                          >
+                            {text}
+                          </span>
+                        );
+                      })}
                     </SeparatedList>
                   }
                 />
@@ -721,9 +753,7 @@ export default function PrimaryIsletClinicalDashboard({
                     </SeparatedList>
                   }
                 />
-              ) : (
-                <MetricCard label="Human donor" value="—" />
-              )}
+              ) : null}
               {hasBiosampleTypeInfo ? (
                 <MetricCard
                   label="Biosample type"
