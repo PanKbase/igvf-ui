@@ -631,7 +631,6 @@ export default function PrimaryIsletClinicalDashboard({
 
   const showBiosampleSummary =
     hasValue(item.isolation_center) ||
-    hasValue(item.accession) ||
     (Array.isArray(donors) && donors.length > 0) ||
     hasBiosampleTypeInfo ||
     Boolean(originatedFrom?.["@id"]) ||
@@ -677,13 +676,12 @@ export default function PrimaryIsletClinicalDashboard({
                   value={item.isolation_center}
                 />
               ) : null}
-              {hasValue(item.accession) ? (
-                <MetricCard label="Accession" value={item.accession} />
-              ) : null}
               {Array.isArray(donors) && donors.length > 0 ? (
                 <MetricCard
                   label={
-                    donors.length > 1 ? "Donor accessions" : "Donor accession"
+                    donors.length > 1
+                      ? "Human Donor accessions"
+                      : "Human Donor accession"
                   }
                   value={
                     <SeparatedList>
