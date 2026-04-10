@@ -490,6 +490,13 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
+  if (hasValue(item.organ_source)) {
+    provenanceRows.push(
+      <FieldPair key="organ" label="Organ Source">
+        {item.organ_source}
+      </FieldPair>
+    );
+  }
   if (hasValue(item.rrid)) {
     provenanceRows.push(
       <FieldPair key="rrid" label="RRID">
@@ -624,7 +631,7 @@ export default function PrimaryIsletClinicalDashboard({
 
   const showBiosampleSummary =
     hasValue(item.isolation_center) ||
-    hasValue(item.organ_source) ||
+    hasValue(item.accession) ||
     (Array.isArray(donors) && donors.length > 0) ||
     hasBiosampleTypeInfo ||
     Boolean(originatedFrom?.["@id"]) ||
@@ -644,17 +651,11 @@ export default function PrimaryIsletClinicalDashboard({
                   <Status status={item.status} />
                 </span>
               ) : null}
-              {(hasValue(item.isolation_center) ||
-                hasValue(item.organ_source)) && (
+              {hasValue(item.isolation_center) ? (
                 <div className="flex flex-wrap gap-x-4 gap-y-1 font-medium text-data-value">
-                  {hasValue(item.isolation_center) ? (
-                    <span>{item.isolation_center}</span>
-                  ) : null}
-                  {hasValue(item.organ_source) ? (
-                    <span>{item.organ_source}</span>
-                  ) : null}
+                  <span>{item.isolation_center}</span>
                 </div>
-              )}
+              ) : null}
               {headerDiseasePills.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {headerDiseasePills.map((t) => (
@@ -676,8 +677,8 @@ export default function PrimaryIsletClinicalDashboard({
                   value={item.isolation_center}
                 />
               ) : null}
-              {hasValue(item.organ_source) ? (
-                <MetricCard label="Organ Source" value={item.organ_source} />
+              {hasValue(item.accession) ? (
+                <MetricCard label="Accession" value={item.accession} />
               ) : null}
               {Array.isArray(donors) && donors.length > 0 ? (
                 <MetricCard
