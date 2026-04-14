@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 // lib
 import {
-  AUTH0_AUDIENCE,
   AUTH0_CLIENT_ID,
   AUTH0_ISSUER_BASE_DOMAIN,
   BRAND_COLOR,
@@ -183,7 +182,9 @@ export default function App(props) {
       onRedirectCallback={onRedirectCallback}
       authorizationParams={{
         redirect_uri: typeof window !== "undefined" && window.location.origin,
-        audience: AUTH0_AUDIENCE,
+        // Omit audience: OIDC access tokens must work with Auth0 /userinfo (used by igvfd).
+        // A Management API audience breaks that flow for SPAs.
+        scope: "openid profile email",
       }}
     >
       <Site
