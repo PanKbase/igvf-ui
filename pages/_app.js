@@ -181,9 +181,11 @@ export default function App(props) {
       clientId={AUTH0_CLIENT_ID}
       onRedirectCallback={onRedirectCallback}
       authorizationParams={{
-        redirect_uri: typeof window !== "undefined" && window.location.origin,
+        // Do not set redirect_uri from `window` here: on Next.js SSR the expression is
+        // `false`, which auth0-spa-js treats as a real redirect_uri and breaks PKCE exchange
+        // (user lands on /?code=...&state=... and stays logged out). Omitting it uses the
+        // SDK default (current origin) on the client only.
         // Omit audience: OIDC access tokens must work with Auth0 /userinfo (used by igvfd).
-        // A Management API audience breaks that flow for SPAs.
         scope: "openid profile email",
       }}
     >
