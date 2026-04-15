@@ -132,9 +132,17 @@ export async function loginAuthProvider(
 
   // Trigger the login process. Pass the current URL as the returnTo parameter so that Auth0
   // redirects back to the current page after login.
+  // Always set redirect_uri here (client-only): it must match Allowed Callback URLs exactly and
+  // must be the same value Auth0 stores for the OAuth transaction. Relying only on the SPA
+  // client's default can misalign after GitHub and cause "Unable to issue redirect" on
+  // /authorize/resume.
   return await loginWithRedirect({
     appState: {
       returnTo: returnUrl,
+    },
+    authorizationParams: {
+      redirect_uri: window.location.origin,
+      scope: "openid profile email",
     },
   });
 }
