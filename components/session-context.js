@@ -13,7 +13,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 // lib
 import {
   getDataProviderUrl,
@@ -60,6 +60,7 @@ export function Session({ postLoginRedirectUri, children }) {
   const { getAccessTokenSilently, isAuthenticated, isLoading, logout } =
     useAuth0();
   const router = useRouter();
+  const backendLoginInFlight = useRef(false);
 
   // Get the data provider URL in case the user loaded a page that 404'd, in which case NextJS
   // doesn't load environment variables, leaving us unable to retrieve the session and session-
@@ -120,33 +121,59 @@ export function Session({ postLoginRedirectUri, children }) {
   // Auth0Provider context, so we have to have that callback set an <App> state and then handle the
   // sign in to igvfd here, *within* the Auth0Provider context.
   useEffect(() => {
-    if (isAuthenticated && session && !session["auth.userid"]) {
-      loginDataProvider(session, getAccessTokenSilently)
-        .then((sessionPropertiesResponse) => {
-          if (
-            !sessionPropertiesResponse ||
-            sessionPropertiesResponse.status === "error"
-          ) {
-            logoutAuthProvider(logout, AUTH_ERROR_URI);
-            return null;
-          }
-          return sessionPropertiesResponse;
-        })
-        .then((sessionPropertiesResponse) => {
-          setSessionProperties(sessionPropertiesResponse);
-          return getSession(dataProviderUrl);
-        })
-        .then((signedInSession) => {
-          setSession(signedInSession);
-          if (postLoginRedirectUri) {
-            router.replace(postLoginRedirectUri);
-          }
-        });
+    const needsBackendLogin =
+      isAuthenticated &&
+      !isLoading &&
+      dataProviderUrl &&
+      session &&
+      !session["auth.userid"];
+
+    if (!needsBackendLogin || backendLoginInFlight.current) {
+      return undefined;
     }
+
+    backendLoginInFlight.current = true;
+
+    (async () => {
+      try {
+        const sessionPropertiesResponse = await loginDataProvider(
+          session,
+          getAccessTokenSilently
+        );
+
+        const isError =
+          !sessionPropertiesResponse ||
+          sessionPropertiesResponse.status === "error" ||
+          sessionPropertiesResponse.isError === true ||
+          (typeof sessionPropertiesResponse.code === "number" &&
+            sessionPropertiesResponse.code >= 400);
+
+        if (isError) {
+          console.error("Backend POST /login failed:", sessionPropertiesResponse);
+          logoutAuthProvider(logout, AUTH_ERROR_URI);
+          return;
+        }
+
+        setSessionProperties(sessionPropertiesResponse);
+        const signedInSession = await getSession(dataProviderUrl);
+        setSession(signedInSession);
+        if (postLoginRedirectUri) {
+          router.replace(postLoginRedirectUri);
+        }
+      } catch (err) {
+        console.error("Backend login threw:", err);
+        logoutAuthProvider(logout, AUTH_ERROR_URI);
+      } finally {
+        backendLoginInFlight.current = false;
+      }
+    })();
+
+    return undefined;
   }, [
     dataProviderUrl,
     getAccessTokenSilently,
     isAuthenticated,
+    isLoading,
     logout,
     router,
     session,
