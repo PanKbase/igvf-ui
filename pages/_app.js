@@ -169,9 +169,13 @@ export default function App(props) {
   const router = useRouter();
 
   function onRedirectCallback(appState) {
-    if (appState?.returnTo) {
-      router.replace(appState.returnTo);
-    }
+    // Always clear Auth0 `code`/`state` query params from the URL.
+    // If `appState.returnTo` is missing (e.g. storage/cookie constraints),
+    // fall back to the current path.
+    const returnTo =
+      appState?.returnTo ||
+      (typeof window !== "undefined" ? window.location.pathname : "/");
+    router.replace(returnTo);
     setAuthTransitionPath(appState?.returnTo || "");
   }
 
