@@ -558,6 +558,50 @@ export default class FetchRequest {
   }
 
   /**
+   * Send a POST with JSON body to an absolute URL (same pattern as {@link getObjectByUrl}).
+   * Use when the host must match the data provider base (e.g. `/login` on the same host as `/session`).
+   */
+  public async postObjectByUrl(
+    url: string,
+    payload: object
+  ): Promise<DataProviderObject | ErrorObject> {
+    logRequest("postObjectByUrl", url);
+    const options = this.buildOptions("POST", {
+      accept: PAYLOAD_FORMAT.JSON,
+      contentType: PAYLOAD_FORMAT.JSON,
+      payload,
+    });
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        try {
+          const error = {
+            ...(await response.json()),
+            isError: true,
+          } as ErrorObject;
+          return error;
+        } catch (jsonError) {
+          const error: ErrorObject = {
+            isError: true,
+            "@type": ["NetworkError", "Error"],
+            status: "error",
+            code: response.status,
+            title: `HTTP ${response.status} Error`,
+            description: `Request to ${url} failed with status ${response.status}`,
+            detail: `Request to ${url} failed with status ${response.status}`,
+          };
+          return error;
+        }
+      }
+      const results = (await response.json()) as DataProviderObject;
+      return results;
+    } catch (error) {
+      console.log(error);
+      return NETWORK_ERROR_RESPONSE;
+    }
+  }
+
+  /**
    * Write the given object with a PUT request.
    * @param {string} path Path to resource to put
    * @param {object} payload Object to put at the given path

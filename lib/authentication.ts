@@ -65,11 +65,13 @@ export async function getDataProviderUrl(): Promise<string | null> {
 
 /**
  * Log the current user into the data provider.
- * @param {object} loggedOutSession Logged-out /session object from the server
- * @param {function} getAccessTokenSilently Auth0-react function to get the current access token
+ * @param dataProviderUrl Base URL of the data provider (must match the host used for `/session`)
+ * @param loggedOutSession Logged-out /session object from the server
+ * @param getAccessTokenSilently Auth0-react function to get the current access token
  * @returns {object} session-properties object for the signed-in user
  */
 export async function loginDataProvider(
+  dataProviderUrl: string,
   loggedOutSession: { _csrft_: string },
   getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
 ) {
@@ -81,7 +83,8 @@ export async function loginDataProvider(
     cacheMode: "off",
   });
   const request = new FetchRequest({ session: loggedOutSession });
-  return request.postObject("/login", { accessToken });
+  const base = dataProviderUrl.replace(/\/$/, "");
+  return request.postObjectByUrl(`${base}/login`, { accessToken });
 }
 
 /**

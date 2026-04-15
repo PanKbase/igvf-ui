@@ -137,6 +137,7 @@ export function Session({ postLoginRedirectUri, children }) {
     (async () => {
       try {
         const sessionPropertiesResponse = await loginDataProvider(
+          dataProviderUrl,
           session,
           getAccessTokenSilently
         );
