@@ -176,7 +176,9 @@ export default function App(props) {
       appState?.returnTo ||
       (typeof window !== "undefined" ? window.location.pathname : "/");
     router.replace(returnTo);
-    setAuthTransitionPath(appState?.returnTo || "");
+    // Must match `returnTo`: Session only runs igvfd login when `authTransitionPath` is truthy.
+    // Using only `appState?.returnTo` leaves "" when Auth0 omits appState and backend /login never runs.
+    setAuthTransitionPath(returnTo);
   }
 
   return (
