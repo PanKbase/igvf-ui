@@ -2,17 +2,18 @@
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Script from "next/script";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 // lib
 import {
+  AUTH0_AUDIENCE,
   AUTH0_CLIENT_ID,
   AUTH0_ISSUER_BASE_DOMAIN,
   BRAND_COLOR,
   SITE_TITLE,
 } from "../lib/constants";
+import { checkAuthErrorUri } from "../lib/authentication";
 import DarkModeManager from "../lib/dark-mode-manager";
 // components
 import Error from "../components/error";
@@ -56,7 +57,7 @@ function TestServerWarning() {
   }
 }
 
-function Site({ Component, pageProps, authentication }) {
+function Site({ Component, pageProps, postLoginRedirectUri }) {
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
   const { isLoading } = useAuth0();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -132,7 +133,7 @@ function Site({ Component, pageProps, authentication }) {
       </Script>
       <TestServerWarning />
       <GlobalContext.Provider value={globalContext}>
-        <Session authentication={authentication}>
+        <Session postLoginRedirectUri={postLoginRedirectUri}>
           <HomeTitle />
           <div className="md:container">
             <div className="md:flex">
@@ -158,27 +159,18 @@ function Site({ Component, pageProps, authentication }) {
 Site.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
-  authentication: PropTypes.exact({
-    authTransitionPath: PropTypes.string.isRequired,
-    setAuthTransitionPath: PropTypes.func.isRequired,
-  }).isRequired,
+  postLoginRedirectUri: PropTypes.string,
 };
 
 export default function App(props) {
-  const [authTransitionPath, setAuthTransitionPath] = useState("");
-  const router = useRouter();
+  const [postLoginRedirectUri, setPostLoginRedirectUri] = useState("/");
 
   function onRedirectCallback(appState) {
-    // Always clear Auth0 `code`/`state` query params from the URL.
-    // If `appState.returnTo` is missing (e.g. storage/cookie constraints),
-    // fall back to the current path.
-    const returnTo =
-      appState?.returnTo ||
-      (typeof window !== "undefined" ? window.location.pathname : "/");
-    router.replace(returnTo);
-    // Must match `returnTo`: Session only runs igvfd login when `authTransitionPath` is truthy.
-    // Using only `appState?.returnTo` leaves "" when Auth0 omits appState and backend /login never runs.
-    setAuthTransitionPath(returnTo);
+    if (appState?.returnTo) {
+      if (!checkAuthErrorUri(appState.returnTo)) {
+        setPostLoginRedirectUri(appState.returnTo);
+      }
+    }
   }
 
   return (
@@ -187,17 +179,13 @@ export default function App(props) {
       clientId={AUTH0_CLIENT_ID}
       onRedirectCallback={onRedirectCallback}
       authorizationParams={{
-        // Do not set redirect_uri from `window` here: on Next.js SSR the expression is
-        // `false`, which auth0-spa-js treats as a real redirect_uri and breaks PKCE exchange
-        // (user lands on /?code=...&state=... and stays logged out). Omitting it uses the
-        // SDK default (current origin) on the client only.
-        // Omit audience: OIDC access tokens must work with Auth0 /userinfo (used by igvfd).
-        scope: "openid profile email",
+        redirect_uri: typeof window !== "undefined" && window.location.origin,
+        audience: AUTH0_AUDIENCE,
       }}
     >
       <Site
         {...props}
-        authentication={{ authTransitionPath, setAuthTransitionPath }}
+        postLoginRedirectUri={postLoginRedirectUri}
       />
     </Auth0Provider>
   );

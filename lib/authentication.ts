@@ -73,18 +73,7 @@ export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
   getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
 ) {
-  // Request token for userinfo endpoint
-  // The /userinfo endpoint requires openid scope
-  // Note: Management API audience tokens do not work with Auth0 /userinfo (used by igvfd).
-  // Never fall back to an unscoped getAccessTokenSilently call — it can return a cached
-  // api/v2 token (see Auth0 logs) and cause POST /login to fail even when Auth0 login succeeded.
-  const accessToken = await getAccessTokenSilently({
-    authorizationParams: {
-      scope: "openid profile email",
-      audience: undefined,
-    },
-    cacheMode: "off",
-  });
+  const accessToken = await getAccessTokenSilently();
   const request = new FetchRequest({ session: loggedOutSession });
   return request.postObject("/login", { accessToken });
 }
@@ -116,17 +105,9 @@ export async function loginAuthProvider(
 
   // Trigger the login process. Pass the current URL as the returnTo parameter so that Auth0
   // redirects back to the current page after login.
-  // Always set redirect_uri here (client-only): it must match Allowed Callback URLs exactly and
-  // must be the same value Auth0 stores for the OAuth transaction. Relying only on the SPA
-  // client's default can misalign after GitHub and cause "Unable to issue redirect" on
-  // /authorize/resume.
   return await loginWithRedirect({
     appState: {
       returnTo: returnUrl,
-    },
-    authorizationParams: {
-      redirect_uri: window.location.origin,
-      scope: "openid profile email",
     },
   });
 }
@@ -141,7 +122,7 @@ export function logoutAuthProvider(
   logout: (options?: LogoutOptions) => Promise<void>,
   altPath: string = ""
 ) {
-  logout({
+  void logout({
     clientId: AUTH0_CLIENT_ID,
     logoutParams: {
       returnTo: `${window.location.origin}${altPath}`,
