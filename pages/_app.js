@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 // lib
 import {
-  AUTH0_AUDIENCE,
   AUTH0_CLIENT_ID,
   AUTH0_ISSUER_BASE_DOMAIN,
   BRAND_COLOR,
@@ -166,6 +165,12 @@ export default function App(props) {
   const [postLoginRedirectUri, setPostLoginRedirectUri] = useState("/");
 
   function onRedirectCallback(appState) {
+    const returnTo =
+      appState?.returnTo ||
+      (typeof window !== "undefined" ? window.location.pathname : "/");
+    if (typeof window !== "undefined") {
+      window.history.replaceState({}, "", returnTo);
+    }
     if (appState?.returnTo) {
       if (!checkAuthErrorUri(appState.returnTo)) {
         setPostLoginRedirectUri(appState.returnTo);
@@ -179,8 +184,7 @@ export default function App(props) {
       clientId={AUTH0_CLIENT_ID}
       onRedirectCallback={onRedirectCallback}
       authorizationParams={{
-        redirect_uri: typeof window !== "undefined" && window.location.origin,
-        audience: AUTH0_AUDIENCE,
+        scope: "openid profile email",
       }}
     >
       <Site

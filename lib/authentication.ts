@@ -73,7 +73,13 @@ export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
   getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
 ) {
-  const accessToken = await getAccessTokenSilently();
+  const accessToken = await getAccessTokenSilently({
+    authorizationParams: {
+      scope: "openid profile email",
+      audience: undefined,
+    },
+    cacheMode: "off",
+  });
   const request = new FetchRequest({ session: loggedOutSession });
   return request.postObject("/login", { accessToken });
 }
@@ -108,6 +114,10 @@ export async function loginAuthProvider(
   return await loginWithRedirect({
     appState: {
       returnTo: returnUrl,
+    },
+    authorizationParams: {
+      redirect_uri: window.location.origin,
+      scope: "openid profile email",
     },
   });
 }
