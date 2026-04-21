@@ -57,10 +57,11 @@ export function Session({ postLoginRedirectUri, children }) {
   const [collectionTitles, setCollectionTitles] = useState(null);
   // Caches the data provider URL
   const [dataProviderUrl, setDataProviderUrl] = useState(null);
-  const { getAccessTokenSilently, isAuthenticated, isLoading, logout } =
+  const { getAccessTokenSilently, isAuthenticated, isLoading, logout, user } =
     useAuth0();
   const router = useRouter();
   const backendLoginInFlight = useRef(false);
+  const wasAuthenticatedRef = useRef(false);
 
   // Get the data provider URL in case the user loaded a page that 404'd, in which case NextJS
   // doesn't load environment variables, leaving us unable to retrieve the session and session-
@@ -116,16 +117,36 @@ export function Session({ postLoginRedirectUri, children }) {
     }
   }, [collectionTitles, dataProviderUrl]);
 
+  // After Auth0 signs out, clear cached API session state. Otherwise `session` can still contain
+  // `auth.userid` from a previous visit and we skip POST /login while Auth0 is signed in again,
+  // which matches "token OK but no /login" in the network tab.
+  useEffect(() => {
+    if (isLoading) {
+      return undefined;
+    }
+    if (wasAuthenticatedRef.current && !isAuthenticated) {
+      setSession(null);
+      setSessionProperties(null);
+      setProfiles(null);
+      setCollectionTitles(null);
+      backendLoginInFlight.current = false;
+    }
+    wasAuthenticatedRef.current = isAuthenticated;
+    return undefined;
+  }, [isAuthenticated, isLoading]);
+
   // If we detect a transition from Auth0's logged-out state to logged-in state, log the user into
   // igvfd. The callback that auth0-react calls after a successful Auth0 login exists outside the
   // Auth0Provider context, so we have to have that callback set an <App> state and then handle the
   // sign in to igvfd here, *within* the Auth0Provider context.
   useEffect(() => {
     const needsBackendLogin =
+      !!user &&
       isAuthenticated &&
       !isLoading &&
       dataProviderUrl &&
       session &&
+      session._csrft_ &&
       !session["auth.userid"];
 
     if (!needsBackendLogin || backendLoginInFlight.current) {
@@ -178,6 +199,7 @@ export function Session({ postLoginRedirectUri, children }) {
     logout,
     router,
     session,
+    user,
     postLoginRedirectUri,
   ]);
 

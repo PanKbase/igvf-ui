@@ -416,8 +416,6 @@ export default function HumanDonorClinicalDashboard({
               <MetricCard label="Diabetes status" value={chipText} />
             ) : null}
             <MetricCard label="BMI" value={bmiDisplay} />
-            <MetricCard label="Height (cm)" value={heightDisplay} />
-            <MetricCard label="Weight (kg)" value={weightDisplay} />
             <MetricCard
               label="HbA1c %"
               value={hbaDisplay}
@@ -443,6 +441,12 @@ export default function HumanDonorClinicalDashboard({
             <FieldPair label="Gender">{item.gender}</FieldPair>
             <FieldPair label="Genetic Sex">
               {item.genetic_sex ?? item.biological_sex}
+            </FieldPair>
+            <FieldPair label="Height (cm)" monoValue>
+              {heightDisplay}
+            </FieldPair>
+            <FieldPair label="Weight (kg)" monoValue>
+              {weightDisplay}
             </FieldPair>
             {item.ethnicities?.length > 0 ? (
               <FieldPair label="Ethnicity">
@@ -648,11 +652,11 @@ export default function HumanDonorClinicalDashboard({
           </section>
         ) : null}
 
-        {/* DATA AVAILABLE */}
+        {/* DATA AVAILABLE (EXTERNAL) */}
         {item.data_available?.length > 0 ? (
           <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
-              Data available
+              Data Available External
             </h2>
             <div className="space-y-5">
               {Object.entries(dataByTissue).map(([tissue, rows]) => (
