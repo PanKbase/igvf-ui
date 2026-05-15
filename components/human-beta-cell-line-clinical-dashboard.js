@@ -91,6 +91,9 @@ export default function HumanBetaCellLineClinicalDashboard({
             <div>
               <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
+                {item.taxa ? (
+                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                ) : null}
                 <FieldPair label="Sex">{item.gender}</FieldPair>
                 <FieldPair label="Age">{item.age}</FieldPair>
                 {hasPassageNumber(item.passage_number) ? (
@@ -115,6 +118,17 @@ export default function HumanBetaCellLineClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical &amp; culture</PanelColumnTitle>
               <dl className="space-y-3">
+                {_diseaseTerms?.length > 0 ? (
+                  <FieldPair label="Disease Terms">
+                    <SeparatedList>
+                      {_diseaseTerms.map((t) => (
+                        <Link key={t["@id"]} href={t["@id"]}>
+                          {t.term_name}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  </FieldPair>
+                ) : null}
                 <FieldPair label="Growth Medium">{item.growth_medium}</FieldPair>
                 <FieldPair label="Coating Condition">
                   {item.coating_condition}

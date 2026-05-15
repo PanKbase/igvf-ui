@@ -1,6 +1,23 @@
 import { DatabaseObject, DataProviderObject } from "../globals";
 import FetchRequest from "./fetch-request";
 
+/** Resolve a JSON-LD link (string `@id` or `{"@id": "..."}`) to a path for bulk fetches. */
+function pathFromLinkRef(ref: unknown): string | null {
+  if (typeof ref === "string" && ref.length > 0) {
+    return ref;
+  }
+  if (
+    ref !== null &&
+    typeof ref === "object" &&
+    "@id" in ref &&
+    typeof (ref as { "@id": unknown })["@id"] === "string" &&
+    (ref as { "@id": string })["@id"].length > 0
+  ) {
+    return (ref as { "@id": string })["@id"];
+  }
+  return null;
+}
+
 /**
  * Retrieve the analysis step objects for the given analysis step paths from the data provider.
  * @param {Array<string>} paths Paths to the analysis step objects to request
@@ -210,16 +227,22 @@ export async function requestDocuments(
 
 /**
  * Retrieve the donor objects for the given donor paths from the data provider.
- * @param {Array<string>} paths Paths to the donor objects to request
+ * @param paths Donor links as string paths and/or embedded `{"@id": ...}` stubs from the API
  * @param {FetchRequest} request The request object to use to make the request
  * @returns {Array<object>} The donor objects requested
  */
 export async function requestDonors(
-  paths: Array<string>,
+  paths: Array<string | DatabaseObject>,
   request: FetchRequest
 ): Promise<Array<DataProviderObject>> {
+  const normalizedPaths = paths
+    .map(pathFromLinkRef)
+    .filter((p): p is string => p !== null);
+  if (normalizedPaths.length === 0) {
+    return [];
+  }
   return (
-    await request.getMultipleObjectsBulk(paths, [
+    await request.getMultipleObjectsBulk(normalizedPaths, [
       "accession",
       "aliases",
       "gender",

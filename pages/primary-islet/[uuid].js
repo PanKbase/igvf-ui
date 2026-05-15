@@ -34,10 +34,12 @@ export default function PrimaryIslet({
   documents,
   donors,
   partOf,
+  originatedFrom,
   parts,
   pooledFrom,
   pooledIn,
   sortedFractions,
+  originOf,
   treatments,
   multiplexedInSamples,
   attribution = null,
@@ -61,6 +63,8 @@ export default function PrimaryIslet({
             item={primaryIslet}
             diseaseTerms={diseaseTerms}
             partOf={partOf}
+            originatedFrom={originatedFrom}
+            originOf={originOf}
             sampleTerms={primaryIslet.sample_terms ?? []}
             treatments={treatments}
           >
@@ -110,6 +114,13 @@ export default function PrimaryIslet({
                 title="Sorted Fractions of Sample"
               />
             )}
+            {originOf.length > 0 && (
+              <SampleTable
+                samples={originOf}
+                reportLink={`/multireport/?type=Biosample&originated_from.@id=${primaryIslet["@id"]}`}
+                title="Origin Sample Of"
+              />
+            )}
             {documents.length > 0 && <DocumentTable documents={documents} />}
           </PrimaryIsletClinicalDashboard>
           <Attribution attribution={attribution} />
@@ -125,10 +136,12 @@ PrimaryIslet.propTypes = {
   documents: PropTypes.arrayOf(PropTypes.object).isRequired,
   donors: PropTypes.arrayOf(PropTypes.object).isRequired,
   partOf: PropTypes.object,
+  originatedFrom: PropTypes.object,
   parts: PropTypes.arrayOf(PropTypes.object),
   pooledFrom: PropTypes.arrayOf(PropTypes.object),
   pooledIn: PropTypes.arrayOf(PropTypes.object),
   sortedFractions: PropTypes.arrayOf(PropTypes.object),
+  originOf: PropTypes.arrayOf(PropTypes.object),
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
   multiplexedInSamples: PropTypes.arrayOf(PropTypes.object).isRequired,
   attribution: PropTypes.object,
@@ -158,6 +171,13 @@ export async function getServerSideProps({ params, req, query }) {
     const partOf = primaryIslet.part_of
       ? (await request.getObject(primaryIslet.part_of)).optional()
       : null;
+    const originatedFromRef =
+      typeof primaryIslet.originated_from === "string"
+        ? primaryIslet.originated_from
+        : primaryIslet.originated_from?.["@id"];
+    const originatedFrom = originatedFromRef
+      ? (await request.getObject(originatedFromRef)).optional()
+      : null;
     const parts =
       primaryIslet.parts?.length > 0
         ? await requestBiosamples(primaryIslet.parts, request)
@@ -173,6 +193,10 @@ export async function getServerSideProps({ params, req, query }) {
     const sortedFractions =
       primaryIslet.sorted_fractions?.length > 0
         ? await requestBiosamples(primaryIslet.sorted_fractions, request)
+        : [];
+    const originOf =
+      primaryIslet.origin_of?.length > 0
+        ? await requestBiosamples(primaryIslet.origin_of, request)
         : [];
     let treatments = [];
     if (primaryIslet.treatments?.length > 0) {
@@ -207,10 +231,12 @@ export async function getServerSideProps({ params, req, query }) {
         documents,
         donors,
         partOf,
+        originatedFrom,
         parts,
         pooledFrom,
         pooledIn,
         sortedFractions,
+        originOf,
         treatments,
         multiplexedInSamples,
         pageContext: {

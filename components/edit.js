@@ -12,7 +12,7 @@ import PagePreamble from "./page-preamble";
 // lib
 import FetchRequest from "../lib/fetch-request";
 import { sortObjectProps } from "../lib/general";
-import { itemToSchema } from "../lib/schema";
+import { itemToSchema, sanitizeEditPutPayload } from "../lib/schema";
 /* istanbul ignore file */
 
 export function useEditor(action) {
@@ -167,6 +167,8 @@ export default function EditPage({ item }) {
       errors: [],
     });
     const value = sortObjectProps(JSON.parse(text));
+    const schema = itemToSchema(item, profiles);
+    sanitizeEditPutPayload(value, schema);
     const putRequest = new FetchRequest({ session });
     putRequest.putObject(path, value).then((response) => {
       if (response.status === "success") {
