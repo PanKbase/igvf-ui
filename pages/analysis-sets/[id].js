@@ -1,13 +1,14 @@
 // node_modules
 import _ from "lodash";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
 import Breadcrumbs from "../../components/breadcrumbs";
 import {
   DataArea,
+  DataAreaTitle,
   DataItemLabel,
   DataItemValue,
   DataPanel,
@@ -36,6 +37,54 @@ import FetchRequest from "../../lib/fetch-request";
 import { getAllDerivedFromFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 import SampleTable from "../../components/sample-table";
+
+const ISLET_NORMALIZATION_FIELDS = [
+  ["total_islet_cell_volume", "Total Islet Cell Volume (IEQ)"],
+  ["total_insulin_content", "Total Islet Insulin Content"],
+  ["total_glucagon_content", "Total Islet Glucagon Content"],
+  ["total_dna_content", "Total Islet DNA Content"],
+  [
+    "normalized_insulin_secretion_units",
+    "Normalized Islet Insulin Secretion Units",
+  ],
+  [
+    "normalized_glucagon_secretion_units",
+    "Normalized Islet Glucagon Secretion Units",
+  ],
+  ["normalized_insulin_content", "Normalized Islet Insulin Content"],
+  ["normalized_glucagon_content", "Normalized Islet Glucagon Content"],
+];
+
+function AnalysisSetIsletNormalization({ analysisSet }) {
+  const rows = ISLET_NORMALIZATION_FIELDS.filter(
+    ([key]) =>
+      analysisSet[key] !== undefined &&
+      analysisSet[key] !== null &&
+      analysisSet[key] !== ""
+  );
+  if (rows.length === 0) {
+    return null;
+  }
+  return (
+    <>
+      <DataAreaTitle>Islet assay normalization</DataAreaTitle>
+      <DataPanel>
+        <DataArea>
+          {rows.map(([key, label]) => (
+            <Fragment key={key}>
+              <DataItemLabel>{label}</DataItemLabel>
+              <DataItemValue>{String(analysisSet[key])}</DataItemValue>
+            </Fragment>
+          ))}
+        </DataArea>
+      </DataPanel>
+    </>
+  );
+}
+
+AnalysisSetIsletNormalization.propTypes = {
+  analysisSet: PropTypes.object.isRequired,
+};
 
 export default function AnalysisSet({
   analysisSet,
@@ -123,6 +172,8 @@ export default function AnalysisSet({
               )}
             </DataArea>
           </DataPanel>
+
+          <AnalysisSetIsletNormalization analysisSet={analysisSet} />
 
           {analysisSet.samples?.length > 0 && (
             <SampleTable

@@ -312,6 +312,16 @@ export default function HumanDonorClinicalDashboard({
       ? `${item.bmi}`
       : "—";
 
+  const heightDisplay =
+    item.height !== undefined && item.height !== null && item.height > 0
+      ? `${item.height}`
+      : "—";
+
+  const weightDisplay =
+    item.weight !== undefined && item.weight !== null && item.weight > 0
+      ? `${item.weight}`
+      : "—";
+
   const hba1cVal =
     item.hba1c !== undefined && item.hba1c !== null ? Number(item.hba1c) : null;
   const hbaDisplay = hba1cVal !== null && !Number.isNaN(hba1cVal) ? hba1cItemDisplay(hba1cVal) : "—";
@@ -406,6 +416,8 @@ export default function HumanDonorClinicalDashboard({
               <MetricCard label="Diabetes status" value={chipText} />
             ) : null}
             <MetricCard label="BMI" value={bmiDisplay} />
+            <MetricCard label="Height (cm)" value={heightDisplay} />
+            <MetricCard label="Weight (kg)" value={weightDisplay} />
             <MetricCard
               label="HbA1c %"
               value={hbaDisplay}
@@ -499,9 +511,6 @@ export default function HumanDonorClinicalDashboard({
                     </span>
                   ) : null}
                 </FieldPair>
-                <FieldPair label="Diabetes status (HbA1c adjusted)">
-                  {item.diabetes_status_hba1c}
-                </FieldPair>
                 <FieldPair label="Family history of diabetes">
                   {item.family_history_of_diabetes}
                 </FieldPair>
@@ -530,9 +539,9 @@ export default function HumanDonorClinicalDashboard({
                     {item.glucose_loweing_theraphy.join(", ")}
                   </FieldPair>
                 ) : null}
-                {item.other_theraphy?.length > 0 ? (
+                {item.other_therapy?.length > 0 ? (
                   <FieldPair label="Medication">
-                    {item.other_theraphy.join(", ")}
+                    {item.other_therapy.join(", ")}
                   </FieldPair>
                 ) : null}
           </dl>
@@ -829,13 +838,14 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "diabetes_status_description",
   "age",
   "bmi",
+  "height",
+  "weight",
   "hba1c",
   "c_peptide",
   "diabetes_duration",
   "diabetes_status",
   "t1d_stage",
   "derived_diabetes_status",
-  "diabetes_status_hba1c",
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "other_disease_states",
@@ -844,7 +854,7 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "donation_type",
   "hospital_stay",
   "glucose_loweing_theraphy",
-  "other_theraphy",
+  "other_therapy",
   "aab_gada",
   "aab_gada_value",
   "aab_gada_assay",

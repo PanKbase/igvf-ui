@@ -96,6 +96,18 @@ export function DonorDataItems({
               <DataItemValue>{item.bmi}</DataItemValue>
             </>
           )}
+          {item.height !== undefined && item.height !== null && item.height > 0 && (
+            <>
+              <DataItemLabel>Height (cm)</DataItemLabel>
+              <DataItemValue>{item.height}</DataItemValue>
+            </>
+          )}
+          {item.weight !== undefined && item.weight !== null && item.weight > 0 && (
+            <>
+              <DataItemLabel>Weight (kg)</DataItemLabel>
+              <DataItemValue>{item.weight}</DataItemValue>
+            </>
+          )}
           {/* Genetic and Ethnic Information */}
           {item.genetic_predicted_ethnicities?.length > 0 && (
             <>
@@ -205,12 +217,6 @@ export function DonorDataItems({
               <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
             </>
           )}
-          {item.diabetes_status_hba1c !== undefined && (
-            <>
-              <DataItemLabel>Diabetes Status, HbA1C Adjusted</DataItemLabel>
-              <DataItemValue>{item.diabetes_status_hba1c}</DataItemValue>
-            </>
-          )}
           {item.hba1c !== undefined && (
             <>
               <DataItemLabel>HbA1C (percentage)</DataItemLabel>
@@ -237,10 +243,10 @@ export function DonorDataItems({
               </DataItemValue>
             </>
           )}
-          {item.other_theraphy?.length > 0 && (
+          {item.other_therapy?.length > 0 && (
             <>
               <DataItemLabel>Medication</DataItemLabel>
-              <DataItemValue>{item.other_theraphy.join(", ")}</DataItemValue>
+              <DataItemValue>{item.other_therapy.join(", ")}</DataItemValue>
             </>
           )}
           {item.hospital_stay !== undefined && (
@@ -582,16 +588,17 @@ DonorDataItems.commonProperties = [
   "age",
   "gender",
   "bmi",
+  "height",
+  "weight",
   "living_donor",
   "other_disease_states",
   "diabetes_status_description",
   "t1d_stage",
   "derived_diabetes_status",
   "diabetes_duration",
-  "diabetes_status_hba1c",
   "hba1c",
   "c_peptide",
-  "other_theraphy",
+  "other_therapy",
   "glucose_loweing_theraphy",
   "ethnicities",
   "genetic_predicted_ethnicities",

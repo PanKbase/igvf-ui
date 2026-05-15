@@ -9,6 +9,7 @@ import Status from "./status";
 import {
   DashboardSectionTitle,
   FieldPair,
+  MetricCard,
   PanelColumnTitle,
 } from "./clinical-dashboard-primitives";
 // lib
@@ -52,10 +53,48 @@ export default function PrimaryCellClinicalDashboard({
         </header>
 
         <section>
+          <DashboardSectionTitle>Biosample summary</DashboardSectionTitle>
+          <div className="flex flex-wrap gap-3">
+            {item.taxa ? (
+              <MetricCard label="Taxa" value={item.taxa} />
+            ) : null}
+            <MetricCard
+              label="Sample Term"
+              value={
+                primaryTerm ? (
+                  <Link
+                    className="text-blue-700 dark:text-blue-400"
+                    href={primaryTerm["@id"]}
+                  >
+                    {primaryTerm.term_name}
+                  </Link>
+                ) : (
+                  "—"
+                )
+              }
+            />
+          </div>
+        </section>
+
+        <section>
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
               <PanelColumnTitle>Sample Identity</PanelColumnTitle>
               <dl className="space-y-3">
+                {item.taxa ? (
+                  <FieldPair label="Taxa">{item.taxa}</FieldPair>
+                ) : null}
+                <FieldPair label="Sample Terms">
+                  {sampleTerms?.length > 0 ? (
+                    <SeparatedList>
+                      {sampleTerms.map((t) => (
+                        <Link key={t["@id"]} href={t["@id"]}>
+                          {t.term_name}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  ) : null}
+                </FieldPair>
                 {truthyOrZero(item.passage_number) ? (
                   <FieldPair label="Passage Number" monoValue>
                     {item.passage_number}
@@ -84,6 +123,17 @@ export default function PrimaryCellClinicalDashboard({
             <div>
               <PanelColumnTitle>Clinical</PanelColumnTitle>
               <dl className="space-y-3">
+                {_diseaseTerms?.length > 0 ? (
+                  <FieldPair label="Disease Terms">
+                    <SeparatedList>
+                      {_diseaseTerms.map((t) => (
+                        <Link key={t["@id"]} href={t["@id"]}>
+                          {t.term_name}
+                        </Link>
+                      ))}
+                    </SeparatedList>
+                  </FieldPair>
+                ) : null}
                 <FieldPair label="Sources">
                   {sources?.length > 0 ? (
                     <SeparatedList>
