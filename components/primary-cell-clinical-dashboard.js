@@ -170,6 +170,18 @@ export default function PrimaryCellClinicalDashboard({
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
           <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
             <FieldPair label="Description">{item.description}</FieldPair>
+            {item.url ? (
+              <FieldPair label="URL">
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="break-all text-blue-700 dark:text-blue-400"
+                >
+                  {item.url}
+                </a>
+              </FieldPair>
+            ) : null}
             {item.dbxrefs?.length > 0 ? (
               <div>
                 <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">

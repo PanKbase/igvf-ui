@@ -581,6 +581,20 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
+  if (hasValue(item.url)) {
+    additionalRows.push(
+      <FieldPair key="url" label="URL">
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="break-all text-blue-700 dark:text-blue-400"
+        >
+          {item.url}
+        </a>
+      </FieldPair>
+    );
+  }
   if (item.protocols?.length > 0) {
     additionalRows.push(
       <FieldPair key="prot" label="Protocols">
