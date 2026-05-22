@@ -18,7 +18,11 @@ import {
 } from "./clinical-dashboard-primitives";
 // lib
 import { formatDate } from "../lib/dates";
-import { hasValue } from "../lib/general";
+import {
+  formatNumericOrDash,
+  formatPercentageOrDash,
+  hasValue,
+} from "../lib/general";
 import {
   getPrimaryIsletPhase,
   primaryIsletBiosampleTypeDisplay,
@@ -191,7 +195,9 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.prep_viability)) {
     isolationRows.push(
       <FieldPair key="prep_viability" label="Pre-shipment Islet Viability (%)">
-        <span className={prepViabilityClass}>{item.prep_viability}</span>
+        <span className={prepViabilityClass}>
+          {formatNumericOrDash(item.prep_viability)}
+        </span>
       </FieldPair>
     );
   }
@@ -206,7 +212,7 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.pre_shipment_culture_time)) {
     isolationRows.push(
       <FieldPair key="pre_culture_t" label="Pre-shipment Culture Time (hours)">
-        {item.pre_shipment_culture_time}
+        {formatNumericOrDash(item.pre_shipment_culture_time)}
       </FieldPair>
     );
   }
@@ -230,28 +236,32 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.cold_ischaemia_time)) {
     isolationRows.push(
       <FieldPair key="cold_isch" label="Cold Ischaemia Time (hours)">
-        <span className={coldClass}>{item.cold_ischaemia_time}</span>
+        <span className={coldClass}>
+          {formatNumericOrDash(item.cold_ischaemia_time)}
+        </span>
       </FieldPair>
     );
   }
   if (hasValue(item.warm_ischaemia_duration)) {
     isolationRows.push(
       <FieldPair key="warm_isch" label="Warm Ischaemia Duration (hours)">
-        <span className={warmIschemiaClass}>{item.warm_ischaemia_duration}</span>
+        <span className={warmIschemiaClass}>
+          {formatNumericOrDash(item.warm_ischaemia_duration)}
+        </span>
       </FieldPair>
     );
   }
   if (hasValue(item.digest_time)) {
     isolationRows.push(
       <FieldPair key="digest" label="Pancreas Digest Time (hours)">
-        {item.digest_time}
+        {formatNumericOrDash(item.digest_time)}
       </FieldPair>
     );
   }
   if (hasValue(item.percentage_trapped)) {
     isolationRows.push(
       <FieldPair key="pct_trap" label="Percentage Trapped (%)">
-        {`${item.percentage_trapped}`.replace(/%$/, "")}%
+        {formatPercentageOrDash(item.percentage_trapped)}
       </FieldPair>
     );
   }
