@@ -693,7 +693,7 @@ export function SampleDataItems({ item, constructLibrarySets = [], children }) {
       )}
       {item.url && (
         <>
-          <DataItemLabel>Additional Information</DataItemLabel>
+          <DataItemLabel>URL</DataItemLabel>
           <DataItemValueUrl>
             <a href={item.url} target="_blank" rel="noopener noreferrer">
               {item.url}
