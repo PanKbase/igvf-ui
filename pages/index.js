@@ -202,26 +202,6 @@ function FileText({ className }) {
   );
 }
 
-function Newspaper({ className }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
-      <path d="M18 14h-8" />
-      <path d="M15 18h-5" />
-      <path d="M10 6h8v4h-8V6Z" />
-    </svg>
-  );
-}
-
 function Plug({ className }) {
   return (
     <svg
@@ -299,8 +279,6 @@ BookOpen.propTypes = { className: PropTypes.string };
 Search.propTypes = { className: PropTypes.string };
 
 FileText.propTypes = { className: PropTypes.string };
-
-Newspaper.propTypes = { className: PropTypes.string };
 
 Plug.propTypes = { className: PropTypes.string };
 
@@ -517,6 +495,12 @@ const carouselItems = [
 // Data Access buttons data
 const dataAccessButtons = [
   {
+    icon: <Database className="w-6 h-6" />,
+    title: "Browse",
+    description: "Browse the PanKbase data library",
+    url: "/browse",
+  },
+  {
     icon: <Plug className="w-6 h-6" />,
     title: "API access",
     description: "Programmatic access to the PanKbase data library through RESTful API endpoints",
@@ -527,12 +511,6 @@ const dataAccessButtons = [
     title: "Scripts",
     description: "Example scripts for accessing the PanKbase data library",
     url: "https://github.com/PanKbase/PanKbase-data-library-scripts",
-  },
-  {
-    icon: <Database className="w-6 h-6" />,
-    title: "Browse",
-    description: "Browse the PanKbase data library",
-    url: "/browse",
   },
 ];
 
@@ -551,10 +529,10 @@ const resourcesButtons = [
     url: "/help/general-help/user-guide/",
   },
   {
-    icon: <Newspaper className="w-6 h-6" />,
-    title: "News",
-    description: "Updates to PanKbase data library",
-    url: "/help/news/",
+    icon: <GitBranch className="w-6 h-6" />,
+    title: "Data Library schema",
+    description: "Schema directory for PanKbase data library object types and properties",
+    url: "https://data.pankbase.org/profiles/",
   },
 ];
 
