@@ -190,6 +190,40 @@ export function truthyOrZero(value: number | null | undefined): boolean {
 /**
  * True if a value should be shown in biosample dashboards (non-empty string/array, non-null).
  */
+/** Sentinel numeric value meaning "not reported" in primary islet metadata. */
+export const MISSING_NUMERIC_SENTINEL = -999;
+
+/**
+ * True when `val` is the missing-data sentinel (-999), including string forms.
+ */
+export function isMissingNumericValue(val: unknown): boolean {
+  if (val === null || val === undefined) {
+    return false;
+  }
+  const n = Number(val);
+  return !Number.isNaN(n) && n === MISSING_NUMERIC_SENTINEL;
+}
+
+/**
+ * Format a numeric value for display, rendering '-' when the value is -999.
+ */
+export function formatNumericOrDash(val: unknown): string | number {
+  if (isMissingNumericValue(val)) {
+    return "-";
+  }
+  return val as string | number;
+}
+
+/**
+ * Format a percentage value for display, rendering '-' when the value is -999.
+ */
+export function formatPercentageOrDash(val: unknown): string {
+  if (isMissingNumericValue(val)) {
+    return "-";
+  }
+  return `${val}`.replace(/%$/, "") + "%";
+}
+
 export function hasValue(val: unknown): boolean {
   if (val === null || val === undefined) {
     return false;

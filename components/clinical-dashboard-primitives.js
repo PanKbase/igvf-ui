@@ -1,5 +1,7 @@
 // node_modules
 import PropTypes from "prop-types";
+// lib
+import { isMissingNumericValue } from "../lib/general";
 
 /**
  * Shared layout primitives matching HumanDonorClinicalDashboard styling.
@@ -125,7 +127,12 @@ YesNoBadge.propTypes = {
 };
 
 export function viabilityHighClass(pct) {
-  if (pct === undefined || pct === null || Number.isNaN(Number(pct))) {
+  if (
+    pct === undefined ||
+    pct === null ||
+    isMissingNumericValue(pct) ||
+    Number.isNaN(Number(pct))
+  ) {
     return "";
   }
   const n = Number(pct);
@@ -136,7 +143,12 @@ export function viabilityHighClass(pct) {
 }
 
 export function coldIschaemiaClass(hours) {
-  if (hours === undefined || hours === null || Number.isNaN(Number(hours))) {
+  if (
+    hours === undefined ||
+    hours === null ||
+    isMissingNumericValue(hours) ||
+    Number.isNaN(Number(hours))
+  ) {
     return "";
   }
   const n = Number(hours);
