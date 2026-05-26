@@ -112,7 +112,7 @@ export default function FileTable({
         data={files}
         columns={filesColumns}
         keyProp="@id"
-        initialSort={{ columnId: "version", direction: "asc" }}
+        initialSort={{ columnId: "version", direction: "desc" }}
         pager={{}}
       />
     </>
