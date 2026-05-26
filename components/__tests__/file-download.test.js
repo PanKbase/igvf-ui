@@ -18,6 +18,29 @@ describe("Test FileDownload component", () => {
     process.env = OLD_ENV; // Restore old environment
   });
 
+  it("uses file_url when available instead of @@download href", () => {
+    const file = {
+      "@id": "/matrix-files/PKBFI5903OGWY/",
+      "@type": ["MatrixFile", "File", "Item"],
+      accession: "PKBFI5903OGWY",
+      file_format: "mtx",
+      href: "/matrix-files/PKBFI5903OGWY/@@download/PKBFI5903OGWY.mtx",
+      file_url:
+        "https://pankbase-data-v1.s3.us-west-2.amazonaws.com/analysis_resources/single_cell_objects/060425_scRNA_v3.3.rds",
+      status: "released",
+      upload_status: "validated",
+    };
+
+    render(<FileDownload file={file} />);
+
+    const downloadLink = screen.getByRole("link");
+    expect(downloadLink).toHaveAttribute(
+      "href",
+      "https://pankbase-data-v1.s3.us-west-2.amazonaws.com/analysis_resources/single_cell_objects/060425_scRNA_v3.3.rds"
+    );
+    expect(downloadLink).toHaveTextContent("Download");
+  });
+
   it("renders a download link for a file", () => {
     const file = {
       "@id": "/reference-files/IGVFFI0001SQBR/",

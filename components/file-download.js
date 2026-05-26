@@ -11,6 +11,19 @@ const FILE_NOT_FOUND = "file not found";
 const PENDING = "pending";
 
 /**
+ * Return the URL to download a file, preferring `file_url` over the system `@@download` path.
+ */
+export function getFileDownloadUrl(file) {
+  if (file.file_url) {
+    return file.file_url;
+  }
+  if (file.href) {
+    return `${API_URL}${file.href}`;
+  }
+  return null;
+}
+
+/**
  * Display a file-download link and download icon. Files without an `upload_status` of `file not
  * found` or `pending` have a disabled download link, as do files with controlled access and an
  * Anvil URL.
@@ -22,9 +35,14 @@ export function FileDownload({ file, className = "" }) {
   const isDownloadDisabledByAnvil = Boolean(
     file.controlled_access && file.anvil_url
   );
+  const downloadUrl = getFileDownloadUrl(file);
 
-  // Use file_url if available, otherwise fallback to the original href with API_URL
-  const downloadUrl = file.file_url || `${API_URL}${file.href}`;
+  if (!downloadUrl) {
+    return null;
+  }
+
+  const isExternalDownload =
+    downloadUrl.startsWith("http://") || downloadUrl.startsWith("https://");
 
   return (
     <ButtonLink
@@ -33,10 +51,11 @@ export function FileDownload({ file, className = "" }) {
       type="secondary"
       size="sm"
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}
-      hasIconOnly
+      isExternal={isExternalDownload}
       className={className}
     >
-      <ArrowDownTrayIcon />
+      <ArrowDownTrayIcon className="h-4 w-4" />
+      Download
     </ButtonLink>
   );
 }
