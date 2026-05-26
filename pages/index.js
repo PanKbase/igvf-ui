@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import PropTypes from "prop-types";
 
@@ -286,22 +286,118 @@ Package.propTypes = { className: PropTypes.string };
 
 Settings.propTypes = { className: PropTypes.string };
 
+const FEATURED_DATASET_ICONS = {
+  scrna: Microscope,
+  snatac: ChartBar,
+  peaks: GitBranch,
+  donor: Users,
+  biosample: Flask,
+};
+
+function FeaturedDatasetCard({ item, cardWidth, onDownload, onBrowse }) {
+  const Icon = FEATURED_DATASET_ICONS[item.category] || Database;
+
+  return (
+    <div
+      className="flex min-h-[280px] flex-col rounded-xl border border-teal-500/20 bg-gradient-to-br from-teal-700 via-teal-600 to-cyan-700 p-6 text-white shadow-md transition-shadow duration-300 hover:shadow-lg md:p-7"
+      style={{
+        flex: `0 1 ${cardWidth}`,
+        maxWidth: cardWidth,
+      }}
+    >
+      <div className="mb-4 flex items-start gap-3">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white/15 ring-1 ring-white/25 backdrop-blur-sm">
+          <Icon className="h-5 w-5 text-white" />
+        </div>
+        <div className="line-clamp-2 min-w-0 flex-1 text-lg font-bold leading-snug md:text-xl">
+          {item.title}
+        </div>
+      </div>
+      <div className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-teal-50/95">
+        {item.description}
+      </div>
+      <div className="mb-4 border-t border-white/20 pt-4 text-xs text-teal-100/90">
+        {item.meta}
+      </div>
+      <div className="mt-auto flex gap-3">
+        <button
+          type="button"
+          onClick={() => onDownload(item)}
+          className="flex-1 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 shadow-sm transition-colors hover:bg-teal-50"
+        >
+          Download
+        </button>
+        <button
+          type="button"
+          onClick={() => onBrowse(item)}
+          className="flex-1 rounded-lg border border-white/40 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+        >
+          Details
+        </button>
+      </div>
+    </div>
+  );
+}
+
+FeaturedDatasetCard.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    meta: PropTypes.string.isRequired,
+    category: PropTypes.string,
+  }).isRequired,
+  cardWidth: PropTypes.string.isRequired,
+  onDownload: PropTypes.func.isRequired,
+  onBrowse: PropTypes.func.isRequired,
+};
+
 // Featured Datasets Carousel Component
 function FeaturedDatasetsCarousel({ items }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemWidth = 320;
-  const gap = 24;
-  const itemWidthWithGap = itemWidth + gap;
+  const containerRef = useRef(null);
+  const [cardsPerView, setCardsPerView] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [slideDirection, setSlideDirection] = useState("right");
+
+  useEffect(() => {
+    function updateCardsPerView() {
+      const width = containerRef.current?.offsetWidth ?? window.innerWidth;
+      if (width >= 1024) {
+        setCardsPerView(3);
+      } else if (width >= 640) {
+        setCardsPerView(2);
+      } else {
+        setCardsPerView(1);
+      }
+    }
+
+    updateCardsPerView();
+    window.addEventListener("resize", updateCardsPerView);
+    return () => window.removeEventListener("resize", updateCardsPerView);
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / cardsPerView));
+  const maxPage = totalPages - 1;
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, maxPage));
+  }, [maxPage]);
+
+  const pageStart = currentPage * cardsPerView;
+  const visibleItems = items.slice(pageStart, pageStart + cardsPerView);
+  const gapRem = 1.25;
+  const cardWidth = `calc((100% - ${(cardsPerView - 1) * gapRem}rem) / ${cardsPerView})`;
+
+  function goToPage(page) {
+    setSlideDirection(page > currentPage ? "right" : "left");
+    setCurrentPage(page);
+  }
 
   function scrollLeft() {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    goToPage(Math.max(0, currentPage - 1));
   }
 
   function scrollRight() {
-    setCurrentIndex((prev) => {
-      const maxIndex = items.length - 1;
-      return Math.min(maxIndex, prev + 1);
-    });
+    goToPage(Math.min(maxPage, currentPage + 1));
   }
 
   function handleDownload(item) {
@@ -316,63 +412,77 @@ function FeaturedDatasetsCarousel({ items }) {
     }
   }
 
-  const maxScrollIndex = items.length - 1;
+  const slideClass =
+    slideDirection === "right"
+      ? "carousel-slide-from-right"
+      : "carousel-slide-from-left";
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-white to-slate-50 rounded-2xl shadow-lg px-20 py-12 border border-slate-100">
-      <button
-        onClick={scrollLeft}
-        disabled={currentIndex === 0}
-        className={`absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white border-2 border-teal-600 cursor-pointer text-xl text-teal-600 flex items-center justify-center transition-all z-10 hover:bg-teal-50 hover:shadow-xl font-bold ${
-          currentIndex === 0 ? "opacity-40 cursor-not-allowed" : ""
-        }`}
-        aria-label="Scroll left"
+    <div
+      ref={containerRef}
+      className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:p-8"
+    >
+      <div
+        key={currentPage}
+        className={`flex flex-wrap justify-center gap-5 ${slideClass}`}
+        aria-live="polite"
       >
-        ‹
-      </button>
-      <div className="overflow-hidden">
-        <div
-          className="flex gap-6 transition-transform duration-500 ease-out"
-          style={{
-            transform: `translateX(-${currentIndex * itemWidthWithGap}px)`,
-          }}
-        >
-          {items.map((item, index) => (
-            <div
-              key={index}
-              className="min-w-80 bg-gradient-to-br from-teal-600 via-teal-500 to-cyan-600 rounded-xl p-7 text-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-teal-400/30 flex flex-col"
-            >
-              <div className="text-xl font-bold mb-3 text-white">{item.title}</div>
-              <div className="text-sm opacity-95 leading-relaxed mb-4">{item.description}</div>
-              <div className="text-xs opacity-75 pt-4 border-t border-white/20 mb-4">{item.meta}</div>
-              <div className="flex gap-3 mt-auto">
-                <button
-                  onClick={() => handleDownload(item)}
-                  className="flex-1 px-4 py-2 bg-white text-teal-600 font-semibold rounded-lg hover:bg-teal-50 transition-all duration-200 shadow-md hover:shadow-lg"
-                >
-                  Download
-                </button>
-                <button
-                  onClick={() => handleBrowse(item)}
-                  className="flex-1 px-4 py-2 bg-teal-700 text-white font-semibold rounded-lg hover:bg-teal-800 transition-all duration-200 shadow-md hover:shadow-lg border border-teal-600"
-                >
-                  Details
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        {visibleItems.map((item, index) => (
+          <FeaturedDatasetCard
+            key={`${item.title}-${pageStart + index}`}
+            item={item}
+            cardWidth={cardWidth}
+            onDownload={handleDownload}
+            onBrowse={handleBrowse}
+          />
+        ))}
       </div>
-      <button
-        onClick={scrollRight}
-        disabled={currentIndex >= maxScrollIndex}
-        className={`absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white border-2 border-teal-600 cursor-pointer text-xl text-teal-600 flex items-center justify-center transition-all z-10 hover:bg-teal-50 hover:shadow-xl font-bold ${
-          currentIndex >= maxScrollIndex ? "opacity-40 cursor-not-allowed" : ""
-        }`}
-        aria-label="Scroll right"
-      >
-        ›
-      </button>
+
+      {totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={scrollLeft}
+            disabled={currentPage === 0}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-teal-600 bg-white text-lg font-bold text-teal-600 transition-all hover:bg-teal-50 hover:shadow-md disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-300 disabled:hover:bg-white disabled:hover:shadow-none"
+            aria-label="Previous datasets"
+          >
+            ‹
+          </button>
+
+          <div className="flex items-center gap-2" role="tablist" aria-label="Featured dataset pages">
+            {Array.from({ length: totalPages }, (_, pageIndex) => (
+              <button
+                key={pageIndex}
+                type="button"
+                role="tab"
+                aria-selected={pageIndex === currentPage}
+                aria-label={`Page ${pageIndex + 1} of ${totalPages}`}
+                onClick={() => goToPage(pageIndex)}
+                className={`h-2.5 rounded-full transition-all ${
+                  pageIndex === currentPage
+                    ? "w-8 bg-teal-600"
+                    : "w-2.5 bg-slate-300 hover:bg-teal-300"
+                }`}
+              />
+            ))}
+          </div>
+
+          <span className="min-w-[4.5rem] text-center text-sm text-slate-500">
+            {currentPage + 1} / {totalPages}
+          </span>
+
+          <button
+            type="button"
+            onClick={scrollRight}
+            disabled={currentPage >= maxPage}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-teal-600 bg-white text-lg font-bold text-teal-600 transition-all hover:bg-teal-50 hover:shadow-md disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-300 disabled:hover:bg-white disabled:hover:shadow-none"
+            aria-label="Next datasets"
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -383,6 +493,7 @@ FeaturedDatasetsCarousel.propTypes = {
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       meta: PropTypes.string.isRequired,
+      category: PropTypes.string,
       s3Url: PropTypes.string.isRequired,
       filename: PropTypes.string.isRequired,
       browseUrl: PropTypes.string.isRequired,
@@ -454,6 +565,7 @@ const carouselItems = [
     title: "Pancreatic islet scRNA map",
     description: "Single cell RNA-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 448,935 cells & 140 donors",
+    category: "scrna",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1349YHGQ/",
@@ -462,6 +574,7 @@ const carouselItems = [
     title: "Pancreatic islet snATAC map",
     description: "Single nuclear ATAC-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
+    category: "snatac",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS0470WCHR/",
@@ -470,6 +583,7 @@ const carouselItems = [
     title: "Cell type peaks from snATAC",
     description: "Cell type-specific peaks from single-nucleus ATAC-seq analysis",
     meta: "Updated: Oct 2025",
+    category: "peaks",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
     filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
     browseUrl: "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
@@ -478,6 +592,7 @@ const carouselItems = [
     title: "Donor meta-data",
     description: "Comprehensive donor metadata including demographics and clinical information",
     meta: "Updated: Nov 2025 | 3.7K donors",
+    category: "donor",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS5236MJJT/",
@@ -486,6 +601,7 @@ const carouselItems = [
     title: "Islet biosample meta-data",
     description: "Pancreatic biosample collection with detailed experimental protocols",
     meta: "Updated: Oct 2025 | 3.6K samples",
+    category: "biosample",
     s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
     filename: "pankbase-biosamples.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1057RJYW/",

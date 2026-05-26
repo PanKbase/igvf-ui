@@ -1410,3 +1410,42 @@ tr.downregulated {
     font-size: 14px;
   }
 }
+
+@keyframes carousel-slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes carousel-slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.carousel-slide-from-right {
+  animation: carousel-slide-from-right 0.35s ease-out;
+}
+
+.carousel-slide-from-left {
+  animation: carousel-slide-from-left 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-slide-from-right,
+  .carousel-slide-from-left {
+    animation: none;
+  }
+}
