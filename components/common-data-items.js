@@ -928,20 +928,17 @@ OntologyTermDataItems.commonProperties = [
 export function FileDataItems({ item, fileSet = null, children }) {
   return (
     <>
-      {fileSet && (
+      {fileSet?.summary && (
         <>
           <DataItemLabel>File Set</DataItemLabel>
           <DataItemValue>
-            <div className="flex gap-1">
-              <Link
-                href={fileSet["@id"]}
-                aria-label={`FileSet ${fileSet.accession}`}
-                key={fileSet.uuid}
-              >
-                {fileSet.accession}
-              </Link>
-              ({fileSet.summary})
-            </div>
+            <Link
+              href={fileSet["@id"]}
+              aria-label={`File set ${fileSet.accession}`}
+              key={fileSet.uuid}
+            >
+              {fileSet.summary}
+            </Link>
           </DataItemValue>
         </>
       )}
@@ -987,14 +984,11 @@ export function FileDataItems({ item, fileSet = null, children }) {
           </DataItemValue>
         </>
       )}
-      {item.file_url && (
+      {(item.file_url || item.href) && (
         <>
           <DataItemLabel>File Download</DataItemLabel>
           <DataItemValue>
-            <div className="flex items-center gap-2">
-              <FileDownload file={item} />
-              <span className="text-sm text-gray-600">{item.file_url}</span>
-            </div>
+            <FileDownload file={item} />
           </DataItemValue>
         </>
       )}
