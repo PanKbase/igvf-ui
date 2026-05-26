@@ -10,7 +10,7 @@ import Status from "./status";
 // lib
 import { FileSetController } from "../lib/batch-download";
 import { formatDate } from "../lib/dates";
-import { dataSize, truthyOrZero } from "../lib/general";
+import { dataSize, fileVersionSortKey, truthyOrZero } from "../lib/general";
 
 const filesColumns = [
   {
@@ -32,7 +32,7 @@ const filesColumns = [
     id: "version",
     title: "Version",
     display: ({ source }) => source.version || "",
-    sorter: (item) => (item.version || "").toLowerCase(),
+    sorter: (item) => fileVersionSortKey(item.version),
   },
   {
     id: "note",
@@ -112,6 +112,7 @@ export default function FileTable({
         data={files}
         columns={filesColumns}
         keyProp="@id"
+        initialSort={{ columnId: "version", direction: "asc" }}
         pager={{}}
       />
     </>
