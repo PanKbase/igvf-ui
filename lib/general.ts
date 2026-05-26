@@ -372,3 +372,21 @@ export function truncateText(text: string, maxLength: number) {
   }
   return processedText;
 }
+
+/**
+ * Sort key for file version strings (e.g. "v1", "v2", "1.0"). Uses the first numeric
+ * portion so v2 sorts before v10. Files without a version sort last.
+ */
+export function fileVersionSortKey(
+  version: string | undefined | null
+): [number, string] {
+  if (!version) {
+    return [Number.MAX_SAFE_INTEGER, ""];
+  }
+  const normalized = String(version);
+  const match = normalized.match(/(\d+)/);
+  if (match) {
+    return [parseInt(match[1], 10), normalized.toLowerCase()];
+  }
+  return [Number.MAX_SAFE_INTEGER - 1, normalized.toLowerCase()];
+}
