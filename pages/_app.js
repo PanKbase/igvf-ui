@@ -20,6 +20,8 @@ import Error from "../components/error";
 //import NavigationSection from "../components/navigation";
 import GlobalContext from "../components/global-context";
 import HomeTitle from "../components/home-title";
+import DataLibraryBreadcrumb from "../src/components/DataLibraryBreadcrumb";
+import HomeFloatingButton from "../src/components/HomeFloatingButton";
 import PkbFooter from "../components/pkb-footer";
 import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
@@ -136,20 +138,24 @@ function Site({ Component, pageProps, authentication }) {
       <GlobalContext.Provider value={globalContext}>
         <Session authentication={authentication}>
           <HomeTitle />
-          <div className="md:container">
-            <div className="md:flex">
-              <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
-                {pageProps.serverSideError ? (
-                  <Error
-                    statusCode={pageProps.serverSideError.code}
-                    title={pageProps.serverSideError.description}
-                  />
-                ) : (
-                  <Component {...pageProps} />
-                )}
+          <DataLibraryBreadcrumb />
+          <main>
+            <div className="md:container">
+              <div className="md:flex">
+                <div className="min-w-0 shrink grow px-3 py-2 md:px-8">
+                  {pageProps.serverSideError ? (
+                    <Error
+                      statusCode={pageProps.serverSideError.code}
+                      title={pageProps.serverSideError.description}
+                    />
+                  ) : (
+                    <Component {...pageProps} />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </main>
+          <HomeFloatingButton />
         </Session>
       </GlobalContext.Provider>
       <PkbFooter />
