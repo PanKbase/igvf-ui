@@ -52,10 +52,10 @@ export function FileDownload({ file, className = "" }) {
       size="sm"
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}
       isExternal={isExternalDownload}
+      hasIconOnly
       className={className}
     >
       <ArrowDownTrayIcon className="h-4 w-4" />
-      Download
     </ButtonLink>
   );
 }
@@ -91,12 +91,11 @@ FileHeaderDownload.propTypes = {
  */
 export function FileAccessionAndDownload({ file, isTargetBlank = false }) {
   return (
-    <div>
-      <div className="flex items-center gap-1">
-        <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
-          {file.accession}
-        </LinkedIdAndStatus>
-      </div>
+    <div className="flex items-center gap-1">
+      <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
+        {file.accession}
+      </LinkedIdAndStatus>
+      <FileDownload file={file} />
     </div>
   );
 }
