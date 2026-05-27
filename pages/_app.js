@@ -25,6 +25,7 @@ import { Session } from "../components/session-context";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
+import "../styles/user-guide.css";
 // import dynamic from "next/dynamic";
 
 const testServerDomains = ["staging.pankbase.org", "localhost"];

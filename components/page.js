@@ -41,6 +41,7 @@ import Modal from "./modal";
 import PageComponent from "./page-component";
 import PagePreamble from "./page-preamble";
 import SessionContext from "./session-context";
+import UserGuideLayout from "./user-guide/user-guide-layout";
 // lib
 import FetchRequest from "../lib/fetch-request";
 import {
@@ -998,15 +999,21 @@ export default function Page({
 
   // Get the displayable page title.
   const { title, codes } = getPageTitleAndCodes(page);
+  const isUserGuide = page?.name === "user-guide";
 
   // Determine whether to display the page border or not.
-  const isPanelHidden = codes.includes("nopanel");
+  const isPanelHidden = codes.includes("nopanel") || isUserGuide;
   const PanelComponent = isPanelHidden ? "div" : DataPanel;
 
   return (
     <PageCondition.Provider value={{ isDirty, setDirty, isNewPage }}>
       <Breadcrumbs />
-      <PagePreamble pageTitle={title}>{titleDecoration}</PagePreamble>
+      <PagePreamble
+        pageTitle={title}
+        titleClassName={isUserGuide ? "sr-only" : ""}
+      >
+        {titleDecoration}
+      </PagePreamble>
       {activeError && (
         <FlashMessage
           message={activeError}
@@ -1027,23 +1034,30 @@ export default function Page({
         <>
           {isAuthenticated && <EditPageTrigger href={router.asPath} />}
           <PanelComponent>
-            <div data-testid="page-blocks" id="page-content">
-              {editableBlocks.map((block) => {
-                if (block["@type"] === BLOCK_TYPE_MARKDOWN) {
-                  return (
-                    <MarkdownSection
-                      key={block["@id"]}
-                      direction={block.direction}
-                    >
-                      {block.body}
-                    </MarkdownSection>
-                  );
-                }
-                if (block["@type"] === BLOCK_TYPE_COMPONENT) {
-                  return <PageComponent key={block["@id"]} spec={block.body} />;
-                }
-              })}
-            </div>
+            {isUserGuide ? (
+              <UserGuideLayout blocks={editableBlocks} page={page} />
+            ) : (
+              <div data-testid="page-blocks" id="page-content">
+                {editableBlocks.map((block) => {
+                  if (block["@type"] === BLOCK_TYPE_MARKDOWN) {
+                    return (
+                      <MarkdownSection
+                        key={block["@id"]}
+                        direction={block.direction}
+                      >
+                        {block.body}
+                      </MarkdownSection>
+                    );
+                  }
+                  if (block["@type"] === BLOCK_TYPE_COMPONENT) {
+                    return (
+                      <PageComponent key={block["@id"]} spec={block.body} />
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            )}
           </PanelComponent>
         </>
       )}
