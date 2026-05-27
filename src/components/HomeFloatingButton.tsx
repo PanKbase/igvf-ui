@@ -1,7 +1,6 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 
 const DATA_LIBRARY_URL = "https://data.pankbase.org";
-const SCROLL_THRESHOLD = 180;
 
 const baseStyle: CSSProperties = {
   position: "fixed",
@@ -20,33 +19,15 @@ const baseStyle: CSSProperties = {
   fontFamily: "inherit",
   textDecoration: "none",
   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-  transition:
-    "opacity 0.25s ease, transform 0.25s ease, background-color 0.2s ease",
+  transition: "transform 0.2s ease, background-color 0.2s ease",
 };
 
 export default function HomeFloatingButton() {
-  const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    function handleScroll() {
-      setIsVisible(window.scrollY > SCROLL_THRESHOLD);
-    }
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const style: CSSProperties = {
     ...baseStyle,
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible
-      ? isHovered
-        ? "translateY(-1px)"
-        : "translateY(0)"
-      : "translateY(8px)",
-    pointerEvents: isVisible ? "auto" : "none",
+    transform: isHovered ? "translateY(-1px)" : "translateY(0)",
     background: isHovered ? "#0a7c72" : "#0d9488",
   };
 

@@ -440,6 +440,11 @@
     mix-blend-mode: multiply;
   }
 
+  /* Clear the beta ribbon that hangs below the header */
+  .pkb-breadcrumbs {
+    margin-top: 1.5rem;
+  }
+
   .pkb-nav .menu-item-wrapper:hover > .submenu {
     display: flex;
     flex-direction: column;
@@ -930,6 +935,10 @@ tr.downregulated {
     position: static;
     margin-top: 10px;
     width: auto;
+  }
+
+  .pkb-breadcrumbs {
+    margin-top: 0.5rem;
   }
 }
 
