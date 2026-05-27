@@ -121,6 +121,7 @@ export async function requestFiles(
       "file_format",
       "file_size",
       "file_set",
+      "file_url",
       "flowcell_id",
       "href",
       "illumina_read_type",
