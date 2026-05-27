@@ -1,4 +1,5 @@
 // node_modules
+import Image from "next/image";
 import PropTypes from "prop-types";
 
 const LOGO_SRC =
@@ -25,12 +26,13 @@ export default function UserGuideHero({ title, updatedAt }) {
   return (
     <header className="user-guide-hero">
       <div className="user-guide-hero__inner">
-        <img
+        <Image
           className="user-guide-hero__logo"
           src={LOGO_SRC}
           alt="PanKbase"
           width={200}
           height={56}
+          style={{ height: "3.5rem", width: "auto" }}
         />
         <div className="user-guide-hero__text">
           <h1 className="user-guide-hero__title">{title}</h1>
