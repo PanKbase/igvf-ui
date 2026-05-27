@@ -142,7 +142,11 @@ export default function Header() {
     <div style={{ width: "100%" }}>
       <div className="pkb-nav">
         <div className="logo">
-          <Link href="/">
+          <Link
+            href="https://pankbase.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Image
               style={{ height: "50px", width: "auto" }}
               src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"

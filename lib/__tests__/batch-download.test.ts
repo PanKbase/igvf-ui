@@ -4,34 +4,28 @@ import SearchController from "../batch-download/search-controller";
 import QueryString from "../query-string";
 
 describe("Test batch download controller classes", () => {
-  let urlAssignMock: jest.Mock;
-  const originalLocation = window.location;
+  let downloadLink: HTMLAnchorElement;
 
   beforeEach(() => {
-    // Mock function to capture URL assignments
-    urlAssignMock = jest.fn();
+    downloadLink = {
+      href: "",
+      target: "",
+      rel: "",
+      click: jest.fn(),
+    } as unknown as HTMLAnchorElement;
 
-    // Mock `window.location` using a class with an href getter and setter
-    Object.defineProperty(window, "location", {
-      value: {
-        ...originalLocation,
-        get href() {
-          return this._href;
-        },
-        set href(value) {
-          this._href = value;
-          urlAssignMock(value);
-        },
-      },
-      writable: true,
+    jest.spyOn(document, "createElement").mockImplementation((tag) => {
+      if (tag === "a") {
+        return downloadLink;
+      }
+      return document.createElement.bind(document)(tag);
     });
+    jest.spyOn(document.body, "appendChild").mockImplementation(() => downloadLink);
+    jest.spyOn(document.body, "removeChild").mockImplementation(() => downloadLink);
   });
 
-  afterAll(() => {
-    // Restore the original `window.location`
-    Object.defineProperty(window, "location", {
-      value: originalLocation,
-    });
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe("Test batch download base controller class", () => {
@@ -41,9 +35,8 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(BaseController);
       expect(controller.offerDownload).toBe(true);
       controller.initiateDownload();
-      expect(urlAssignMock).toHaveBeenCalledWith(
-        "/batch-download/?type=FileSet"
-      );
+      expect(downloadLink.href).toBe("/batch-download/?type=FileSet");
+      expect(downloadLink.click).toHaveBeenCalled();
     });
   });
 
@@ -63,9 +56,10 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(FileSetController);
       expect(controller.offerDownload).toBe(true);
       controller.initiateDownload();
-      expect(urlAssignMock).toHaveBeenCalledWith(
+      expect(downloadLink.href).toBe(
         "/batch-download/?type=AnalysisSet&@id=%2Fanalysis-sets%2FIGVFDS1006IYEJ%2F"
       );
+      expect(downloadLink.click).toHaveBeenCalled();
     });
 
     it("should create a new instance of the fileset controller with an extra query, and make a FileSet query", () => {
@@ -86,9 +80,10 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(FileSetController);
       expect(controller.offerDownload).toBe(true);
       controller.initiateDownload();
-      expect(urlAssignMock).toHaveBeenCalledWith(
+      expect(downloadLink.href).toBe(
         "/batch-download/?illumina_read_type=*&type=AnalysisSet&@id=%2Fanalysis-sets%2FIGVFDS1006IYEJ%2F"
       );
+      expect(downloadLink.click).toHaveBeenCalled();
     });
   });
 
@@ -132,9 +127,8 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(SearchController);
       expect(controller.offerDownload).toBe(true);
       controller.initiateDownload();
-      expect(urlAssignMock).toHaveBeenCalledWith(
-        "/batch-download/?type=FileSet"
-      );
+      expect(downloadLink.href).toBe("/batch-download/?type=FileSet");
+      expect(downloadLink.click).toHaveBeenCalled();
     });
 
     it("should create a new instance of the search controller with a profile, and make a AnalysisSet query", () => {
@@ -146,9 +140,8 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(SearchController);
       expect(controller.offerDownload).toBe(true);
       controller.initiateDownload();
-      expect(urlAssignMock).toHaveBeenCalledWith(
-        "/batch-download/?type=AnalysisSet"
-      );
+      expect(downloadLink.href).toBe("/batch-download/?type=AnalysisSet");
+      expect(downloadLink.click).toHaveBeenCalled();
     });
 
     it("should not initiate a download if we pass null for profiles", () => {
@@ -160,7 +153,7 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(SearchController);
       expect(controller.offerDownload).toBe(false);
       controller.initiateDownload();
-      expect(urlAssignMock).not.toHaveBeenCalled();
+      expect(downloadLink.click).not.toHaveBeenCalled();
     });
 
     it("should not initiate a download if the query-string type isn't a FileSet type", () => {
@@ -172,7 +165,7 @@ describe("Test batch download controller classes", () => {
       expect(controller).toBeInstanceOf(SearchController);
       expect(controller.offerDownload).toBe(false);
       controller.initiateDownload();
-      expect(urlAssignMock).not.toHaveBeenCalled();
+      expect(downloadLink.click).not.toHaveBeenCalled();
     });
   });
 });

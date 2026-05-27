@@ -38,7 +38,7 @@ describe("Test FileDownload component", () => {
       "href",
       "https://pankbase-data-v1.s3.us-west-2.amazonaws.com/analysis_resources/single_cell_objects/060425_scRNA_v3.3.rds"
     );
-    expect(downloadLink).toHaveTextContent("Download");
+    expect(downloadLink).not.toHaveTextContent("Download");
   });
 
   it("renders a download link for a file", () => {

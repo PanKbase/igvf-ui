@@ -15,10 +15,7 @@ import {
 import DerivedFromTable from "../../components/derived-from-table";
 import DocumentTable from "../../components/document-table";
 import { EditableItem } from "../../components/edit";
-import {
-  FileDownload,
-  FileHeaderDownload,
-} from "../../components/file-download";
+import { FileHeaderDownload } from "../../components/file-download";
 import FileTable from "../../components/file-table";
 import JsonDisplay from "../../components/json-display";
 import ObjectPageHeader from "../../components/object-page-header";
@@ -75,10 +72,6 @@ export default function MatrixFile({
               <DataItemValue>{matrixFile.dimension1}</DataItemValue>
               <DataItemLabel>Second Dimension</DataItemLabel>
               <DataItemValue>{matrixFile.dimension2}</DataItemValue>
-              <DataItemLabel>Download File</DataItemLabel>
-              <DataItemValue>
-                <FileDownload file={matrixFile} />
-              </DataItemValue>
             </DataArea>
           </DataPanel>
           {referenceFiles.length > 0 && (
