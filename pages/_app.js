@@ -20,7 +20,6 @@ import Error from "../components/error";
 //import NavigationSection from "../components/navigation";
 import GlobalContext from "../components/global-context";
 import HomeTitle from "../components/home-title";
-import DataLibraryBreadcrumb from "../src/components/DataLibraryBreadcrumb";
 import HomeFloatingButton from "../src/components/HomeFloatingButton";
 import PkbFooter from "../components/pkb-footer";
 import { Session } from "../components/session-context";
@@ -138,7 +137,6 @@ function Site({ Component, pageProps, authentication }) {
       <GlobalContext.Provider value={globalContext}>
         <Session authentication={authentication}>
           <HomeTitle />
-          <DataLibraryBreadcrumb />
           <main>
             <div className="md:container">
               <div className="md:flex">
