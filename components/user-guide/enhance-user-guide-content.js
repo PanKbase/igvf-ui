@@ -99,6 +99,19 @@ function markIntro(container) {
   }
 }
 
+/** Readable screenshot width; overrides narrow IMAGE_ALIGNED width from CMS. */
+function styleScreenshots(container) {
+  container.querySelectorAll('[data-testid="image-aligned"]').forEach((figure) => {
+    figure.classList.add("user-guide-figure");
+    figure.style.width = "65%";
+    figure.style.float = "none";
+    const caption = figure.querySelector('[data-testid="image-aligned-caption"]');
+    if (caption) {
+      caption.classList.add("user-guide-figure-caption");
+    }
+  });
+}
+
 /**
  * @param {HTMLElement} container Root content element
  * @returns {{ sections: Array<{id: string, label: string}> }}
@@ -111,6 +124,7 @@ export function enhanceUserGuideContent(container) {
   const sections = addSectionIds(container);
   styleEntryCards(container);
   styleTables(container);
+  styleScreenshots(container);
   container.querySelectorAll("h3").forEach(wrapCallout);
   return { sections };
 }
