@@ -294,17 +294,11 @@ const FEATURED_DATASET_ICONS = {
   biosample: Flask,
 };
 
-function FeaturedDatasetCard({ item, cardWidth, onDownload, onBrowse }) {
+function FeaturedDatasetCard({ item, onDownload, onBrowse }) {
   const Icon = FEATURED_DATASET_ICONS[item.category] || Database;
 
   return (
-    <div
-      className="flex min-h-[280px] flex-col rounded-xl border border-teal-500/20 bg-gradient-to-br from-teal-700 via-teal-600 to-cyan-700 p-6 text-white shadow-md transition-shadow duration-300 hover:shadow-lg md:p-7"
-      style={{
-        flex: `0 1 ${cardWidth}`,
-        maxWidth: cardWidth,
-      }}
-    >
+    <div className="flex min-h-[280px] min-w-0 flex-col rounded-xl border border-teal-500/20 bg-gradient-to-br from-teal-700 via-teal-600 to-cyan-700 p-6 text-white shadow-md transition-shadow duration-300 hover:shadow-lg md:p-7">
       <div className="mb-4 flex items-start gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white/15 ring-1 ring-white/25 backdrop-blur-sm">
           <Icon className="h-5 w-5 text-white" />
@@ -346,7 +340,6 @@ FeaturedDatasetCard.propTypes = {
     meta: PropTypes.string.isRequired,
     category: PropTypes.string,
   }).isRequired,
-  cardWidth: PropTypes.string.isRequired,
   onDownload: PropTypes.func.isRequired,
   onBrowse: PropTypes.func.isRequired,
 };
@@ -359,8 +352,13 @@ function FeaturedDatasetsCarousel({ items }) {
   const [slideDirection, setSlideDirection] = useState("right");
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return undefined;
+    }
+
     function updateCardsPerView() {
-      const width = containerRef.current?.offsetWidth ?? window.innerWidth;
+      const width = container.offsetWidth;
       if (width >= 1024) {
         setCardsPerView(3);
       } else if (width >= 640) {
@@ -371,8 +369,9 @@ function FeaturedDatasetsCarousel({ items }) {
     }
 
     updateCardsPerView();
-    window.addEventListener("resize", updateCardsPerView);
-    return () => window.removeEventListener("resize", updateCardsPerView);
+    const observer = new ResizeObserver(updateCardsPerView);
+    observer.observe(container);
+    return () => observer.disconnect();
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(items.length / cardsPerView));
@@ -384,8 +383,6 @@ function FeaturedDatasetsCarousel({ items }) {
 
   const pageStart = currentPage * cardsPerView;
   const visibleItems = items.slice(pageStart, pageStart + cardsPerView);
-  const gapRem = 1.25;
-  const cardWidth = `calc((100% - ${(cardsPerView - 1) * gapRem}rem) / ${cardsPerView})`;
 
   function goToPage(page) {
     setSlideDirection(page > currentPage ? "right" : "left");
@@ -424,14 +421,16 @@ function FeaturedDatasetsCarousel({ items }) {
     >
       <div
         key={currentPage}
-        className={`flex flex-wrap justify-center gap-5 ${slideClass}`}
+        className={`grid gap-5 ${slideClass}`}
+        style={{
+          gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 1fr))`,
+        }}
         aria-live="polite"
       >
         {visibleItems.map((item, index) => (
           <FeaturedDatasetCard
             key={`${item.title}-${pageStart + index}`}
             item={item}
-            cardWidth={cardWidth}
             onDownload={handleDownload}
             onBrowse={handleBrowse}
           />

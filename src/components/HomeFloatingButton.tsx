@@ -34,6 +34,7 @@ export default function HomeFloatingButton() {
   return (
     <a
       href={DATA_LIBRARY_URL}
+      className="pkb-floating-home-btn"
       aria-label="Return to PanKbase Data Library home"
       style={style}
       onMouseEnter={() => setIsHovered(true)}

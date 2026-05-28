@@ -644,6 +644,14 @@ a:hover {
   ) !important; /* Highlight color for link hover */
 }
 
+/* Floating "Data Library" home button — override global link colors */
+.pkb-floating-home-btn,
+.pkb-floating-home-btn:visited,
+.pkb-floating-home-btn:hover,
+.pkb-floating-home-btn:focus-visible {
+  color: #ffffff !important;
+}
+
 /* Header-specific link overrides - now properly scoped */
 .pkb-nav a,
 .pkb-nav a:visited {
