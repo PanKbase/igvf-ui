@@ -37,7 +37,6 @@ import {
   getSelectedTypes,
   getSortColumn,
 } from "../lib/report";
-import QueryString from "../lib/query-string";
 import {
   generateSearchResultsTypes,
   stripLimitQueryIfNeeded,
