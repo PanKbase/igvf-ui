@@ -1,3 +1,4 @@
+import { HomeIcon } from "@heroicons/react/20/solid";
 import { useState, type CSSProperties } from "react";
 
 const DATA_LIBRARY_URL = "https://data.pankbase.org";
@@ -40,7 +41,7 @@ export default function HomeFloatingButton() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <span aria-hidden="true">⌂</span>
+      <HomeIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
       Data Library
     </a>
   );

@@ -29,6 +29,8 @@ export default function SearchResultsHeader({
                 visibleColumnSpecs={reportViewExtras.visibleColumnSpecs}
                 onChange={reportViewExtras.onColumnVisibilityChange}
                 onChangeAll={reportViewExtras.onAllColumnsVisibilityChange}
+                columnPresetLabel={reportViewExtras.columnPresetLabel}
+                onColumnPresetApply={reportViewExtras.onColumnPresetApply}
               />
               <DownloadTSV searchUri={searchResults["@id"]} />
               <ExportGuideModal />
@@ -57,5 +59,9 @@ SearchResultsHeader.propTypes = {
     onColumnVisibilityChange: PropTypes.func.isRequired,
     // Callback when the user changes the visibility of all columns
     onAllColumnsVisibilityChange: PropTypes.func.isRequired,
+    // Label for the optional column preset button (e.g. "Clinical")
+    columnPresetLabel: PropTypes.string,
+    // Callback when the user applies the column preset
+    onColumnPresetApply: PropTypes.func,
   }),
 };

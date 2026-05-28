@@ -490,7 +490,7 @@ export default function HumanDonorClinicalDashboard({
                   )}
                 </FieldPair>
                 <FieldPair label="T1D stage">{item.t1d_stage}</FieldPair>
-                <FieldPair label="Derived diabetes status">
+                <FieldPair label="HbA1c-derived diabetes status">
                   {item.derived_diabetes_status ? (
                     <span
                       className={
