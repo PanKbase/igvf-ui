@@ -26,4 +26,23 @@ describe("enhanceUserGuideContent", () => {
       "HumanDonor"
     );
   });
+
+  it("sizes screenshot figures to 65% content width", () => {
+    document.body.innerHTML = `
+      <div id="root">
+        <picture data-testid="image-aligned" style="width: 33%; float: right">
+          <img alt="Example screenshot" src="/pages/example.png" />
+          <figcaption data-testid="image-aligned-caption">Figure 1.</figcaption>
+        </picture>
+      </div>
+    `;
+    enhanceUserGuideContent(document.getElementById("root"));
+    const figure = document.querySelector('[data-testid="image-aligned"]');
+    expect(figure.classList.contains("user-guide-figure")).toBe(true);
+    expect(figure.style.width).toBe("65%");
+    expect(figure.style.float).toBe("none");
+    expect(
+      document.querySelector(".user-guide-figure-caption")
+    ).toBeTruthy();
+  });
 });

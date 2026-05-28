@@ -396,18 +396,54 @@
   white-space: nowrap;
 }
 
-/* Figure captions */
+/* Screenshots and figures — readable width, centered */
+.user-guide-content .user-guide-figure,
 .user-guide-content [data-testid="image-aligned"] {
-  margin: 2rem auto;
+  display: block;
+  width: 65% !important;
+  max-width: 65%;
+  float: none !important;
+  clear: both;
+  margin: 2.5rem auto;
 }
 
+.user-guide-content .user-guide-figure img,
+.user-guide-content [data-testid="image-aligned"] img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ug-gray-200);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.user-guide-content .prose img {
+  display: block;
+  width: 65%;
+  max-width: 65%;
+  height: auto;
+  margin: 2.5rem auto;
+  border: 1px solid var(--ug-gray-200);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.user-guide-content .user-guide-figure-caption,
 .user-guide-content [data-testid="image-aligned-caption"] {
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--ug-gray-700);
   text-align: center;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
   border-top: 2px solid var(--ug-teal);
   line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .user-guide-content .user-guide-figure,
+  .user-guide-content [data-testid="image-aligned"] {
+    margin: 3rem auto;
+  }
 }
