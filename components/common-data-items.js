@@ -213,7 +213,7 @@ export function DonorDataItems({
           )}
           {item.derived_diabetes_status && (
             <>
-              <DataItemLabel>Derived diabetes status</DataItemLabel>
+              <DataItemLabel>HbA1c-derived diabetes status</DataItemLabel>
               <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
             </>
           )}

@@ -18,7 +18,7 @@ import type {
  * The report code often references the `ColumnSpec` object that specifies the columns of a
  * report and only gets used internally to this file.
  */
-interface ColumnSpec {
+export interface ColumnSpec {
   // Column ID, which is the property name of the column in the report data; e.g. `@id`
   id: string;
   // Column title, which is the human-readable name of the column; e.g. "ID"

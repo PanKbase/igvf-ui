@@ -86,6 +86,8 @@ export default function ColumnSelector({
   visibleColumnSpecs,
   onChange,
   onChangeAll,
+  columnPresetLabel = null,
+  onColumnPresetApply = null,
 }) {
   // True if the column-selection modal is open.
   const [isOpen, setIsOpen] = useState(false);
@@ -117,8 +119,19 @@ export default function ColumnSelector({
           </Modal.Header>
 
           <Modal.Body className="[&>div]:p-0">
-            <div className="border-b border-modal-border p-1 md:flex md:items-center">
+            <div className="border-b border-modal-border p-1 md:flex md:flex-wrap md:items-center md:gap-1">
               <ChangeAllControls onChangeAll={onChangeAll} />
+              {columnPresetLabel && onColumnPresetApply && (
+                <Button
+                  className="flex-grow md:flex-grow-0"
+                  onClick={() => {
+                    onColumnPresetApply();
+                    setIsOpen(false);
+                  }}
+                >
+                  {columnPresetLabel}
+                </Button>
+              )}
               <Note className="md:ml-2">
                 The <i>ID</i> column cannot be hidden. Selected columns will be included in the TSV download.
               </Note>
@@ -170,4 +183,8 @@ ColumnSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
   // Called when the user wants to show or hide all columns at once
   onChangeAll: PropTypes.func.isRequired,
+  // Optional preset button label (e.g. "Clinical")
+  columnPresetLabel: PropTypes.string,
+  // Called when the user applies the column preset
+  onColumnPresetApply: PropTypes.func,
 };
