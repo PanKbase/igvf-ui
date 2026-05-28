@@ -987,7 +987,7 @@ export function FileDataItems({ item, fileSet = null, children }) {
       {(item.file_url || item.href) && (
         <>
           <DataItemLabel>File Download</DataItemLabel>
-          <DataItemValue>
+          <DataItemValue className="flex items-center">
             <FileDownload file={item} />
           </DataItemValue>
         </>

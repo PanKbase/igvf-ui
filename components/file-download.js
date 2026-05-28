@@ -50,10 +50,11 @@ export function FileDownload({ file, className = "" }) {
       href={downloadUrl}
       type="secondary"
       size="sm"
+      isInline
+      hasIconCircleOnly
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}
       isExternal={isExternalDownload}
-      hasIconOnly
-      className={className}
+      className={`w-fit shrink-0 ${className}`.trim()}
     >
       <ArrowDownTrayIcon className="h-4 w-4" />
     </ButtonLink>
