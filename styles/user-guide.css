@@ -400,8 +400,8 @@
 .user-guide-content .user-guide-figure,
 .user-guide-content [data-testid="image-aligned"] {
   display: block;
-  width: 65% !important;
-  max-width: 65%;
+  width: 100% !important;
+  max-width: 100%;
   float: none !important;
   clear: both;
   margin: 2.5rem auto;
@@ -420,8 +420,8 @@
 
 .user-guide-content .prose img {
   display: block;
-  width: 65%;
-  max-width: 65%;
+  width: 100%;
+  max-width: 100%;
   height: auto;
   margin: 2.5rem auto;
   border: 1px solid var(--ug-gray-200);

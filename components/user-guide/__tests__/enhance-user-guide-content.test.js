@@ -27,7 +27,7 @@ describe("enhanceUserGuideContent", () => {
     );
   });
 
-  it("sizes screenshot figures to 65% content width", () => {
+  it("sizes screenshot figures to full content width", () => {
     document.body.innerHTML = `
       <div id="root">
         <picture data-testid="image-aligned" style="width: 33%; float: right">
@@ -39,7 +39,7 @@ describe("enhanceUserGuideContent", () => {
     enhanceUserGuideContent(document.getElementById("root"));
     const figure = document.querySelector('[data-testid="image-aligned"]');
     expect(figure.classList.contains("user-guide-figure")).toBe(true);
-    expect(figure.style.width).toBe("65%");
+    expect(figure.style.width).toBe("100%");
     expect(figure.style.float).toBe("none");
     expect(
       document.querySelector(".user-guide-figure-caption")

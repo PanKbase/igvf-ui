@@ -103,7 +103,7 @@ function markIntro(container) {
 function styleScreenshots(container) {
   container.querySelectorAll('[data-testid="image-aligned"]').forEach((figure) => {
     figure.classList.add("user-guide-figure");
-    figure.style.width = "65%";
+    figure.style.width = "100%";
     figure.style.float = "none";
     const caption = figure.querySelector('[data-testid="image-aligned-caption"]');
     if (caption) {
