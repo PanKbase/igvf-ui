@@ -127,6 +127,23 @@ function ChartBar({ className }) {
   );
 }
 
+function Activity({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  );
+}
+
 function Code({ className }) {
   return (
     <svg
@@ -272,6 +289,8 @@ GitBranch.propTypes = { className: PropTypes.string };
 
 ChartBar.propTypes = { className: PropTypes.string };
 
+Activity.propTypes = { className: PropTypes.string };
+
 Code.propTypes = { className: PropTypes.string };
 
 BookOpen.propTypes = { className: PropTypes.string };
@@ -292,6 +311,7 @@ const FEATURED_DATASET_ICONS = {
   peaks: GitBranch,
   donor: Users,
   biosample: Flask,
+  perifusion: Activity,
 };
 
 function FeaturedDatasetCard({ item, onDownload, onBrowse }) {
@@ -560,6 +580,18 @@ DataAccessCard.propTypes = {
 
 // Carousel items data
 const carouselItems = [
+  {
+    title: "Islet dynamic perifusion",
+    description:
+      "Insulin and glucagon secretion traits from dynamic islet perifusion assays",
+    meta: "Updated: May 2026 | 416 donors",
+    category: "perifusion",
+    s3Url:
+      "https://pankbase-data-v1.s3.us-west-2.amazonaws.com/download/HIPP_all_traits.pankbase.txt",
+    filename: "HIPP_all_traits.pankbase.txt",
+    browseUrl:
+      "https://data.pankbase.org/search/?type=AnalysisSet&assay_titles=an+analyte+assay+that+measures+the+abundance+of+a+hormone",
+  },
   {
     title: "Pancreatic islet scRNA map",
     description: "Single cell RNA-seq from human pancreatic islets",
