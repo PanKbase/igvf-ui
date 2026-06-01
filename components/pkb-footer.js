@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { pkbMenu } from "../lib/pkbMenu";
 
 const SOCIAL_LINKS = [
@@ -83,13 +84,13 @@ export default function PkbFooter() {
       </div>
 
       <div className="f-row" style={{ gap: "20px" }}>
-        <a href="/">
+        <Link href="/">
           <img
             style={{ height: "37px" }}
             src={PANKBASE_LOGO_URL}
             alt="PanKbase Logo"
           />
-        </a>
+        </Link>
         <div>
           Supported by <strong>National Institutes of Health (NIH)</strong> grants{" "}
           <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
