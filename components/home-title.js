@@ -1,92 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import NavigationSection from "../components/navigation";
+import React, { useEffect, useRef } from "react";
+import { pkbMenu } from "../lib/pkbMenu";
 
-export const pkbMenu = {
-  highlightItems: [
-    { label: "PanKgraph", path: "https://pankgraph.org/" },
-    {
-      label: "Integrated Cell Browser",
-      path: "https://pankbase.org/single-cell.html",
-    },
-  ],
-  menuItems: [
-    {
-      label: "Data",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Donor Summary",
-          path: "https://pankbase.org/donor-metadata.html",
-        },
-        { label: "Data Library", path: "https://data.pankbase.org" },
-        { label: "APIs", path: "https://pankbase.org/apis.html" },
-      ],
-    },
-    {
-      label: "Resources",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Integrated Cell Browser",
-          path: "https://pankbase.org/single-cell.html",
-        },
-        {
-          label: "Differential Gene Expression Browser",
-          path: "https://pankbase.org/diff-exp.html",
-        },
-        {
-          label: "PCA Explorer",
-          path: "https://pankbase.org/pca-explorer.html",
-        },
-        {
-          label: "Analytical Library",
-          path: "https://pankbase.org/analytical-library.html",
-        },
-        {
-          label: "Metadata Standards",
-          path: "https://pankbase.org/metadata-data-standards.html",
-        },
-        {
-          label: "Tools | Pipelines",
-          path: "https://pankbase.org/tools-pipelines.html",
-        },
-        {
-          label: "Publications",
-          path: "https://pankbase.org/publications.html",
-        },
-      ],
-    },
-    {
-      label: "About",
-      path: "",
-      subMenuItems: [
-        { label: "Project", path: "https://pankbase.org/projects.html" },
-        { label: "People", path: "https://pankbase.org/people.html" },
-        { label: "Policies", path: "https://pankbase.org/policies.html" },
-        {
-          label: "Related Programs",
-          path: "https://pankbase.org/programs.html",
-        },
-        { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
-      ],
-    },
-    {
-      label: "Help",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Contact | Feedback",
-          path: "https://pankbase.org/contact.html",
-        },
-        { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
-        { label: "GitHub", path: "https://github.com/PanKbase" },
-        { label: "News", path: "https://pankbase.org/news.html" },
-      ],
-    },
-  ],
-};
+const LOGO_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg";
+const FUNDING_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg";
+const SEARCH_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg";
+const USER_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg";
+const HIRN_LOGO_URL =
+  "https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg";
+const FAVICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png";
+const OPEN_SANS_URL =
+  "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap";
 
 function injectFavicon(faviconUrl) {
   if (typeof window === "undefined") {
@@ -113,97 +41,93 @@ function injectFont(fontUrl) {
 }
 
 export default function Header() {
-  const [menuItemActive, setMenuItemActive] = useState(false);
+  const menuItemActiveRef = useRef(false);
 
   useEffect(() => {
-    injectFavicon(
-      "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
-    );
-    injectFont(
-      "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-    );
+    injectFavicon(FAVICON_URL);
+    injectFont(OPEN_SANS_URL);
   }, []);
 
   function isActive(path) {
-    if (menuItemActive) {
+    if (menuItemActiveRef.current) {
       return false;
     }
-    if (typeof window !== "undefined") {
-      const currentPath = window.location.pathname;
-      if (path === currentPath) {
-        setMenuItemActive(true);
-        return true;
-      }
+    if (typeof window !== "undefined" && path === window.location.pathname) {
+      menuItemActiveRef.current = true;
+      return true;
     }
     return false;
   }
+
+  menuItemActiveRef.current = false;
 
   return (
     <div style={{ width: "100%" }}>
       <div className="pkb-nav">
         <div className="logo">
-          <Link
-            href="https://pankbase.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              style={{ height: "50px", width: "auto" }}
-              src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
-              alt="PanKbase Logo"
-              width={240}
-              height={50}
-              unoptimized
-            />
-          </Link>
+          <a href="https://pankbase.org/">
+            <img style={{ height: "50px" }} src={LOGO_URL} alt="PanKbase Logo" />
+          </a>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <div className="menu-wrapper">
             <div className="topmenu">
               <a className="topmenu-item" href="https://pankbase.org/funding.html">
-                Funding Opportunities{" "}
-                <Image
+                Funding Opportunities
+                <img
                   style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+                  src={FUNDING_ICON_URL}
                   alt=""
-                  width={15}
-                  height={15}
-                  unoptimized
                 />
               </a>
               <a className="topmenu-item disabled">
-                Search{" "}
-                <Image
+                Search
+                <img
                   style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
+                  src={SEARCH_ICON_URL}
                   alt=""
-                  width={15}
-                  height={15}
-                  unoptimized
                 />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              <NavigationSection />
+              <a className="topmenu-item disabled">
+                Login
+                <img
+                  style={{ height: "15px", width: "15px" }}
+                  src={USER_ICON_URL}
+                  alt=""
+                />
+              </a>
             </div>
             <div className="menu">
               <div className="main-menu-items">
-                {pkbMenu.highlightItems.map((item, index) => (
-                  <div key={`highlight-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
+                {pkbMenu.highlightItems.map((item) => (
+                  <div
+                    key={item.label}
+                    className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
+                  >
                     <a className="menu-item menu-item-main" href={item.path}>
                       {item.label}
                     </a>
                   </div>
                 ))}
               </div>
-              {pkbMenu.menuItems.map((item, index) => (
-                <div key={`menu-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
-                  <a className="menu-item" href={item.path || null}>
+              {pkbMenu.menuItems.map((item) => (
+                <div
+                  key={item.label}
+                  className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
+                >
+                  <a className="menu-item" href={item.path || undefined}>
                     {item.label}
                   </a>
                   {item.subMenuItems && (
                     <div className="submenu">
-                      {item.subMenuItems.map((subItem, subIndex) => (
-                        <a key={`submenu-${index}-${subIndex}`} className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`} href={subItem.path || null} data-whatever={isActive(subItem.path).toString()}>
+                      {item.subMenuItems.map((subItem) => (
+                        <a
+                          key={subItem.label}
+                          className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
+                          href={subItem.path || undefined}
+                          data-whatever={isActive(subItem.path).toString()}
+                        >
                           {subItem.label}
                         </a>
                       ))}
@@ -214,14 +138,7 @@ export default function Header() {
             </div>
           </div>
           <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <Image
-              style={{ height: "37px", width: "auto" }}
-              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
-              alt="HIRN Logo"
-              width={120}
-              height={37}
-              unoptimized
-            />
+            <img style={{ height: "37px" }} src={HIRN_LOGO_URL} alt="HIRN Logo" />
           </a>
         </div>
         <div className="pkb-beta">beta</div>
