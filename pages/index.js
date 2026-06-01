@@ -589,8 +589,7 @@ const carouselItems = [
     s3Url:
       "https://pankbase-data-v1.s3.us-west-2.amazonaws.com/download/HIPP_all_traits.pankbase.txt",
     filename: "HIPP_all_traits.pankbase.txt",
-    browseUrl:
-      "https://data.pankbase.org/search/?type=AnalysisSet&assay_titles=an+analyte+assay+that+measures+the+abundance+of+a+hormone",
+    browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS9874MXRB/",
   },
   {
     title: "Pancreatic islet scRNA map",
