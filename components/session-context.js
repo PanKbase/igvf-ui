@@ -17,12 +17,12 @@ import {
   getDataProviderUrl,
   getSession,
   getSessionProperties,
+  goToAuthError,
   loginDataProvider,
   logoutAuthProvider,
   logoutDataProvider,
 } from "../lib/authentication";
 import getCollectionTitles from "../lib/collection-titles";
-import { AUTH_ERROR_URI } from "../lib/constants";
 import { getProfiles } from "../lib/profiles";
 /* istanbul ignore file */
 
@@ -141,6 +141,11 @@ export function Session({ postLoginRedirectUri = "", children }) {
               sessionPropertiesResponse.code >= 400);
 
           if (isError) {
+            const reason =
+              sessionPropertiesResponse?.description ||
+              sessionPropertiesResponse?.title ||
+              sessionPropertiesResponse?.detail ||
+              `Login failed (${sessionPropertiesResponse?.code || "unknown"})`;
             console.error(
               "Failed to authenticate with backend. Error details:",
               {
@@ -152,7 +157,9 @@ export function Session({ postLoginRedirectUri = "", children }) {
                 fullResponse: sessionPropertiesResponse,
               }
             );
-            logoutAuthProvider(logout, AUTH_ERROR_URI);
+            loginInFlight.current = false;
+            logoutAuthProvider(logout);
+            goToAuthError(String(reason));
             return null;
           }
 
@@ -171,7 +178,10 @@ export function Session({ postLoginRedirectUri = "", children }) {
         .catch((error) => {
           loginInFlight.current = false;
           console.error("Failed to authenticate with backend:", error);
-          logoutAuthProvider(logout, AUTH_ERROR_URI);
+          logoutAuthProvider(logout);
+          goToAuthError(
+            error instanceof Error ? error.message : "Login request failed"
+          );
         });
     }
   }, [

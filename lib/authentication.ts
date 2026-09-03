@@ -103,13 +103,27 @@ export async function loginAuthProvider(
     ? "/"
     : `${window.location.pathname}${window.location.search}`;
 
-  // Trigger the login process. Pass the current URL as the returnTo parameter so that Auth0
-  // redirects back to the current page after login.
-  return await loginWithRedirect({
-    appState: {
-      returnTo: returnUrl,
-    },
-  });
+  try {
+    return await loginWithRedirect({
+      appState: {
+        returnTo: returnUrl,
+      },
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Auth0 redirect failed";
+    goToAuthError(message);
+  }
+}
+
+/**
+ * Send the browser to the authentication error page with an optional reason string.
+ */
+export function goToAuthError(reason: string = "") {
+  const query = reason
+    ? `?reason=${encodeURIComponent(reason.slice(0, 400))}`
+    : "";
+  window.location.assign(`${window.location.origin}/auth-error/${query}`);
 }
 
 /**
