@@ -142,9 +142,9 @@ export function Session({ postLoginRedirectUri = "", children }) {
 
           if (isError) {
             const reason =
+              sessionPropertiesResponse?.detail ||
               sessionPropertiesResponse?.description ||
               sessionPropertiesResponse?.title ||
-              sessionPropertiesResponse?.detail ||
               `Login failed (${sessionPropertiesResponse?.code || "unknown"})`;
             console.error(
               "Failed to authenticate with backend. Error details:",
