@@ -117,18 +117,27 @@ export async function loginAuthProvider(
 }
 
 /**
- * Send the browser to the authentication error page with an optional reason string.
+ * Build the path (with optional reason query) for the authentication error page.
  */
-export function goToAuthError(reason: string = "") {
+export function authErrorPath(reason: string = ""): string {
   const query = reason
     ? `?reason=${encodeURIComponent(reason.slice(0, 400))}`
     : "";
-  window.location.assign(`${window.location.origin}/auth-error/${query}`);
+  return `${AUTH_ERROR_URI}/${query}`;
 }
 
 /**
- * Log the user out of the authentication provider. Redirect to the home page by default, or to
- * the specified path.
+ * Send the browser to the authentication error page with an optional reason string.
+ */
+export function goToAuthError(reason: string = "") {
+  window.location.assign(`${window.location.origin}${authErrorPath(reason)}`);
+}
+
+/**
+ * Log the user out of Auth0, then return to home or an alternate path (e.g. auth-error).
+ * When clearing Auth0 after a backend login failure, pass authErrorPath(reason) as
+ * altPath — do not also call goToAuthError(), or Auth0's returnTo=/ wins and the
+ * error page never appears (silent fail).
  * @param {function} logout Auth0-react function to logout of the authentication provider
  * @param {string} altPath Optional path to redirect to after logging out; "/" by default
  */
