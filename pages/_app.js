@@ -61,7 +61,7 @@ function TestServerWarning() {
 
 function Site({ Component, pageProps, postLoginRedirectUri }) {
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
-  const { isLoading } = useAuth0();
+  const { isLoading, error: auth0Error } = useAuth0();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -134,6 +134,14 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
         `}
       </Script>
       <TestServerWarning />
+      {auth0Error && (
+        <div
+          className="border-b border-red-700 bg-red-600 p-2 text-center text-sm text-white"
+          data-testid="auth0-error-banner"
+        >
+          Sign-in failed: {auth0Error.message}
+        </div>
+      )}
       <GlobalContext.Provider value={globalContext}>
         <Session postLoginRedirectUri={postLoginRedirectUri}>
           <HomeTitle />
@@ -183,7 +191,8 @@ export default function App(props) {
       onRedirectCallback={onRedirectCallback}
       cacheLocation={AUTH0_CACHE_LOCATION}
       authorizationParams={{
-        redirect_uri: typeof window !== "undefined" && window.location.origin,
+        redirect_uri:
+          typeof window !== "undefined" ? window.location.origin : undefined,
         scope: "openid profile email",
       }}
     >
