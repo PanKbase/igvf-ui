@@ -2,13 +2,12 @@
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Script from "next/script";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 // lib
+import { checkAuthErrorUri } from "../lib/authentication";
 import {
-  AUTH0_AUDIENCE,
   AUTH0_CLIENT_ID,
   AUTH0_ISSUER_BASE_DOMAIN,
   BRAND_COLOR,
@@ -29,6 +28,7 @@ import "../styles/globals.css";
 import "../styles/user-guide.css";
 // import dynamic from "next/dynamic";
 
+const AUTH0_CACHE_LOCATION = "localstorage";
 const testServerDomains = ["staging.pankbase.org", "localhost"];
 
 function TestServerWarning() {
@@ -59,7 +59,7 @@ function TestServerWarning() {
   }
 }
 
-function Site({ Component, pageProps, authentication }) {
+function Site({ Component, pageProps, postLoginRedirectUri }) {
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
   const { isLoading } = useAuth0();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -135,7 +135,7 @@ function Site({ Component, pageProps, authentication }) {
       </Script>
       <TestServerWarning />
       <GlobalContext.Provider value={globalContext}>
-        <Session authentication={authentication}>
+        <Session postLoginRedirectUri={postLoginRedirectUri}>
           <HomeTitle />
           <main>
             <div className="md:container">
@@ -164,21 +164,16 @@ function Site({ Component, pageProps, authentication }) {
 Site.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
-  authentication: PropTypes.exact({
-    authTransitionPath: PropTypes.string.isRequired,
-    setAuthTransitionPath: PropTypes.func.isRequired,
-  }).isRequired,
+  postLoginRedirectUri: PropTypes.string,
 };
 
 export default function App(props) {
-  const [authTransitionPath, setAuthTransitionPath] = useState("");
-  const router = useRouter();
+  const [postLoginRedirectUri, setPostLoginRedirectUri] = useState("/");
 
   function onRedirectCallback(appState) {
-    if (appState?.returnTo) {
-      router.replace(appState.returnTo);
+    if (appState?.returnTo && !checkAuthErrorUri(appState.returnTo)) {
+      setPostLoginRedirectUri(appState.returnTo);
     }
-    setAuthTransitionPath(appState?.returnTo || "");
   }
 
   return (
@@ -186,15 +181,13 @@ export default function App(props) {
       domain={AUTH0_ISSUER_BASE_DOMAIN}
       clientId={AUTH0_CLIENT_ID}
       onRedirectCallback={onRedirectCallback}
+      cacheLocation={AUTH0_CACHE_LOCATION}
       authorizationParams={{
         redirect_uri: typeof window !== "undefined" && window.location.origin,
-        audience: AUTH0_AUDIENCE,
+        scope: "openid profile email",
       }}
     >
-      <Site
-        {...props}
-        authentication={{ authTransitionPath, setAuthTransitionPath }}
-      />
+      <Site {...props} postLoginRedirectUri={postLoginRedirectUri} />
     </Auth0Provider>
   );
 }
