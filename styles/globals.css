@@ -358,6 +358,20 @@
     pointer-events: none;
   }
 
+  .pkb-nav button.topmenu-item {
+    background: transparent;
+    border: 0;
+    font-family: inherit;
+    line-height: inherit;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pkb-nav button.topmenu-item-login {
+    color: var(--pkb-black);
+    cursor: pointer;
+  }
+
   .pkb-nav .menu-separator {
     color: var(--pkb-primary-green);
     margin: 0 5px;

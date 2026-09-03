@@ -1,5 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { pkbMenu } from "../lib/pkbMenu";
+import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
+import { Button } from "./form-elements";
+import Modal from "./modal";
+import SessionContext from "./session-context";
 
 const LOGO_URL =
   "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg";
@@ -38,6 +43,83 @@ function injectFont(fontUrl) {
   linkTag.rel = "stylesheet";
   linkTag.href = fontUrl;
   document.head.appendChild(linkTag);
+}
+
+function HeaderAuthControl() {
+  const [isWarningOpen, setIsWarningOpen] = useState(false);
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { sessionProperties, setAuthStageLogin, setAuthStageLogout } =
+    useContext(SessionContext);
+
+  if (isAuthenticated) {
+    const userTitle = sessionProperties?.user?.title || "Sign Out";
+    return (
+      <>
+        <button
+          type="button"
+          className="topmenu-item topmenu-item-login"
+          data-testid="navigation-authenticate"
+          onClick={() => setIsWarningOpen(true)}
+        >
+          {userTitle}
+          <img
+            style={{ height: "15px", width: "15px" }}
+            src={USER_ICON_URL}
+            alt=""
+          />
+        </button>
+        <Modal isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)}>
+          <Modal.Header
+            onClose={() => setIsWarningOpen(false)}
+            closeLabel="Cancel signing out"
+          >
+            <h2 className="text-lg font-semibold">Sign Out {userTitle}</h2>
+          </Modal.Header>
+          <Modal.Body>
+            Once you sign out, you only see publicly released data.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="secondary"
+              onClick={() => setIsWarningOpen(false)}
+              label="Cancel signing out"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setAuthStageLogout?.();
+                logoutAuthProvider(logout);
+              }}
+              label={`Sign out ${userTitle}`}
+              id="sign-out-confirm"
+            >
+              <span data-testid="navigation-signout">Sign Out</span>
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className="topmenu-item topmenu-item-login"
+      data-testid="navigation-authenticate"
+      onClick={() => {
+        setAuthStageLogin?.();
+        loginAuthProvider(loginWithRedirect);
+      }}
+    >
+      Login
+      <img
+        style={{ height: "15px", width: "15px" }}
+        src={USER_ICON_URL}
+        alt=""
+      />
+    </button>
+  );
 }
 
 export default function Header() {
@@ -89,14 +171,7 @@ export default function Header() {
                 />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              <a className="topmenu-item disabled">
-                Login
-                <img
-                  style={{ height: "15px", width: "15px" }}
-                  src={USER_ICON_URL}
-                  alt=""
-                />
-              </a>
+              <HeaderAuthControl />
             </div>
             <div className="menu">
               <div className="main-menu-items">
