@@ -134,10 +134,28 @@ export function goToAuthError(reason: string = "") {
 }
 
 /**
- * Log the user out of Auth0, then return to home or an alternate path (e.g. auth-error).
- * When clearing Auth0 after a backend login failure, pass authErrorPath(reason) as
- * altPath — do not also call goToAuthError(), or Auth0's returnTo=/ wins and the
- * error page never appears (silent fail).
+ * Clear the Auth0 browser session without redirecting, then show /auth-error.
+ * Prefer this after a backend login failure: Auth0 redirect logout races with
+ * navigation and often lands on `/` with no error (and requires auth-error in
+ * Allowed Logout URLs).
+ */
+export async function logoutAuthProviderAndShowError(
+  logout: (options?: LogoutOptions) => Promise<void>,
+  reason: string = ""
+) {
+  try {
+    await logout({
+      clientId: AUTH0_CLIENT_ID,
+      openUrl: false,
+    });
+  } catch (error) {
+    console.error("Failed to clear Auth0 session after login error:", error);
+  }
+  goToAuthError(reason);
+}
+
+/**
+ * Log the user out of Auth0, then return to home or an alternate path.
  * @param {function} logout Auth0-react function to logout of the authentication provider
  * @param {string} altPath Optional path to redirect to after logging out; "/" by default
  */
