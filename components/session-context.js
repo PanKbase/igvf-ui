@@ -14,12 +14,11 @@ import PropTypes from "prop-types";
 import { createContext, useEffect, useRef, useState } from "react";
 // lib
 import {
-  authErrorPath,
   getDataProviderUrl,
   getSession,
   getSessionProperties,
   loginDataProvider,
-  logoutAuthProvider,
+  logoutAuthProviderAndShowError,
   logoutDataProvider,
 } from "../lib/authentication";
 import getCollectionTitles from "../lib/collection-titles";
@@ -158,9 +157,7 @@ export function Session({ postLoginRedirectUri = "", children }) {
               }
             );
             loginInFlight.current = false;
-            // Auth0 logout returnTo must be the error page; a separate
-            // goToAuthError() races and loses to returnTo="/".
-            logoutAuthProvider(logout, authErrorPath(String(reason)));
+            logoutAuthProviderAndShowError(logout, String(reason));
             return null;
           }
 
@@ -179,11 +176,9 @@ export function Session({ postLoginRedirectUri = "", children }) {
         .catch((error) => {
           loginInFlight.current = false;
           console.error("Failed to authenticate with backend:", error);
-          logoutAuthProvider(
+          logoutAuthProviderAndShowError(
             logout,
-            authErrorPath(
-              error instanceof Error ? error.message : "Login request failed"
-            )
+            error instanceof Error ? error.message : "Login request failed"
           );
         });
     }
