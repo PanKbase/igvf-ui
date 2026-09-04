@@ -130,7 +130,7 @@ export function Session({ postLoginRedirectUri = "", children }) {
       !loginInFlight.current
     ) {
       loginInFlight.current = true;
-      loginDataProvider(session, getAccessTokenSilently)
+      loginDataProvider(session, getAccessTokenSilently, dataProviderUrl)
         .then((sessionPropertiesResponse) => {
           const isError =
             !sessionPropertiesResponse ||

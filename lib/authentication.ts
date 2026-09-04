@@ -67,15 +67,18 @@ export async function getDataProviderUrl(): Promise<string | null> {
  * Log the current user into the data provider.
  * @param {object} loggedOutSession Logged-out /session object from the server
  * @param {function} getAccessTokenSilently Auth0-react function to get the current access token
+ * @param {string} dataProviderUrl Absolute URL of the data provider (required; do not rely on
+ *   PUBLIC_BACKEND_URL, which can be empty in some production UI containers)
  * @returns {object} session-properties object for the signed-in user
  */
 export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
-  getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
+  getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>,
+  dataProviderUrl: string
 ) {
   const accessToken = await getAccessTokenSilently();
   const request = new FetchRequest({ session: loggedOutSession });
-  return request.postObject("/login", { accessToken });
+  return request.postObjectByUrl(`${dataProviderUrl}/login`, { accessToken });
 }
 
 /**
