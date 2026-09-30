@@ -362,7 +362,10 @@ export default function HumanDonorClinicalDashboard({
     item.aab_iaa_value !== undefined ||
     item.aab_iaa !== undefined ||
     item.aab_znt8_value !== undefined ||
-    item.aab_znt8 !== undefined;
+    item.aab_znt8 !== undefined ||
+    item.aab_summary !== undefined ||
+    item.aab_positive !== undefined ||
+    item.aab_count !== undefined;
 
   const hlaRows = Array.isArray(item.hla_typing)
     ? item.hla_typing.flatMap((row) => parseHlaRow(row) ?? [])
@@ -415,6 +418,10 @@ export default function HumanDonorClinicalDashboard({
             {chipText ? (
               <MetricCard label="Diabetes status" value={chipText} />
             ) : null}
+            <MetricCard label="Age (y)" value={ageDisplay} />
+            {item.age_group ? (
+              <MetricCard label="Age group" value={item.age_group} />
+            ) : null}
             <MetricCard label="BMI" value={bmiDisplay} />
             <MetricCard label="Height (cm)" value={heightDisplay} />
             <MetricCard label="Weight (kg)" value={weightDisplay} />
@@ -428,6 +435,12 @@ export default function HumanDonorClinicalDashboard({
               value={cPeptideDisplay}
             />
             <MetricCard label="Diabetes duration" value={dmDurDisplay} />
+            {item.aab_summary ? (
+              <MetricCard label="AAB summary" value={item.aab_summary} />
+            ) : null}
+            {item.aab_count !== undefined && item.aab_count !== null ? (
+              <MetricCard label="AAB count" value={String(item.aab_count)} />
+            ) : null}
           </div>
         </section>
 
@@ -440,10 +453,23 @@ export default function HumanDonorClinicalDashboard({
             <FieldPair label="Age (y)" monoValue>
               {ageDisplay}
             </FieldPair>
+            {item.age_group ? (
+              <FieldPair label="Age group">{item.age_group}</FieldPair>
+            ) : null}
+            {item.pediatric !== undefined ? (
+              <FieldPair label="Pediatric">
+                {item.pediatric ? "Yes" : "No"}
+              </FieldPair>
+            ) : null}
             <FieldPair label="Gender">{item.gender}</FieldPair>
             <FieldPair label="Genetic Sex">
               {item.genetic_sex ?? item.biological_sex}
             </FieldPair>
+            {item.sex_discordant !== undefined ? (
+              <FieldPair label="Sex discordant">
+                {item.sex_discordant ? "Yes" : "No"}
+              </FieldPair>
+            ) : null}
             {item.ethnicities?.length > 0 ? (
               <FieldPair label="Ethnicity">
                 {item.ethnicities.join(", ")}
@@ -460,6 +486,11 @@ export default function HumanDonorClinicalDashboard({
                     {i < ge.length - 1 ? ", " : ""}
                   </span>
                 ))}
+              </FieldPair>
+            ) : null}
+            {item.dominant_genetic_ancestry ? (
+              <FieldPair label="Dominant genetic ancestry">
+                {item.dominant_genetic_ancestry}
               </FieldPair>
             ) : null}
             {item.self_reported_ethnicities?.length > 0 ? (
@@ -511,6 +542,16 @@ export default function HumanDonorClinicalDashboard({
                     </span>
                   ) : null}
                 </FieldPair>
+                {item.label_hba1c_discordant !== undefined ? (
+                  <FieldPair label="Label vs HbA1c discordant">
+                    {item.label_hba1c_discordant ? "Yes" : "No"}
+                  </FieldPair>
+                ) : null}
+                {item.tier1_complete !== undefined ? (
+                  <FieldPair label="Tier 1 complete">
+                    {item.tier1_complete ? "Yes" : "No"}
+                  </FieldPair>
+                ) : null}
                 <FieldPair label="Family history of diabetes">
                   {item.family_history_of_diabetes}
                 </FieldPair>
@@ -553,6 +594,31 @@ export default function HumanDonorClinicalDashboard({
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Autoantibodies
             </h2>
+            {(item.aab_summary ||
+              item.aab_positive !== undefined ||
+              item.aab_tested !== undefined ||
+              item.aab_count !== undefined) && (
+              <dl className="mb-4 space-y-2 sm:grid sm:grid-cols-2 sm:gap-3 sm:space-y-0">
+                {item.aab_summary ? (
+                  <FieldPair label="Summary">{item.aab_summary}</FieldPair>
+                ) : null}
+                {item.aab_positive !== undefined ? (
+                  <FieldPair label="Any positive">
+                    {item.aab_positive ? "Yes" : "No"}
+                  </FieldPair>
+                ) : null}
+                {item.aab_tested !== undefined ? (
+                  <FieldPair label="Tested">
+                    {item.aab_tested ? "Yes" : "No"}
+                  </FieldPair>
+                ) : null}
+                {item.aab_count !== undefined && item.aab_count !== null ? (
+                  <FieldPair label="Positive count" monoValue>
+                    {item.aab_count}
+                  </FieldPair>
+                ) : null}
+              </dl>
+            )}
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               <AutoantibodyCard
                 name="GADA"
@@ -635,58 +701,113 @@ export default function HumanDonorClinicalDashboard({
         )}
 
         {/* GENETIC RISK SCORE */}
-        {item.genetic_risk_score?.length > 0 ? (
+        {(item.genetic_risk_score?.length > 0 ||
+          item.grs2_score !== undefined ||
+          item.t2d_grs_score !== undefined) && (
           <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Genetic risk score
             </h2>
-            <div className="space-y-3">
-              {item.genetic_risk_score.map((entry, idx) => (
-                <GrsMethodCard key={`${entry.method}-${idx}`} entry={entry} />
-              ))}
-            </div>
+            {(item.grs2_score !== undefined ||
+              item.grs2_normalized !== undefined ||
+              item.t2d_grs_score !== undefined ||
+              item.t2d_grs_normalized !== undefined) && (
+              <div className="mb-4 flex flex-wrap gap-3">
+                {item.grs2_score !== undefined ? (
+                  <MetricCard
+                    label="GRS2 score"
+                    value={String(item.grs2_score)}
+                  />
+                ) : null}
+                {item.grs2_normalized !== undefined ? (
+                  <MetricCard
+                    label="GRS2 normalized"
+                    value={String(item.grs2_normalized)}
+                  />
+                ) : null}
+                {item.t2d_grs_score !== undefined ? (
+                  <MetricCard
+                    label="T2D GRS score"
+                    value={String(item.t2d_grs_score)}
+                  />
+                ) : null}
+                {item.t2d_grs_normalized !== undefined ? (
+                  <MetricCard
+                    label="T2D GRS normalized"
+                    value={String(item.t2d_grs_normalized)}
+                  />
+                ) : null}
+              </div>
+            )}
+            {item.genetic_risk_score?.length > 0 ? (
+              <div className="space-y-3">
+                {item.genetic_risk_score.map((entry, idx) => (
+                  <GrsMethodCard key={`${entry.method}-${idx}`} entry={entry} />
+                ))}
+              </div>
+            ) : null}
           </section>
-        ) : null}
+        )}
 
         {/* DATA AVAILABLE */}
-        {item.data_available?.length > 0 ? (
+        {(item.data_available?.length > 0 ||
+          item.data_available_datasets?.length > 0 ||
+          item.data_available_tissues?.length > 0 ||
+          item.data_available_keys?.length > 0) && (
           <section>
             <h2 className="mb-4 border-b border-gray-200 pb-2 text-2xl font-light text-gray-900 dark:border-gray-800 dark:text-gray-100">
               Data available
             </h2>
-            <div className="space-y-5">
-              {Object.entries(dataByTissue).map(([tissue, rows]) => (
-                <div key={tissue}>
-                  <h3 className="mb-2 text-sm font-semibold text-data-label dark:text-gray-400">
-                    {tissue}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {rows.map((row, i) => (
-                      <div
-                        key={`${row.dataset}-${i}`}
-                        className="inline-flex flex-wrap items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-sm dark:border-gray-700 dark:bg-gray-900"
-                      >
-                        <span className="font-medium text-gray-900 dark:text-gray-100">
-                          {row.dataset}
-                        </span>
-                        {row.dataset_link ? (
-                          <a
-                            href={row.dataset_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs font-semibold text-blue-700 underline dark:text-blue-400"
-                          >
-                            Access dataset
-                          </a>
-                        ) : null}
-                      </div>
-                    ))}
+            {(item.data_available_datasets?.length > 0 ||
+              item.data_available_tissues?.length > 0) && (
+              <dl className="mb-4 space-y-2 sm:grid sm:grid-cols-2 sm:gap-3 sm:space-y-0">
+                {item.data_available_datasets?.length > 0 ? (
+                  <FieldPair label="Datasets">
+                    {item.data_available_datasets.join(", ")}
+                  </FieldPair>
+                ) : null}
+                {item.data_available_tissues?.length > 0 ? (
+                  <FieldPair label="Tissues">
+                    {item.data_available_tissues.join(", ")}
+                  </FieldPair>
+                ) : null}
+              </dl>
+            )}
+            {item.data_available?.length > 0 ? (
+              <div className="space-y-5">
+                {Object.entries(dataByTissue).map(([tissue, rows]) => (
+                  <div key={tissue}>
+                    <h3 className="mb-2 text-sm font-semibold text-data-label dark:text-gray-400">
+                      {tissue}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {rows.map((row, i) => (
+                        <div
+                          key={`${row.dataset}-${i}`}
+                          className="inline-flex flex-wrap items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-sm dark:border-gray-700 dark:bg-gray-900"
+                        >
+                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                            {row.dataset}
+                          </span>
+                          {row.dataset_link ? (
+                            <a
+                              href={row.dataset_link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs font-semibold text-blue-700 underline dark:text-blue-400"
+                            >
+                              Access dataset
+                            </a>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : null}
           </section>
-        ) : null}
+        )}
 
         {/* SUPPLEMENTARY */}
         <section>
@@ -837,6 +958,8 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "self_reported_ethnicities",
   "diabetes_status_description",
   "age",
+  "age_group",
+  "pediatric",
   "bmi",
   "height",
   "weight",
@@ -846,6 +969,7 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "diabetes_status",
   "t1d_stage",
   "derived_diabetes_status",
+  "label_hba1c_discordant",
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "other_disease_states",
@@ -855,6 +979,10 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "hospital_stay",
   "glucose_loweing_theraphy",
   "other_therapy",
+  "aab_summary",
+  "aab_positive",
+  "aab_tested",
+  "aab_count",
   "aab_gada",
   "aab_gada_value",
   "aab_gada_assay",
@@ -870,7 +998,17 @@ HumanDonorClinicalDashboard.displayedProperties = [
   "hla_typing",
   "hla_status",
   "genetic_risk_score",
+  "grs2_score",
+  "grs2_normalized",
+  "t2d_grs_score",
+  "t2d_grs_normalized",
+  "tier1_complete",
+  "sex_discordant",
+  "dominant_genetic_ancestry",
   "data_available",
+  "data_available_datasets",
+  "data_available_tissues",
+  "data_available_keys",
   "pancreas_tissue_available",
   "other_tissues_available",
   "publication_data",

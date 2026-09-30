@@ -31,6 +31,7 @@ import {
 /** `post_shipment_*` keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
 const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
   "post_shipment_islet_viability",
+  "post_shipment_viability",
   "post_shipment_viability_qualitative",
   "post_shipment_viability_quantitative",
   "post_shipment_purity",
