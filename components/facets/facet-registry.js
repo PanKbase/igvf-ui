@@ -1,4 +1,6 @@
 // components/facets/custom-facets
+import AnnotationTypeTagLabel from "./custom-facets/annotation-type-tag-label";
+import AnnotationTypeTermLabel from "./custom-facets/annotation-type-term-label";
 import AuditTitle from "./custom-facets/audit-title";
 import GenderTitle from "./custom-facets/gender-title";
 import InternalActionAuditTerms from "./custom-facets/audit-internal-action-terms";
@@ -19,6 +21,7 @@ import TypeTerm from "./custom-facets/type-terms";
 const facetRegistry = {
   // Custom tag labels.
   tagLabel: {
+    annotation_type: AnnotationTypeTagLabel,
     "donors.taxa": TaxaTagLabel,
     taxa: TaxaTagLabel,
     standard: StandardTagLabel,
@@ -26,6 +29,7 @@ const facetRegistry = {
 
   // Custom term labels and document counts for a standard facet term.
   termLabel: {
+    annotation_type: AnnotationTypeTermLabel,
     "donors.taxa": TaxaTermLabel,
     taxa: TaxaTermLabel,
     standard: StandardTermLabel,

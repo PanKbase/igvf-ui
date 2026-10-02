@@ -37,6 +37,7 @@ import FetchRequest from "../../lib/fetch-request";
 import { getAllDerivedFromFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 import SampleTable from "../../components/sample-table";
+import { getAnnotationTypeTitle } from "../../lib/annotation-type";
 
 const ISLET_NORMALIZATION_FIELDS = [
   ["total_islet_cell_volume", "Total Islet Cell Volume (IEQ)"],
@@ -141,6 +142,20 @@ export default function AnalysisSet({
             <DataArea>
               <DataItemLabel>File Set Type</DataItemLabel>
               <DataItemValue>{analysisSet.file_set_type}</DataItemValue>
+              {analysisSet.annotation_type && (
+                <>
+                  <DataItemLabel>Annotation Type</DataItemLabel>
+                  <DataItemValue>
+                    {getAnnotationTypeTitle(analysisSet.annotation_type)}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.annotation_category && (
+                <>
+                  <DataItemLabel>Annotation Category</DataItemLabel>
+                  <DataItemValue>{analysisSet.annotation_category}</DataItemValue>
+                </>
+              )}
               {analysisSet.publication_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Publication Identifiers</DataItemLabel>

@@ -13,6 +13,8 @@ import {
   SearchListItemType,
   SearchListItemUniqueId,
 } from "./search-list-item";
+// lib
+import { getAnnotationTypeTitle } from "../../../lib/annotation-type";
 
 export default function AnalysisSet({ item: analysisSet }) {
   // Use description if available, otherwise use summary, then fall back to file_set_type + assay_title
@@ -47,10 +49,19 @@ export default function AnalysisSet({ item: analysisSet }) {
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(analysisSet.award)
-              ? analysisSet.award.map(award => award.title).join(", ")
-              : analysisSet.award.title
-            }
+              ? analysisSet.award.map((award) => award.title).join(", ")
+              : analysisSet.award.title}
           </span>
+          {analysisSet.annotation_type && (
+            <span key="annotation-type">
+              {getAnnotationTypeTitle(analysisSet.annotation_type)}
+            </span>
+          )}
+          {analysisSet.annotation_category && (
+            <span key="annotation-category">
+              {analysisSet.annotation_category}
+            </span>
+          )}
         </SearchListItemMeta>
         <SearchListItemSupplement>
           <SearchListItemSupplementAlternateAccessions item={analysisSet} />

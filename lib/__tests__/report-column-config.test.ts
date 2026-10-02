@@ -87,6 +87,8 @@ describe("getReportColumnPreset", () => {
       FILE_SET_CLINICAL_COLUMN_IDS
     );
     expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("description");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("annotation_type");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("annotation_category");
   });
 
   it("returns clinical columns for Workflow", () => {
