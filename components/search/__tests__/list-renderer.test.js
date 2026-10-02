@@ -1438,7 +1438,9 @@ describe("Test the AnalysisSet component", () => {
       accession: "IGVFDS3099XPLN",
       alternate_accessions: ["IGVFDS3099XPLO"],
       aliases: ["igvf:basic_analysis_set"],
-      award: "/awards/HG012012/",
+      award: { title: "J. Michael Cherry, Stanford" },
+      annotation_type: "sample_scrnaseq",
+      annotation_category: "Gene expression",
       file_set_type: "primary analysis",
       lab: {
         title: "J. Michael Cherry, Stanford",
@@ -1459,10 +1461,12 @@ describe("Test the AnalysisSet component", () => {
     expect(uniqueId).toHaveTextContent(/IGVFDS3099XPLN$/);
 
     const title = screen.getByTestId("search-list-item-title");
-    expect(title).toHaveTextContent(/^primary analysis$/);
+    expect(title).toHaveTextContent(/^primary analysis of data$/);
 
     const meta = screen.queryByTestId("search-list-item-meta");
     expect(meta).toHaveTextContent("J. Michael Cherry, Stanford");
+    expect(meta).toHaveTextContent("Per-sample processed islet scRNA-seq");
+    expect(meta).toHaveTextContent("Gene expression");
 
     const supplement = screen.getByTestId("search-list-item-supplement");
     expect(supplement).toHaveTextContent("primary analysis of data");
@@ -1477,7 +1481,7 @@ describe("Test the AnalysisSet component", () => {
       "@type": ["AnalysisSet", "FileSet", "Item"],
       accession: "IGVFDS0390NOLS",
       aliases: ["igvf:basic_analysis_set_2"],
-      award: "/awards/HG012012/",
+      award: { title: "J. Michael Cherry, Stanford" },
       file_set_type: "primary analysis",
       lab: {
         "@id": "/labs/j-michael-cherry/",
@@ -1499,7 +1503,7 @@ describe("Test the AnalysisSet component", () => {
     expect(uniqueId).toHaveTextContent(/IGVFDS0390NOLS$/);
 
     const title = screen.getByTestId("search-list-item-title");
-    expect(title).toHaveTextContent(/^primary analysis$/);
+    expect(title).toHaveTextContent(/^primary analysis of data$/);
 
     const meta = screen.queryByTestId("search-list-item-meta");
     expect(meta).toHaveTextContent(/^J. Michael Cherry, Stanford/);

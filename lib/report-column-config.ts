@@ -216,6 +216,8 @@ export const ANALYSIS_SET_CLINICAL_COLUMN_IDS: readonly string[] = [
   "accession",
   "status",
   "file_set_type",
+  "annotation_type",
+  "annotation_category",
   "assay_titles",
   "description",
   "samples",
