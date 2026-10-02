@@ -22,6 +22,15 @@ describe("filterHiddenReportColumns", () => {
     expect(specs.map((spec) => spec.id)).toEqual(["@id", "accession", "hba1c"]);
   });
 
+  it("keeps description columns", () => {
+    const specs = filterHiddenReportColumns([
+      { id: "accession", title: "Accession" },
+      { id: "description", title: "Description" },
+      { id: "summary", title: "Summary" },
+    ]);
+    expect(specs.map((spec) => spec.id)).toEqual(["accession", "description"]);
+  });
+
   it("removes biosample provenance columns", () => {
     const specs = filterHiddenReportColumns([
       { id: "accession", title: "Accession" },
@@ -77,6 +86,7 @@ describe("getReportColumnPreset", () => {
     expect(getReportColumnPreset(["AnalysisSet"])).not.toBe(
       FILE_SET_CLINICAL_COLUMN_IDS
     );
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("description");
   });
 
   it("returns clinical columns for Workflow", () => {
