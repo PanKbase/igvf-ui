@@ -55,6 +55,65 @@ export function formatDateRange(startDate?: string, endDate?: string): string {
 }
 
 /**
+ * Converts a Date object representing a calendar date (local midnight, as returned by
+ * `stringToDate()` and the date-range picker) to a human-readable string in the format
+ * "Month Day, Year".
+ * @param date Date object to convert
+ * @returns Human-readable date string in the format "Month Day, Year"
+ */
+export function formatLongDate(date: Date): string {
+  return dateFns.format(date, "MMMM d, yyyy");
+}
+
+/**
+ * Converts a Date object representing a calendar date (local midnight, as returned by
+ * `stringToDate()` and the date-range picker) to the YYYY-MM-DD format used in query strings.
+ * @param date Date object to convert
+ * @returns Date string in the format YYYY-MM-DD
+ */
+export function dateToDateOnly(date: Date): string {
+  return dateFns.format(date, "yyyy-MM-dd");
+}
+
+/**
+ * Strip the time from an ISO 8601 date-time string, leaving only the date, e.g. "YYYY-MM-DD".
+ * @param iso8601 ISO 8601 date or date-time string
+ * @returns Date portion of `iso8601`
+ */
+export function iso8601ToDateOnly(iso8601: string): string {
+  return iso8601.split("T")[0];
+}
+
+/**
+ * Convert a date string in the format YYYY-MM-DD or 2023-08-01T04:12:31.890123+00:00 to a Date
+ * object without using the local time zone. So "2025-06-01" returns a Date object representing
+ * June 1, 2025, at local midnight, never "2025-05-31".
+ * @param dateString Date string in the format YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS.mmmmmm+00:00
+ * @returns Date object representing `dateString`
+ */
+export function stringToDate(dateString: string): Date {
+  const dateWithoutTime = dateString.split("T")[0];
+  return dateFns.parse(dateWithoutTime, "yyyy-MM-dd", new Date());
+}
+
+/**
+ * Get the system date limits for the date-range picker as local calendar dates. The start limit
+ * is January 1, 2023, and the end limit is 90 days after today.
+ * @returns Start and end limits as Date objects
+ */
+export function getSystemDateRange(): { startLimit: Date; endLimit: Date } {
+  const today = new Date();
+  const endLimit = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 90
+  );
+  const startLimit = new Date(2023, 0, 1);
+
+  return { startLimit, endLimit };
+}
+
+/**
  * Convert an ISO 8601 date string to the equivalent date in yyyy-MM format. Don't use npm date
  * utilities because they can use the local time zone, which could return a month that's off by
  * one.

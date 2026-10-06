@@ -3,12 +3,21 @@ import { useAuth0 } from "@auth0/auth0-react";
 import PropTypes from "prop-types";
 // components
 import { auditMap } from "../../audit";
+// components/facets
+import { FacetTermCount } from "../facet-term-count";
+// components/facets/custom-facets
+import StandardTitleElement from "./standard-title-element";
 
 /**
  * Displays the title for audit facets. These show a shortened title and an icon matching the icons
  * in the audit panels. This component gets used for the titles of all audit categories.
  */
-export default function AuditTitle({ facet }) {
+export default function AuditTitle({
+  facet,
+  searchResults,
+  isFacetOpen = false,
+  isEditOrderMode = false,
+}) {
   const { isAuthenticated } = useAuth0();
 
   if (isAuthenticated || facet.field !== "audit.INTERNAL_ACTION.category") {
@@ -17,19 +26,28 @@ export default function AuditTitle({ facet }) {
     const mapping = auditMap[auditType];
 
     return (
-      <h2
-        className="mb-1 bg-facet-title text-center text-base font-medium text-facet-title"
-        data-testid={`facettitle-${facet.field}`}
-      >
-        <div className="flex items-center justify-center gap-1">
-          <div>Audit {mapping.humanReadable}</div>
-          <div className="relative h-4 w-4">
-            <mapping.Icon
-              className={`absolute bottom-0 left-0 right-0 top-0 ${mapping.color}`}
-            />
+      <>
+        <StandardTitleElement
+          field={facet.field}
+          description={facet.description}
+          isFacetOpen={isFacetOpen}
+          isEditOrderMode={isEditOrderMode}
+        >
+          <div className="flex items-center gap-1">
+            <div>Audit {mapping.humanReadable}</div>
+            <div className="relative h-4 w-4">
+              <mapping.Icon
+                className={`absolute bottom-0 left-0 right-0 top-0 ${mapping.color}`}
+              />
+            </div>
           </div>
-        </div>
-      </h2>
+        </StandardTitleElement>
+        <FacetTermCount
+          facet={facet}
+          searchResults={searchResults}
+          isFacetOpen={isFacetOpen}
+        />
+      </>
     );
   }
   return null;
@@ -40,5 +58,17 @@ AuditTitle.propTypes = {
   facet: PropTypes.shape({
     // Audit property name including the audit type
     field: PropTypes.string.isRequired,
+    // Facet description
+    description: PropTypes.string,
+    // Facet terms
+    terms: PropTypes.array,
   }).isRequired,
+  // Search results that include the facet
+  searchResults: PropTypes.shape({
+    filters: PropTypes.array.isRequired,
+  }).isRequired,
+  // True if the facet displays all its terms
+  isFacetOpen: PropTypes.bool,
+  // True when editing the facet order
+  isEditOrderMode: PropTypes.bool,
 };

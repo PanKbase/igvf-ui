@@ -1475,6 +1475,42 @@ describe("Test the AnalysisSet component", () => {
     expect(status).toHaveTextContent("released");
   });
 
+  it("renders DE fields on an AnalysisSet search result", () => {
+    const item = {
+      "@id": "/analysis-sets/PKBDS0001DE01/",
+      "@type": ["AnalysisSet", "FileSet", "Item"],
+      accession: "PKBDS0001DE01",
+      award: { title: "J. Michael Cherry, Stanford" },
+      annotation_type: "differential_expression",
+      annotation_category: "Differential expression",
+      cell_type: "beta",
+      de_comparison_class: "disease_status",
+      de_contrast: "T1D vs control",
+      de_method: "pseudobulk_group_comparison",
+      file_set_type: "principal analysis",
+      lab: {
+        title: "J. Michael Cherry, Stanford",
+      },
+      status: "released",
+      summary: "principal analysis of data",
+      uuid: "609869e7-cbd9-4d06-9569-d3fdb4604cde",
+    };
+
+    render(
+      <SessionContext.Provider value={{ profiles }}>
+        <AnalysisSet item={item} />
+      </SessionContext.Provider>
+    );
+
+    const meta = screen.queryByTestId("search-list-item-meta");
+    expect(meta).toHaveTextContent("Differential expression results by cell type");
+    expect(meta).toHaveTextContent("Differential expression");
+    expect(meta).toHaveTextContent("beta");
+    expect(meta).toHaveTextContent("Disease status");
+    expect(meta).toHaveTextContent("T1D vs control");
+    expect(meta).toHaveTextContent("Pseudobulk group comparison");
+  });
+
   it("renders an AnalysisSet item without alternate accessions", () => {
     const item = {
       "@id": "/analysis-sets/IGVFDS0390NOLS/",

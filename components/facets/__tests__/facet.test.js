@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import Facet from "../facet";
 import FacetTerm from "../facet-term";
 
@@ -95,6 +95,8 @@ describe("Test the <Facet> component", () => {
         facet={facet}
         searchResults={searchResults}
         updateQuery={updateQuery}
+        updateOpen={jest.fn()}
+        isFacetOpen
       >
         {facet.terms.map((term) => {
           return (
@@ -129,5 +131,84 @@ describe("Test the <Facet> component", () => {
     expect(checkbox).toHaveAttribute("checked");
     checkbox = within(terms[1]).getByRole("checkbox");
     expect(checkbox).not.toHaveAttribute("checked");
+
+    // The open facet's trigger reports it as expanded, and the title includes the term count.
+    expect(screen.getByTestId(`facettrigger-${facet.field}`)).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    expect(
+      screen.getByTestId(`facet-term-count-${facet.field}`)
+    ).toHaveAttribute("aria-label", "1 selected of 2 terms");
+  });
+
+  describe("title trigger and optional quick-hide", () => {
+    const facet = {
+      field: "t1d_stage",
+      title: "T1D Stage",
+      description: "Type 1 diabetes stage.",
+      optional: true,
+      terms: [{ key: "Stage 1", doc_count: 2 }],
+    };
+    const searchResults = { filters: [] };
+
+    it("calls updateOpen when the title is clicked and marks a closed facet unexpanded", () => {
+      const updateOpen = jest.fn();
+      render(
+        <Facet
+          facet={facet}
+          searchResults={searchResults}
+          updateQuery={jest.fn()}
+          updateOpen={updateOpen}
+        />
+      );
+
+      const trigger = screen.getByTestId("facettrigger-t1d_stage");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(
+        screen.queryByTestId("optional-facet-quick-hide-button-t1d_stage")
+      ).not.toBeInTheDocument();
+
+      fireEvent.click(trigger);
+      expect(updateOpen).toHaveBeenCalledTimes(1);
+    });
+
+    it("shows a quick-hide button for configured optional facets", () => {
+      const onQuickHide = jest.fn();
+      const updateOpen = jest.fn();
+      render(
+        <Facet
+          facet={facet}
+          searchResults={searchResults}
+          updateQuery={jest.fn()}
+          updateOpen={updateOpen}
+          onOptionalFacetQuickHideChange={onQuickHide}
+          isOptional
+        />
+      );
+
+      fireEvent.click(
+        screen.getByTestId("optional-facet-quick-hide-button-t1d_stage")
+      );
+      expect(onQuickHide).toHaveBeenCalledWith("t1d_stage");
+      expect(updateOpen).not.toHaveBeenCalled();
+    });
+
+    it("hides the quick-hide button while editing the facet order", () => {
+      render(
+        <Facet
+          facet={facet}
+          searchResults={searchResults}
+          updateQuery={jest.fn()}
+          updateOpen={jest.fn()}
+          isOptional
+          isEditOrderMode
+        />
+      );
+
+      expect(
+        screen.queryByTestId("optional-facet-quick-hide-button-t1d_stage")
+      ).not.toBeInTheDocument();
+    });
   });
 });

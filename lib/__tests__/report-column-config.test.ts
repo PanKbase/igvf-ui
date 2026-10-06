@@ -89,6 +89,12 @@ describe("getReportColumnPreset", () => {
     expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("description");
     expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("annotation_type");
     expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("annotation_category");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("cell_type");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("de_comparison_class");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("de_contrast");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("de_trait");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("de_trait_description");
+    expect(ANALYSIS_SET_CLINICAL_COLUMN_IDS).toContain("de_method");
   });
 
   it("returns clinical columns for Workflow", () => {

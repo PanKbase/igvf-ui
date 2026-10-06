@@ -15,6 +15,10 @@ import {
 } from "./search-list-item";
 // lib
 import { getAnnotationTypeTitle } from "../../../lib/annotation-type";
+import {
+  getDeComparisonClassShortTitle,
+  getDeMethodTitle,
+} from "../../../lib/analysis-set-de";
 
 export default function AnalysisSet({ item: analysisSet }) {
   // Use description if available, otherwise use summary, then fall back to file_set_type + assay_title
@@ -60,6 +64,25 @@ export default function AnalysisSet({ item: analysisSet }) {
           {analysisSet.annotation_category && (
             <span key="annotation-category">
               {analysisSet.annotation_category}
+            </span>
+          )}
+          {analysisSet.cell_type && (
+            <span key="cell-type">{analysisSet.cell_type}</span>
+          )}
+          {analysisSet.de_comparison_class && (
+            <span key="de-comparison-class">
+              {getDeComparisonClassShortTitle(analysisSet.de_comparison_class)}
+            </span>
+          )}
+          {analysisSet.de_contrast && (
+            <span key="de-contrast">{analysisSet.de_contrast}</span>
+          )}
+          {analysisSet.de_trait && (
+            <span key="de-trait">{analysisSet.de_trait}</span>
+          )}
+          {analysisSet.de_method && (
+            <span key="de-method">
+              {getDeMethodTitle(analysisSet.de_method)}
             </span>
           )}
         </SearchListItemMeta>
