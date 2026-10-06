@@ -17,6 +17,7 @@ import TableCount from "../components/table-count";
 // lib
 import buildBreadcrumbs from "../lib/breadcrumbs";
 import { errorObjectToProps } from "../lib/errors";
+import { loadFacetConfig } from "../lib/facets";
 import FetchRequest from "../lib/fetch-request";
 import QueryString from "../lib/query-string";
 import {
@@ -136,7 +137,7 @@ function applyColumnPresetQuery(queryString, columnIds) {
   return buildColumnPresetQuery(queryString, columnIds);
 }
 
-export default function MultiReport({ searchResults }) {
+export default function MultiReport({ searchResults, facetConfig = null }) {
   const router = useRouter();
   const { collectionTitles, profiles } = useContext(SessionContext);
   const { totalPages } = useSearchLimits(searchResults);
@@ -157,8 +158,10 @@ export default function MultiReport({ searchResults }) {
   const visibleColumnSpecs = columnsToColumnSpecs(searchResults.result_columns);
   const allColumnSpecs = getReportTypeColumnSpecs(selectedTypes, profiles);
 
-  const filteredDefaultColumnSpecs = filterHiddenReportColumns(defaultColumnSpecs);
-  const filteredVisibleColumnSpecs = filterHiddenReportColumns(visibleColumnSpecs);
+  const filteredDefaultColumnSpecs =
+    filterHiddenReportColumns(defaultColumnSpecs);
+  const filteredVisibleColumnSpecs =
+    filterHiddenReportColumns(visibleColumnSpecs);
   const filteredAllColumnSpecs = filterHiddenReportColumns(allColumnSpecs);
   const columnPreset = getReportColumnPreset(selectedTypes);
 
@@ -243,7 +246,10 @@ export default function MultiReport({ searchResults }) {
         )}
         {items.length > 0 ? (
           <div className="lg:flex lg:items-start lg:gap-1">
-            <FacetSection searchResults={searchResults} />
+            <FacetSection
+              searchResults={searchResults}
+              facetConfig={facetConfig}
+            />
             <div className="min-w-0 grow">
               <FacetTags searchResults={searchResults} />
               <SearchResultsHeader
@@ -287,6 +293,8 @@ export default function MultiReport({ searchResults }) {
 MultiReport.propTypes = {
   // @graph from search results from igvfd
   searchResults: PropTypes.object.isRequired,
+  // Optional/category/description for the facets from the search config, keyed by facet field
+  facetConfig: PropTypes.object,
 };
 
 export async function getServerSideProps({ req, query }) {
@@ -330,9 +338,11 @@ export async function getServerSideProps({ req, query }) {
       "title",
       req.headers.cookie
     );
+    const facetConfig = await loadFacetConfig(searchResults, request);
     return {
       props: {
         searchResults,
+        facetConfig,
         pageContext: { title: "title" },
         breadcrumbs,
       },

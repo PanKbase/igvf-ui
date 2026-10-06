@@ -1,776 +1,488 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { useAuth0 } from "@auth0/auth0-react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import FacetSection from "../facet-section";
+import FetchRequest from "../../../lib/fetch-request";
+import { clearSearchConfigCache } from "../../../lib/facets";
 
-jest.mock("next/router", () => {
-  // Mock the window.location object so we can test the router.push() function.
-  const location = new URL("https://www.example.com");
-  location.assign = jest.fn();
-  location.replace = jest.fn();
-  location.reload = jest.fn();
-  delete window.location;
-  window.location = location;
+const mockPush = jest.fn();
 
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: "",
+      asPath: "",
+      push: mockPush,
+    };
+  },
+}));
+
+jest.mock("@auth0/auth0-react", () => ({
+  useAuth0: jest.fn(),
+}));
+
+jest.mock("../../../lib/fetch-request", () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+const facetConfig = {
+  gender: { optional: false, category: "Donor" },
+  status: { optional: false },
+  t1d_stage: {
+    optional: true,
+    category: "Clinical",
+    description: "Stage of type 1 diabetes",
+  },
+  hla: { optional: true, category: "Clinical" },
+};
+
+function buildSearchResults({ type = "HumanDonor", selected = [] } = {}) {
   return {
-    useRouter() {
-      return {
-        route: "/",
-        pathname: "",
-        query: "",
-        asPath: "",
-        push: jest.fn().mockImplementation((href) => {
-          window.location.href = `https://www.example.com${href}`;
-        }),
-      };
-    },
+    "@id": `/search/?type=${type}`,
+    clear_filters: `/search/?type=${type}`,
+    facets: [
+      {
+        field: "type",
+        title: "Object Type",
+        terms: [{ key: type, doc_count: 7 }],
+      },
+      {
+        field: "gender",
+        title: "Gender",
+        terms: [
+          { key: "female", doc_count: 4 },
+          { key: "male", doc_count: 3 },
+        ],
+      },
+      {
+        field: "status",
+        title: "Status",
+        open_on_load: true,
+        terms: [{ key: "released", doc_count: 7 }],
+      },
+      {
+        field: "t1d_stage",
+        title: "T1D Stage",
+        terms: [{ key: "Stage 1", doc_count: 2 }],
+      },
+      {
+        field: "hla",
+        title: "HLA",
+        terms: [{ key: "A1", doc_count: 1 }],
+      },
+    ],
+    filters: [{ field: "type", term: type, remove: "/search/" }, ...selected],
+    total: 7,
   };
-});
+}
+
+function facetFields() {
+  return screen
+    .getAllByTestId(/^facet-container-/)
+    .map((el) =>
+      el.getAttribute("data-testid").replace("facet-container-", "")
+    );
+}
 
 describe("Test <FacetSection> component", () => {
-  it("renders the correct facets without facet groups", () => {
-    const searchResults = {
-      "@id": "/search?type=Gene&taxa!=Homo+sapiens",
-      facet_groups: [],
-      facets: [
-        {
-          field: "type",
-          title: "Data Type",
-          terms: [
-            {
-              key: "Gene",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "taxa",
-          title: "Taxa",
-          terms: [
-            {
-              key: "Homo sapiens",
-              doc_count: 5,
-            },
-            {
-              key: "Mus musculus",
-              doc_count: 2,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "status",
-          title: "Status",
-          terms: [
-            {
-              key: "released",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "audit.WARNING.category",
-          title: "Audit category: WARNING",
-          terms: [
-            {
-              key: "missing plasmid map",
-              doc_count: 2,
-            },
-          ],
-          total: 3,
-        },
-      ],
-      filters: [
-        {
-          field: "taxa!",
-          remove: "/search/?type=Gene",
-          term: "Homo sapiens",
-        },
-        {
-          field: "type",
-          term: "Gene",
-          remove: "/search",
-        },
-      ],
-    };
+  beforeEach(() => {
+    window.scrollTo = jest.fn();
+    localStorage.clear();
+    sessionStorage.clear();
+    clearSearchConfigCache();
+    mockPush.mockClear();
+    useAuth0.mockReturnValue({ isAuthenticated: true });
+  });
 
-    render(<FacetSection searchResults={searchResults} />);
+  it("renders the non-optional facets and the controls, hiding the type facet", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
 
-    // Check for no facet group buttons.
-    const facetGroupButtonSection = screen.queryByTestId("facet-group-buttons");
-    expect(facetGroupButtonSection).toBeNull();
+    expect(facetFields()).toEqual(["gender", "status"]);
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+    expect(screen.getByTestId("facet-terms-status")).toBeInTheDocument();
+    expect(screen.getByText("Clear Filters")).toBeInTheDocument();
+    expect(screen.getByLabelText("Open all facets")).toBeInTheDocument();
+    expect(screen.getByLabelText("Close all facets")).toBeInTheDocument();
+    expect(screen.getByText("Optional Filters")).toBeInTheDocument();
+    expect(screen.getByText("Filter Order")).toBeInTheDocument();
+  });
 
-    // Check for the correct number of facets.
-    const facetSections = screen.getAllByTestId(/^facet-/);
-    expect(facetSections).toHaveLength(3);
+  it("renders nothing if only the type facet exists", () => {
+    const searchResults = buildSearchResults();
+    searchResults.facets = [searchResults.facets[0]];
+    const { container } = render(
+      <FacetSection searchResults={searchResults} facetConfig={{}} />
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
 
-    // Make sure the first facet has the correct title.
-    const facetTitle = within(facetSections[0]).getByRole("heading", {
-      name: /^Taxa$/,
+  it("doesn't offer optional filters for types without them", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults({ type: "Gene" })}
+        facetConfig={{ gender: { optional: false } }}
+      />
+    );
+    expect(screen.queryByText("Optional Filters")).not.toBeInTheDocument();
+    expect(screen.getByText("Filter Order")).toBeInTheDocument();
+  });
+
+  it("clears all filters when clicking the Clear Filters button", () => {
+    const searchResults = buildSearchResults({
+      selected: [{ field: "gender", term: "female", remove: "/search/" }],
     });
-    expect(facetTitle).toBeInTheDocument();
+    render(
+      <FacetSection searchResults={searchResults} facetConfig={facetConfig} />
+    );
 
-    // Make sure the first facet has the correct terms.
-    let terms = within(facetSections[0]).getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(2);
-    expect(terms[0]).toHaveTextContent(/^Homo sapiens/);
-    expect(terms[1]).toHaveTextContent(/^Mus musculus/);
-    expect(terms[1]).toHaveTextContent(/2$/);
+    fireEvent.click(screen.getByText("Clear Filters"));
+    expect(mockPush).toHaveBeenCalledWith(
+      searchResults.clear_filters,
+      undefined,
+      { scroll: false }
+    );
+  });
 
-    // Make sure the second facet has the correct terms.
-    terms = within(facetSections[1]).getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(1);
-    expect(terms[0]).toHaveTextContent(/^released/);
-    expect(terms[0]).toHaveTextContent(/7$/);
+  it("disables Clear Filters when nothing but the type is selected", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+    expect(screen.getByLabelText("Clear all filters")).toBeDisabled();
+  });
 
-    // Make sure the third facet has the correct title.
-    const auditFacetTitle = within(facetSections[2]).getByRole("heading", {
-      name: /^Audit Warning$/,
+  it("opens and closes all facets and remembers it in localStorage", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText("Open all facets"));
+    expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    expect(JSON.parse(localStorage.getItem("facet-open-HumanDonor"))).toEqual({
+      gender: true,
+      status: true,
     });
-    expect(auditFacetTitle).toBeInTheDocument();
-  });
 
-  it("renders the correct facets with facet groups", () => {
-    const searchResults = {
-      "@id": "/search?type=AssayTerm",
-      facet_groups: [
-        {
-          name: "AssayTerm",
-          title: "Assay",
-          facet_fields: ["assay_slims", "category_slims", "objective_slims"],
-        },
-        {
-          name: "AssayTerm",
-          title: "Quality",
-          facet_fields: ["status"],
-        },
-      ],
-      facets: [
-        {
-          field: "type",
-          title: "Data Type",
-          terms: [
-            {
-              key: "AssayTerm",
-              doc_count: 7,
-            },
-            {
-              key: "OntologyTerm",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "assay_slims",
-          title: "Assay Type",
-          terms: [
-            {
-              key: "Massively parallel reporter assay",
-              doc_count: 2,
-            },
-            {
-              key: "DNA binding",
-              doc_count: 1,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "status",
-          title: "Status",
-          terms: [
-            {
-              key: "released",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-      ],
-      filters: [
-        {
-          field: "type",
-          term: "Gene",
-          remove: "/search",
-        },
-      ],
-    };
-
-    render(<FacetSection searchResults={searchResults} />);
-
-    // Check for the correct number facet group buttons.
-    const facetGroupButtonSection =
-      screen.queryByTestId(/^facetgroup-buttons$/);
-    expect(facetGroupButtonSection).toBeInTheDocument();
-    const facetGroupButtons = within(facetGroupButtonSection).getAllByRole(
-      "button"
+    fireEvent.click(screen.getByLabelText("Close all facets"));
+    expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+      "aria-expanded",
+      "false"
     );
-    expect(facetGroupButtons).toHaveLength(2);
-
-    // Check for the correct number of facets.
-    const facetSections = screen.getAllByTestId(/^facet-/);
-    expect(facetSections).toHaveLength(1);
-
-    // Make sure the first facet has the correct title.
-    const facetTitle = within(facetSections[0]).getByRole("heading", {
-      name: /^Assay Type$/,
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+    expect(JSON.parse(localStorage.getItem("facet-open-HumanDonor"))).toEqual({
+      gender: false,
+      status: false,
     });
-    expect(facetTitle).toBeInTheDocument();
-
-    // Make sure the first facet has the correct terms.
-    const terms = within(facetSections[0]).getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(2);
-    expect(terms[0]).toHaveTextContent(/^Massively parallel reporter assay/);
-    expect(terms[0]).toHaveTextContent(/2$/);
-    expect(terms[1]).toHaveTextContent(/^DNA binding/);
-    expect(terms[1]).toHaveTextContent(/1$/);
-
-    // Make sure the Status facet doesn't exist because its group isn't selected.
-    const statusFacet = screen.queryByTestId(/^facettitle-status$/);
-    expect(statusFacet).toBeNull();
   });
 
-  it("renders no facets if only a type facet exists", () => {
-    const searchResults = {
-      "@id": "/search?type=Gene",
-      facet_groups: [],
-      facets: [
-        {
-          field: "type",
-          title: "Data Type",
-          terms: [
-            {
-              key: "Gene",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-      ],
-      filters: [
-        {
-          field: "type",
-          term: "Gene",
-          remove: "/search",
-        },
-      ],
-    };
-
-    render(<FacetSection searchResults={searchResults} />);
-
-    // Check for no facet group buttons.
-    const facetGroupButtonSection = screen.queryByTestId("facet-group-buttons");
-    expect(facetGroupButtonSection).toBeNull();
-
-    // Check for no facets.
-    const facetSections = screen.queryAllByTestId(/^facet-/);
-    expect(facetSections).toHaveLength(0);
-  });
-
-  it("selects the correct facet group when clicking one", () => {
-    const searchResults = {
-      "@id": "/search?type=AssayTerm",
-      facet_groups: [
-        {
-          name: "AssayTerm",
-          title: "Assay",
-          facet_fields: ["assay_slims"],
-        },
-        {
-          name: "AssayTerm",
-          title: "Quality",
-          facet_fields: ["status"],
-        },
-      ],
-      facets: [
-        {
-          field: "type",
-          title: "Data Type",
-          terms: [
-            {
-              key: "AssayTerm",
-              doc_count: 7,
-            },
-            {
-              key: "OntologyTerm",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "assay_slims",
-          title: "Assay Type",
-          terms: [
-            {
-              key: "Massively parallel reporter assay",
-              doc_count: 2,
-            },
-            {
-              key: "DNA binding",
-              doc_count: 1,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-        {
-          field: "status",
-          title: "Status",
-          terms: [
-            {
-              key: "released",
-              doc_count: 7,
-            },
-          ],
-          total: 7,
-          type: "terms",
-          appended: false,
-          open_on_load: false,
-        },
-      ],
-      filters: [
-        {
-          field: "type",
-          term: "Gene",
-          remove: "/search",
-        },
-      ],
-    };
-
-    render(<FacetSection searchResults={searchResults} />);
-
-    // Check for the correct number facet group buttons.
-    const facetGroupButtonSection =
-      screen.queryByTestId(/^facetgroup-buttons$/);
-    const facetGroupButtons = within(facetGroupButtonSection).getAllByRole(
-      "button"
-    );
-    expect(facetGroupButtons).toHaveLength(2);
-
-    // Check that the first button has an aria label indicating it's selected and the second button
-    // has an aria label indicating it's not.
-    expect(facetGroupButtons[0]).toHaveAttribute(
-      "aria-label",
-      "Assay selected filter group"
-    );
-    expect(facetGroupButtons[1]).toHaveAttribute(
-      "aria-label",
-      "Quality filter group"
+  it("toggles a single facet and toggles all with the alt key", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
     );
 
-    // Click the second button and check that its new aria label indicates it's selected and the
-    // first button's aria label indicates it's not.
-    fireEvent.click(facetGroupButtons[1]);
-    expect(facetGroupButtons[0]).toHaveAttribute(
-      "aria-label",
-      "Assay filter group"
+    fireEvent.click(screen.getByTestId("facettrigger-gender"));
+    expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+      "aria-expanded",
+      "true"
     );
-    expect(facetGroupButtons[1]).toHaveAttribute(
-      "aria-label",
-      "Quality selected filter group"
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+    fireEvent.click(screen.getByTestId("facettrigger-gender"), {
+      altKey: true,
+    });
+    expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "false"
     );
   });
 
-  it("clears all filters when clicking the Clear All button", () => {
-    const searchResults = {
-      "@graph": [
-        {
-          "@id": "/human-donors/IGVFDO9494FQMY/",
-          "@type": ["HumanDonor", "Donor", "Item"],
-          accession: "IGVFDO9494FQMY",
-          aliases: ["igvf:alias_human_donor_child"],
-          award: {
-            "@id": "/awards/HG012012/",
-            component: "data coordination",
+  it("restores the saved open state from localStorage", async () => {
+    localStorage.setItem(
+      "facet-open-HumanDonor",
+      JSON.stringify({ gender: true, status: false })
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.getByTestId("facettrigger-gender")).toHaveAttribute(
+        "aria-expanded",
+        "true"
+      )
+    );
+    expect(screen.getByTestId("facettrigger-status")).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+  });
+
+  it("shows optional facets the user saved in localStorage", async () => {
+    localStorage.setItem(
+      "facet-optional",
+      JSON.stringify({ HumanDonor: ["t1d_stage"] })
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    await waitFor(() =>
+      expect(facetFields()).toEqual(["gender", "status", "t1d_stage"])
+    );
+    expect(
+      screen.getByTestId("optional-facet-quick-hide-button-t1d_stage")
+    ).toBeInTheDocument();
+  });
+
+  it("saves optional filters chosen in the modal to localStorage", async () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Optional Filters"));
+    const modal = await screen.findByTestId("optional-facets-modal");
+
+    // Facets group by category, each with its checkbox.
+    expect(within(modal).getByText("Clinical")).toBeInTheDocument();
+    expect(within(modal).getByLabelText("T1D Stage")).not.toBeChecked();
+    expect(within(modal).queryByLabelText("Gender")).not.toBeInTheDocument();
+
+    fireEvent.click(within(modal).getByLabelText("T1D Stage"));
+    fireEvent.click(within(modal).getByLabelText("HLA"));
+    fireEvent.click(within(modal).getByText("Save"));
+
+    await waitFor(() =>
+      expect(facetFields()).toEqual(["gender", "status", "t1d_stage", "hla"])
+    );
+    expect(JSON.parse(localStorage.getItem("facet-optional"))).toEqual({
+      HumanDonor: ["t1d_stage", "hla"],
+    });
+  });
+
+  it("doesn't save optional filters when closing the modal", async () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Optional Filters"));
+    const modal = await screen.findByTestId("optional-facets-modal");
+    fireEvent.click(within(modal).getByLabelText("T1D Stage"));
+    fireEvent.click(within(modal).getByText("Close"));
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("optional-facets-modal")
+      ).not.toBeInTheDocument()
+    );
+    expect(localStorage.getItem("facet-optional")).toBeNull();
+    expect(facetFields()).toEqual(["gender", "status"]);
+  });
+
+  it("hides an optional facet with its quick-hide button", async () => {
+    localStorage.setItem(
+      "facet-optional",
+      JSON.stringify({ HumanDonor: ["t1d_stage", "hla"] })
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    const button = await screen.findByTestId(
+      "optional-facet-quick-hide-button-t1d_stage"
+    );
+    fireEvent.click(button);
+
+    await waitFor(() =>
+      expect(facetFields()).toEqual(["gender", "status", "hla"])
+    );
+    expect(JSON.parse(localStorage.getItem("facet-optional"))).toEqual({
+      HumanDonor: ["hla"],
+    });
+  });
+
+  it("applies a saved facet order from localStorage", async () => {
+    localStorage.setItem(
+      "facet-order-HumanDonor",
+      JSON.stringify(["status", "gender"])
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    await waitFor(() => expect(facetFields()).toEqual(["status", "gender"]));
+  });
+
+  it("enters and cancels filter-order editing, and resets without saving", async () => {
+    localStorage.setItem(
+      "facet-order-HumanDonor",
+      JSON.stringify(["status", "gender"])
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+    await waitFor(() => expect(facetFields()).toEqual(["status", "gender"]));
+
+    fireEvent.click(screen.getByText("Filter Order"));
+    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
+    expect(screen.queryByText("Clear Filters")).not.toBeInTheDocument();
+    expect(facetFields()).toEqual(["status", "gender"]);
+
+    // Reset shows the default order but only saving persists it.
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(facetFields()).toEqual(["gender", "status"]);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(
+      screen.queryByRole("button", { name: "Done" })
+    ).not.toBeInTheDocument();
+    expect(facetFields()).toEqual(["status", "gender"]);
+    expect(localStorage.getItem("facet-order-HumanDonor")).not.toBeNull();
+  });
+
+  it("removes the saved order when saving the default order", async () => {
+    localStorage.setItem(
+      "facet-order-HumanDonor",
+      JSON.stringify(["status", "gender"])
+    );
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+    await waitFor(() => expect(facetFields()).toEqual(["status", "gender"]));
+
+    fireEvent.click(screen.getByText("Filter Order"));
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+
+    expect(facetFields()).toEqual(["gender", "status"]);
+    expect(localStorage.getItem("facet-order-HumanDonor")).toBeNull();
+  });
+
+  it("saves no order when finishing edit mode without changes", () => {
+    render(
+      <FacetSection
+        searchResults={buildSearchResults()}
+        facetConfig={facetConfig}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Filter Order"));
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+    expect(localStorage.getItem("facet-order-HumanDonor")).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: "Done" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("loads the facet config from the registry when the page doesn't supply it", async () => {
+    const getObject = jest.fn().mockResolvedValue({
+      optional: () => ({
+        HumanDonor: {
+          facets: {
+            gender: { title: "Gender" },
+            t1d_stage: { title: "T1D Stage", optional: true },
+            hla: { title: "HLA", optional: true },
           },
-          collections: ["ENCODE"],
-          ethnicities: ["Eskimo", "Arab"],
-          lab: {
-            "@id": "/labs/j-michael-cherry/",
-            title: "J. Michael Cherry, Stanford",
-          },
-          gender: "female",
-          status: "released",
-          taxa: "Homo sapiens",
-          uuid: "38d6630f-5b87-47a1-ae7d-174eab5758d2",
-          virtual: false,
         },
-      ],
-      "@id": "/search/?type=HumanDonor&gender=female",
-      "@type": ["Search"],
-      clear_filters: "/search/?type=HumanDonor",
-      facet_groups: [],
-      facets: [
-        {
-          appended: false,
-          field: "gender",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 3,
-              key: "female",
-            },
-            {
-              doc_count: 1,
-              key: "male",
-            },
-          ],
-          title: "Sex",
-          total: 4,
-          type: "terms",
-        },
-      ],
-      filters: [
-        {
-          field: "gender",
-          remove: "/search/?type=HumanDonor",
-          term: "female",
-        },
-        {
-          field: "type",
-          remove: "/search/?gender=female",
-          term: "HumanDonor",
-        },
-      ],
-    };
-
-    render(<FacetSection searchResults={searchResults} />);
-
-    // Click the Clear All button and check that the router push function was called with the
-    // correct URL.
-    const clearAllButton = screen.getByLabelText(/Clear all filters/);
-    fireEvent.click(clearAllButton);
-    expect(window.location.href).toBe(
-      "https://www.example.com/search/?type=HumanDonor"
+      }),
+    });
+    FetchRequest.mockImplementation(() => ({ getObject }));
+    localStorage.setItem(
+      "facet-optional",
+      JSON.stringify({ HumanDonor: ["t1d_stage"] })
     );
+
+    const { container } = render(
+      <FacetSection searchResults={buildSearchResults()} />
+    );
+    // Nothing displays until the registry tells us which facets are optional.
+    expect(container).toBeEmptyDOMElement();
+
+    await waitFor(() =>
+      expect(facetFields()).toEqual(["gender", "status", "t1d_stage"])
+    );
+    expect(getObject).toHaveBeenCalledWith("/search-config-registry/");
   });
 
-  it("reacts to the user clicking the All and None buttons", () => {
-    const searchResults = {
-      "@graph": [
-        {
-          "@id": "/in-vitro-systems/IGVFSM0008HUES/",
-          "@type": ["InVitroSystem", "Biosample", "Sample", "Item"],
-          accession: "IGVFSM0008HUES",
-          sample_terms: [
-            {
-              "@id": "/sample-terms/EFO_0007093/",
-              term_name: "HUES8",
-            },
-          ],
-          status: "released",
-        },
-      ],
-      "@id": "/search/?type=InVitroSystem",
-      "@type": ["Search"],
-      clear_filters: "/search/?type=InVitroSystem",
-      columns: {
-        "@id": {
-          title: "ID",
-        },
-        accession: {
-          title: "Accession",
-        },
-        sample_terms: {
-          title: "Sample Terms",
-        },
-      },
-      facet_groups: [],
-      facets: [
-        {
-          appended: false,
-          field: "sample_terms.term_name",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 3,
-              key: "motor neuron",
-            },
-            {
-              doc_count: 1,
-              key: "HUES8",
-            },
-          ],
-          title: "Sample Terms",
-          total: 4,
-          type: "terms",
-        },
-      ],
-      filters: [
-        {
-          field: "type",
-          remove: "/search/",
-          term: "InVitroSystem",
-        },
-      ],
-      notification: "Success",
-      sort: {
-        date_created: {
-          order: "desc",
-          unmapped_type: "keyword",
-        },
-        label: {
-          order: "desc",
-          unmapped_type: "keyword",
-        },
-        uuid: {
-          order: "desc",
-          unmapped_type: "keyword",
-        },
-      },
-      title: "Search",
-      total: 4,
-    };
+  it("shows facets as non-optional if the registry can't load", async () => {
+    FetchRequest.mockImplementation(() => ({
+      getObject: jest.fn().mockRejectedValue(new Error("network")),
+    }));
 
-    render(<FacetSection searchResults={searchResults} />);
+    await act(async () => {
+      render(<FacetSection searchResults={buildSearchResults()} />);
+    });
 
-    // Click the All button and check that the router gets called with both terms selected.
-    const allButton = screen.getByLabelText(/Select all Sample Terms/);
-    fireEvent.click(allButton);
-    expect(window.location.href).toBe(
-      "https://www.example.com/search/?type=InVitroSystem&sample_terms.term_name=motor+neuron&sample_terms.term_name=HUES8"
+    await waitFor(() =>
+      expect(facetFields()).toEqual(["gender", "status", "t1d_stage", "hla"])
     );
-
-    // Click the None button and check that the router gets called with no terms selected.
-    const noneButton = screen.getByLabelText(/Select no Sample Terms/);
-    fireEvent.click(noneButton);
-    expect(window.location.href).toBe(
-      "https://www.example.com/search/?type=InVitroSystem"
-    );
-  });
-
-  it("renders a facet with lots of terms", () => {
-    const searchResults = {
-      "@context": "/terms/",
-      "@graph": [
-        {
-          "@id": "/labs/hyejung-won/",
-          "@type": ["Lab", "Item"],
-          awards: [
-            {
-              "@id": "/awards/1UM1HG012003-01/",
-              component: "functional characterization",
-            },
-          ],
-          institute_label: "UNC",
-          name: "hyejung-won",
-          pi: "/users/7e51864b-2e2b-40cf-9abc-5cc2dc98f35d/",
-          status: "current",
-          title: "Hyejung Won, UNC",
-          uuid: "fe27c988-4664-4245-a1ca-bab9e1c62a00",
-        },
-      ],
-      "@id": "/search/?type=Lab",
-      "@type": ["Search"],
-      all: "/search/?type=Lab&limit=all",
-      clear_filters: "/search/?type=Lab",
-      columns: {
-        "@id": {
-          title: "ID",
-        },
-      },
-      facet_groups: [],
-      facets: [
-        {
-          appended: false,
-          field: "institute_label",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 12,
-              key: "Stanford",
-            },
-            {
-              doc_count: 5,
-              key: "UMich",
-            },
-            {
-              doc_count: 4,
-              key: "Broad",
-            },
-            {
-              doc_count: 4,
-              key: "Duke",
-            },
-            {
-              doc_count: 4,
-              key: "MSKCC",
-            },
-            {
-              doc_count: 4,
-              key: "UCLA",
-            },
-            {
-              doc_count: 4,
-              key: "UCSD",
-            },
-            {
-              doc_count: 4,
-              key: "UW",
-            },
-            {
-              doc_count: 3,
-              key: "UCI",
-            },
-            {
-              doc_count: 3,
-              key: "UNC",
-            },
-            {
-              doc_count: 3,
-              key: "UT",
-            },
-            {
-              doc_count: 3,
-              key: "UW Madison",
-            },
-            {
-              doc_count: 2,
-              key: "Caltech",
-            },
-            {
-              doc_count: 2,
-              key: "DFCI",
-            },
-            {
-              doc_count: 2,
-              key: "JHU",
-            },
-            {
-              doc_count: 2,
-              key: "MGH",
-            },
-            {
-              doc_count: 2,
-              key: "UCSF",
-            },
-            {
-              doc_count: 2,
-              key: "UMass",
-            },
-            {
-              doc_count: 2,
-              key: "UToronto",
-            },
-            {
-              doc_count: 2,
-              key: "University of Pittsburgh",
-            },
-            {
-              doc_count: 1,
-              key: "BIH",
-            },
-            {
-              doc_count: 1,
-              key: "Brigham and Women's Hospital",
-            },
-            {
-              doc_count: 1,
-              key: "HSCI",
-            },
-            {
-              doc_count: 1,
-              key: "HSPH",
-            },
-            {
-              doc_count: 1,
-              key: "HSS",
-            },
-            {
-              doc_count: 1,
-              key: "MD Anderson",
-            },
-            {
-              doc_count: 1,
-              key: "MHI",
-            },
-            {
-              doc_count: 1,
-              key: "Mount Sinai",
-            },
-            {
-              doc_count: 1,
-              key: "Northeastern",
-            },
-            {
-              doc_count: 1,
-              key: "PreventionGenetics",
-            },
-          ],
-          title: "Institute",
-          total: 79,
-          type: "terms",
-        },
-      ],
-      filters: [
-        {
-          field: "type",
-          remove: "/search/",
-          term: "Lab",
-        },
-      ],
-      notification: "Success",
-      title: "Search",
-      total: 79,
-    };
-
-    render(<FacetSection searchResults={searchResults} />);
-
-    // Make sure the correct number of collapsed terms appears.
-    let terms = screen.getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(10);
-
-    // Make sure the facet term filter exists.
-    const facetTermFilter = screen.getByTestId(/^facet-term-filter-/);
-    expect(facetTermFilter).toBeInTheDocument();
-
-    // Make sure the collapse control exists.
-    const collapseControl = screen.getByTestId(/^facet-term-collapse-/);
-    expect(collapseControl).toBeInTheDocument();
-
-    // Click the collapse control and make sure all the terms appear.
-    fireEvent.click(collapseControl);
-    terms = screen.getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(30);
-
-    // Type something into the term filter input and make sure the correct number of terms are
-    // displayed.
-    const termFilterInput = within(facetTermFilter).getByRole("textbox");
-    fireEvent.change(termFilterInput, { target: { value: "uc" } });
-    terms = screen.getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(4);
-
-    // Clear the term filter and make sure all the terms appear again.
-    fireEvent.click(within(facetTermFilter).getByTestId(/^facet-term-clear-/));
-    terms = screen.getAllByTestId(/^facetterm-/);
-    expect(terms).toHaveLength(30);
   });
 });

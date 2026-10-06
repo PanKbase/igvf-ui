@@ -94,6 +94,21 @@
   --color-facet-filter-input-text: #85abd6;
   --color-facet-filter-input-text-focus: #000000;
 
+  --color-facet-counter: #808080;
+  --color-facet-counter-open: #c0c0c0;
+  --color-facet-counter-selected: #84cc16;
+  --color-facet-counter-open-selected: #a3e635;
+  --color-facet-counter-negative: #e11d48;
+  --color-facet-counter-open-negative: #fb7185;
+
+  --color-open-facet-help-underline: #d1d5db;
+  --color-optional-facet-config-header: #6b7280;
+  --color-optional-facet-config-divider: #d1d5db;
+  --color-optional-facet-quick-hide-open: #ffffff;
+  --color-optional-facet-quick-hide-closed: #000000;
+  --color-optional-facet-quick-hide-hover-open: #6b7280;
+  --color-optional-facet-quick-hide-hover-closed: #e5e7eb;
+
   --color-tab-group-border: #d0d0d0;
   --color-tab-selected-border: #3b82f6;
   --color-tab-unselected-border: transparent;
@@ -1002,6 +1017,21 @@ tr.downregulated {
   --color-facet-filter-input-text: #85abd6;
   --color-facet-filter-input-text-focus: #ffffff;
 
+  --color-facet-counter: #909090;
+  --color-facet-counter-open: #c0c0c0;
+  --color-facet-counter-selected: #4ade80;
+  --color-facet-counter-open-selected: #86efac;
+  --color-facet-counter-negative: #e11d48;
+  --color-facet-counter-open-negative: #fb7185;
+
+  --color-open-facet-help-underline: #9ca3af;
+  --color-optional-facet-config-header: #9ca3af;
+  --color-optional-facet-config-divider: #374151;
+  --color-optional-facet-quick-hide-open: #ffffff;
+  --color-optional-facet-quick-hide-closed: #ffffff;
+  --color-optional-facet-quick-hide-hover-open: #6b7280;
+  --color-optional-facet-quick-hide-hover-closed: #374151;
+
   --color-tab-group-border: #4e5b75;
   --color-tab-selected-border: #1d4ed8;
   --color-tab-unselected-border: transparent;
@@ -1456,4 +1486,18 @@ tr.downregulated {
   .carousel-slide-from-left {
     animation: none;
   }
+}
+
+/* Fade out the right edge of a facet's term-count indicators when they overflow. */
+.facet-term-count-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 1) calc(100% - 30px),
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 1) calc(100% - 30px),
+    rgba(0, 0, 0, 0) 100%
+  );
 }

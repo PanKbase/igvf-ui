@@ -38,6 +38,10 @@ import { getAllDerivedFromFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 import SampleTable from "../../components/sample-table";
 import { getAnnotationTypeTitle } from "../../lib/annotation-type";
+import {
+  getDeComparisonClassTitle,
+  getDeMethodTitle,
+} from "../../lib/analysis-set-de";
 
 const ISLET_NORMALIZATION_FIELDS = [
   ["total_islet_cell_volume", "Total Islet Cell Volume (IEQ)"],
@@ -154,6 +158,48 @@ export default function AnalysisSet({
                 <>
                   <DataItemLabel>Annotation Category</DataItemLabel>
                   <DataItemValue>{analysisSet.annotation_category}</DataItemValue>
+                </>
+              )}
+              {analysisSet.cell_type && (
+                <>
+                  <DataItemLabel>Cell Type</DataItemLabel>
+                  <DataItemValue>{analysisSet.cell_type}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_comparison_class && (
+                <>
+                  <DataItemLabel>DE Comparison Class</DataItemLabel>
+                  <DataItemValue>
+                    {getDeComparisonClassTitle(analysisSet.de_comparison_class)}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.de_contrast && (
+                <>
+                  <DataItemLabel>DE Contrast</DataItemLabel>
+                  <DataItemValue>{analysisSet.de_contrast}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_trait && (
+                <>
+                  <DataItemLabel>DE Trait</DataItemLabel>
+                  <DataItemValue>{analysisSet.de_trait}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_trait_description && (
+                <>
+                  <DataItemLabel>DE Trait Description</DataItemLabel>
+                  <DataItemValue>
+                    {analysisSet.de_trait_description}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.de_method && (
+                <>
+                  <DataItemLabel>DE Method</DataItemLabel>
+                  <DataItemValue>
+                    {getDeMethodTitle(analysisSet.de_method)}
+                  </DataItemValue>
                 </>
               )}
               {analysisSet.publication_identifiers?.length > 0 && (
