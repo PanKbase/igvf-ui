@@ -18,6 +18,7 @@ import {
   useCollapseControl,
 } from "../collapse-control";
 import SeparatedList from "../separated-list";
+import { AliasesCell } from "../table-cells";
 import UnspecifiedProperty from "../unspecified-property";
 // lib
 import { attachmentToServerHref } from "../../lib/attachment";
@@ -484,6 +485,7 @@ export const reportPropertyRenderers = {
 
 export const propertyRenderers = {
   "@id": AtId,
+  aliases: AliasesCell,
   attachment: Attachment,
   href: Href,
   "attachment.href": AttachmentHref,

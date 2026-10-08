@@ -41,8 +41,6 @@ describe("enhanceUserGuideContent", () => {
     expect(figure.classList.contains("user-guide-figure")).toBe(true);
     expect(figure.style.width).toBe("100%");
     expect(figure.style.float).toBe("none");
-    expect(
-      document.querySelector(".user-guide-figure-caption")
-    ).toBeTruthy();
+    expect(document.querySelector(".user-guide-figure-caption")).toBeTruthy();
   });
 });

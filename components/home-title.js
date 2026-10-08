@@ -148,13 +148,20 @@ export default function Header() {
       <div className="pkb-nav">
         <div className="logo">
           <a href="https://pankbase.org/">
-            <img style={{ height: "50px" }} src={LOGO_URL} alt="PanKbase Logo" />
+            <img
+              style={{ height: "50px" }}
+              src={LOGO_URL}
+              alt="PanKbase Logo"
+            />
           </a>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <div className="menu-wrapper">
             <div className="topmenu">
-              <a className="topmenu-item" href="https://pankbase.org/funding.html">
+              <a
+                className="topmenu-item"
+                href="https://pankbase.org/funding.html"
+              >
                 Funding Opportunities
                 <img
                   style={{ height: "15px", width: "15px" }}
@@ -178,7 +185,9 @@ export default function Header() {
                 {pkbMenu.highlightItems.map((item) => (
                   <div
                     key={item.label}
-                    className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
+                    className={`menu-item-wrapper ${
+                      isActive(item.path) ? "active" : ""
+                    }`}
                   >
                     <a className="menu-item menu-item-main" href={item.path}>
                       {item.label}
@@ -189,7 +198,9 @@ export default function Header() {
               {pkbMenu.menuItems.map((item) => (
                 <div
                   key={item.label}
-                  className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}
+                  className={`menu-item-wrapper ${
+                    isActive(item.path) ? "active" : ""
+                  }`}
                 >
                   <a className="menu-item" href={item.path || undefined}>
                     {item.label}
@@ -199,7 +210,9 @@ export default function Header() {
                       {item.subMenuItems.map((subItem) => (
                         <a
                           key={subItem.label}
-                          className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`}
+                          className={`submenu-item ${
+                            isActive(subItem.path) ? "active" : ""
+                          }`}
                           href={subItem.path || undefined}
                           data-whatever={isActive(subItem.path).toString()}
                         >
@@ -212,8 +225,16 @@ export default function Header() {
               ))}
             </div>
           </div>
-          <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <img style={{ height: "37px" }} src={HIRN_LOGO_URL} alt="HIRN Logo" />
+          <a
+            href="https://hirnetwork.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              style={{ height: "37px" }}
+              src={HIRN_LOGO_URL}
+              alt="HIRN Logo"
+            />
           </a>
         </div>
         <div className="pkb-beta">beta</div>

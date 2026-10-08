@@ -40,7 +40,9 @@ export default function UserGuideHero({ title, updatedAt }) {
             A guide to finding, filtering, and accessing pancreatic data
           </p>
           {formatted && (
-            <p className="user-guide-hero__updated">Last updated: {formatted}</p>
+            <p className="user-guide-hero__updated">
+              Last updated: {formatted}
+            </p>
           )}
         </div>
       </div>

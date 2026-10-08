@@ -242,6 +242,7 @@ describe("Test the Biosample component", () => {
         component: "data coordination",
         name: "HG012012",
         "@id": "/awards/HG012012/",
+        title: "J. Michael Cherry, Stanford",
       },
       sample_terms: [
         {
@@ -616,7 +617,10 @@ describe("Test the HumanDonor component", () => {
       accession: "IGVFDO856PXB",
       alternate_accessions: ["IGVFDO856PXC"],
       aliases: ["chongyuan-luo:AA F donor of fibroblasts"],
-      award: "/awards/1U01HG012079-01/",
+      award: {
+        "@id": "/awards/1U01HG012079-01/",
+        title: "Chongyuan Luo",
+      },
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
       gender: "female",
@@ -700,7 +704,10 @@ describe("Test the HumanDonor component", () => {
       "@type": ["HumanDonor", "Donor", "Item"],
       accession: "IGVFDO856PXB",
       aliases: ["chongyuan-luo:AA F donor of fibroblasts"],
-      award: "/awards/1U01HG012079-01/",
+      award: {
+        "@id": "/awards/1U01HG012079-01/",
+        title: "Chongyuan Luo",
+      },
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
       gender: "female",
@@ -1503,7 +1510,9 @@ describe("Test the AnalysisSet component", () => {
     );
 
     const meta = screen.queryByTestId("search-list-item-meta");
-    expect(meta).toHaveTextContent("Differential expression results by cell type");
+    expect(meta).toHaveTextContent(
+      "Differential expression results by cell type"
+    );
     expect(meta).toHaveTextContent("Differential expression");
     expect(meta).toHaveTextContent("beta");
     expect(meta).toHaveTextContent("Disease status");
@@ -2463,7 +2472,10 @@ describe("Test Workflow component", () => {
       "@id": "/workflows/IGVFWF3254CAGQ/",
       "@type": ["Workflow", "Item"],
       accession: "IGVFWF3254CAGQ",
-      award: "/awards/HG012012/",
+      award: {
+        "@id": "/awards/HG012012/",
+        title: "J. Michael Cherry, Stanford",
+      },
       lab: {
         "@id": "/labs/j-michael-cherry/",
         title: "J. Michael Cherry, Stanford",

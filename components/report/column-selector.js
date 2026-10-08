@@ -106,7 +106,12 @@ export default function ColumnSelector({
 
     return (
       <>
-        <Button type="primary" onClick={() => setIsOpen(true)} isDisabled={isDisabled} className="text-center no-underline flex items-center justify-center border font-semibold leading-none px-2 rounded text-xs h-6 [&>svg]:h-3 [&>svg]:w-3 border-button-primary text-button-primary fill-button-primary disabled:bg-button-primary-disabled disabled:border-button-primary-disabled disabled:text-button-primary-disabled disabled:fill-button-primary-disabled">
+        <Button
+          type="primary"
+          onClick={() => setIsOpen(true)}
+          isDisabled={isDisabled}
+          className="text-center no-underline flex items-center justify-center border font-semibold leading-none px-2 rounded text-xs h-6 [&>svg]:h-3 [&>svg]:w-3 border-button-primary text-button-primary fill-button-primary disabled:bg-button-primary-disabled disabled:border-button-primary-disabled disabled:text-button-primary-disabled disabled:fill-button-primary-disabled"
+        >
           Columns
           <HiddenColumnsIndicator isAnyColumnHidden={isAnyColumnHidden} />
         </Button>
@@ -133,7 +138,8 @@ export default function ColumnSelector({
                 </Button>
               )}
               <Note className="md:ml-2">
-                The <i>ID</i> column cannot be hidden. Selected columns will be included in the TSV download.
+                The <i>ID</i> column cannot be hidden. Selected columns will be
+                included in the TSV download.
               </Note>
             </div>
             <CheckboxArea>
