@@ -1,4 +1,3 @@
-
 This is the UI portion of the IGVF DACC project bootstrapped with [Next.js](https://nextjs.org). This relies on the [igvfd](https://github.com/IGVF-DACC/igvfd) project to supply its data.
 
 ## Getting Started
