@@ -12,7 +12,10 @@ export function parseHlaRow(row) {
     return null;
   }
 
-  const parts = row.split(",").map((p) => p.trim()).filter(Boolean);
+  const parts = row
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   const KNOWN_METHODS = new Set(["OPO", "NGS", "RT-PCR", "SSO", "."]);
   const isBlob = parts.length > 3 && KNOWN_METHODS.has(parts[2]);
@@ -37,12 +40,14 @@ export function parseHlaRow(row) {
   if (parts.length >= 3) {
     const [locus, allelePart, ...methodParts] = parts;
     const [a1, a2] = allelePart.split("-");
-    return [{
-      locus,
-      allele1: !a1 || a1 === "." ? "—" : a1,
-      allele2: !a2 || a2 === "." ? "—" : a2,
-      method: methodParts.join(", ") || "—",
-    }];
+    return [
+      {
+        locus,
+        allele1: !a1 || a1 === "." ? "—" : a1,
+        allele2: !a2 || a2 === "." ? "—" : a2,
+        method: methodParts.join(", ") || "—",
+      },
+    ];
   }
 
   return null;
@@ -117,7 +122,9 @@ function FieldPair({ label, children, monoValue = false }) {
         {label}
       </dt>
       <dd
-        className={`text-sm font-medium text-data-value ${monoValue ? "tabular-nums" : ""}`}
+        className={`text-sm font-medium text-data-value ${
+          monoValue ? "tabular-nums" : ""
+        }`}
       >
         {children}
       </dd>
@@ -221,9 +228,7 @@ function GrsMethodCard({ entry }) {
   const orderedSubs = useMemo(() => sortGrsSubScores(subs), [subs]);
 
   const normBarPct =
-    typeof normalized === "number" &&
-    normalized >= 0 &&
-    normalized <= 1
+    typeof normalized === "number" && normalized >= 0 && normalized <= 1
       ? Math.round(Math.min(100, Math.max(0, normalized * 100)))
       : null;
 
@@ -324,7 +329,10 @@ export default function HumanDonorClinicalDashboard({
 
   const hba1cVal =
     item.hba1c !== undefined && item.hba1c !== null ? Number(item.hba1c) : null;
-  const hbaDisplay = hba1cVal !== null && !Number.isNaN(hba1cVal) ? hba1cItemDisplay(hba1cVal) : "—";
+  const hbaDisplay =
+    hba1cVal !== null && !Number.isNaN(hba1cVal)
+      ? hba1cItemDisplay(hba1cVal)
+      : "—";
 
   const cPeptideDisplay =
     item.c_peptide !== undefined && item.c_peptide !== null
@@ -430,10 +438,7 @@ export default function HumanDonorClinicalDashboard({
               value={hbaDisplay}
               valueClass={hba1cStatusClass(hba1cVal)}
             />
-            <MetricCard
-              label="C-Peptide (ng/ml)"
-              value={cPeptideDisplay}
-            />
+            <MetricCard label="C-Peptide (ng/ml)" value={cPeptideDisplay} />
             <MetricCard label="Diabetes duration" value={dmDurDisplay} />
             {item.aab_summary ? (
               <MetricCard label="AAB summary" value={item.aab_summary} />
@@ -508,83 +513,85 @@ export default function HumanDonorClinicalDashboard({
           </h2>
           <dl className="space-y-3">
             <FieldPair label="Diabetes (ontology)">
-                  {Array.isArray(diabetesStatus) && diabetesStatus.length > 0 ? (
-                    <SeparatedList>
-                      {diabetesStatus.map((status) => (
-                        <Link key={status["@id"]} href={status["@id"]}>
-                          {status.term_id}
-                        </Link>
-                      ))}
-                    </SeparatedList>
-                  ) : (
-                    <span className="text-gray-500">No ontology term</span>
-                  )}
-                </FieldPair>
-                <FieldPair label="T1D stage">{item.t1d_stage}</FieldPair>
-                <FieldPair label="HbA1c-derived diabetes status">
-                  {item.derived_diabetes_status ? (
-                    <span
-                      className={
-                        item.derived_diabetes_status.toLowerCase() === "diabetes"
-                          ? "font-medium text-red-700 dark:text-red-400"
-                          : item.derived_diabetes_status
-                                .toLowerCase()
-                                .includes("prediabetes")
-                            ? "font-medium text-amber-700 dark:text-amber-400"
-                            : item.derived_diabetes_status
-                                  .toLowerCase()
-                                  .includes("normal")
-                              ? "text-emerald-700 dark:text-emerald-400"
-                              : ""
-                      }
-                    >
-                      {item.derived_diabetes_status}
-                    </span>
-                  ) : null}
-                </FieldPair>
-                {item.label_hba1c_discordant !== undefined ? (
-                  <FieldPair label="Label vs HbA1c discordant">
-                    {item.label_hba1c_discordant ? "Yes" : "No"}
-                  </FieldPair>
-                ) : null}
-                {item.tier1_complete !== undefined ? (
-                  <FieldPair label="Tier 1 complete">
-                    {item.tier1_complete ? "Yes" : "No"}
-                  </FieldPair>
-                ) : null}
-                <FieldPair label="Family history of diabetes">
-                  {item.family_history_of_diabetes}
-                </FieldPair>
-                {item.family_history_of_diabetes_relationship?.length > 0 ? (
-                  <FieldPair label="Family history relationship">
-                    {item.family_history_of_diabetes_relationship.join(", ")}
-                  </FieldPair>
-                ) : null}
-                {item.other_disease_states?.length > 0 ? (
-                  <FieldPair label="Other disease states">
-                    {item.other_disease_states.join(", ")}
-                  </FieldPair>
-                ) : null}
-                <FieldPair label="Living donor">
-                  {item.living_donor !== undefined
-                    ? item.living_donor
-                      ? "Yes"
-                      : "No"
-                    : null}
-                </FieldPair>
-                <FieldPair label="Cause of death">{item.cause_of_death}</FieldPair>
-                <FieldPair label="Donation type">{item.donation_type}</FieldPair>
-                <FieldPair label="Hospital stay (h)">{item.hospital_stay}</FieldPair>
-                {item.glucose_loweing_theraphy?.length > 0 ? (
-                  <FieldPair label="Glucose lowering therapy">
-                    {item.glucose_loweing_theraphy.join(", ")}
-                  </FieldPair>
-                ) : null}
-                {item.other_therapy?.length > 0 ? (
-                  <FieldPair label="Medication">
-                    {item.other_therapy.join(", ")}
-                  </FieldPair>
-                ) : null}
+              {Array.isArray(diabetesStatus) && diabetesStatus.length > 0 ? (
+                <SeparatedList>
+                  {diabetesStatus.map((status) => (
+                    <Link key={status["@id"]} href={status["@id"]}>
+                      {status.term_id}
+                    </Link>
+                  ))}
+                </SeparatedList>
+              ) : (
+                <span className="text-gray-500">No ontology term</span>
+              )}
+            </FieldPair>
+            <FieldPair label="T1D stage">{item.t1d_stage}</FieldPair>
+            <FieldPair label="HbA1c-derived diabetes status">
+              {item.derived_diabetes_status ? (
+                <span
+                  className={
+                    item.derived_diabetes_status.toLowerCase() === "diabetes"
+                      ? "font-medium text-red-700 dark:text-red-400"
+                      : item.derived_diabetes_status
+                          .toLowerCase()
+                          .includes("prediabetes")
+                      ? "font-medium text-amber-700 dark:text-amber-400"
+                      : item.derived_diabetes_status
+                          .toLowerCase()
+                          .includes("normal")
+                      ? "text-emerald-700 dark:text-emerald-400"
+                      : ""
+                  }
+                >
+                  {item.derived_diabetes_status}
+                </span>
+              ) : null}
+            </FieldPair>
+            {item.label_hba1c_discordant !== undefined ? (
+              <FieldPair label="Label vs HbA1c discordant">
+                {item.label_hba1c_discordant ? "Yes" : "No"}
+              </FieldPair>
+            ) : null}
+            {item.tier1_complete !== undefined ? (
+              <FieldPair label="Tier 1 complete">
+                {item.tier1_complete ? "Yes" : "No"}
+              </FieldPair>
+            ) : null}
+            <FieldPair label="Family history of diabetes">
+              {item.family_history_of_diabetes}
+            </FieldPair>
+            {item.family_history_of_diabetes_relationship?.length > 0 ? (
+              <FieldPair label="Family history relationship">
+                {item.family_history_of_diabetes_relationship.join(", ")}
+              </FieldPair>
+            ) : null}
+            {item.other_disease_states?.length > 0 ? (
+              <FieldPair label="Other disease states">
+                {item.other_disease_states.join(", ")}
+              </FieldPair>
+            ) : null}
+            <FieldPair label="Living donor">
+              {item.living_donor !== undefined
+                ? item.living_donor
+                  ? "Yes"
+                  : "No"
+                : null}
+            </FieldPair>
+            <FieldPair label="Cause of death">{item.cause_of_death}</FieldPair>
+            <FieldPair label="Donation type">{item.donation_type}</FieldPair>
+            <FieldPair label="Hospital stay (h)">
+              {item.hospital_stay}
+            </FieldPair>
+            {item.glucose_loweing_theraphy?.length > 0 ? (
+              <FieldPair label="Glucose lowering therapy">
+                {item.glucose_loweing_theraphy.join(", ")}
+              </FieldPair>
+            ) : null}
+            {item.other_therapy?.length > 0 ? (
+              <FieldPair label="Medication">
+                {item.other_therapy.join(", ")}
+              </FieldPair>
+            ) : null}
           </dl>
         </section>
 

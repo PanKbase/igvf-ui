@@ -56,28 +56,30 @@ function styleEntryCards(container) {
 }
 
 function styleTables(container) {
-  container.querySelectorAll(".markdown-table table").forEach((table, index) => {
-    table.classList.add("user-guide-table");
-    if (index !== 0) {
-      return;
-    }
-    table.querySelectorAll("tbody tr").forEach((row) => {
-      const cells = row.querySelectorAll("td");
-      if (cells.length < 2) {
+  container
+    .querySelectorAll(".markdown-table table")
+    .forEach((table, index) => {
+      table.classList.add("user-guide-table");
+      if (index !== 0) {
         return;
       }
-      const cell = cells[1];
-      const value = cell.textContent.trim();
-      if (!value || cell.querySelector(".user-guide-badge")) {
-        return;
-      }
-      const badge = document.createElement("span");
-      badge.className = "user-guide-badge";
-      badge.textContent = value;
-      cell.textContent = "";
-      cell.appendChild(badge);
+      table.querySelectorAll("tbody tr").forEach((row) => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length < 2) {
+          return;
+        }
+        const cell = cells[1];
+        const value = cell.textContent.trim();
+        if (!value || cell.querySelector(".user-guide-badge")) {
+          return;
+        }
+        const badge = document.createElement("span");
+        badge.className = "user-guide-badge";
+        badge.textContent = value;
+        cell.textContent = "";
+        cell.appendChild(badge);
+      });
     });
-  });
 }
 
 function addSectionIds(container) {
@@ -87,7 +89,10 @@ function addSectionIds(container) {
       const id = slugify(h2.textContent) || `section-${index + 1}`;
       h2.id = id;
     }
-    sections.push({ id: h2.id, label: h2.textContent.replace(/^\d+\.\s*/, "").trim() });
+    sections.push({
+      id: h2.id,
+      label: h2.textContent.replace(/^\d+\.\s*/, "").trim(),
+    });
   });
   return sections;
 }
@@ -101,15 +106,19 @@ function markIntro(container) {
 
 /** Readable screenshot width; overrides narrow IMAGE_ALIGNED width from CMS. */
 function styleScreenshots(container) {
-  container.querySelectorAll('[data-testid="image-aligned"]').forEach((figure) => {
-    figure.classList.add("user-guide-figure");
-    figure.style.width = "100%";
-    figure.style.float = "none";
-    const caption = figure.querySelector('[data-testid="image-aligned-caption"]');
-    if (caption) {
-      caption.classList.add("user-guide-figure-caption");
-    }
-  });
+  container
+    .querySelectorAll('[data-testid="image-aligned"]')
+    .forEach((figure) => {
+      figure.classList.add("user-guide-figure");
+      figure.style.width = "100%";
+      figure.style.float = "none";
+      const caption = figure.querySelector(
+        '[data-testid="image-aligned-caption"]'
+      );
+      if (caption) {
+        caption.classList.add("user-guide-figure-caption");
+      }
+    });
 }
 
 /**

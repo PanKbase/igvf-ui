@@ -35,7 +35,9 @@ export default function HumanBetaCellLineClinicalDashboard({
   treatments = [],
   children = null,
 }) {
-  const diagnosisChip = formatDiagnosisChipText(item.diabetes_status_description);
+  const diagnosisChip = formatDiagnosisChipText(
+    item.diabetes_status_description
+  );
   const lotProductSubtitle = [
     item.sample_name,
     [item.lot_id, item.product_id].filter(Boolean).join(" / "),
@@ -107,7 +109,9 @@ export default function HumanBetaCellLineClinicalDashboard({
                 <FieldPair label="Date Harvested">
                   {item.date_harvested ? formatDate(item.date_harvested) : null}
                 </FieldPair>
-                <FieldPair label="Cell Density">{cellDensityDisplay || null}</FieldPair>
+                <FieldPair label="Cell Density">
+                  {cellDensityDisplay || null}
+                </FieldPair>
                 {truthyOrZero(item.year_obtained) ? (
                   <FieldPair label="Year Obtained" monoValue>
                     {item.year_obtained}
@@ -129,12 +133,18 @@ export default function HumanBetaCellLineClinicalDashboard({
                     </SeparatedList>
                   </FieldPair>
                 ) : null}
-                <FieldPair label="Growth Medium">{item.growth_medium}</FieldPair>
+                <FieldPair label="Growth Medium">
+                  {item.growth_medium}
+                </FieldPair>
                 <FieldPair label="Coating Condition">
                   {item.coating_condition}
                 </FieldPair>
-                <FieldPair label="Excision Status">{item.excision_status}</FieldPair>
-                <FieldPair label="Authentication">{item.authentication}</FieldPair>
+                <FieldPair label="Excision Status">
+                  {item.excision_status}
+                </FieldPair>
+                <FieldPair label="Authentication">
+                  {item.authentication}
+                </FieldPair>
                 <FieldPair label="Nucleic Acid Delivery">
                   {item.nucleic_acid_delivery}
                 </FieldPair>
@@ -165,7 +175,9 @@ export default function HumanBetaCellLineClinicalDashboard({
             <FieldPair label="NIH Institutional Certification">
               {item.nih_institutional_certification}
             </FieldPair>
-            <FieldPair label="Cellular Sub Pool">{item.cellular_sub_pool}</FieldPair>
+            <FieldPair label="Cellular Sub Pool">
+              {item.cellular_sub_pool}
+            </FieldPair>
             <FieldPair label="Sorted From Sample">
               {sortedFrom ? (
                 <>
@@ -205,7 +217,9 @@ export default function HumanBetaCellLineClinicalDashboard({
                 </a>
               </FieldPair>
             ) : null}
-            <FieldPair label="Submitter Comment">{item.submitter_comment}</FieldPair>
+            <FieldPair label="Submitter Comment">
+              {item.submitter_comment}
+            </FieldPair>
             {item.dbxrefs?.length > 0 ? (
               <div>
                 <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">

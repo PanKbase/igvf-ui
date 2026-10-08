@@ -10,7 +10,9 @@ function TocList({ sections, activeId, onNavigate }) {
         <li key={id}>
           <Link
             href={`#${id}`}
-            className={`user-guide-toc__link${activeId === id ? " is-active" : ""}`}
+            className={`user-guide-toc__link${
+              activeId === id ? " is-active" : ""
+            }`}
             onClick={() => onNavigate?.(id)}
           >
             {label}

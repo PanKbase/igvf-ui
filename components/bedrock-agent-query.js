@@ -83,10 +83,12 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
       }
 
       const data = await response.json();
-      const assistantResponse = data.response || "I couldn't generate a response. Please try again.";
+      const assistantResponse =
+        data.response || "I couldn't generate a response. Please try again.";
       setResponse(assistantResponse);
     } catch (err) {
-      const errorMessage = err.message || "Failed to get response. Please try again.";
+      const errorMessage =
+        err.message || "Failed to get response. Please try again.";
       setError(errorMessage);
       setResponse("");
     } finally {
@@ -116,7 +118,9 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
       {/* Response Display */}
       {response && (
         <div className="mb-6 bg-white rounded-lg p-4 border border-slate-200">
-          <div className="text-sm text-slate-900 whitespace-pre-wrap">{response}</div>
+          <div className="text-sm text-slate-900 whitespace-pre-wrap">
+            {response}
+          </div>
         </div>
       )}
 
@@ -167,7 +171,9 @@ export default function BedrockAgentQuery({ apiBaseUrl = null }) {
       {/* Example Queries */}
       {!response && !isLoading && (
         <div className="mt-6">
-          <p className="text-sm font-semibold text-slate-700 mb-3">Try asking:</p>
+          <p className="text-sm font-semibold text-slate-700 mb-3">
+            Try asking:
+          </p>
           <div className="flex flex-wrap gap-2">
             {exampleQueries.map((example, index) => (
               <button

@@ -228,10 +228,7 @@ export function hasValue(val: unknown): boolean {
   if (val === null || val === undefined) {
     return false;
   }
-  if (
-    typeof val === "string" &&
-    (val.trim() === "" || val.trim() === "—")
-  ) {
+  if (typeof val === "string" && (val.trim() === "" || val.trim() === "—")) {
     return false;
   }
   if (Array.isArray(val) && val.length === 0) {

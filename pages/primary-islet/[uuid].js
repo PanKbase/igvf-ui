@@ -240,7 +240,9 @@ export async function getServerSideProps({ params, req, query }) {
         treatments,
         multiplexedInSamples,
         pageContext: {
-          title: `${primaryIslet.sample_terms?.[0]?.term_name ?? primaryIslet.accession} — ${primaryIslet.accession}`,
+          title: `${
+            primaryIslet.sample_terms?.[0]?.term_name ?? primaryIslet.accession
+          } — ${primaryIslet.accession}`,
         },
         breadcrumbs,
         attribution,

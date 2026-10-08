@@ -469,7 +469,11 @@ function FeaturedDatasetsCarousel({ items }) {
             ‹
           </button>
 
-          <div className="flex items-center gap-2" role="tablist" aria-label="Featured dataset pages">
+          <div
+            className="flex items-center gap-2"
+            role="tablist"
+            aria-label="Featured dataset pages"
+          >
             {Array.from({ length: totalPages }, (_, pageIndex) => (
               <button
                 key={pageIndex}
@@ -516,7 +520,7 @@ FeaturedDatasetsCarousel.propTypes = {
       s3Url: PropTypes.string.isRequired,
       filename: PropTypes.string.isRequired,
       browseUrl: PropTypes.string.isRequired,
-    }),
+    })
   ).isRequired,
 };
 
@@ -535,7 +539,9 @@ function ResourceCard({ icon, title, description, url }) {
         </div>
       )}
       <div className="text-lg font-bold text-slate-900 mb-3">{title}</div>
-      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
+      <div className="text-sm text-slate-600 leading-relaxed">
+        {description}
+      </div>
     </a>
   );
 }
@@ -563,9 +569,15 @@ function DataAccessCard({ icon, title, count, description, url }) {
       )}
       <div className="text-lg font-bold text-slate-900 mb-3">
         {title}
-        {count && <span className="ml-2 text-base font-semibold text-slate-500">({count})</span>}
+        {count && (
+          <span className="ml-2 text-base font-semibold text-slate-500">
+            ({count})
+          </span>
+        )}
       </div>
-      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
+      <div className="text-sm text-slate-600 leading-relaxed">
+        {description}
+      </div>
     </a>
   );
 }
@@ -596,7 +608,8 @@ const carouselItems = [
     description: "Single cell RNA-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 448,935 cells & 140 donors",
     category: "scrna",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
+    s3Url:
+      "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-scrna-umap-v3.3.tar.gz",
     filename: "pankbase-scrna-umap-v3.3.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1349YHGQ/",
   },
@@ -605,34 +618,42 @@ const carouselItems = [
     description: "Single nuclear ATAC-seq from human pancreatic islets",
     meta: "Updated: Oct 2025 | 97,659 cells & 41 donors",
     category: "snatac",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
+    s3Url:
+      "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-snatac-umap-v1.0.tar.gz",
     filename: "pankbase-snatac-umap-v1.0.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS0470WCHR/",
   },
   {
     title: "Cell type peaks from snATAC",
-    description: "Cell type-specific peaks from single-nucleus ATAC-seq analysis",
+    description:
+      "Cell type-specific peaks from single-nucleus ATAC-seq analysis",
     meta: "Updated: Oct 2025",
     category: "peaks",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
+    s3Url:
+      "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
     filename: "pankbase-peak-counts-snATAC-seq-umap1.0.tar.gz",
-    browseUrl: "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
+    browseUrl:
+      "https://data.pankbase.org/search/?type=AnalysisSet&query=Peak+counts&file_set_type=principal+analysis",
   },
   {
     title: "Donor meta-data",
-    description: "Comprehensive donor metadata including demographics and clinical information",
+    description:
+      "Comprehensive donor metadata including demographics and clinical information",
     meta: "Updated: Nov 2025 | 3.7K donors",
     category: "donor",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
+    s3Url:
+      "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-donors.tar.gz",
     filename: "pankbase-donors.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS5236MJJT/",
   },
   {
     title: "Islet biosample meta-data",
-    description: "Pancreatic biosample collection with detailed experimental protocols",
+    description:
+      "Pancreatic biosample collection with detailed experimental protocols",
     meta: "Updated: Oct 2025 | 3.6K samples",
     category: "biosample",
-    s3Url: "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
+    s3Url:
+      "https://pankbase-data-v1.s3.amazonaws.com/download/pankbase-biosamples.tar.gz",
     filename: "pankbase-biosamples.tar.gz",
     browseUrl: "https://data.pankbase.org/analysis-sets/PKBDS1057RJYW/",
   },
@@ -649,7 +670,8 @@ const dataAccessButtons = [
   {
     icon: <Plug className="w-6 h-6" />,
     title: "API access",
-    description: "Programmatic access to the PanKbase data library through RESTful API endpoints",
+    description:
+      "Programmatic access to the PanKbase data library through RESTful API endpoints",
     url: "https://pankbase.github.io/pankbase-client-openapi-spec",
   },
   {
@@ -665,19 +687,22 @@ const resourcesButtons = [
   {
     icon: <FileText className="w-6 h-6" />,
     title: "Data standards",
-    description: "Standards used for meta-data and data processing in the PanKbase data library",
+    description:
+      "Standards used for meta-data and data processing in the PanKbase data library",
     url: "/standards/",
   },
   {
     icon: <BookOpen className="w-6 h-6" />,
     title: "User guide",
-    description: "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
+    description:
+      "Comprehensive guide for using the PanKbase Data Library and navigating available resources",
     url: "/help/general-help/user-guide/",
   },
   {
     icon: <GitBranch className="w-6 h-6" />,
     title: "Data Library schema",
-    description: "Schema directory for PanKbase data library object types and properties",
+    description:
+      "Schema directory for PanKbase data library object types and properties",
     url: "https://data.pankbase.org/profiles/",
   },
 ];
@@ -689,8 +714,12 @@ export default function Home() {
         {/* Featured Datasets Carousel Section */}
         <section className="mb-20">
           <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Featured Datasets</h2>
-            <p className="text-lg text-slate-600">Featured datasets and resources in the Pankbase data library</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">
+              Featured Datasets
+            </h2>
+            <p className="text-lg text-slate-600">
+              Featured datasets and resources in the Pankbase data library
+            </p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <FeaturedDatasetsCarousel items={carouselItems} />
@@ -699,8 +728,13 @@ export default function Home() {
         {/* Data Access Section */}
         <section className="mb-20">
           <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Data Access</h2>
-            <p className="text-lg text-slate-600">Multiple ways to access and interact with the Pankbase data library</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">
+              Data Access
+            </h2>
+            <p className="text-lg text-slate-600">
+              Multiple ways to access and interact with the Pankbase data
+              library
+            </p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="mb-8">
@@ -716,8 +750,12 @@ export default function Home() {
         {/* Resources Section */}
         <section>
           <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">Resources</h2>
-            <p className="text-lg text-slate-600">Documentation and updates to the Pankbase data library</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-900 text-balance">
+              Resources
+            </h2>
+            <p className="text-lg text-slate-600">
+              Documentation and updates to the Pankbase data library
+            </p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
