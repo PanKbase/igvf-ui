@@ -533,14 +533,14 @@ export default function HumanDonorClinicalDashboard({
                     item.derived_diabetes_status.toLowerCase() === "diabetes"
                       ? "font-medium text-red-700 dark:text-red-400"
                       : item.derived_diabetes_status
-                          .toLowerCase()
-                          .includes("prediabetes")
-                      ? "font-medium text-amber-700 dark:text-amber-400"
-                      : item.derived_diabetes_status
-                          .toLowerCase()
-                          .includes("normal")
-                      ? "text-emerald-700 dark:text-emerald-400"
-                      : ""
+                            .toLowerCase()
+                            .includes("prediabetes")
+                        ? "font-medium text-amber-700 dark:text-amber-400"
+                        : item.derived_diabetes_status
+                              .toLowerCase()
+                              .includes("normal")
+                          ? "text-emerald-700 dark:text-emerald-400"
+                          : ""
                   }
                 >
                   {item.derived_diabetes_status}

@@ -38,8 +38,8 @@ jobs:
         run: npm ci
       - name: next lint
         run: npm run lint
-      - name: prettier check
-        run: npx prettier --check .
+      # Prettier is covered by pre-commit (mirrors-prettier@3.0.0).
+      # Do not also run project prettier --check; versions can disagree.
 
   test:
     name: test
