@@ -50,16 +50,14 @@ function linkIfUrl(value) {
  * Renders perifunctional / islet assay metadata from measurement_set when any field is present.
  */
 export default function MeasurementSetIsletAssayDetails({ measurementSet }) {
-  const hasIsletsShipped =
-    typeof measurementSet.islets_shipped === "boolean";
+  const hasIsletsShipped = typeof measurementSet.islets_shipped === "boolean";
   const hasAny =
     hasIsletsShipped ||
     ISLET_ASSAY_FIELDS.filter(([key]) => key !== "islets_shipped").some(
       ([key]) =>
         measurementSet[key] !== undefined && measurementSet[key] !== null
     );
-  const hasHormones =
-    measurementSet.hormone_assays?.length > 0;
+  const hasHormones = measurementSet.hormone_assays?.length > 0;
   const hasDataUrl =
     measurementSet.data_url !== undefined && measurementSet.data_url !== null;
 

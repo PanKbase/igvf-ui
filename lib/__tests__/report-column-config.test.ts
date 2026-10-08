@@ -72,7 +72,9 @@ describe("getReportColumnPreset", () => {
   });
 
   it("returns clinical columns for FileSet report types", () => {
-    expect(getReportColumnPreset(["FileSet"])).toBe(FILE_SET_CLINICAL_COLUMN_IDS);
+    expect(getReportColumnPreset(["FileSet"])).toBe(
+      FILE_SET_CLINICAL_COLUMN_IDS
+    );
     expect(getReportColumnPreset(["MeasurementSet"])).toBe(
       FILE_SET_CLINICAL_COLUMN_IDS
     );
@@ -98,7 +100,9 @@ describe("getReportColumnPreset", () => {
   });
 
   it("returns clinical columns for Workflow", () => {
-    expect(getReportColumnPreset(["Workflow"])).toBe(WORKFLOW_CLINICAL_COLUMN_IDS);
+    expect(getReportColumnPreset(["Workflow"])).toBe(
+      WORKFLOW_CLINICAL_COLUMN_IDS
+    );
   });
 });
 
@@ -111,10 +115,9 @@ describe("shouldApplyDefaultReportColumnPreset", () => {
 
   it("is false when field params exist", () => {
     expect(
-      shouldApplyDefaultReportColumnPreset(
-        "type=HumanDonor&field=accession",
-        ["HumanDonor"]
-      )
+      shouldApplyDefaultReportColumnPreset("type=HumanDonor&field=accession", [
+        "HumanDonor",
+      ])
     ).toBe(false);
   });
 

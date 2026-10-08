@@ -321,7 +321,10 @@ export async function getServerSideProps({ req, query }) {
     if (preset) {
       return {
         redirect: {
-          destination: `/multireport/?${buildColumnPresetQuery(queryParams, preset)}`,
+          destination: `/multireport/?${buildColumnPresetQuery(
+            queryParams,
+            preset
+          )}`,
           permanent: false,
         },
       };

@@ -30,7 +30,8 @@ def _explicit_vpc_props_from_context(scope: Construct) -> Optional[Dict[str, Any
         return None
     if not isinstance(raw, dict):
         raise ValueError('igvfDemoVpcAttributes context must be an object')
-    required = ('vpcId', 'availabilityZones', 'publicSubnetIds', 'isolatedSubnetIds')
+    required = ('vpcId', 'availabilityZones',
+                'publicSubnetIds', 'isolatedSubnetIds')
     missing = [k for k in required if k not in raw]
     if missing:
         raise ValueError(f'igvfDemoVpcAttributes missing keys: {missing}')

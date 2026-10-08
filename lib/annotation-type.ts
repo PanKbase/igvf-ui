@@ -5,8 +5,7 @@
 export const ANNOTATION_TYPE_TITLES: Readonly<Record<string, string>> = {
   sample_bulk_rnaseq: "Per-sample processed bulk RNA-seq",
   sample_scrnaseq: "Per-sample processed islet scRNA-seq",
-  gene_expression_matrix:
-    "Pseudobulk counts per cell type, or bulk TPM matrix",
+  gene_expression_matrix: "Pseudobulk counts per cell type, or bulk TPM matrix",
   reference_atlas: "Cell type reference map (scRNA-seq or snATAC-seq)",
   differential_expression: "Differential expression results by cell type",
   sample_snatacseq: "Per-sample processed snATAC-seq",

@@ -28,7 +28,10 @@ export default function UserGuideLayout({ blocks, page }) {
 
   return (
     <div className="user-guide-page">
-      <UserGuideHero title={page?.title || "User Guide"} updatedAt={updatedAt} />
+      <UserGuideHero
+        title={page?.title || "User Guide"}
+        updatedAt={updatedAt}
+      />
       <div className="user-guide-shell">
         <UserGuideToc sections={sections} />
         <div

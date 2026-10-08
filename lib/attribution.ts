@@ -69,8 +69,8 @@ export default async function buildAttribution(
       );
       // Filter out failed requests and extract successful objects
       const successfulAwards = awardResults
-        .filter(result => result.isOk())
-        .map(result => result.unwrap());
+        .filter((result) => result.isOk())
+        .map((result) => result.unwrap());
       return ok(successfulAwards);
     })
   ).optional();

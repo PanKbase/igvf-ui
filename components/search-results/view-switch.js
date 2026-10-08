@@ -77,7 +77,9 @@ export default function ViewSwitch({ searchResults, className = null }) {
           <span className="flex items-center">
             <TableCellsIcon
               className={`h-5 w-5 mr-2 ${
-                isReportSelected ? "fill-button-selected" : "fill-button-secondary"
+                isReportSelected
+                  ? "fill-button-selected"
+                  : "fill-button-secondary"
               }`}
               style={{
                 fill: isReportSelected

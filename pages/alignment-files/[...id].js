@@ -77,11 +77,13 @@ export default function AlignmentFile({
                   <DataItemLabel>Reference Files</DataItemLabel>
                   <DataItemValue>
                     <SeparatedList isCollapsible>
-                      {(referenceFiles || []).filter(file => file && file["@id"]).map((file) => (
-                        <Link href={file["@id"]} key={file["@id"]}>
-                          {file.accession}
-                        </Link>
-                      ))}
+                      {(referenceFiles || [])
+                        .filter((file) => file && file["@id"])
+                        .map((file) => (
+                          <Link href={file["@id"]} key={file["@id"]}>
+                            {file.accession}
+                          </Link>
+                        ))}
                     </SeparatedList>
                   </DataItemValue>
                 </>
@@ -154,78 +156,81 @@ AlignmentFile.propTypes = {
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
   try {
-  // Redirect to the file page if the URL is a file download link.
-  const isPathForFileDownload = checkForFileDownloadPath(resolvedUrl);
-  if (isPathForFileDownload) {
-    return {
-      redirect: {
-        destination: convertFileDownloadPathToFilePagePath(resolvedUrl),
-        permanent: false,
-      },
-    };
-  }
+    // Redirect to the file page if the URL is a file download link.
+    const isPathForFileDownload = checkForFileDownloadPath(resolvedUrl);
+    if (isPathForFileDownload) {
+      return {
+        redirect: {
+          destination: convertFileDownloadPathToFilePagePath(resolvedUrl),
+          permanent: false,
+        },
+      };
+    }
 
-  const isJson = isJsonFormat(query);
-  const request = new FetchRequest({ cookie: req.headers.cookie });
-  const alignmentFile = (
-    await request.getObject(`/alignment-files/${params.id}/`)
-  ).union();
-  if (FetchRequest.isResponseSuccess(alignmentFile)) {
-    const fileSet = (
-      await request.getObject(alignmentFile.file_set)
-    ).optional();
-    const documents = alignmentFile.documents
-      ? await requestDocuments(alignmentFile.documents, request)
-      : [];
-    const derivedFrom = alignmentFile.derived_from
-      ? await requestFiles(alignmentFile.derived_from, request)
-      : [];
-    const derivedFromFileSetPaths = (derivedFrom || [])
-      .filter(file => file)
-      .map((file) => file.file_set)
-      .filter((fileSet) => fileSet);
-    const uniqueDerivedFromFileSetPaths = [...new Set(derivedFromFileSetPaths)];
-    const derivedFromFileSets =
-      uniqueDerivedFromFileSetPaths.length > 0
-        ? await requestFileSets(uniqueDerivedFromFileSetPaths, request)
+    const isJson = isJsonFormat(query);
+    const request = new FetchRequest({ cookie: req.headers.cookie });
+    const alignmentFile = (
+      await request.getObject(`/alignment-files/${params.id}/`)
+    ).union();
+    if (FetchRequest.isResponseSuccess(alignmentFile)) {
+      const fileSet = (
+        await request.getObject(alignmentFile.file_set)
+      ).optional();
+      const documents = alignmentFile.documents
+        ? await requestDocuments(alignmentFile.documents, request)
         : [];
-    const fileFormatSpecifications = alignmentFile.file_format_specifications
-      ? await requestDocuments(
-          alignmentFile.file_format_specifications,
-          request
-        )
-      : [];
-    const referenceFiles = alignmentFile.reference_files?.length > 0
-      ? await requestFiles(alignmentFile.reference_files, request)
-      : [];
-    const breadcrumbs = await buildBreadcrumbs(
-      alignmentFile,
-      alignmentFile.accession,
-      req.headers.cookie
-    );
-    const attribution = await buildAttribution(
-      alignmentFile,
-      req.headers.cookie
-    );
-    return {
-      props: {
+      const derivedFrom = alignmentFile.derived_from
+        ? await requestFiles(alignmentFile.derived_from, request)
+        : [];
+      const derivedFromFileSetPaths = (derivedFrom || [])
+        .filter((file) => file)
+        .map((file) => file.file_set)
+        .filter((fileSet) => fileSet);
+      const uniqueDerivedFromFileSetPaths = [
+        ...new Set(derivedFromFileSetPaths),
+      ];
+      const derivedFromFileSets =
+        uniqueDerivedFromFileSetPaths.length > 0
+          ? await requestFileSets(uniqueDerivedFromFileSetPaths, request)
+          : [];
+      const fileFormatSpecifications = alignmentFile.file_format_specifications
+        ? await requestDocuments(
+            alignmentFile.file_format_specifications,
+            request
+          )
+        : [];
+      const referenceFiles =
+        alignmentFile.reference_files?.length > 0
+          ? await requestFiles(alignmentFile.reference_files, request)
+          : [];
+      const breadcrumbs = await buildBreadcrumbs(
         alignmentFile,
-        fileSet,
-        documents,
-        derivedFrom,
-        derivedFromFileSets,
-        fileFormatSpecifications,
-        pageContext: { title: alignmentFile.accession },
-        breadcrumbs,
-        attribution,
-        referenceFiles,
-        isJson,
-      },
-    };
-  }
-  return errorObjectToProps(alignmentFile);
+        alignmentFile.accession,
+        req.headers.cookie
+      );
+      const attribution = await buildAttribution(
+        alignmentFile,
+        req.headers.cookie
+      );
+      return {
+        props: {
+          alignmentFile,
+          fileSet,
+          documents,
+          derivedFrom,
+          derivedFromFileSets,
+          fileFormatSpecifications,
+          pageContext: { title: alignmentFile.accession },
+          breadcrumbs,
+          attribution,
+          referenceFiles,
+          isJson,
+        },
+      };
+    }
+    return errorObjectToProps(alignmentFile);
   } catch (error) {
-    console.error('[AlignmentFile] Error in getServerSideProps', {
+    console.error("[AlignmentFile] Error in getServerSideProps", {
       id: params.id,
       error: error.message,
       stack: error.stack,

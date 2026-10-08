@@ -93,7 +93,9 @@ export async function getServerSideProps({ params, req, query }) {
   if (FetchRequest.isResponseSuccess(software)) {
     const award = software.award
       ? Array.isArray(software.award)
-        ? await Promise.all(software.award.map(a => request.getObject(a["@id"]).optional()))
+        ? await Promise.all(
+            software.award.map((a) => request.getObject(a["@id"]).optional())
+          )
         : [(await request.getObject(software.award["@id"])).optional()]
       : [];
     const lab = (await request.getObject(software.lab["@id"])).optional();

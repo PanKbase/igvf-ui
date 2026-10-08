@@ -147,9 +147,15 @@ function DataAccessCard({ icon, title, count, description, url }) {
       )}
       <div className="text-lg font-bold text-slate-900 mb-3">
         {title}
-        {count && <span className="ml-2 text-base font-semibold text-slate-500">({count})</span>}
+        {count && (
+          <span className="ml-2 text-base font-semibold text-slate-500">
+            ({count})
+          </span>
+        )}
       </div>
-      <div className="text-sm text-slate-600 leading-relaxed">{description}</div>
+      <div className="text-sm text-slate-600 leading-relaxed">
+        {description}
+      </div>
     </a>
   );
 }
@@ -220,7 +226,8 @@ export default function Browse({
       icon: <Settings className="w-6 h-6" />,
       title: "Workflows",
       count: abbreviateNumber(workflowCount),
-      description: "Analysis workflows used to processed data and create resources",
+      description:
+        "Analysis workflows used to processed data and create resources",
       url: "/search/?type=Workflow",
     },
   ];
@@ -230,8 +237,12 @@ export default function Browse({
       <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 md:py-24">
         <section>
           <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">Browse Data</h2>
-            <p className="text-lg text-slate-600">Explore all available data types and resources</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 text-balance">
+              Browse Data
+            </h2>
+            <p className="text-lg text-slate-600">
+              Explore all available data types and resources
+            </p>
             <div className="h-1 w-20 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

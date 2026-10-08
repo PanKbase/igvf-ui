@@ -332,7 +332,9 @@ const hiddenColumnIdSet = new Set(REPORT_HIDDEN_COLUMN_IDS);
 export function filterHiddenReportColumns(
   columnSpecs: ColumnSpec[]
 ): ColumnSpec[] {
-  return columnSpecs.filter((columnSpec) => !hiddenColumnIdSet.has(columnSpec.id));
+  return columnSpecs.filter(
+    (columnSpec) => !hiddenColumnIdSet.has(columnSpec.id)
+  );
 }
 
 /**

@@ -92,13 +92,17 @@ export default function PkbFooter() {
           />
         </Link>
         <div>
-          Supported by <strong>National Institutes of Health (NIH)</strong> grants{" "}
-          <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
+          Supported by <strong>National Institutes of Health (NIH)</strong>{" "}
+          grants <strong>U24 DK138515</strong>, <strong>U24 DK138512</strong>
           <br />
           Supplemental funds from the{" "}
           <strong>NIH Office of Data Science Strategies</strong>
         </div>
-        <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://hirnetwork.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img style={{ height: "37px" }} src={HIRN_LOGO_URL} alt="HIRN Logo" />
         </a>
       </div>

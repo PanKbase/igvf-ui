@@ -54,7 +54,7 @@ export default function AnalysisSet({ item: analysisSet }) {
           <span key="lab">
             {Array.isArray(analysisSet.award)
               ? analysisSet.award.map((award) => award.title).join(", ")
-              : analysisSet.award.title}
+              : analysisSet.award?.title}
           </span>
           {analysisSet.annotation_type && (
             <span key="annotation-type">

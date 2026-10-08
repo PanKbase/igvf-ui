@@ -20,8 +20,12 @@ describe("Test batch download controller classes", () => {
       }
       return document.createElement.bind(document)(tag);
     });
-    jest.spyOn(document.body, "appendChild").mockImplementation(() => downloadLink);
-    jest.spyOn(document.body, "removeChild").mockImplementation(() => downloadLink);
+    jest
+      .spyOn(document.body, "appendChild")
+      .mockImplementation(() => downloadLink);
+    jest
+      .spyOn(document.body, "removeChild")
+      .mockImplementation(() => downloadLink);
   });
 
   afterEach(() => {

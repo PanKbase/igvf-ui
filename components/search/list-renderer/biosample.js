@@ -27,9 +27,8 @@ export default function Biosample({ item: biosample }) {
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(biosample.award)
-              ? biosample.award.map(award => award.title).join(", ")
-              : biosample.award.title
-            }
+              ? biosample.award.map((award) => award.title).join(", ")
+              : biosample.award?.title}
           </span>
         </SearchListItemMeta>
         {isSupplementsVisible && (
