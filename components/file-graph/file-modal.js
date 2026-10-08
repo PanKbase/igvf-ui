@@ -107,7 +107,7 @@ export function FileModal({ node, onClose }) {
                   target: "_blank",
                   rel: "noopener noreferrer",
                 },
-                file.lab?.title || ''
+                file.lab?.title || ""
               )
             )
           ),

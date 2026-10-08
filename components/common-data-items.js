@@ -116,18 +116,22 @@ export function DonorDataItems({
               <DataItemValue>{item.bmi}</DataItemValue>
             </>
           )}
-          {item.height !== undefined && item.height !== null && item.height > 0 && (
-            <>
-              <DataItemLabel>Height (cm)</DataItemLabel>
-              <DataItemValue>{item.height}</DataItemValue>
-            </>
-          )}
-          {item.weight !== undefined && item.weight !== null && item.weight > 0 && (
-            <>
-              <DataItemLabel>Weight (kg)</DataItemLabel>
-              <DataItemValue>{item.weight}</DataItemValue>
-            </>
-          )}
+          {item.height !== undefined &&
+            item.height !== null &&
+            item.height > 0 && (
+              <>
+                <DataItemLabel>Height (cm)</DataItemLabel>
+                <DataItemValue>{item.height}</DataItemValue>
+              </>
+            )}
+          {item.weight !== undefined &&
+            item.weight !== null &&
+            item.weight > 0 && (
+              <>
+                <DataItemLabel>Weight (kg)</DataItemLabel>
+                <DataItemValue>{item.weight}</DataItemValue>
+              </>
+            )}
           {/* Genetic and Ethnic Information */}
           {item.genetic_predicted_ethnicities?.length > 0 && (
             <>
@@ -479,7 +483,9 @@ export function DonorDataItems({
                           const ai = order.indexOf(a.label);
                           const bi = order.indexOf(b.label);
                           if (ai === -1 && bi === -1) {
-                            return String(a.label).localeCompare(String(b.label));
+                            return String(a.label).localeCompare(
+                              String(b.label)
+                            );
                           }
                           if (ai === -1) {
                             return 1;
@@ -601,14 +607,14 @@ export function DonorDataItems({
             </>
           )}
 
-      {item.publication_data?.length > 0 && (
-        <>
-          <DataItemLabel>Publication Data</DataItemLabel>
-          <DataItemValue>
-            <DbxrefList dbxrefs={item.publication_data} isCollapsible />
-          </DataItemValue>
-        </>
-      )}
+          {item.publication_data?.length > 0 && (
+            <>
+              <DataItemLabel>Publication Data</DataItemLabel>
+              <DataItemValue>
+                <DbxrefList dbxrefs={item.publication_data} isCollapsible />
+              </DataItemValue>
+            </>
+          )}
           {item.pancreas_tissue_available !== undefined && (
             <>
               <DataItemLabel>Pancreas Tissue Available</DataItemLabel>

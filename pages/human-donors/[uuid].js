@@ -39,10 +39,7 @@ export default function HumanDonor({
     <>
       <Breadcrumbs />
       <EditableItem item={donor}>
-        <PagePreamble
-          pageTitle={donor.accession}
-          titleClassName="sr-only"
-        >
+        <PagePreamble pageTitle={donor.accession} titleClassName="sr-only">
           <AlternateAccessions
             alternateAccessions={donor.alternate_accessions}
           />

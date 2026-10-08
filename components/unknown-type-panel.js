@@ -51,7 +51,8 @@ export default function UnknownTypePanel({ item, attribution = null }) {
       !PROPERTIES_TO_OMIT.includes(property) &&
       // Hide empty arrays and null/undefined values
       !(Array.isArray(item[property]) && item[property].length === 0) &&
-      item[property] !== null && item[property] !== undefined
+      item[property] !== null &&
+      item[property] !== undefined
   );
 
   return (

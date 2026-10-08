@@ -156,7 +156,9 @@ export async function getServerSideProps({ params, req, query }) {
   if (FetchRequest.isResponseSuccess(workflow)) {
     const award = workflow.award
       ? Array.isArray(workflow.award)
-        ? await Promise.all(workflow.award.map(a => request.getObject(a["@id"]).optional()))
+        ? await Promise.all(
+            workflow.award.map((a) => request.getObject(a["@id"]).optional())
+          )
         : [(await request.getObject(workflow.award["@id"])).optional()]
       : [];
     const lab = (await request.getObject(workflow.lab["@id"])).optional();

@@ -44,7 +44,9 @@ export function FieldPair({ label, children, monoValue = false }) {
         {label}
       </dt>
       <dd
-        className={`text-sm font-medium text-data-value ${monoValue ? "tabular-nums" : ""}`}
+        className={`text-sm font-medium text-data-value ${
+          monoValue ? "tabular-nums" : ""
+        }`}
       >
         {children}
       </dd>

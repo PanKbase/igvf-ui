@@ -164,9 +164,9 @@ ChartDonorLab.propTypes = {
       lab: PropTypes.shape({
         title: PropTypes.string.isRequired,
       }).isRequired,
-        /* eslint-disable camelcase */
-        diabetes_status_description: PropTypes.string.isRequired,
-       /* eslint-enable camelcase */
+      /* eslint-disable camelcase */
+      diabetes_status_description: PropTypes.string.isRequired,
+      /* eslint-enable camelcase */
     })
   ).isRequired,
   title: PropTypes.string.isRequired,
