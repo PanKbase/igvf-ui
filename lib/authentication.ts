@@ -67,42 +67,18 @@ export async function getDataProviderUrl(): Promise<string | null> {
  * Log the current user into the data provider.
  * @param {object} loggedOutSession Logged-out /session object from the server
  * @param {function} getAccessTokenSilently Auth0-react function to get the current access token
+ * @param {string} dataProviderUrl Absolute URL of the data provider (required; do not rely on
+ *   PUBLIC_BACKEND_URL, which can be empty in some production UI containers)
  * @returns {object} session-properties object for the signed-in user
  */
 export async function loginDataProvider(
   loggedOutSession: { _csrft_: string },
-  getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>
+  getAccessTokenSilently: (o?: GetTokenSilentlyOptions) => Promise<string>,
+  dataProviderUrl: string
 ) {
-  // Request token for userinfo endpoint
-  // The /userinfo endpoint requires openid scope
-  // Note: Management API audience tokens may not work with /userinfo
-  // We need to explicitly request without audience for userinfo compatibility
-  let accessToken: string;
-  try {
-    // Try to get token without the Management API audience for userinfo
-    // The userinfo endpoint works with default OIDC tokens, not Management API tokens
-    accessToken = await getAccessTokenSilently({
-      authorizationParams: {
-        scope: "openid profile email",
-        audience: undefined, // Explicitly remove audience for userinfo endpoint
-      },
-      cacheMode: "off", // Force new token request without audience
-    });
-  } catch (error) {
-    // If removing audience fails, the Auth0Provider's audience might be hardcoded
-    // In that case, we'll use whatever token we get and let the backend handle the error
-    console.warn(
-      "Could not get token without audience, using default token:",
-      error
-    );
-    accessToken = await getAccessTokenSilently({
-      authorizationParams: {
-        scope: "openid profile email",
-      },
-    });
-  }
+  const accessToken = await getAccessTokenSilently();
   const request = new FetchRequest({ session: loggedOutSession });
-  return request.postObject("/login", { accessToken });
+  return request.postObjectByUrl(`${dataProviderUrl}/login`, { accessToken });
 }
 
 /**
@@ -130,18 +106,59 @@ export async function loginAuthProvider(
     ? "/"
     : `${window.location.pathname}${window.location.search}`;
 
-  // Trigger the login process. Pass the current URL as the returnTo parameter so that Auth0
-  // redirects back to the current page after login.
-  return await loginWithRedirect({
-    appState: {
-      returnTo: returnUrl,
-    },
-  });
+  try {
+    return await loginWithRedirect({
+      appState: {
+        returnTo: returnUrl,
+      },
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Auth0 redirect failed";
+    goToAuthError(message);
+  }
 }
 
 /**
- * Log the user out of the authentication provider. Redirect to the home page by default, or to
- * the specified path.
+ * Build the path (with optional reason query) for the authentication error page.
+ */
+export function authErrorPath(reason: string = ""): string {
+  const query = reason
+    ? `?reason=${encodeURIComponent(reason.slice(0, 400))}`
+    : "";
+  return `${AUTH_ERROR_URI}/${query}`;
+}
+
+/**
+ * Send the browser to the authentication error page with an optional reason string.
+ */
+export function goToAuthError(reason: string = "") {
+  window.location.assign(`${window.location.origin}${authErrorPath(reason)}`);
+}
+
+/**
+ * Clear the Auth0 browser session without redirecting, then show /auth-error.
+ * Prefer this after a backend login failure: Auth0 redirect logout races with
+ * navigation and often lands on `/` with no error (and requires auth-error in
+ * Allowed Logout URLs).
+ */
+export async function logoutAuthProviderAndShowError(
+  logout: (options?: LogoutOptions) => Promise<void>,
+  reason: string = ""
+) {
+  try {
+    await logout({
+      clientId: AUTH0_CLIENT_ID,
+      openUrl: false,
+    });
+  } catch (error) {
+    console.error("Failed to clear Auth0 session after login error:", error);
+  }
+  goToAuthError(reason);
+}
+
+/**
+ * Log the user out of Auth0, then return to home or an alternate path.
  * @param {function} logout Auth0-react function to logout of the authentication provider
  * @param {string} altPath Optional path to redirect to after logging out; "/" by default
  */

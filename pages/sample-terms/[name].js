@@ -116,7 +116,9 @@ export async function getServerSideProps({ params, req, query }) {
       props: {
         sampleOntologyTerm,
         isA,
-        pageContext: { title: sampleOntologyTerm.term_name || sampleOntologyTerm.term_id },
+        pageContext: {
+          title: sampleOntologyTerm.term_name || sampleOntologyTerm.term_id,
+        },
         breadcrumbs,
         isJson,
       },

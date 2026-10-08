@@ -1,92 +1,25 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import NavigationSection from "../components/navigation";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { pkbMenu } from "../lib/pkbMenu";
+import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
+import { Button } from "./form-elements";
+import Modal from "./modal";
+import SessionContext from "./session-context";
 
-export const pkbMenu = {
-  highlightItems: [
-    { label: "PanKgraph", path: "https://pankgraph.org/" },
-    {
-      label: "Integrated Cell Browser",
-      path: "https://pankbase.org/single-cell.html",
-    },
-  ],
-  menuItems: [
-    {
-      label: "Data",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Donor Summary",
-          path: "https://pankbase.org/donor-metadata.html",
-        },
-        { label: "Data Library", path: "https://data.pankbase.org" },
-        { label: "APIs", path: "https://pankbase.org/apis.html" },
-      ],
-    },
-    {
-      label: "Resources",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Integrated Cell Browser",
-          path: "https://pankbase.org/single-cell.html",
-        },
-        {
-          label: "Differential Gene Expression Browser",
-          path: "https://pankbase.org/diff-exp.html",
-        },
-        {
-          label: "PCA Explorer",
-          path: "https://pankbase.org/pca-explorer.html",
-        },
-        {
-          label: "Analytical Library",
-          path: "https://pankbase.org/analytical-library.html",
-        },
-        {
-          label: "Metadata Standards",
-          path: "https://pankbase.org/metadata-data-standards.html",
-        },
-        {
-          label: "Tools | Pipelines",
-          path: "https://pankbase.org/tools-pipelines.html",
-        },
-        {
-          label: "Publications",
-          path: "https://pankbase.org/publications.html",
-        },
-      ],
-    },
-    {
-      label: "About",
-      path: "",
-      subMenuItems: [
-        { label: "Project", path: "https://pankbase.org/projects.html" },
-        { label: "People", path: "https://pankbase.org/people.html" },
-        { label: "Policies", path: "https://pankbase.org/policies.html" },
-        {
-          label: "Related Programs",
-          path: "https://pankbase.org/programs.html",
-        },
-        { label: "Collaborate", path: "https://pankbase.org/collaborate.html" },
-      ],
-    },
-    {
-      label: "Help",
-      path: "",
-      subMenuItems: [
-        {
-          label: "Contact | Feedback",
-          path: "https://pankbase.org/contact.html",
-        },
-        { label: "Tutorials", path: "https://pankbase.org/tutorials.html" },
-        { label: "GitHub", path: "https://github.com/PanKbase" },
-        { label: "News", path: "https://pankbase.org/news.html" },
-      ],
-    },
-  ],
-};
+const LOGO_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg";
+const FUNDING_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg";
+const SEARCH_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg";
+const USER_ICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/user-icon.svg";
+const HIRN_LOGO_URL =
+  "https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg";
+const FAVICON_URL =
+  "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png";
+const OPEN_SANS_URL =
+  "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap";
 
 function injectFavicon(faviconUrl) {
   if (typeof window === "undefined") {
@@ -112,94 +45,177 @@ function injectFont(fontUrl) {
   document.head.appendChild(linkTag);
 }
 
+function HeaderAuthControl() {
+  const [isWarningOpen, setIsWarningOpen] = useState(false);
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { sessionProperties, setAuthStageLogin, setAuthStageLogout } =
+    useContext(SessionContext);
+
+  if (isAuthenticated) {
+    const userTitle = sessionProperties?.user?.title || "Sign Out";
+    return (
+      <>
+        <button
+          type="button"
+          className="topmenu-item topmenu-item-login"
+          data-testid="navigation-authenticate"
+          onClick={() => setIsWarningOpen(true)}
+        >
+          {userTitle}
+          <img
+            style={{ height: "15px", width: "15px" }}
+            src={USER_ICON_URL}
+            alt=""
+          />
+        </button>
+        <Modal isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)}>
+          <Modal.Header
+            onClose={() => setIsWarningOpen(false)}
+            closeLabel="Cancel signing out"
+          >
+            <h2 className="text-lg font-semibold">Sign Out {userTitle}</h2>
+          </Modal.Header>
+          <Modal.Body>
+            Once you sign out, you only see publicly released data.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="secondary"
+              onClick={() => setIsWarningOpen(false)}
+              label="Cancel signing out"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setAuthStageLogout?.();
+                logoutAuthProvider(logout);
+              }}
+              label={`Sign out ${userTitle}`}
+              id="sign-out-confirm"
+            >
+              <span data-testid="navigation-signout">Sign Out</span>
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className="topmenu-item topmenu-item-login"
+      data-testid="navigation-authenticate"
+      onClick={() => {
+        setAuthStageLogin?.();
+        loginAuthProvider(loginWithRedirect);
+      }}
+    >
+      Login
+      <img
+        style={{ height: "15px", width: "15px" }}
+        src={USER_ICON_URL}
+        alt=""
+      />
+    </button>
+  );
+}
+
 export default function Header() {
-  const [menuItemActive, setMenuItemActive] = useState(false);
+  const menuItemActiveRef = useRef(false);
 
   useEffect(() => {
-    injectFavicon(
-      "https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-icon.png"
-    );
-    injectFont(
-      "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-    );
+    injectFavicon(FAVICON_URL);
+    injectFont(OPEN_SANS_URL);
   }, []);
 
   function isActive(path) {
-    if (menuItemActive) {
+    if (menuItemActiveRef.current) {
       return false;
     }
-    if (typeof window !== "undefined") {
-      const currentPath = window.location.pathname;
-      if (path === currentPath) {
-        setMenuItemActive(true);
-        return true;
-      }
+    if (typeof window !== "undefined" && path === window.location.pathname) {
+      menuItemActiveRef.current = true;
+      return true;
     }
     return false;
   }
+
+  menuItemActiveRef.current = false;
 
   return (
     <div style={{ width: "100%" }}>
       <div className="pkb-nav">
         <div className="logo">
-          <Link href="/">
-            <Image
-              style={{ height: "50px", width: "auto" }}
-              src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/PanKbase_logo-black-tagline.svg"
+          <a href="https://pankbase.org/">
+            <img
+              style={{ height: "50px" }}
+              src={LOGO_URL}
               alt="PanKbase Logo"
-              width={240}
-              height={50}
-              unoptimized
             />
-          </Link>
+          </a>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <div className="menu-wrapper">
             <div className="topmenu">
-              <a className="topmenu-item" href="https://pankbase.org/funding.html">
-                Funding Opportunities{" "}
-                <Image
+              <a
+                className="topmenu-item"
+                href="https://pankbase.org/funding.html"
+              >
+                Funding Opportunities
+                <img
                   style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/images/pankbase/icons/funding_icon_black.svg"
+                  src={FUNDING_ICON_URL}
                   alt=""
-                  width={15}
-                  height={15}
-                  unoptimized
                 />
               </a>
               <a className="topmenu-item disabled">
-                Search{" "}
-                <Image
+                Search
+                <img
                   style={{ height: "15px", width: "15px" }}
-                  src="https://hugeampkpncms.org/sites/default/files/users/user32/pankbase/search-icon.svg"
+                  src={SEARCH_ICON_URL}
                   alt=""
-                  width={15}
-                  height={15}
-                  unoptimized
                 />
               </a>
               <a className="topmenu-item disabled">Analysis</a>
-              <NavigationSection />
+              <HeaderAuthControl />
             </div>
             <div className="menu">
               <div className="main-menu-items">
-                {pkbMenu.highlightItems.map((item, index) => (
-                  <div key={`highlight-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
+                {pkbMenu.highlightItems.map((item) => (
+                  <div
+                    key={item.label}
+                    className={`menu-item-wrapper ${
+                      isActive(item.path) ? "active" : ""
+                    }`}
+                  >
                     <a className="menu-item menu-item-main" href={item.path}>
                       {item.label}
                     </a>
                   </div>
                 ))}
               </div>
-              {pkbMenu.menuItems.map((item, index) => (
-                <div key={`menu-${index}`} className={`menu-item-wrapper ${isActive(item.path) ? "active" : ""}`}>
-                  <a className="menu-item" href={item.path || null}>
+              {pkbMenu.menuItems.map((item) => (
+                <div
+                  key={item.label}
+                  className={`menu-item-wrapper ${
+                    isActive(item.path) ? "active" : ""
+                  }`}
+                >
+                  <a className="menu-item" href={item.path || undefined}>
                     {item.label}
                   </a>
                   {item.subMenuItems && (
                     <div className="submenu">
-                      {item.subMenuItems.map((subItem, subIndex) => (
-                        <a key={`submenu-${index}-${subIndex}`} className={`submenu-item ${isActive(subItem.path) ? "active" : ""}`} href={subItem.path || null} data-whatever={isActive(subItem.path).toString()}>
+                      {item.subMenuItems.map((subItem) => (
+                        <a
+                          key={subItem.label}
+                          className={`submenu-item ${
+                            isActive(subItem.path) ? "active" : ""
+                          }`}
+                          href={subItem.path || undefined}
+                          data-whatever={isActive(subItem.path).toString()}
+                        >
                           {subItem.label}
                         </a>
                       ))}
@@ -209,14 +225,15 @@ export default function Header() {
               ))}
             </div>
           </div>
-          <a href="https://hirnetwork.org/" target="_blank" rel="noopener noreferrer">
-            <Image
-              style={{ height: "37px", width: "auto" }}
-              src="https://hugeampkpncms.org/sites/default/files/images/pankbase/logo-hirn.svg"
+          <a
+            href="https://hirnetwork.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              style={{ height: "37px" }}
+              src={HIRN_LOGO_URL}
               alt="HIRN Logo"
-              width={120}
-              height={37}
-              unoptimized
             />
           </a>
         </div>

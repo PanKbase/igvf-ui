@@ -89,7 +89,7 @@ export default function Breadcrumbs() {
   const processedBreadcrumbs = processBreadcrumbs(breadcrumbs, profiles);
 
   return (
-    <nav aria-label="breadcrumbs">
+    <nav aria-label="breadcrumbs" className="pkb-breadcrumbs">
       <SeparatedList
         className="mb-4 flex items-center text-xs"
         separator={

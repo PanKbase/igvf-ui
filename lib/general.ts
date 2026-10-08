@@ -190,14 +190,45 @@ export function truthyOrZero(value: number | null | undefined): boolean {
 /**
  * True if a value should be shown in biosample dashboards (non-empty string/array, non-null).
  */
+/** Sentinel numeric value meaning "not reported" in primary islet metadata. */
+export const MISSING_NUMERIC_SENTINEL = -999;
+
+/**
+ * True when `val` is the missing-data sentinel (-999), including string forms.
+ */
+export function isMissingNumericValue(val: unknown): boolean {
+  if (val === null || val === undefined) {
+    return false;
+  }
+  const n = Number(val);
+  return !Number.isNaN(n) && n === MISSING_NUMERIC_SENTINEL;
+}
+
+/**
+ * Format a numeric value for display, rendering '-' when the value is -999.
+ */
+export function formatNumericOrDash(val: unknown): string | number {
+  if (isMissingNumericValue(val)) {
+    return "-";
+  }
+  return val as string | number;
+}
+
+/**
+ * Format a percentage value for display, rendering '-' when the value is -999.
+ */
+export function formatPercentageOrDash(val: unknown): string {
+  if (isMissingNumericValue(val)) {
+    return "-";
+  }
+  return `${val}`.replace(/%$/, "") + "%";
+}
+
 export function hasValue(val: unknown): boolean {
   if (val === null || val === undefined) {
     return false;
   }
-  if (
-    typeof val === "string" &&
-    (val.trim() === "" || val.trim() === "—")
-  ) {
+  if (typeof val === "string" && (val.trim() === "" || val.trim() === "—")) {
     return false;
   }
   if (Array.isArray(val) && val.length === 0) {
@@ -337,4 +368,22 @@ export function truncateText(text: string, maxLength: number) {
     processedText = `${finalTruncatedText}${UC.hellip}`;
   }
   return processedText;
+}
+
+/**
+ * Sort key for file version strings (e.g. "v1", "v2", "1.0"). Uses the first numeric
+ * portion so v2 sorts before v10. Files without a version sort last.
+ */
+export function fileVersionSortKey(
+  version: string | undefined | null
+): [number, string] {
+  if (!version) {
+    return [Number.MAX_SAFE_INTEGER, ""];
+  }
+  const normalized = String(version);
+  const match = normalized.match(/(\d+)/);
+  if (match) {
+    return [parseInt(match[1], 10), normalized.toLowerCase()];
+  }
+  return [Number.MAX_SAFE_INTEGER - 1, normalized.toLowerCase()];
 }

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 // components/facets
 import facetRegistry from "./facet-registry";
 // lib
-import { getVisibleFacets } from "../../lib/facets";
+import { getVisibleFilters } from "../../lib/facets";
 
 /**
  * Facet tags show a list of the currently selected facet terms. Clicking each tag clears that facet
@@ -74,7 +74,7 @@ FacetTag.propTypes = {
 export default function FacetTags({ searchResults }) {
   // All selected facet terms appear in the `filters` property of the search results except for the
   // hidden facet fields.
-  const removableFilters = getVisibleFacets(searchResults.filters);
+  const removableFilters = getVisibleFilters(searchResults.filters);
   if (removableFilters.length > 0) {
     return (
       <div className="mb-2 flex flex-wrap gap-1" data-testid="facettags">

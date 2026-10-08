@@ -21,7 +21,12 @@ export default function HumanDonor({ item: humanDonor }) {
   const ethnicities =
     humanDonor.ethnicities?.length > 0 ? humanDonor.ethnicities.join(", ") : "";
   const gender = humanDonor.gender || "";
-  const title = [ethnicities, gender].filter(Boolean);
+  const ageGroup = humanDonor.age_group || "";
+  const diabetes = humanDonor.diabetes_status_description || "";
+  const aabSummary = humanDonor.aab_summary || "";
+  const title = [ethnicities, gender, ageGroup, diabetes, aabSummary].filter(
+    Boolean
+  );
   const collections =
     humanDonor.collections?.length > 0 ? humanDonor.collections.join(", ") : "";
   let phenotypicFeatures = humanDonor.phenotypic_features
@@ -48,9 +53,8 @@ export default function HumanDonor({ item: humanDonor }) {
         <SearchListItemMeta>
           <span key="lab">
             {Array.isArray(humanDonor.award)
-              ? humanDonor.award.map(award => award.title).join(", ")
-              : humanDonor.award.title
-            }
+              ? humanDonor.award.map((award) => award.title).join(", ")
+              : humanDonor.award?.title}
           </span>
         </SearchListItemMeta>
         {isSupplementVisible && (

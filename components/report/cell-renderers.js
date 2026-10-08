@@ -11,13 +11,14 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 // components
 import ChromosomeLocations from "../chromosome-locations";
-import { FileDownload } from "../file-download";
+import { FileDownload, getFileDownloadUrl } from "../file-download";
 import {
   CollapseControlVertical,
   DEFAULT_MAX_COLLAPSE_ITEMS_VERTICAL,
   useCollapseControl,
 } from "../collapse-control";
 import SeparatedList from "../separated-list";
+import { AliasesCell } from "../table-cells";
 import UnspecifiedProperty from "../unspecified-property";
 // lib
 import { attachmentToServerHref } from "../../lib/attachment";
@@ -172,13 +173,15 @@ Generic.propTypes = {
  * Display a file-download button along with the full download path to the file.
  */
 function Href({ source }) {
+  const downloadUrl = getFileDownloadUrl(source);
+
   // Wrap in a div because the cell has a flex class we don't want to inherit.
   return (
     <div>
       <div className="flex">
         <FileDownload file={source} className="shrink" />
       </div>
-      <div>{`${API_URL}${source.href}`}</div>
+      {downloadUrl && <div>{downloadUrl}</div>}
     </div>
   );
 }
@@ -392,12 +395,8 @@ AttachmentHref.propTypes = {
 function FilesHref({ source }) {
   const hrefs = source.files
     ? source.files
-        .map((file) => {
-          if (file.file_url) {
-            return `${file.file_url}`;
-          }
-        })
-        .filter((e) => e !== undefined)
+        .map((file) => getFileDownloadUrl(file))
+        .filter((href) => href !== null)
     : [];
 
   return <div>{hrefs.join(", ")}</div>;
@@ -486,6 +485,7 @@ export const reportPropertyRenderers = {
 
 export const propertyRenderers = {
   "@id": AtId,
+  aliases: AliasesCell,
   attachment: Attachment,
   href: Href,
   "attachment.href": AttachmentHref,

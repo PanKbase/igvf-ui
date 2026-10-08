@@ -303,7 +303,10 @@ export async function getServerSideProps({ params, req, query }) {
         treatments,
         multiplexedInSamples,
         pageContext: {
-          title: `${humanBetaCellLines.sample_terms?.[0]?.term_name || humanBetaCellLines.accession} — ${humanBetaCellLines.accession}`,
+          title: `${
+            humanBetaCellLines.sample_terms?.[0]?.term_name ||
+            humanBetaCellLines.accession
+          } — ${humanBetaCellLines.accession}`,
         },
         breadcrumbs,
         attribution,

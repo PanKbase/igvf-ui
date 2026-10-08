@@ -72,8 +72,6 @@ export default function MatrixFile({
               <DataItemValue>{matrixFile.dimension1}</DataItemValue>
               <DataItemLabel>Second Dimension</DataItemLabel>
               <DataItemValue>{matrixFile.dimension2}</DataItemValue>
-              <DataItemLabel>Download File</DataItemLabel>
-              <DataItemValue>{matrixFile.file_url}</DataItemValue>
             </DataArea>
           </DataPanel>
           {referenceFiles.length > 0 && (

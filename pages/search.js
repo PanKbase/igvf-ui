@@ -19,6 +19,7 @@ import TableCount from "../components/table-count";
 // lib
 import buildBreadcrumbs from "../lib/breadcrumbs";
 import { errorObjectToProps } from "../lib/errors";
+import { loadFacetConfig } from "../lib/facets";
 import FetchRequest from "../lib/fetch-request";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import {
@@ -31,7 +32,11 @@ import {
  * components this relies on use the term, "search list," to distinguish it from other kinds of
  * search-result display pages, such as /report.
  */
-export default function Search({ searchResults, accessoryData = null }) {
+export default function Search({
+  searchResults,
+  accessoryData = null,
+  facetConfig = null,
+}) {
   const { collectionTitles, profiles } = useContext(SessionContext);
   const { totalPages } = useSearchLimits(searchResults);
   const resultTypes = generateSearchResultsTypes(
@@ -54,7 +59,10 @@ export default function Search({ searchResults, accessoryData = null }) {
       )}
       {searchResults.total > 0 ? (
         <div className="lg:flex lg:items-start lg:gap-1">
-          <FacetSection searchResults={searchResults} />
+          <FacetSection
+            searchResults={searchResults}
+            facetConfig={facetConfig}
+          />
           <div className="grow">
             <FacetTags searchResults={searchResults} />
             <SearchResultsHeader searchResults={searchResults} />
@@ -93,6 +101,8 @@ Search.propTypes = {
   searchResults: PropTypes.object.isRequired,
   // Accessory data for search results, keyed by each object's `@id`
   accessoryData: PropTypes.object,
+  // Optional/category/description for the facets from the search config, keyed by facet field
+  facetConfig: PropTypes.object,
 };
 
 export async function getServerSideProps({ req, query }) {
@@ -125,10 +135,12 @@ export async function getServerSideProps({ req, query }) {
       "",
       req.headers.cookie
     );
+    const facetConfig = await loadFacetConfig(searchResults, request);
     return {
       props: {
         searchResults,
         accessoryData,
+        facetConfig,
         pageContext: { title: "title" },
         breadcrumbs,
       },

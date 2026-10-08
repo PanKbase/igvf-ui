@@ -78,6 +78,14 @@ export function DonorDataItems({
               <DataItemValue>{item.gender}</DataItemValue>
             </>
           )}
+          {item.sex_discordant !== undefined && (
+            <>
+              <DataItemLabel>Sex Discordant</DataItemLabel>
+              <DataItemValue>
+                {item.sex_discordant ? "true" : "false"}
+              </DataItemValue>
+            </>
+          )}
           {item.ethnicities?.length > 0 && (
             <>
               <DataItemLabel>Ethnicity</DataItemLabel>
@@ -90,24 +98,40 @@ export function DonorDataItems({
               <DataItemValue>{item.age}</DataItemValue>
             </>
           )}
+          {item.age_group && (
+            <>
+              <DataItemLabel>Age Group</DataItemLabel>
+              <DataItemValue>{item.age_group}</DataItemValue>
+            </>
+          )}
+          {item.pediatric !== undefined && (
+            <>
+              <DataItemLabel>Pediatric</DataItemLabel>
+              <DataItemValue>{item.pediatric ? "true" : "false"}</DataItemValue>
+            </>
+          )}
           {item.bmi > 0 && (
             <>
               <DataItemLabel>BMI</DataItemLabel>
               <DataItemValue>{item.bmi}</DataItemValue>
             </>
           )}
-          {item.height !== undefined && item.height !== null && item.height > 0 && (
-            <>
-              <DataItemLabel>Height (cm)</DataItemLabel>
-              <DataItemValue>{item.height}</DataItemValue>
-            </>
-          )}
-          {item.weight !== undefined && item.weight !== null && item.weight > 0 && (
-            <>
-              <DataItemLabel>Weight (kg)</DataItemLabel>
-              <DataItemValue>{item.weight}</DataItemValue>
-            </>
-          )}
+          {item.height !== undefined &&
+            item.height !== null &&
+            item.height > 0 && (
+              <>
+                <DataItemLabel>Height (cm)</DataItemLabel>
+                <DataItemValue>{item.height}</DataItemValue>
+              </>
+            )}
+          {item.weight !== undefined &&
+            item.weight !== null &&
+            item.weight > 0 && (
+              <>
+                <DataItemLabel>Weight (kg)</DataItemLabel>
+                <DataItemValue>{item.weight}</DataItemValue>
+              </>
+            )}
           {/* Genetic and Ethnic Information */}
           {item.genetic_predicted_ethnicities?.length > 0 && (
             <>
@@ -128,6 +152,12 @@ export function DonorDataItems({
                   )
                 )}
               </DataItemValue>
+            </>
+          )}
+          {item.dominant_genetic_ancestry && (
+            <>
+              <DataItemLabel>Dominant Genetic Ancestry</DataItemLabel>
+              <DataItemValue>{item.dominant_genetic_ancestry}</DataItemValue>
             </>
           )}
           {item.self_reported_ethnicities?.length > 0 && (
@@ -213,8 +243,24 @@ export function DonorDataItems({
           )}
           {item.derived_diabetes_status && (
             <>
-              <DataItemLabel>Derived diabetes status</DataItemLabel>
+              <DataItemLabel>HbA1c-derived diabetes status</DataItemLabel>
               <DataItemValue>{item.derived_diabetes_status}</DataItemValue>
+            </>
+          )}
+          {item.label_hba1c_discordant !== undefined && (
+            <>
+              <DataItemLabel>Label vs HbA1c Discordant</DataItemLabel>
+              <DataItemValue>
+                {item.label_hba1c_discordant ? "true" : "false"}
+              </DataItemValue>
+            </>
+          )}
+          {item.tier1_complete !== undefined && (
+            <>
+              <DataItemLabel>Tier 1 Complete</DataItemLabel>
+              <DataItemValue>
+                {item.tier1_complete ? "true" : "false"}
+              </DataItemValue>
             </>
           )}
           {item.hba1c !== undefined && (
@@ -271,11 +317,42 @@ export function DonorDataItems({
         item.aab_iaa_value !== undefined ||
         item.aab_iaa !== undefined ||
         item.aab_znt8_value !== undefined ||
-        item.aab_znt8 !== undefined) && (
+        item.aab_znt8 !== undefined ||
+        item.aab_summary !== undefined ||
+        item.aab_positive !== undefined ||
+        item.aab_count !== undefined) && (
         <>
           <DataAreaTitle>Auto Antibodies</DataAreaTitle>
           <DataPanel>
             <DataArea>
+              {item.aab_summary !== undefined && (
+                <>
+                  <DataItemLabel>AAB Summary</DataItemLabel>
+                  <DataItemValue>{item.aab_summary}</DataItemValue>
+                </>
+              )}
+              {item.aab_positive !== undefined && (
+                <>
+                  <DataItemLabel>AAB Positive</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_positive ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_tested !== undefined && (
+                <>
+                  <DataItemLabel>AAB Tested</DataItemLabel>
+                  <DataItemValue>
+                    {item.aab_tested ? "true" : "false"}
+                  </DataItemValue>
+                </>
+              )}
+              {item.aab_count !== undefined && (
+                <>
+                  <DataItemLabel>AAB Count</DataItemLabel>
+                  <DataItemValue>{item.aab_count}</DataItemValue>
+                </>
+              )}
               {item.aab_gada_value !== undefined && (
                 <>
                   <DataItemLabel>AAB GADA Value (unit/ml)</DataItemLabel>
@@ -406,7 +483,9 @@ export function DonorDataItems({
                           const ai = order.indexOf(a.label);
                           const bi = order.indexOf(b.label);
                           if (ai === -1 && bi === -1) {
-                            return String(a.label).localeCompare(String(b.label));
+                            return String(a.label).localeCompare(
+                              String(b.label)
+                            );
                           }
                           if (ai === -1) {
                             return 1;
@@ -453,7 +532,55 @@ export function DonorDataItems({
               </DataPanel>
             </>
           )}
+          {item.grs2_score !== undefined && (
+            <>
+              <DataItemLabel>GRS2 Score</DataItemLabel>
+              <DataItemValue>{item.grs2_score}</DataItemValue>
+            </>
+          )}
+          {item.grs2_normalized !== undefined && (
+            <>
+              <DataItemLabel>GRS2 Normalized</DataItemLabel>
+              <DataItemValue>{item.grs2_normalized}</DataItemValue>
+            </>
+          )}
+          {item.t2d_grs_score !== undefined && (
+            <>
+              <DataItemLabel>T2D GRS Score</DataItemLabel>
+              <DataItemValue>{item.t2d_grs_score}</DataItemValue>
+            </>
+          )}
+          {item.t2d_grs_normalized !== undefined && (
+            <>
+              <DataItemLabel>T2D GRS Normalized</DataItemLabel>
+              <DataItemValue>{item.t2d_grs_normalized}</DataItemValue>
+            </>
+          )}
           {/* Additional Biological Information */}
+          {item.data_available_datasets?.length > 0 && (
+            <>
+              <DataItemLabel>Data Available Datasets</DataItemLabel>
+              <DataItemValue>
+                {item.data_available_datasets.join(", ")}
+              </DataItemValue>
+            </>
+          )}
+          {item.data_available_tissues?.length > 0 && (
+            <>
+              <DataItemLabel>Data Available Tissues</DataItemLabel>
+              <DataItemValue>
+                {item.data_available_tissues.join(", ")}
+              </DataItemValue>
+            </>
+          )}
+          {item.data_available_keys?.length > 0 && (
+            <>
+              <DataItemLabel>Data Available Keys</DataItemLabel>
+              <DataItemValue>
+                {item.data_available_keys.join(", ")}
+              </DataItemValue>
+            </>
+          )}
           {item.data_available?.length > 0 && (
             <>
               <DataItemLabel>Data Available</DataItemLabel>
@@ -480,14 +607,14 @@ export function DonorDataItems({
             </>
           )}
 
-      {item.publication_data?.length > 0 && (
-        <>
-          <DataItemLabel>Publication Data</DataItemLabel>
-          <DataItemValue>
-            <DbxrefList dbxrefs={item.publication_data} isCollapsible />
-          </DataItemValue>
-        </>
-      )}
+          {item.publication_data?.length > 0 && (
+            <>
+              <DataItemLabel>Publication Data</DataItemLabel>
+              <DataItemValue>
+                <DbxrefList dbxrefs={item.publication_data} isCollapsible />
+              </DataItemValue>
+            </>
+          )}
           {item.pancreas_tissue_available !== undefined && (
             <>
               <DataItemLabel>Pancreas Tissue Available</DataItemLabel>
@@ -586,7 +713,10 @@ DonorDataItems.commonProperties = [
   "family_history_of_diabetes",
   "family_history_of_diabetes_relationship",
   "age",
+  "age_group",
+  "pediatric",
   "gender",
+  "sex_discordant",
   "bmi",
   "height",
   "weight",
@@ -595,6 +725,7 @@ DonorDataItems.commonProperties = [
   "diabetes_status_description",
   "t1d_stage",
   "derived_diabetes_status",
+  "label_hba1c_discordant",
   "diabetes_duration",
   "hba1c",
   "c_peptide",
@@ -602,11 +733,16 @@ DonorDataItems.commonProperties = [
   "glucose_loweing_theraphy",
   "ethnicities",
   "genetic_predicted_ethnicities",
+  "dominant_genetic_ancestry",
   "self_reported_ethnicities",
   "cause_of_death",
   "hospital_stay",
   "donation_type",
   "pancreas_tissue_available",
+  "aab_summary",
+  "aab_positive",
+  "aab_tested",
+  "aab_count",
   "aab_gada_value",
   "aab_gada",
   "aab_gada_assay",
@@ -623,6 +759,15 @@ DonorDataItems.commonProperties = [
   "phenotypic_features",
   "hla_status",
   "genetic_risk_score",
+  "grs2_score",
+  "grs2_normalized",
+  "t2d_grs_score",
+  "t2d_grs_normalized",
+  "tier1_complete",
+  "data_available",
+  "data_available_datasets",
+  "data_available_tissues",
+  "data_available_keys",
   "description",
   "collections",
   "dbxrefs",
@@ -693,7 +838,7 @@ export function SampleDataItems({ item, constructLibrarySets = [], children }) {
       )}
       {item.url && (
         <>
-          <DataItemLabel>Additional Information</DataItemLabel>
+          <DataItemLabel>URL</DataItemLabel>
           <DataItemValueUrl>
             <a href={item.url} target="_blank" rel="noopener noreferrer">
               {item.url}
@@ -928,20 +1073,17 @@ OntologyTermDataItems.commonProperties = [
 export function FileDataItems({ item, fileSet = null, children }) {
   return (
     <>
-      {fileSet && (
+      {fileSet?.summary && (
         <>
           <DataItemLabel>File Set</DataItemLabel>
           <DataItemValue>
-            <div className="flex gap-1">
-              <Link
-                href={fileSet["@id"]}
-                aria-label={`FileSet ${fileSet.accession}`}
-                key={fileSet.uuid}
-              >
-                {fileSet.accession}
-              </Link>
-              ({fileSet.summary})
-            </div>
+            <Link
+              href={fileSet["@id"]}
+              aria-label={`File set ${fileSet.accession}`}
+              key={fileSet.uuid}
+            >
+              {fileSet.summary}
+            </Link>
           </DataItemValue>
         </>
       )}
@@ -987,14 +1129,11 @@ export function FileDataItems({ item, fileSet = null, children }) {
           </DataItemValue>
         </>
       )}
-      {item.file_url && (
+      {(item.file_url || item.href) && (
         <>
           <DataItemLabel>File Download</DataItemLabel>
-          <DataItemValue>
-            <div className="flex items-center gap-2">
-              <FileDownload file={item} />
-              <span className="text-sm text-gray-600">{item.file_url}</span>
-            </div>
+          <DataItemValue className="flex items-center">
+            <FileDownload file={item} />
           </DataItemValue>
         </>
       )}

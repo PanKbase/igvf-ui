@@ -11,6 +11,19 @@ const FILE_NOT_FOUND = "file not found";
 const PENDING = "pending";
 
 /**
+ * Return the URL to download a file, preferring `file_url` over the system `@@download` path.
+ */
+export function getFileDownloadUrl(file) {
+  if (file.file_url) {
+    return file.file_url;
+  }
+  if (file.href) {
+    return `${API_URL}${file.href}`;
+  }
+  return null;
+}
+
+/**
  * Display a file-download link and download icon. Files without an `upload_status` of `file not
  * found` or `pending` have a disabled download link, as do files with controlled access and an
  * Anvil URL.
@@ -22,9 +35,14 @@ export function FileDownload({ file, className = "" }) {
   const isDownloadDisabledByAnvil = Boolean(
     file.controlled_access && file.anvil_url
   );
+  const downloadUrl = getFileDownloadUrl(file);
 
-  // Use file_url if available, otherwise fallback to the original href with API_URL
-  const downloadUrl = file.file_url || `${API_URL}${file.href}`;
+  if (!downloadUrl) {
+    return null;
+  }
+
+  const isExternalDownload =
+    downloadUrl.startsWith("http://") || downloadUrl.startsWith("https://");
 
   return (
     <ButtonLink
@@ -32,11 +50,13 @@ export function FileDownload({ file, className = "" }) {
       href={downloadUrl}
       type="secondary"
       size="sm"
+      isInline
+      hasIconCircleOnly
       isDisabled={isDownloadDisabledByStatus || isDownloadDisabledByAnvil}
-      hasIconOnly
-      className={className}
+      isExternal={isExternalDownload}
+      className={`w-fit shrink-0 ${className}`.trim()}
     >
-      <ArrowDownTrayIcon />
+      <ArrowDownTrayIcon className="h-4 w-4" />
     </ButtonLink>
   );
 }
@@ -72,12 +92,11 @@ FileHeaderDownload.propTypes = {
  */
 export function FileAccessionAndDownload({ file, isTargetBlank = false }) {
   return (
-    <div>
-      <div className="flex items-center gap-1">
-        <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
-          {file.accession}
-        </LinkedIdAndStatus>
-      </div>
+    <div className="flex items-center gap-1">
+      <LinkedIdAndStatus item={file} isTargetBlank={isTargetBlank}>
+        {file.accession}
+      </LinkedIdAndStatus>
+      <FileDownload file={file} />
     </div>
   );
 }

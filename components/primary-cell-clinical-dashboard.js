@@ -55,9 +55,7 @@ export default function PrimaryCellClinicalDashboard({
         <section>
           <DashboardSectionTitle>Biosample summary</DashboardSectionTitle>
           <div className="flex flex-wrap gap-3">
-            {item.taxa ? (
-              <MetricCard label="Taxa" value={item.taxa} />
-            ) : null}
+            {item.taxa ? <MetricCard label="Taxa" value={item.taxa} /> : null}
             <MetricCard
               label="Sample Term"
               value={
@@ -112,7 +110,9 @@ export default function PrimaryCellClinicalDashboard({
                       }`
                     : null}
                 </FieldPair>
-                <FieldPair label="Cellular Sub Pool">{item.cellular_sub_pool}</FieldPair>
+                <FieldPair label="Cellular Sub Pool">
+                  {item.cellular_sub_pool}
+                </FieldPair>
                 <FieldPair label="Part of Sample">
                   {partOf ? (
                     <Link href={partOf["@id"]}>{partOf.accession}</Link>
@@ -151,7 +151,9 @@ export default function PrimaryCellClinicalDashboard({
                 <FieldPair label="Sorted From Sample">
                   {sortedFrom ? (
                     <>
-                      <Link href={sortedFrom["@id"]}>{sortedFrom.accession}</Link>
+                      <Link href={sortedFrom["@id"]}>
+                        {sortedFrom.accession}
+                      </Link>
                       {item.sorted_from_detail ? (
                         <> {item.sorted_from_detail}</>
                       ) : null}
@@ -170,6 +172,18 @@ export default function PrimaryCellClinicalDashboard({
           <DashboardSectionTitle>Additional information</DashboardSectionTitle>
           <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
             <FieldPair label="Description">{item.description}</FieldPair>
+            {item.url ? (
+              <FieldPair label="URL">
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="break-all text-blue-700 dark:text-blue-400"
+                >
+                  {item.url}
+                </a>
+              </FieldPair>
+            ) : null}
             {item.dbxrefs?.length > 0 ? (
               <div>
                 <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">
@@ -195,7 +209,9 @@ export default function PrimaryCellClinicalDashboard({
                 </SeparatedList>
               </FieldPair>
             ) : null}
-            <FieldPair label="Submitter Comment">{item.submitter_comment}</FieldPair>
+            <FieldPair label="Submitter Comment">
+              {item.submitter_comment}
+            </FieldPair>
             <FieldPair label="Revoke Detail">{item.revoke_detail}</FieldPair>
             {item.publication_identifiers?.length > 0 ? (
               <div>
