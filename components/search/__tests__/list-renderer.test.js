@@ -242,6 +242,7 @@ describe("Test the Biosample component", () => {
         component: "data coordination",
         name: "HG012012",
         "@id": "/awards/HG012012/",
+        title: "J. Michael Cherry, Stanford",
       },
       sample_terms: [
         {
@@ -616,7 +617,10 @@ describe("Test the HumanDonor component", () => {
       accession: "IGVFDO856PXB",
       alternate_accessions: ["IGVFDO856PXC"],
       aliases: ["chongyuan-luo:AA F donor of fibroblasts"],
-      award: "/awards/1U01HG012079-01/",
+      award: {
+        "@id": "/awards/1U01HG012079-01/",
+        title: "Chongyuan Luo",
+      },
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
       gender: "female",
@@ -700,7 +704,10 @@ describe("Test the HumanDonor component", () => {
       "@type": ["HumanDonor", "Donor", "Item"],
       accession: "IGVFDO856PXB",
       aliases: ["chongyuan-luo:AA F donor of fibroblasts"],
-      award: "/awards/1U01HG012079-01/",
+      award: {
+        "@id": "/awards/1U01HG012079-01/",
+        title: "Chongyuan Luo",
+      },
       ethnicities: ["African American"],
       lab: { "@id": "/labs/chongyuan-luo/", title: "Chongyuan Luo" },
       gender: "female",
@@ -1438,7 +1445,9 @@ describe("Test the AnalysisSet component", () => {
       accession: "IGVFDS3099XPLN",
       alternate_accessions: ["IGVFDS3099XPLO"],
       aliases: ["igvf:basic_analysis_set"],
-      award: "/awards/HG012012/",
+      award: { title: "J. Michael Cherry, Stanford" },
+      annotation_type: "sample_scrnaseq",
+      annotation_category: "Gene expression",
       file_set_type: "primary analysis",
       lab: {
         title: "J. Michael Cherry, Stanford",
@@ -1459,10 +1468,12 @@ describe("Test the AnalysisSet component", () => {
     expect(uniqueId).toHaveTextContent(/IGVFDS3099XPLN$/);
 
     const title = screen.getByTestId("search-list-item-title");
-    expect(title).toHaveTextContent(/^primary analysis$/);
+    expect(title).toHaveTextContent(/^primary analysis of data$/);
 
     const meta = screen.queryByTestId("search-list-item-meta");
     expect(meta).toHaveTextContent("J. Michael Cherry, Stanford");
+    expect(meta).toHaveTextContent("Per-sample processed islet scRNA-seq");
+    expect(meta).toHaveTextContent("Gene expression");
 
     const supplement = screen.getByTestId("search-list-item-supplement");
     expect(supplement).toHaveTextContent("primary analysis of data");
@@ -1471,13 +1482,51 @@ describe("Test the AnalysisSet component", () => {
     expect(status).toHaveTextContent("released");
   });
 
+  it("renders DE fields on an AnalysisSet search result", () => {
+    const item = {
+      "@id": "/analysis-sets/PKBDS0001DE01/",
+      "@type": ["AnalysisSet", "FileSet", "Item"],
+      accession: "PKBDS0001DE01",
+      award: { title: "J. Michael Cherry, Stanford" },
+      annotation_type: "differential_expression",
+      annotation_category: "Differential expression",
+      cell_type: "beta",
+      de_comparison_class: "disease_status",
+      de_contrast: "T1D vs control",
+      de_method: "pseudobulk_group_comparison",
+      file_set_type: "principal analysis",
+      lab: {
+        title: "J. Michael Cherry, Stanford",
+      },
+      status: "released",
+      summary: "principal analysis of data",
+      uuid: "609869e7-cbd9-4d06-9569-d3fdb4604cde",
+    };
+
+    render(
+      <SessionContext.Provider value={{ profiles }}>
+        <AnalysisSet item={item} />
+      </SessionContext.Provider>
+    );
+
+    const meta = screen.queryByTestId("search-list-item-meta");
+    expect(meta).toHaveTextContent(
+      "Differential expression results by cell type"
+    );
+    expect(meta).toHaveTextContent("Differential expression");
+    expect(meta).toHaveTextContent("beta");
+    expect(meta).toHaveTextContent("Disease status");
+    expect(meta).toHaveTextContent("T1D vs control");
+    expect(meta).toHaveTextContent("Pseudobulk group comparison");
+  });
+
   it("renders an AnalysisSet item without alternate accessions", () => {
     const item = {
       "@id": "/analysis-sets/IGVFDS0390NOLS/",
       "@type": ["AnalysisSet", "FileSet", "Item"],
       accession: "IGVFDS0390NOLS",
       aliases: ["igvf:basic_analysis_set_2"],
-      award: "/awards/HG012012/",
+      award: { title: "J. Michael Cherry, Stanford" },
       file_set_type: "primary analysis",
       lab: {
         "@id": "/labs/j-michael-cherry/",
@@ -1499,7 +1548,7 @@ describe("Test the AnalysisSet component", () => {
     expect(uniqueId).toHaveTextContent(/IGVFDS0390NOLS$/);
 
     const title = screen.getByTestId("search-list-item-title");
-    expect(title).toHaveTextContent(/^primary analysis$/);
+    expect(title).toHaveTextContent(/^primary analysis of data$/);
 
     const meta = screen.queryByTestId("search-list-item-meta");
     expect(meta).toHaveTextContent(/^J. Michael Cherry, Stanford/);
@@ -2423,7 +2472,10 @@ describe("Test Workflow component", () => {
       "@id": "/workflows/IGVFWF3254CAGQ/",
       "@type": ["Workflow", "Item"],
       accession: "IGVFWF3254CAGQ",
-      award: "/awards/HG012012/",
+      award: {
+        "@id": "/awards/HG012012/",
+        title: "J. Michael Cherry, Stanford",
+      },
       lab: {
         "@id": "/labs/j-michael-cherry/",
         title: "J. Michael Cherry, Stanford",

@@ -27,9 +27,8 @@ export default function Workflow({ item: workflow }) {
         <SearchListItemMeta>
           <div key="lab">
             {Array.isArray(workflow.award)
-              ? workflow.award.map(award => award.title).join(", ")
-              : workflow.award.title
-            }
+              ? workflow.award.map((award) => award.title).join(", ")
+              : workflow.award?.title}
           </div>
         </SearchListItemMeta>
         {isSupplementVisible && (

@@ -35,7 +35,8 @@ export default function DownloadTSV({ searchUri }) {
         </div>
       </TooltipRef>
       <Tooltip tooltipAttr={tooltipAttr}>
-        Download the report as a TSV file. Use the Columns button to customize which fields are included in the export.
+        Download the report as a TSV file. Use the Columns button to customize
+        which fields are included in the export.
       </Tooltip>
     </>
   );

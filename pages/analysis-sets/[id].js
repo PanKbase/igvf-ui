@@ -37,6 +37,11 @@ import FetchRequest from "../../lib/fetch-request";
 import { getAllDerivedFromFiles } from "../../lib/files";
 import { isJsonFormat } from "../../lib/query-utils";
 import SampleTable from "../../components/sample-table";
+import { getAnnotationTypeTitle } from "../../lib/annotation-type";
+import {
+  getDeComparisonClassTitle,
+  getDeMethodTitle,
+} from "../../lib/analysis-set-de";
 
 const ISLET_NORMALIZATION_FIELDS = [
   ["total_islet_cell_volume", "Total Islet Cell Volume (IEQ)"],
@@ -110,7 +115,7 @@ export default function AnalysisSet({
 }) {
   // Hooks must be called unconditionally at the top level
   useEffect(() => {
-    console.log('[AnalysisSet] Component mounted', {
+    console.log("[AnalysisSet] Component mounted", {
       id: analysisSet?.["@id"],
       accession: analysisSet?.accession,
       fileSetType: analysisSet?.file_set_type,
@@ -141,6 +146,64 @@ export default function AnalysisSet({
             <DataArea>
               <DataItemLabel>File Set Type</DataItemLabel>
               <DataItemValue>{analysisSet.file_set_type}</DataItemValue>
+              {analysisSet.annotation_type && (
+                <>
+                  <DataItemLabel>Annotation Type</DataItemLabel>
+                  <DataItemValue>
+                    {getAnnotationTypeTitle(analysisSet.annotation_type)}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.annotation_category && (
+                <>
+                  <DataItemLabel>Annotation Category</DataItemLabel>
+                  <DataItemValue>
+                    {analysisSet.annotation_category}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.cell_type && (
+                <>
+                  <DataItemLabel>Cell Type</DataItemLabel>
+                  <DataItemValue>{analysisSet.cell_type}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_comparison_class && (
+                <>
+                  <DataItemLabel>DE Comparison Class</DataItemLabel>
+                  <DataItemValue>
+                    {getDeComparisonClassTitle(analysisSet.de_comparison_class)}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.de_contrast && (
+                <>
+                  <DataItemLabel>DE Contrast</DataItemLabel>
+                  <DataItemValue>{analysisSet.de_contrast}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_trait && (
+                <>
+                  <DataItemLabel>DE Trait</DataItemLabel>
+                  <DataItemValue>{analysisSet.de_trait}</DataItemValue>
+                </>
+              )}
+              {analysisSet.de_trait_description && (
+                <>
+                  <DataItemLabel>DE Trait Description</DataItemLabel>
+                  <DataItemValue>
+                    {analysisSet.de_trait_description}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.de_method && (
+                <>
+                  <DataItemLabel>DE Method</DataItemLabel>
+                  <DataItemValue>
+                    {getDeMethodTitle(analysisSet.de_method)}
+                  </DataItemValue>
+                </>
+              )}
               {analysisSet.publication_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Publication Identifiers</DataItemLabel>
@@ -178,7 +241,9 @@ export default function AnalysisSet({
           {analysisSet.samples?.length > 0 && (
             <SampleTable
               samples={analysisSet.samples}
-              reportLink={`/multireport/?type=Sample&file_sets.@id=${analysisSet?.["@id"] || ""}`}
+              reportLink={`/multireport/?type=Sample&file_sets.@id=${
+                analysisSet?.["@id"] || ""
+              }`}
             />
           )}
 
@@ -252,15 +317,15 @@ AnalysisSet.propTypes = {
 };
 
 export async function getServerSideProps({ params, req, query }) {
-  console.log('[AnalysisSet] getServerSideProps started', { id: params.id });
+  console.log("[AnalysisSet] getServerSideProps started", { id: params.id });
   try {
     const isJson = isJsonFormat(query);
     const request = new FetchRequest({ cookie: req.headers.cookie });
-    console.log('[AnalysisSet] Fetching analysis set', { id: params.id });
+    console.log("[AnalysisSet] Fetching analysis set", { id: params.id });
     const analysisSet = (
       await request.getObject(`/analysis-sets/${params.id}/`)
     ).union();
-    console.log('[AnalysisSet] Analysis set response', {
+    console.log("[AnalysisSet] Analysis set response", {
       success: FetchRequest.isResponseSuccess(analysisSet),
       hasFiles: !!analysisSet?.files,
       fileCount: analysisSet?.files?.length || 0,
@@ -268,42 +333,58 @@ export async function getServerSideProps({ params, req, query }) {
       inputFileSetCount: analysisSet?.input_file_sets?.length || 0,
     });
     if (FetchRequest.isResponseSuccess(analysisSet)) {
-    const documents = analysisSet.documents
-      ? await requestDocuments(analysisSet.documents, request)
-      : [];
+      const documents = analysisSet.documents
+        ? await requestDocuments(analysisSet.documents, request)
+        : [];
 
-    const filePaths = (analysisSet.files || []).filter(file => file).map((file) => file["@id"]);
-    console.log('[AnalysisSet] Processing files', { fileCount: filePaths.length });
-    let files = [];
-    try {
-      files = filePaths.length > 0 ? await requestFiles(filePaths, request) : [];
-    } catch (error) {
-      console.error('[AnalysisSet] Error fetching files', { error: error.message, filePaths });
-      files = [];
-    }
-    console.log('[AnalysisSet] Files fetched', { filesCount: files.length });
-    const derivedFromFiles = await getAllDerivedFromFiles(files, request);
-    console.log('[AnalysisSet] Derived from files', { derivedFromFilesCount: derivedFromFiles.length });
-    const combinedFiles = files.concat(derivedFromFiles);
-    console.log('[AnalysisSet] Combined files', { combinedFilesCount: combinedFiles.length });
-    // Get all file-set objects in every file's `file_sets` property.
-    let fileFileSets = [];
-    if (combinedFiles.length > 0) {
-      const fileSetPaths = combinedFiles.reduce((acc, file) => {
-        if (file.file_set?.["@id"]) {
-          return acc.includes(file.file_set["@id"])
-            ? acc
-            : acc.concat(file.file_set["@id"]);
-        }
-        return acc;
-      }, []);
-      console.log('[AnalysisSet] File set paths extracted', { fileSetPathsCount: fileSetPaths.length });
-      fileFileSets = await requestFileSets(fileSetPaths, request);
-      console.log('[AnalysisSet] File file sets fetched', { fileFileSetsCount: fileFileSets.length });
-    }
-    // Temporarily disabled Input File Sets fetching to debug 500 error
-    const inputFileSets = [];
-    /*
+      const filePaths = (analysisSet.files || [])
+        .filter((file) => file)
+        .map((file) => file["@id"]);
+      console.log("[AnalysisSet] Processing files", {
+        fileCount: filePaths.length,
+      });
+      let files = [];
+      try {
+        files =
+          filePaths.length > 0 ? await requestFiles(filePaths, request) : [];
+      } catch (error) {
+        console.error("[AnalysisSet] Error fetching files", {
+          error: error.message,
+          filePaths,
+        });
+        files = [];
+      }
+      console.log("[AnalysisSet] Files fetched", { filesCount: files.length });
+      const derivedFromFiles = await getAllDerivedFromFiles(files, request);
+      console.log("[AnalysisSet] Derived from files", {
+        derivedFromFilesCount: derivedFromFiles.length,
+      });
+      const combinedFiles = files.concat(derivedFromFiles);
+      console.log("[AnalysisSet] Combined files", {
+        combinedFilesCount: combinedFiles.length,
+      });
+      // Get all file-set objects in every file's `file_sets` property.
+      let fileFileSets = [];
+      if (combinedFiles.length > 0) {
+        const fileSetPaths = combinedFiles.reduce((acc, file) => {
+          if (file.file_set?.["@id"]) {
+            return acc.includes(file.file_set["@id"])
+              ? acc
+              : acc.concat(file.file_set["@id"]);
+          }
+          return acc;
+        }, []);
+        console.log("[AnalysisSet] File set paths extracted", {
+          fileSetPathsCount: fileSetPaths.length,
+        });
+        fileFileSets = await requestFileSets(fileSetPaths, request);
+        console.log("[AnalysisSet] File file sets fetched", {
+          fileFileSetsCount: fileFileSets.length,
+        });
+      }
+      // Temporarily disabled Input File Sets fetching to debug 500 error
+      const inputFileSets = [];
+      /*
     if (analysisSet.input_file_sets?.length > 0) {
       // The embedded `input_file_sets` in the analysis set don't have enough properties to display
       // in the table, so we have to request them.
@@ -326,14 +407,14 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-    // Temporarily disabled - depends on inputFileSets
-    // All Input File Sets processing code is disabled below
-    const appliedToSamples = [];
-    const auxiliarySets = [];
-    const controlFileSets = [];
-    const measurementSets = [];
-    /* eslint-disable */
-    /*
+      // Temporarily disabled - depends on inputFileSets
+      // All Input File Sets processing code is disabled below
+      const appliedToSamples = [];
+      const auxiliarySets = [];
+      const controlFileSets = [];
+      const measurementSets = [];
+      /* eslint-disable */
+      /*
     if (inputFileSets.length > 0) {
       // Retrieve the input file sets' applied to samples.
       appliedToSamples = inputFileSets.reduce((acc, fileSet) => {
@@ -398,11 +479,11 @@ export async function getServerSideProps({ params, req, query }) {
       controlFileSets = await requestFileSets(controlFileSetPaths, request);
     }
     */
-    /* eslint-enable */
+      /* eslint-enable */
 
-    // Temporarily disabled - depends on inputFileSets
-    const _embeddedSamples = [];
-    /*
+      // Temporarily disabled - depends on inputFileSets
+      const _embeddedSamples = [];
+      /*
     const embeddedSamples = inputFileSets.reduce((acc, inputFileSet) => {
       if (inputFileSet?.samples?.length > 0) {
         const filtered = inputFileSet.samples.filter(item => item);
@@ -412,8 +493,8 @@ export async function getServerSideProps({ params, req, query }) {
     }, []);
     */
 
-    const inputFileSetSamples = [];
-    /*
+      const inputFileSetSamples = [];
+      /*
     if (embeddedSamples.length > 0) {
       let samplePaths = embeddedSamples.filter(sample => sample).map((sample) => sample["@id"]);
       samplePaths = [...new Set(samplePaths)];
@@ -421,9 +502,9 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-    // Temporarily disabled - depends on inputFileSetSamples
-    const constructLibrarySets = [];
-    /*
+      // Temporarily disabled - depends on inputFileSetSamples
+      const constructLibrarySets = [];
+      /*
     if (inputFileSetSamples.length > 0) {
       let constructLibrarySetPaths = inputFileSetSamples.reduce(
         (acc, sample) => {
@@ -452,38 +533,46 @@ export async function getServerSideProps({ params, req, query }) {
     }
     */
 
-    const breadcrumbs = await buildBreadcrumbs(
-      analysisSet,
-      analysisSet.accession,
-      req.headers.cookie
-    );
-    const attribution = await buildAttribution(analysisSet, req.headers.cookie);
-    console.log('[AnalysisSet] getServerSideProps completed successfully', { id: params.id });
-    return {
-      props: {
+      const breadcrumbs = await buildBreadcrumbs(
         analysisSet,
-        documents,
-        files,
-        fileFileSets,
-        derivedFromFiles,
-        inputFileSets,
-        inputFileSetSamples,
-        controlFileSets,
-        appliedToSamples,
-        auxiliarySets,
-        measurementSets,
-        constructLibrarySets,
-        pageContext: { title: analysisSet.accession },
-        breadcrumbs,
-        attribution,
-        isJson,
-      },
-    };
-  }
-  console.error('[AnalysisSet] Analysis set fetch failed', { id: params.id, analysisSet });
-  return errorObjectToProps(analysisSet);
+        analysisSet.accession,
+        req.headers.cookie
+      );
+      const attribution = await buildAttribution(
+        analysisSet,
+        req.headers.cookie
+      );
+      console.log("[AnalysisSet] getServerSideProps completed successfully", {
+        id: params.id,
+      });
+      return {
+        props: {
+          analysisSet,
+          documents,
+          files,
+          fileFileSets,
+          derivedFromFiles,
+          inputFileSets,
+          inputFileSetSamples,
+          controlFileSets,
+          appliedToSamples,
+          auxiliarySets,
+          measurementSets,
+          constructLibrarySets,
+          pageContext: { title: analysisSet.accession },
+          breadcrumbs,
+          attribution,
+          isJson,
+        },
+      };
+    }
+    console.error("[AnalysisSet] Analysis set fetch failed", {
+      id: params.id,
+      analysisSet,
+    });
+    return errorObjectToProps(analysisSet);
   } catch (error) {
-    console.error('[AnalysisSet] Error in getServerSideProps', {
+    console.error("[AnalysisSet] Error in getServerSideProps", {
       id: params.id,
       error: error.message,
       stack: error.stack,
@@ -491,12 +580,15 @@ export async function getServerSideProps({ params, req, query }) {
       errorString: String(error),
     });
     // Log the full error for debugging
-    console.error('[AnalysisSet] Full error object:', error);
+    console.error("[AnalysisSet] Full error object:", error);
     // Create a proper error object for errorObjectToProps
     // If error has a code property, use it; otherwise default to 500
     const errorObject = {
       code: error.code || 500,
-      detail: error.message || error.detail || 'An error occurred while fetching the analysis set',
+      detail:
+        error.message ||
+        error.detail ||
+        "An error occurred while fetching the analysis set",
       ...error,
     };
     return errorObjectToProps(errorObject);

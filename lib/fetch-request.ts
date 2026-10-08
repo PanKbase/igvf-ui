@@ -520,13 +520,27 @@ export default class FetchRequest {
     payload: object
   ): Promise<DataProviderObject | ErrorObject> {
     logRequest("postObject", path);
+    return this.postObjectByUrl(this.pathUrl(path), payload);
+  }
+
+  /**
+   * Send a POST request to a fully qualified URL.
+   * @param {string} url Full URL to post to
+   * @param {object} payload Object to post
+   * @returns {Promise<DataProviderObject|ErrorObject>} Response from POST request
+   */
+  public async postObjectByUrl(
+    url: string,
+    payload: object
+  ): Promise<DataProviderObject | ErrorObject> {
+    logRequest("postObjectByUrl", url);
     const options = this.buildOptions("POST", {
       accept: PAYLOAD_FORMAT.JSON,
       contentType: PAYLOAD_FORMAT.JSON,
       payload,
     });
     try {
-      const response = await fetch(this.pathUrl(path), options);
+      const response = await fetch(url, options);
       if (!response.ok) {
         // Try to parse JSON error response, fallback to network error if not JSON
         try {
@@ -543,8 +557,8 @@ export default class FetchRequest {
             status: "error",
             code: response.status,
             title: `HTTP ${response.status} Error`,
-            description: `Request to ${path} failed with status ${response.status}`,
-            detail: `Request to ${path} failed with status ${response.status}`,
+            description: `Request to ${url} failed with status ${response.status}`,
+            detail: `Request to ${url} failed with status ${response.status}`,
           };
           return error;
         }

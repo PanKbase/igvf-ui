@@ -244,7 +244,9 @@ export async function getServerSideProps({ params, req, query }) {
         treatments,
         multiplexedInSamples,
         pageContext: {
-          title: `${primaryCell.sample_terms?.[0]?.term_name ?? primaryCell.accession} — ${primaryCell.accession}`,
+          title: `${
+            primaryCell.sample_terms?.[0]?.term_name ?? primaryCell.accession
+          } — ${primaryCell.accession}`,
         },
         breadcrumbs,
         attribution,

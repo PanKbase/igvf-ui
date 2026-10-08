@@ -86,6 +86,8 @@ export default function ColumnSelector({
   visibleColumnSpecs,
   onChange,
   onChangeAll,
+  columnPresetLabel = null,
+  onColumnPresetApply = null,
 }) {
   // True if the column-selection modal is open.
   const [isOpen, setIsOpen] = useState(false);
@@ -104,7 +106,12 @@ export default function ColumnSelector({
 
     return (
       <>
-        <Button type="primary" onClick={() => setIsOpen(true)} isDisabled={isDisabled} className="text-center no-underline flex items-center justify-center border font-semibold leading-none px-2 rounded text-xs h-6 [&>svg]:h-3 [&>svg]:w-3 border-button-primary text-button-primary fill-button-primary disabled:bg-button-primary-disabled disabled:border-button-primary-disabled disabled:text-button-primary-disabled disabled:fill-button-primary-disabled">
+        <Button
+          type="primary"
+          onClick={() => setIsOpen(true)}
+          isDisabled={isDisabled}
+          className="text-center no-underline flex items-center justify-center border font-semibold leading-none px-2 rounded text-xs h-6 [&>svg]:h-3 [&>svg]:w-3 border-button-primary text-button-primary fill-button-primary disabled:bg-button-primary-disabled disabled:border-button-primary-disabled disabled:text-button-primary-disabled disabled:fill-button-primary-disabled"
+        >
           Columns
           <HiddenColumnsIndicator isAnyColumnHidden={isAnyColumnHidden} />
         </Button>
@@ -117,10 +124,22 @@ export default function ColumnSelector({
           </Modal.Header>
 
           <Modal.Body className="[&>div]:p-0">
-            <div className="border-b border-modal-border p-1 md:flex md:items-center">
+            <div className="border-b border-modal-border p-1 md:flex md:flex-wrap md:items-center md:gap-1">
               <ChangeAllControls onChangeAll={onChangeAll} />
+              {columnPresetLabel && onColumnPresetApply && (
+                <Button
+                  className="flex-grow md:flex-grow-0"
+                  onClick={() => {
+                    onColumnPresetApply();
+                    setIsOpen(false);
+                  }}
+                >
+                  {columnPresetLabel}
+                </Button>
+              )}
               <Note className="md:ml-2">
-                The <i>ID</i> column cannot be hidden. Selected columns will be included in the TSV download.
+                The <i>ID</i> column cannot be hidden. Selected columns will be
+                included in the TSV download.
               </Note>
             </div>
             <CheckboxArea>
@@ -170,4 +189,8 @@ ColumnSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
   // Called when the user wants to show or hide all columns at once
   onChangeAll: PropTypes.func.isRequired,
+  // Optional preset button label (e.g. "Clinical")
+  columnPresetLabel: PropTypes.string,
+  // Called when the user applies the column preset
+  onColumnPresetApply: PropTypes.func,
 };

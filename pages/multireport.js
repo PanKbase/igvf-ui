@@ -17,12 +17,19 @@ import TableCount from "../components/table-count";
 // lib
 import buildBreadcrumbs from "../lib/breadcrumbs";
 import { errorObjectToProps } from "../lib/errors";
+import { loadFacetConfig } from "../lib/facets";
 import FetchRequest from "../lib/fetch-request";
 import QueryString from "../lib/query-string";
 import {
   splitPathAndQueryString,
   getQueryStringFromServerQuery,
 } from "../lib/query-utils";
+import {
+  buildColumnPresetQuery,
+  filterHiddenReportColumns,
+  getReportColumnPreset,
+  shouldApplyDefaultReportColumnPreset,
+} from "../lib/report-column-config";
 import {
   columnsToColumnSpecs,
   getMergedSchemaProperties,
@@ -120,7 +127,17 @@ function updateAllColumnsVisibilityQuery(
   return query.format();
 }
 
-export default function MultiReport({ searchResults }) {
+/**
+ * Set the report query string to show only the columns in a preset.
+ * @param {string} queryString Current multireport query string
+ * @param {readonly string[]} columnIds Column property names to display
+ * @returns {string} Updated query string
+ */
+function applyColumnPresetQuery(queryString, columnIds) {
+  return buildColumnPresetQuery(queryString, columnIds);
+}
+
+export default function MultiReport({ searchResults, facetConfig = null }) {
   const router = useRouter();
   const { collectionTitles, profiles } = useContext(SessionContext);
   const { totalPages } = useSearchLimits(searchResults);
@@ -141,21 +158,12 @@ export default function MultiReport({ searchResults }) {
   const visibleColumnSpecs = columnsToColumnSpecs(searchResults.result_columns);
   const allColumnSpecs = getReportTypeColumnSpecs(selectedTypes, profiles);
 
-  // Filter out lab, uuid, and award columns from default columns
-  const columnsToHide = ['lab', 'uuid', 'award'];
-  const filteredDefaultColumnSpecs = defaultColumnSpecs.filter(
-    (columnSpec) => !columnsToHide.includes(columnSpec.id)
-  );
-
-  // Always filter out lab, uuid, and award columns from visible columns
-  const filteredVisibleColumnSpecs = visibleColumnSpecs.filter(
-    (columnSpec) => !columnsToHide.includes(columnSpec.id)
-  );
-
-  // Filter out lab, uuid, and award columns from all column specs (for column selector)
-  const filteredAllColumnSpecs = allColumnSpecs.filter(
-    (columnSpec) => !columnsToHide.includes(columnSpec.id)
-  );
+  const filteredDefaultColumnSpecs =
+    filterHiddenReportColumns(defaultColumnSpecs);
+  const filteredVisibleColumnSpecs =
+    filterHiddenReportColumns(visibleColumnSpecs);
+  const filteredAllColumnSpecs = filterHiddenReportColumns(allColumnSpecs);
+  const columnPreset = getReportColumnPreset(selectedTypes);
 
   /**
    * Navigate to the same page but with the "sort=" query parameter set to the column that was
@@ -202,6 +210,15 @@ export default function MultiReport({ searchResults }) {
     router.push(`${path}?${updatedQueryString}`);
   }
 
+  /**
+   * Apply a named column preset (e.g. clinical columns for human donors).
+   * @param {readonly string[]} columnIds Property names to show
+   */
+  function onColumnPresetApply(columnIds) {
+    const updatedQueryString = applyColumnPresetQuery(queryString, columnIds);
+    router.push(`${path}?${updatedQueryString}`);
+  }
+
   if (schemaProperties) {
     const resultTypes = generateSearchResultsTypes(
       searchResults,
@@ -229,7 +246,10 @@ export default function MultiReport({ searchResults }) {
         )}
         {items.length > 0 ? (
           <div className="lg:flex lg:items-start lg:gap-1">
-            <FacetSection searchResults={searchResults} />
+            <FacetSection
+              searchResults={searchResults}
+              facetConfig={facetConfig}
+            />
             <div className="min-w-0 grow">
               <FacetTags searchResults={searchResults} />
               <SearchResultsHeader
@@ -239,6 +259,10 @@ export default function MultiReport({ searchResults }) {
                   visibleColumnSpecs: filteredVisibleColumnSpecs,
                   onColumnVisibilityChange,
                   onAllColumnsVisibilityChange,
+                  columnPresetLabel: columnPreset ? "Clinical" : null,
+                  onColumnPresetApply: columnPreset
+                    ? () => onColumnPresetApply(columnPreset)
+                    : null,
                 }}
               />
               <TableCount count={searchResults.total} />
@@ -269,6 +293,8 @@ export default function MultiReport({ searchResults }) {
 MultiReport.propTypes = {
   // @graph from search results from igvfd
   searchResults: PropTypes.object.isRequired,
+  // Optional/category/description for the facets from the search config, keyed by facet field
+  facetConfig: PropTypes.object,
 };
 
 export async function getServerSideProps({ req, query }) {
@@ -286,6 +312,25 @@ export async function getServerSideProps({ req, query }) {
 
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const queryParams = getQueryStringFromServerQuery(query);
+  const queryForTypes = new QueryString(queryParams);
+  const configTypes = queryForTypes.getKeyValues("config");
+  const reportTypes =
+    configTypes.length > 0 ? configTypes : queryForTypes.getKeyValues("type");
+  if (shouldApplyDefaultReportColumnPreset(queryParams, reportTypes)) {
+    const preset = getReportColumnPreset(reportTypes);
+    if (preset) {
+      return {
+        redirect: {
+          destination: `/multireport/?${buildColumnPresetQuery(
+            queryParams,
+            preset
+          )}`,
+          permanent: false,
+        },
+      };
+    }
+  }
+
   const searchResults = (
     await request.getObject(`/multireport/?${queryParams}`)
   ).union();
@@ -296,9 +341,11 @@ export async function getServerSideProps({ req, query }) {
       "title",
       req.headers.cookie
     );
+    const facetConfig = await loadFacetConfig(searchResults, request);
     return {
       props: {
         searchResults,
+        facetConfig,
         pageContext: { title: "title" },
         breadcrumbs,
       },

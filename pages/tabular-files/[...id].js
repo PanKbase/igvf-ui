@@ -144,70 +144,80 @@ TabularFile.propTypes = {
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
   try {
-  // Redirect to the file page if the URL is a file download link.
-  if (checkForFileDownloadPath(resolvedUrl)) {
-    return {
-      redirect: {
-        destination: convertFileDownloadPathToFilePagePath(resolvedUrl),
-        permanent: false,
-      },
-    };
-  }
+    // Redirect to the file page if the URL is a file download link.
+    if (checkForFileDownloadPath(resolvedUrl)) {
+      return {
+        redirect: {
+          destination: convertFileDownloadPathToFilePagePath(resolvedUrl),
+          permanent: false,
+        },
+      };
+    }
 
-  const isJson = isJsonFormat(query);
-  const request = new FetchRequest({ cookie: req.headers.cookie });
-  const tabularFile = (
-    await request.getObject(`/tabular-files/${params.id}/`)
-  ).union();
-  if (FetchRequest.isResponseSuccess(tabularFile)) {
-    const fileSet = (await request.getObject(tabularFile.file_set)).optional();
-    const documents = tabularFile.documents
-      ? await requestDocuments(tabularFile.documents, request)
-      : [];
-    const derivedFrom = tabularFile.derived_from
-      ? await requestFiles(tabularFile.derived_from, request)
-      : [];
-    const derivedFromFileSetPaths = (derivedFrom || [])
-      .filter(file => file)
-      .map((file) => file.file_set)
-      .filter((fileSet) => fileSet);
-    const uniqueDerivedFromFileSetPaths = [...new Set(derivedFromFileSetPaths)];
-    const derivedFromFileSets =
-      uniqueDerivedFromFileSetPaths.length > 0
-        ? await requestFileSets(uniqueDerivedFromFileSetPaths, request)
+    const isJson = isJsonFormat(query);
+    const request = new FetchRequest({ cookie: req.headers.cookie });
+    const tabularFile = (
+      await request.getObject(`/tabular-files/${params.id}/`)
+    ).union();
+    if (FetchRequest.isResponseSuccess(tabularFile)) {
+      const fileSet = (
+        await request.getObject(tabularFile.file_set)
+      ).optional();
+      const documents = tabularFile.documents
+        ? await requestDocuments(tabularFile.documents, request)
         : [];
-    const fileFormatSpecifications = tabularFile.file_format_specifications
-      ? await requestDocuments(tabularFile.file_format_specifications, request)
-      : [];
-    const integratedIn =
-      tabularFile.integrated_in?.length > 0
-        ? await requestFileSets(tabularFile.integrated_in, request)
+      const derivedFrom = tabularFile.derived_from
+        ? await requestFiles(tabularFile.derived_from, request)
         : [];
-    const breadcrumbs = await buildBreadcrumbs(
-      tabularFile,
-      tabularFile.accession,
-      req.headers.cookie
-    );
-    const attribution = await buildAttribution(tabularFile, req.headers.cookie);
-    return {
-      props: {
+      const derivedFromFileSetPaths = (derivedFrom || [])
+        .filter((file) => file)
+        .map((file) => file.file_set)
+        .filter((fileSet) => fileSet);
+      const uniqueDerivedFromFileSetPaths = [
+        ...new Set(derivedFromFileSetPaths),
+      ];
+      const derivedFromFileSets =
+        uniqueDerivedFromFileSetPaths.length > 0
+          ? await requestFileSets(uniqueDerivedFromFileSetPaths, request)
+          : [];
+      const fileFormatSpecifications = tabularFile.file_format_specifications
+        ? await requestDocuments(
+            tabularFile.file_format_specifications,
+            request
+          )
+        : [];
+      const integratedIn =
+        tabularFile.integrated_in?.length > 0
+          ? await requestFileSets(tabularFile.integrated_in, request)
+          : [];
+      const breadcrumbs = await buildBreadcrumbs(
         tabularFile,
-        fileSet,
-        documents,
-        derivedFrom,
-        derivedFromFileSets,
-        fileFormatSpecifications,
-        integratedIn,
-        pageContext: { title: tabularFile.accession },
-        breadcrumbs,
-        attribution,
-        isJson,
-      },
-    };
-  }
-  return errorObjectToProps(tabularFile);
+        tabularFile.accession,
+        req.headers.cookie
+      );
+      const attribution = await buildAttribution(
+        tabularFile,
+        req.headers.cookie
+      );
+      return {
+        props: {
+          tabularFile,
+          fileSet,
+          documents,
+          derivedFrom,
+          derivedFromFileSets,
+          fileFormatSpecifications,
+          integratedIn,
+          pageContext: { title: tabularFile.accession },
+          breadcrumbs,
+          attribution,
+          isJson,
+        },
+      };
+    }
+    return errorObjectToProps(tabularFile);
   } catch (error) {
-    console.error('[TabularFile] Error in getServerSideProps', {
+    console.error("[TabularFile] Error in getServerSideProps", {
       id: params.id,
       error: error.message,
       stack: error.stack,

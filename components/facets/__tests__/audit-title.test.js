@@ -11,30 +11,39 @@ jest.mock("@auth0/auth0-react", () => ({
   useAuth0: jest.fn(),
 }));
 
+const searchResults = { filters: [] };
+
+function buildFacet(field, title, termKey) {
+  return {
+    appended: false,
+    field,
+    open_on_load: false,
+    terms: [{ doc_count: 4, key: termKey }],
+    title,
+    total: 5,
+    type: "terms",
+  };
+}
+
 describe("Test the facet audit title component", () => {
   it("renders the internal actions audit facet title while authorized", () => {
     useAuth0.mockReturnValue({ isAuthenticated: true });
 
     render(
       <AuditTitle
-        facet={{
-          appended: false,
-          field: "audit.INTERNAL_ACTION.category",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 4,
-              key: "mismatched status",
-            },
-          ],
-          title: "Audit category: DCC ACTION",
-          total: 5,
-          type: "terms",
-        }}
+        facet={buildFacet(
+          "audit.INTERNAL_ACTION.category",
+          "Audit category: DCC ACTION",
+          "mismatched status"
+        )}
+        searchResults={searchResults}
       />
     );
 
     expect(screen.getByText("Audit Internal Action")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("facet-term-count-audit.INTERNAL_ACTION.category")
+    ).toBeInTheDocument();
   });
 
   it("doesn't render the internal actions audit facet title while not authorized", () => {
@@ -42,20 +51,12 @@ describe("Test the facet audit title component", () => {
 
     render(
       <AuditTitle
-        facet={{
-          appended: false,
-          field: "audit.INTERNAL_ACTION.category",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 4,
-              key: "mismatched status",
-            },
-          ],
-          title: "Audit category: DCC ACTION",
-          total: 5,
-          type: "terms",
-        }}
+        facet={buildFacet(
+          "audit.INTERNAL_ACTION.category",
+          "Audit category: DCC ACTION",
+          "mismatched status"
+        )}
+        searchResults={searchResults}
       />
     );
 
@@ -67,20 +68,12 @@ describe("Test the facet audit title component", () => {
 
     render(
       <AuditTitle
-        facet={{
-          appended: false,
-          field: "audit.ERROR.category",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 4,
-              key: "missing file",
-            },
-          ],
-          title: "Audit category: ERROR",
-          total: 5,
-          type: "terms",
-        }}
+        facet={buildFacet(
+          "audit.ERROR.category",
+          "Audit category: ERROR",
+          "missing file"
+        )}
+        searchResults={searchResults}
       />
     );
 
@@ -88,24 +81,16 @@ describe("Test the facet audit title component", () => {
   });
 
   it("renders the error audit facet title while not authorized", () => {
-    useAuth0.mockReturnValue({ isAuthenticated: true });
+    useAuth0.mockReturnValue({ isAuthenticated: false });
 
     render(
       <AuditTitle
-        facet={{
-          appended: false,
-          field: "audit.ERROR.category",
-          open_on_load: false,
-          terms: [
-            {
-              doc_count: 4,
-              key: "missing file",
-            },
-          ],
-          title: "Audit category: ERROR",
-          total: 5,
-          type: "terms",
-        }}
+        facet={buildFacet(
+          "audit.ERROR.category",
+          "Audit category: ERROR",
+          "missing file"
+        )}
+        searchResults={searchResults}
       />
     );
 

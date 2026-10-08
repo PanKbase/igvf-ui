@@ -18,7 +18,11 @@ import {
 } from "./clinical-dashboard-primitives";
 // lib
 import { formatDate } from "../lib/dates";
-import { hasValue } from "../lib/general";
+import {
+  formatNumericOrDash,
+  formatPercentageOrDash,
+  hasValue,
+} from "../lib/general";
 import {
   getPrimaryIsletPhase,
   primaryIsletBiosampleTypeDisplay,
@@ -27,6 +31,7 @@ import {
 /** `post_shipment_*` keys rendered explicitly (exclude from generic `post_shipment_*` fallback). */
 const EXPLICIT_POST_SHIPMENT_KEYS = new Set([
   "post_shipment_islet_viability",
+  "post_shipment_viability",
   "post_shipment_viability_qualitative",
   "post_shipment_viability_quantitative",
   "post_shipment_purity",
@@ -126,7 +131,9 @@ function formatInstitutionalCertificates(item) {
   const v = item.institutional_certificates;
   if (hasValue(v)) {
     if (Array.isArray(v)) {
-      return v.map((x) => (typeof x === "object" ? JSON.stringify(x) : String(x))).join(", ");
+      return v
+        .map((x) => (typeof x === "object" ? JSON.stringify(x) : String(x)))
+        .join(", ");
     }
     return typeof v === "object" ? JSON.stringify(v) : String(v);
   }
@@ -180,8 +187,7 @@ export default function PrimaryIsletClinicalDashboard({
     : [];
 
   const postShipmentExtraKeys = Object.keys(item).filter(
-    (k) =>
-      k.startsWith("post_shipment_") && !EXPLICIT_POST_SHIPMENT_KEYS.has(k)
+    (k) => k.startsWith("post_shipment_") && !EXPLICIT_POST_SHIPMENT_KEYS.has(k)
   );
 
   const institutionalDisplay = formatInstitutionalCertificates(item);
@@ -191,7 +197,9 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.prep_viability)) {
     isolationRows.push(
       <FieldPair key="prep_viability" label="Pre-shipment Islet Viability (%)">
-        <span className={prepViabilityClass}>{item.prep_viability}</span>
+        <span className={prepViabilityClass}>
+          {formatNumericOrDash(item.prep_viability)}
+        </span>
       </FieldPair>
     );
   }
@@ -206,7 +214,7 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.pre_shipment_culture_time)) {
     isolationRows.push(
       <FieldPair key="pre_culture_t" label="Pre-shipment Culture Time (hours)">
-        {item.pre_shipment_culture_time}
+        {formatNumericOrDash(item.pre_shipment_culture_time)}
       </FieldPair>
     );
   }
@@ -230,28 +238,32 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.cold_ischaemia_time)) {
     isolationRows.push(
       <FieldPair key="cold_isch" label="Cold Ischaemia Time (hours)">
-        <span className={coldClass}>{item.cold_ischaemia_time}</span>
+        <span className={coldClass}>
+          {formatNumericOrDash(item.cold_ischaemia_time)}
+        </span>
       </FieldPair>
     );
   }
   if (hasValue(item.warm_ischaemia_duration)) {
     isolationRows.push(
       <FieldPair key="warm_isch" label="Warm Ischaemia Duration (hours)">
-        <span className={warmIschemiaClass}>{item.warm_ischaemia_duration}</span>
+        <span className={warmIschemiaClass}>
+          {formatNumericOrDash(item.warm_ischaemia_duration)}
+        </span>
       </FieldPair>
     );
   }
   if (hasValue(item.digest_time)) {
     isolationRows.push(
       <FieldPair key="digest" label="Pancreas Digest Time (hours)">
-        {item.digest_time}
+        {formatNumericOrDash(item.digest_time)}
       </FieldPair>
     );
   }
   if (hasValue(item.percentage_trapped)) {
     isolationRows.push(
       <FieldPair key="pct_trap" label="Percentage Trapped (%)">
-        {`${item.percentage_trapped}`.replace(/%$/, "")}%
+        {formatPercentageOrDash(item.percentage_trapped)}
       </FieldPair>
     );
   }
@@ -302,10 +314,7 @@ export default function PrimaryIsletClinicalDashboard({
   const postTransferRows = [];
   if (hasValue(item.post_shipment_islet_viability)) {
     postTransferRows.push(
-      <FieldPair
-        key="ps_via"
-        label="Post-Shipment Islet Viability (%)"
-      >
+      <FieldPair key="ps_via" label="Post-Shipment Islet Viability (%)">
         {item.post_shipment_islet_viability}
       </FieldPair>
     );
@@ -313,7 +322,10 @@ export default function PrimaryIsletClinicalDashboard({
   if (hasValue(item.post_shipment_viability_qualitative)) {
     const q = String(item.post_shipment_viability_qualitative).trim();
     postTransferRows.push(
-      <FieldPair key="ps_vq" label="Post-Shipment Viability (imaging / qualitative)">
+      <FieldPair
+        key="ps_vq"
+        label="Post-Shipment Viability (imaging / qualitative)"
+      >
         {/^https?:\/\//i.test(q) ? (
           <a
             href={q}
@@ -399,9 +411,7 @@ export default function PrimaryIsletClinicalDashboard({
     postTransferRows.push(
       <FieldPair
         key={key}
-        label={key
-          .replace(/^post_shipment_/, "")
-          .replace(/_/g, " ")}
+        label={key.replace(/^post_shipment_/, "").replace(/_/g, " ")}
       >
         {disp}
       </FieldPair>
@@ -571,6 +581,20 @@ export default function PrimaryIsletClinicalDashboard({
       </FieldPair>
     );
   }
+  if (hasValue(item.url)) {
+    additionalRows.push(
+      <FieldPair key="url" label="URL">
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="break-all text-blue-700 dark:text-blue-400"
+        >
+          {item.url}
+        </a>
+      </FieldPair>
+    );
+  }
   if (item.protocols?.length > 0) {
     additionalRows.push(
       <FieldPair key="prot" label="Protocols">
@@ -610,10 +634,7 @@ export default function PrimaryIsletClinicalDashboard({
         <div className="mb-1 text-sm font-semibold text-data-label dark:text-gray-400">
           Publication Identifiers
         </div>
-        <DbxrefList
-          dbxrefs={item.publication_identifiers}
-          isCollapsible
-        />
+        <DbxrefList dbxrefs={item.publication_identifiers} isCollapsible />
       </div>
     );
   }
@@ -631,6 +652,7 @@ export default function PrimaryIsletClinicalDashboard({
 
   const showBiosampleSummary =
     hasValue(item.isolation_center) ||
+    hasValue(item.organ_source) ||
     (Array.isArray(donors) && donors.length > 0) ||
     hasBiosampleTypeInfo ||
     Boolean(originatedFrom?.["@id"]) ||
@@ -676,6 +698,9 @@ export default function PrimaryIsletClinicalDashboard({
                   value={item.isolation_center}
                 />
               ) : null}
+              {hasValue(item.organ_source) ? (
+                <MetricCard label="Organ Source" value={item.organ_source} />
+              ) : null}
               {Array.isArray(donors) && donors.length > 0 ? (
                 <MetricCard
                   label={
@@ -699,10 +724,7 @@ export default function PrimaryIsletClinicalDashboard({
                 />
               ) : null}
               {hasBiosampleTypeInfo ? (
-                <MetricCard
-                  label="Biosample type"
-                  value={biosampleTypeLabel}
-                />
+                <MetricCard label="Biosample type" value={biosampleTypeLabel} />
               ) : null}
               {originatedFrom?.["@id"] ? (
                 <MetricCard
@@ -758,7 +780,9 @@ export default function PrimaryIsletClinicalDashboard({
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
               <DashboardSectionTitle>Isolation Metrics</DashboardSectionTitle>
-              <SubsectionHint>Data captured at time of isolation</SubsectionHint>
+              <SubsectionHint>
+                Data captured at time of isolation
+              </SubsectionHint>
               {isolationRows.length === 0 ? (
                 <SectionEmptyHint text="No data recorded yet" />
               ) : (
@@ -766,8 +790,12 @@ export default function PrimaryIsletClinicalDashboard({
               )}
             </div>
             <div>
-              <DashboardSectionTitle>Post-shipment Metrics</DashboardSectionTitle>
-              <SubsectionHint>Data captured at time of receipt/use</SubsectionHint>
+              <DashboardSectionTitle>
+                Post-shipment Metrics
+              </DashboardSectionTitle>
+              <SubsectionHint>
+                Data captured at time of receipt/use
+              </SubsectionHint>
               {postTransferRows.length === 0 ? (
                 <SectionEmptyHint text="No post-shipment data recorded yet" />
               ) : (
@@ -778,7 +806,9 @@ export default function PrimaryIsletClinicalDashboard({
         </section>
 
         <section>
-          <DashboardSectionTitle>Quality &amp; Morphology</DashboardSectionTitle>
+          <DashboardSectionTitle>
+            Quality &amp; Morphology
+          </DashboardSectionTitle>
           {qualityRows.length === 0 ? (
             <SectionEmptyHint text="No data recorded yet" />
           ) : (
@@ -805,7 +835,9 @@ export default function PrimaryIsletClinicalDashboard({
 
         {additionalRows.length > 0 ? (
           <section>
-            <DashboardSectionTitle>Additional information</DashboardSectionTitle>
+            <DashboardSectionTitle>
+              Additional information
+            </DashboardSectionTitle>
             <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
               {additionalRows}
             </div>

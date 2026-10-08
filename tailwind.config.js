@@ -84,6 +84,17 @@ module.exports = {
           "var(--color-facet-group-button-selected-background)",
         "facet-title": "var(--color-facet-title-background)",
 
+        "facet-counter-selected": "var(--color-facet-counter-selected)",
+        "facet-counter-open-selected":
+          "var(--color-facet-counter-open-selected)",
+        "facet-counter-negative": "var(--color-facet-counter-negative)",
+        "facet-counter-open-negative":
+          "var(--color-facet-counter-open-negative)",
+        "optional-facet-quick-hide-hover-open":
+          "var(--color-optional-facet-quick-hide-hover-open)",
+        "optional-facet-quick-hide-hover-closed":
+          "var(--color-optional-facet-quick-hide-hover-closed)",
+
         "facet-tag": "var(--color-facet-tag-background)",
         "facet-tag-neg": "var(--color-facet-tag-neg-background)",
 
@@ -148,6 +159,17 @@ module.exports = {
         "facet-filter": "var(--color-facet-filter-input-border)",
         "facet-filter-focus": "var(--color-facet-filter-input-border-focus)",
 
+        "facet-counter": "var(--color-facet-counter)",
+        "facet-counter-open": "var(--color-facet-counter-open)",
+        "facet-counter-selected": "var(--color-facet-counter-selected)",
+        "facet-counter-open-selected":
+          "var(--color-facet-counter-open-selected)",
+        "facet-counter-negative": "var(--color-facet-counter-negative)",
+        "facet-counter-open-negative":
+          "var(--color-facet-counter-open-negative)",
+        "optional-facet-config-divider":
+          "var(--color-optional-facet-config-divider)",
+
         "tab-group": "var(--color-tab-group-border)",
         "tab-selected": "var(--color-tab-selected-border)",
         "tab-unselected": "var(--color-tab-unselected-border)",
@@ -203,6 +225,13 @@ module.exports = {
         "facet-filter": "var(--color-facet-filter-input-text)",
         "facet-filter-focus": "var(--color-facet-filter-input-text-focus)",
 
+        "optional-facet-config-header":
+          "var(--color-optional-facet-config-header)",
+        "optional-facet-quick-hide-open":
+          "var(--color-optional-facet-quick-hide-open)",
+        "optional-facet-quick-hide-closed":
+          "var(--color-optional-facet-quick-hide-closed)",
+
         "tab-title-selected": "var(--color-tab-title-selected-text)",
         "tab-title-unselected": "var(--color-tab-title-unselected-text)",
         "tab-title-disabled": "var(--color-tab-title-disabled-text)",
@@ -226,6 +255,9 @@ module.exports = {
 
         "indexed-state": "var(--color-indexed-state-content)",
         "indexing-state": "var(--color-indexing-state-content)",
+      },
+      textDecorationColor: {
+        "open-facet-help-underline": "var(--color-open-facet-help-underline)",
       },
       boxShadow: {
         // Status badges
