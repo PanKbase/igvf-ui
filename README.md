@@ -205,3 +205,7 @@ pre-commit install
 ```
 
 Now every time you run `git commit` the automatic checks are run to check the changes you made.
+
+## Branch and deploy flow
+
+See [CONTRIBUTING.md](CONTRIBUTING.md): feature branches → PR to `dev` → staging verify → promote `dev` → `main` (production).
