@@ -40,6 +40,12 @@ export default function Lab({ lab, awards = null, pi = null, isJson }) {
                   <DataItemValue>{pi.title}</DataItemValue>
                 </>
               )}
+              {lab.consortium_name && (
+                <>
+                  <DataItemLabel>Consortium</DataItemLabel>
+                  <DataItemValue>{lab.consortium_name}</DataItemValue>
+                </>
+              )}
               {lab.url && (
                 <>
                   <DataItemLabel>URL</DataItemLabel>
@@ -101,7 +107,8 @@ export async function getServerSideProps({ params, req, query }) {
       const awardPaths = lab.awards.map((award) => award["@id"]);
       awards = await requestAwards(awardPaths, request);
     }
-    const pi = (await request.getObject(lab.pi)).optional();
+    // Labs led by a consortium might not have a PI.
+    const pi = lab.pi ? (await request.getObject(lab.pi)).optional() : null;
     const breadcrumbs = await buildBreadcrumbs(
       lab,
       lab.title,
