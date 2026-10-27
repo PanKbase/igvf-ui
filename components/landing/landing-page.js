@@ -11,12 +11,13 @@ import {
 import { LandingCitation, LandingDeveloperBand } from "./landing-developers";
 import LandingDonors from "./landing-donors";
 import LandingHero from "./landing-hero";
-import LandingRecent from "./landing-recent";
 import LandingShell from "./landing-shell";
 import LandingStats from "./landing-stats";
 import { AnalysisTiles, AssayTiles } from "./landing-tiles";
+import LandingWhatsNew from "./landing-whats-new";
 // lib
 import { getLandingFeaturedDatasets } from "../../lib/featured-datasets";
+import { getNewestReleaseNotes } from "../../lib/whats-new";
 
 /**
  * Featured datasets section of the landing page: the first few cards plus a link to the page with
@@ -42,7 +43,7 @@ function LandingFeatured() {
 /**
  * Body of the redesigned Data Library landing page. Each live-data section renders only when its
  * query succeeded and has something to show; the static developer, documentation and citation
- * blocks always render.
+ * blocks always render. What's new comes from `lib/whats-new.ts` and hides itself when empty.
  */
 export default function LandingPage({ data }) {
   return (
@@ -60,7 +61,7 @@ export default function LandingPage({ data }) {
         />
       )}
       <LandingFeatured />
-      {data.recent.length > 0 && <LandingRecent rows={data.recent} />}
+      <LandingWhatsNew notes={getNewestReleaseNotes()} />
       <LandingDeveloperBand resourceLink={data.resourceLink} />
       <LandingCitation />
     </LandingShell>
@@ -87,7 +88,6 @@ LandingPage.propTypes = {
     donorChips: PropTypes.arrayOf(chipPropType).isRequired,
     autoantibodyChip: chipPropType,
     resourceLink: chipPropType,
-    recent: PropTypes.arrayOf(PropTypes.object).isRequired,
     tryChips: PropTypes.arrayOf(chipPropType).isRequired,
   }).isRequired,
 };

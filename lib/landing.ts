@@ -1,11 +1,8 @@
 /**
  * Pure logic for the Data Library landing page: building search links, mapping facet terms to
- * tiles and chips, and picking the "Recently updated" rows. Nothing in here touches the network;
- * `landing-server.ts` fetches the data and calls these functions.
+ * tiles and chips. Nothing in here touches the network; `landing-server.ts` fetches the data and
+ * calls these functions.
  */
-
-// lib
-import { getAnnotationTypeTitle } from "./annotation-type";
 
 // ---------------------------------------------------------------------------------------------
 // Types
@@ -33,40 +30,8 @@ export type CountLink = {
   icon?: LandingIcon;
 };
 
-/** One row of the Recently updated table. All properties survive JSON serialization. */
-export type RecentRow = {
-  accession: string;
-  /** Path to the analysis set's object page */
-  path: string;
-  /** Display name; the annotation type's title */
-  name: string;
-  category: string;
-  /** Release date in ISO 8601 format, from `release_timestamp` */
-  released: string;
-  /** Released month and year for display, e.g. "May 2026" */
-  releasedLabel: string;
-  /** Download link; the single file, or the object page when the set has other than one file */
-  downloadHref: string;
-  /** True if `downloadHref` goes straight to a file rather than to the object page */
-  isDirectDownload: boolean;
-};
-
-/** Analysis set as requested for the Recently updated rows. */
-export type RecentAnalysisSet = {
-  "@id": string;
-  accession: string;
-  annotation_type?: string;
-  annotation_category?: string;
-  release_timestamp?: string;
-  submitted_files_timestamp?: string;
-  files?: Array<{ href?: string; file_url?: string }>;
-};
-
 // ---------------------------------------------------------------------------------------------
 // Constants
-
-/** Number of rows in the Recently updated table. */
-export const RECENT_ROW_COUNT = 6;
 
 /** Only released objects show on the landing page. */
 export const RELEASED_STATUS = "released";
@@ -309,117 +274,4 @@ export function buildTryChips(sources: {
     }
   });
   return chips;
-}
-
-// ---------------------------------------------------------------------------------------------
-// Recently updated
-
-/**
- * Get the timestamp to sort and display an analysis set by. This is `release_timestamp`, the
- * date igvfd assigns when an object is released. Only when a set lacks it does this fall back to
- * `submitted_files_timestamp`.
- * @param analysisSet Analysis set to get the date of
- * @returns ISO 8601 timestamp, or an empty string if the set has neither
- */
-export function getReleaseDate(analysisSet: RecentAnalysisSet): string {
-  return (
-    analysisSet.release_timestamp || analysisSet.submitted_files_timestamp || ""
-  );
-}
-
-/**
- * Format a timestamp as an abbreviated month and year in UTC, e.g. "May 2026". UTC keeps server
- * and browser renderings identical.
- * @param timestamp ISO 8601 timestamp
- * @returns Month and year, or an empty string for an invalid timestamp
- */
-export function formatReleaseMonth(timestamp: string): string {
-  const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-}
-
-/**
- * Get where the Download button of an analysis set should go. A set with exactly one file links
- * straight to that file's download. A set with several files, or none, links to its object page
- * where the files get listed.
- * @param analysisSet Analysis set with its `files` embedded
- * @param apiUrl Public URL of igvfd, to prefix `@@download` paths
- * @returns Link and whether it goes directly to a file
- */
-export function getDownloadLink(
-  analysisSet: RecentAnalysisSet,
-  apiUrl: string
-): { href: string; isDirect: boolean } {
-  const files = analysisSet.files || [];
-  if (files.length === 1) {
-    const [file] = files;
-    if (file.file_url) {
-      return { href: file.file_url, isDirect: true };
-    }
-    if (file.href) {
-      return { href: `${apiUrl}${file.href}`, isDirect: true };
-    }
-  }
-  return { href: analysisSet["@id"], isDirect: false };
-}
-
-/**
- * Pick the rows of the Recently updated table. Takes the newest analysis set of each
- * `annotation_type`, sorts those newest first, and keeps the first `limit`. A batch release of
- * hundreds of sets of one type therefore appears as a single row.
- * @param analysisSets Candidate released analysis sets; need not be sorted or unique per type
- * @param apiUrl Public URL of igvfd, to build file download links
- * @param limit Maximum number of rows
- * @returns Table rows, newest release first
- */
-export function pickRecentlyUpdated(
-  analysisSets: ReadonlyArray<RecentAnalysisSet>,
-  apiUrl: string,
-  limit = RECENT_ROW_COUNT
-): Array<RecentRow> {
-  // Newest set of each annotation type.
-  const newestByType = new Map<string, RecentAnalysisSet>();
-  analysisSets.forEach((analysisSet) => {
-    const type = analysisSet.annotation_type;
-    if (!type || !getReleaseDate(analysisSet)) {
-      return;
-    }
-    const current = newestByType.get(type);
-    if (
-      !current ||
-      new Date(getReleaseDate(analysisSet)).getTime() >
-        new Date(getReleaseDate(current)).getTime()
-    ) {
-      newestByType.set(type, analysisSet);
-    }
-  });
-
-  return Array.from(newestByType.values())
-    .sort(
-      (a, b) =>
-        new Date(getReleaseDate(b)).getTime() -
-        new Date(getReleaseDate(a)).getTime()
-    )
-    .slice(0, limit)
-    .map((analysisSet) => {
-      const released = getReleaseDate(analysisSet);
-      const download = getDownloadLink(analysisSet, apiUrl);
-      return {
-        accession: analysisSet.accession,
-        path: analysisSet["@id"],
-        name: getAnnotationTypeTitle(analysisSet.annotation_type as string),
-        category: analysisSet.annotation_category || "",
-        released,
-        releasedLabel: formatReleaseMonth(released),
-        downloadHref: download.href,
-        isDirectDownload: download.isDirect,
-      };
-    });
 }
