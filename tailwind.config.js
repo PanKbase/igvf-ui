@@ -44,6 +44,23 @@ module.exports = {
         "highlight-border": "var(--color-highlight-border)",
         "modal-border": "var(--color-modal-border)",
 
+        // PanKbase brand teal and neutrals for the Data Library landing page
+        pkb: {
+          DEFAULT: "#0b7a82",
+          dark: "#075a61",
+          tint: "#e6f4f4",
+          "tint-hover": "#d6eeee",
+          "tint-border": "#b5dcdc",
+          ink: "#1b2340",
+          body: "#3d4560",
+          muted: "#555d75",
+          line: "#dde1ea",
+          "line-soft": "#e8ebf1",
+          canvas: "#f7f8fb",
+          head: "#eef0f5",
+          code: "#141a30",
+        },
+
         // Data items on an object page
         "data-title": "var(--color-data-title)",
         "data-label": "var(--color-data-label)",
