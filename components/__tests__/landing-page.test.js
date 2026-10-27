@@ -2,12 +2,14 @@ import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "../__mocks__/navigator";
 import FeaturedPage from "../landing/featured-page";
 import LandingPage from "../landing/landing-page";
+import LandingWhatsNew from "../landing/landing-whats-new";
 import {
   FEATURED_DATASETS,
   LANDING_FEATURED_COUNT,
 } from "../../lib/featured-datasets";
 import { EMPTY_LANDING_DATA } from "../../lib/landing-server";
 import { buildSearchHref } from "../../lib/landing";
+import { WHATS_NEW } from "../../lib/whats-new";
 
 /**
  * Assert an anchor's href. In jest, `next/link` doesn't know the app's `trailingSlash: true`
@@ -65,28 +67,6 @@ const FULL_DATA = {
     count: 3,
     href: "/search/?type=AnalysisSet&status=released&annotation_category=Resource",
   },
-  recent: [
-    {
-      accession: "PKBDS1",
-      path: "/analysis-sets/PKBDS1/",
-      name: "cRE-target gene links",
-      category: "Chromatin accessibility",
-      released: "2026-09-02T10:00:00+00:00",
-      releasedLabel: "Sep 2026",
-      downloadHref: "https://files.example.org/links.tsv",
-      isDirectDownload: true,
-    },
-    {
-      accession: "PKBDS2",
-      path: "/analysis-sets/PKBDS2/",
-      name: "Bulk RNA-seq",
-      category: "Gene expression",
-      released: "2026-03-01T00:00:00+00:00",
-      releasedLabel: "Mar 2026",
-      downloadHref: "/analysis-sets/PKBDS2/",
-      isDirectDownload: false,
-    },
-  ],
   tryChips: [
     {
       label: "scRNA-seq",
@@ -237,52 +217,67 @@ describe("<LandingPage> live sections", () => {
     expect(screen.queryByText("Autoantibody+")).not.toBeInTheDocument();
     expect(screen.queryByText("Overlapping filter")).not.toBeInTheDocument();
   });
+});
 
-  it("renders Recently updated rows with name, accession, category, month year and Download", () => {
+describe("<LandingPage> What's new", () => {
+  it("replaces Recently updated: no table, no download buttons, no accessions", () => {
     render(<LandingPage data={FULL_DATA} />);
 
-    const table = screen.getByRole("table", { name: "Recently updated" });
     expect(
-      within(table)
-        .getAllByRole("columnheader")
-        .map((header) => header.textContent)
-    ).toEqual(["Name", "Category", "Released", "Download"]);
-
-    const rows = within(table).getAllByRole("row").slice(1);
-    expect(rows).toHaveLength(2);
-
-    const first = within(rows[0]);
-    expectHref(
-      first.getByRole("link", { name: "cRE-target gene links" }),
-      "/analysis-sets/PKBDS1/"
-    );
-    expect(first.getByText("PKBDS1")).toBeInTheDocument();
-    expect(first.getByText("Chromatin accessibility")).toBeInTheDocument();
-    expect(first.getByText("Sep 2026")).toHaveAttribute(
-      "datetime",
-      "2026-09-02T10:00:00+00:00"
-    );
+      screen.queryByRole("heading", { name: "Recently updated" })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    const section = screen.getByRole("region", { name: "What's new" });
     expect(
-      first.getByRole("link", { name: "Download cRE-target gene links" })
-    ).toHaveAttribute("href", "https://files.example.org/links.tsv");
+      within(section).queryByRole("link", { name: /download/i })
+    ).not.toBeInTheDocument();
+    expect(within(section).queryByText(/PKB/)).not.toBeInTheDocument();
   });
 
-  it("sends Download to the object page for a set without exactly one file, and says so", () => {
+  it("shows the three newest notes with date, title link and summary, and links All updates to the News page", () => {
     render(<LandingPage data={FULL_DATA} />);
 
-    const link = screen.getByRole("link", {
-      name: "Download files for Bulk RNA-seq (opens the object page)",
+    const section = screen.getByRole("region", { name: "What's new" });
+    expect(
+      within(section).getByRole("heading", { level: 2, name: "What's new" })
+    ).toBeInTheDocument();
+    expect(
+      within(section).getByRole("link", { name: "All updates →" })
+    ).toHaveAttribute("href", "https://pankbase.org/news.html");
+
+    const items = within(section).getAllByRole("listitem");
+    expect(items).toHaveLength(3);
+    expect(items.map((item) => item.querySelector("time").textContent)).toEqual(
+      ["Sep 2026", "May 2026", "May 2026"]
+    );
+    expect(items.map((item) => item.querySelector("time").dateTime)).toEqual([
+      "2026-09",
+      "2026-05",
+      "2026-05",
+    ]);
+    WHATS_NEW.slice(0, 3).forEach((note, index) => {
+      const item = within(items[index]);
+      expect(item.getByRole("link", { name: note.title })).toHaveAttribute(
+        "href",
+        note.href
+      );
+      expect(item.getByText(note.summary)).toBeInTheDocument();
     });
-    expectHref(link, "/analysis-sets/PKBDS2/");
   });
 
-  it("links View all to released analysis sets, newest first", () => {
+  it("lays the cards out as one row from md up and stacks them below", () => {
     render(<LandingPage data={FULL_DATA} />);
 
-    expectHref(
-      screen.getByRole("link", { name: "View all →" }),
-      "/search/?type=AnalysisSet&status=released&sort=-release_timestamp"
-    );
+    const list = within(
+      screen.getByRole("region", { name: "What's new" })
+    ).getByRole("list");
+    expect(list).toHaveClass("grid-cols-1", "md:grid-cols-3");
+  });
+
+  it("renders no section when there are no notes", () => {
+    const { container } = render(<LandingWhatsNew notes={[]} />);
+
+    expect(container).toBeEmptyDOMElement();
   });
 });
 
@@ -305,6 +300,7 @@ describe("<LandingPage> with no live data", () => {
     expect(
       screen.queryByRole("heading", { name: "Recently updated" })
     ).not.toBeInTheDocument();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
     expect(screen.queryByText("Try:")).not.toBeInTheDocument();
     // No zeros or error text in place of the hidden sections.
     expect(screen.queryByText(/\b0\b/)).not.toBeInTheDocument();
@@ -317,6 +313,9 @@ describe("<LandingPage> with no live data", () => {
     expect(screen.getByRole("search")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Featured datasets" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "What's new" })
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "For developers" })
@@ -490,7 +489,7 @@ describe("<LandingPage> headings", () => {
         "Browse by analysis",
         "Find donors",
         "Featured datasets",
-        "Recently updated",
+        "What's new",
         "For developers",
         "Documentation",
       ])

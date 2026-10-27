@@ -16,7 +16,6 @@ jest.mock("../../lib/landing-server", () => ({
     donorChips: [],
     autoantibodyChip: null,
     resourceLink: null,
-    recent: [],
     tryChips: [],
   },
   getLandingData: jest.fn(),

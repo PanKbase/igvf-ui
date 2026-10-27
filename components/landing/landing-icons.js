@@ -69,32 +69,6 @@ ExternalLinkIcon.propTypes = {
 };
 
 /**
- * Arrow pointing down into a tray.
- */
-export function DownloadIcon({ className = "" }) {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={`shrink-0 ${className}`.trim()}
-    >
-      <path d="M12 4v12m-5-5l5 5 5-5M5 20h14" />
-    </svg>
-  );
-}
-
-DownloadIcon.propTypes = {
-  className: PropTypes.string,
-};
-
-/**
  * Two overlapping sheets, for copy-to-clipboard buttons.
  */
 export function CopyIcon({ className = "" }) {
