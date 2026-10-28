@@ -64,13 +64,32 @@ describe("getNewestReleaseNotes", () => {
 });
 
 describe("WHATS_NEW config", () => {
-  it("holds well-formed entries, each marked TODO until replaced", () => {
-    expect(WHATS_NEW.length).toBeGreaterThan(0);
+  it("has exactly three entries with valid months", () => {
+    expect(WHATS_NEW).toHaveLength(3);
     WHATS_NEW.forEach((entry) => {
       expect(entry.date).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
-      expect(entry.title).not.toBe("");
-      expect(entry.summary).not.toBe("");
-      expect(entry.href).not.toBe("");
+    });
+  });
+
+  it("has a non-empty title and summary in every entry, with no TODO text", () => {
+    WHATS_NEW.forEach((entry) => {
+      expect(entry.title.trim()).not.toBe("");
+      expect(entry.summary.trim()).not.toBe("");
+      expect(entry.title).not.toMatch(/todo/i);
+      expect(entry.summary).not.toMatch(/todo/i);
+    });
+  });
+
+  it("links every entry to an /analysis-sets/<accession>/ page or a /search/ URL with a type", () => {
+    WHATS_NEW.forEach((entry) => {
+      const url = new URL(entry.href, "https://example.org");
+      expect(url.origin).toBe("https://example.org"); // same-site, not a full URL
+      const isAnalysisSet = /^\/analysis-sets\/[A-Za-z0-9]+\/$/.test(
+        entry.href
+      );
+      const isSearch =
+        url.pathname === "/search/" && Boolean(url.searchParams.get("type"));
+      expect(isAnalysisSet || isSearch).toBe(true);
     });
   });
 });

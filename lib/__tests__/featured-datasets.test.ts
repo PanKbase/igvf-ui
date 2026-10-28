@@ -9,7 +9,7 @@ describe("featured datasets config", () => {
     expect(FEATURED_DATASETS.map((d) => d.title)).toEqual([
       "Islet dynamic perifusion",
       "Pancreatic islet scRNA-seq",
-      "Islet snATAC-seq",
+      "Pancreatic islet snATAC-seq",
       "Cell-type peaks from snATAC-seq",
       "cRE\u2013target gene links",
       "Differential gene expression",

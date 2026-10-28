@@ -10,41 +10,35 @@ export type ReleaseNote = {
   title: string;
   /** One line describing the release; keep it short enough to fit a compact card */
   summary: string;
-  /** Where the title links to; a same-site path or a full URL */
+  /** Where the whole card links to: an /analysis-sets/<accession>/ path or a /search/ URL */
   href: string;
 };
 
 /** Number of release notes the landing page shows. */
 export const WHATS_NEW_COUNT = 3;
 
-/** Where "All updates →" goes. */
-export const NEWS_URL = "https://pankbase.org/news.html";
-
-/**
- * TODO: Every entry below is a PLACEHOLDER. Replace the titles, summaries and links (all of
- * them currently point to the News page) with the real release notes before the page goes live.
- */
+/** Release notes, in any order; the page sorts them. Each card links to its `href`. */
 export const WHATS_NEW: ReadonlyArray<ReleaseNote> = [
   {
-    // TODO: placeholder entry; replace date, title, summary and href.
     date: "2026-09",
-    title: "cRE-to-gene links (ABC) by islet cell type",
-    summary: "TODO: one-line summary goes here.",
-    href: NEWS_URL,
+    title: "cRE-to-gene links for 12 islet cell types",
+    summary:
+      "ABC-predicted links between candidate regulatory elements and their target genes, one set per cell type.",
+    href: "/search/?type=AnalysisSet&annotation_type=cre_target_links",
   },
   {
-    // TODO: placeholder entry; replace date, title, summary and href.
     date: "2026-05",
-    title: "Per-donor dynamic perifusion traits for 413 donors",
-    summary: "TODO: one-line summary goes here.",
-    href: NEWS_URL,
+    title: "Dynamic perifusion traits for 413 donors",
+    summary:
+      "Insulin and glucagon secretion measures from dynamic islet perifusion, in one table.",
+    href: "/analysis-sets/PKBDS9874MXRB/",
   },
   {
-    // TODO: placeholder entry; replace date, title, summary and href.
     date: "2026-05",
-    title: "Differential expression results by cell type",
-    summary: "TODO: one-line summary goes here.",
-    href: NEWS_URL,
+    title: "Gene expression associated with islet function traits",
+    summary:
+      "224 differential expression results: 32 perifusion insulin and glucagon secretion traits across 7 islet cell types.",
+    href: "/search/?type=AnalysisSet&annotation_type=differential_expression&de_comparison_class=islet_function_trait",
   },
 ];
 
