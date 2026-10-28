@@ -11,6 +11,7 @@ jest.mock("../../lib/landing-server", () => ({
   __esModule: true,
   EMPTY_LANDING_DATA: {
     stats: null,
+    donorTotal: null,
     assayTiles: [],
     analysisTiles: [],
     donorChips: [],

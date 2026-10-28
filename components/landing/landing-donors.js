@@ -9,17 +9,27 @@ import {
   TEXT_LINK,
 } from "./landing-common";
 // lib
-import { buildSearchHref } from "../../lib/landing";
+import { buildSearchHref, formatShare } from "../../lib/landing";
 
 const BROWSE_ALL_DONORS_HREF = buildSearchHref("HumanDonor");
 
 /**
  * Find donors: a chip per diabetes condition, plus the Autoantibody+ filter, which overlaps the
  * conditions and so gets its own dashed pill under an "Overlapping filter" label. Each chip links
- * to a pre-filtered donor search.
+ * to a pre-filtered donor search, and shows its share of all donors in muted text under its
+ * count. The shares come from the live counts: `totalDonors` is the library's donor total, and
+ * they're left out when it's unknown.
  */
-export default function LandingDonors({ conditionChips, autoantibodyChip }) {
-  const maxCount = Math.max(...conditionChips.map((chip) => chip.count), 1);
+export default function LandingDonors({
+  conditionChips,
+  autoantibodyChip,
+  totalDonors = null,
+}) {
+  /** "83% of donors", or an empty string when there's no total to compare with. */
+  function shareText(count) {
+    const share = formatShare(count, totalDonors);
+    return share ? `${share} of donors` : "";
+  }
 
   return (
     <section aria-labelledby="find-donors" className="flex flex-col gap-[16px]">
@@ -32,13 +42,13 @@ export default function LandingDonors({ conditionChips, autoantibodyChip }) {
         {conditionChips.length > 0 && (
           <ul
             aria-label="Condition"
-            className="m-0 flex flex-1 list-none flex-wrap gap-[12px] p-0"
+            className="m-0 grid flex-1 list-none grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-[12px] p-0"
           >
             {conditionChips.map((chip) => (
-              <li key={chip.label} className="flex min-w-[150px] flex-1">
+              <li key={chip.label} className="flex">
                 <SmartLink
                   href={chip.href}
-                  className={`flex w-full flex-col gap-[8px] rounded-[8px] border-[1.5px] border-[#cdd2de] bg-white px-[16px] py-[12px] text-left !text-pkb-ink hover:!text-pkb-ink no-underline hover:border-pkb ${FOCUS_RING}`}
+                  className={`flex w-full flex-col gap-[4px] rounded-[8px] border-[1.5px] border-[#cdd2de] bg-white px-[16px] py-[12px] text-left !text-pkb-ink hover:!text-pkb-ink no-underline hover:border-pkb ${FOCUS_RING}`}
                 >
                   <span className="text-[14px] font-semibold">
                     {chip.label}
@@ -47,15 +57,11 @@ export default function LandingDonors({ conditionChips, autoantibodyChip }) {
                     {formatCount(chip.count)}
                     <span className="sr-only"> donors</span>
                   </span>
-                  <span
-                    aria-hidden="true"
-                    className="block h-[4px] rounded-[2px] bg-pkb-line-soft"
-                  >
-                    <span
-                      className="block h-[4px] min-w-[3px] rounded-[2px] bg-pkb"
-                      style={{ width: `${(chip.count / maxCount) * 100}%` }}
-                    />
-                  </span>
+                  {shareText(chip.count) && (
+                    <span className="text-[13px] text-pkb-muted">
+                      {shareText(chip.count)}
+                    </span>
+                  )}
                 </SmartLink>
               </li>
             ))}
@@ -69,7 +75,7 @@ export default function LandingDonors({ conditionChips, autoantibodyChip }) {
                 : ""
             }`}
           >
-            <span className="text-[12px] font-semibold uppercase tracking-[0.05em] text-pkb-muted">
+            <span className="text-[13px] font-semibold uppercase tracking-[0.05em] text-pkb-muted">
               Overlapping filter
             </span>
             <SmartLink
@@ -82,8 +88,10 @@ export default function LandingDonors({ conditionChips, autoantibodyChip }) {
                 <span className="sr-only"> donors</span>
               </span>
             </SmartLink>
-            <span className="text-[12px] text-pkb-muted">
+            <span className="text-[13px] text-pkb-muted">
               Spans the condition groups
+              {shareText(autoantibodyChip.count) &&
+                ` · ${shareText(autoantibodyChip.count)}`}
             </span>
           </div>
         )}
@@ -107,4 +115,6 @@ const chipPropType = PropTypes.shape({
 LandingDonors.propTypes = {
   conditionChips: PropTypes.arrayOf(chipPropType).isRequired,
   autoantibodyChip: chipPropType,
+  // Number of released donors in the library, the whole that each share is of
+  totalDonors: PropTypes.number,
 };

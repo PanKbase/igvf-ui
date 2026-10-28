@@ -275,3 +275,31 @@ export function buildTryChips(sources: {
   });
   return chips;
 }
+
+/**
+ * Format a count's share of a total as a whole percentage, e.g. "83%". A share above zero but
+ * under half a percent shows as "<1%" rather than a misleading "0%".
+ * @param count Part of the total
+ * @param total Whole to compare against
+ * @returns Percentage text, or an empty string when the total isn't a positive number or the
+ *   count isn't a number from 0 to the total
+ */
+export function formatShare(
+  count: number | null | undefined,
+  total: number | null | undefined
+): string {
+  if (
+    typeof count !== "number" ||
+    typeof total !== "number" ||
+    !(total > 0) ||
+    count < 0 ||
+    count > total
+  ) {
+    return "";
+  }
+  const percent = (count / total) * 100;
+  if (percent > 0 && percent < 1) {
+    return "<1%";
+  }
+  return `${Math.round(percent)}%`;
+}

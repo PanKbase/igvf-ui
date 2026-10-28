@@ -53,6 +53,8 @@ export type LandingData = {
     measurementSets: number;
     analysisSets: number;
   } | null;
+  /** Number of released donors, the whole for the Find donors shares; null if unknown */
+  donorTotal: number | null;
   assayTiles: Array<CountLink>;
   analysisTiles: Array<CountLink>;
   donorChips: Array<CountLink>;
@@ -65,6 +67,7 @@ export type LandingData = {
 /** Landing data with every live-data section hidden. */
 export const EMPTY_LANDING_DATA: LandingData = {
   stats: null,
+  donorTotal: null,
   assayTiles: [],
   analysisTiles: [],
   donorChips: [],
@@ -213,6 +216,7 @@ export async function getLandingData(): Promise<LandingData> {
             analysisSets: analysisSetTotal,
           }
         : null,
+    donorTotal,
     assayTiles,
     analysisTiles,
     donorChips,

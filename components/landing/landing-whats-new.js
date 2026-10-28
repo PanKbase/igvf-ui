@@ -7,8 +7,8 @@ import { formatReleaseNoteDate } from "../../lib/whats-new";
 
 /**
  * What's new: a compact strip of the newest release notes. Each card is one link to the notes'
- * `href`, opening in the same tab. Cards sit in a single row from the md breakpoint up and stack
- * below it. Renders nothing when there are no notes.
+ * `href`, opening in the same tab. Cards are equal height, with the date at the top and the title
+ * clamped to two lines. They sit in a single row from the md breakpoint up and stack below it. Renders nothing when there are no notes.
  */
 export default function LandingWhatsNew({ notes }) {
   if (notes.length === 0) {
@@ -23,15 +23,15 @@ export default function LandingWhatsNew({ notes }) {
           <li key={`${note.date}-${note.title}`} className="flex min-w-0">
             <SmartLink
               href={note.href}
-              className={`group block w-full min-w-0 rounded-[8px] border border-t-[3px] border-pkb-line border-t-pkb bg-white px-[16px] py-[12px] !text-pkb-ink no-underline hover:!text-pkb-ink ${FOCUS_RING}`}
+              className={`group flex h-full w-full min-w-0 flex-col rounded-[8px] border border-t-[3px] border-pkb-line border-t-pkb bg-white px-[16px] py-[12px] !text-pkb-ink no-underline hover:!text-pkb-ink ${FOCUS_RING}`}
             >
               <time
                 dateTime={note.date}
-                className="block text-[12px] text-pkb-muted"
+                className="block text-[13px] text-pkb-muted"
               >
                 {formatReleaseNoteDate(note.date)}
               </time>
-              <span className="mt-[2px] block text-[15px] font-semibold leading-snug text-pkb underline-offset-2 group-hover:text-pkb-dark group-hover:underline">
+              <span className="mt-[2px] line-clamp-2 block text-[15px] font-semibold leading-snug text-pkb underline-offset-2 group-hover:text-pkb-dark group-hover:underline">
                 {note.title}
               </span>
               <span className="mt-[4px] block text-[13px] leading-snug text-pkb-body">

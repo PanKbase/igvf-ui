@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 /**
  * Stroke paths, on a 24x24 grid, for the icons that identify assay and analysis tiles.
  */
-const TILE_ICON_PATHS = {
-  rna: "M4 4c4 0 4 8 8 8s4 8 8 8M4 20c4 0 4-8 8-8s4-8 8-8",
+export const TILE_ICON_PATHS = {
+  // Stacked layers: pooled (bulk) samples
+  rna: "M12 3l9 5-9 5-9-5 9-5zM3 12.5l9 5 9-5M3 17l9 5 9-5",
   perifusion: "M3 12h4l3-8 4 16 3-8h4",
   singleCell:
     "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
@@ -17,11 +18,11 @@ const TILE_ICON_PATHS = {
 /**
  * Decorative icon for a tile. Hidden from assistive technology because the tile's text names it.
  */
-export function TileIcon({ name, className = "" }) {
+export function TileIcon({ name, size = 22, className = "" }) {
   return (
     <svg
-      width="22"
-      height="22"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -39,6 +40,8 @@ export function TileIcon({ name, className = "" }) {
 TileIcon.propTypes = {
   // Key of `TILE_ICON_PATHS`; unknown names draw the chart icon
   name: PropTypes.string,
+  // Width and height in pixels
+  size: PropTypes.number,
   className: PropTypes.string,
 };
 
