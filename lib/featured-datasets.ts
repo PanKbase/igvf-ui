@@ -62,7 +62,7 @@ export const FEATURED_DATASETS: ReadonlyArray<FeaturedDataset> = [
   {
     id: "islet-snatac-seq",
     category: "Chromatin accessibility",
-    title: "Islet snATAC-seq",
+    title: "Pancreatic islet snATAC-seq",
     description: "Single-nucleus chromatin accessibility in human islets.",
     downloadUrl: `${S3}/analysis_resources/single_cell_objects/hpap_atac.h5ad`,
     detailsUrl: `${DATA_LIBRARY}/analysis-sets/PKBDS0470WCHR/`,

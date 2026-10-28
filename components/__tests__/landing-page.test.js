@@ -234,16 +234,13 @@ describe("<LandingPage> What's new", () => {
     expect(within(section).queryByText(/PKB/)).not.toBeInTheDocument();
   });
 
-  it("shows the three newest notes with date, title link and summary, and links All updates to the News page", () => {
+  it("shows the three newest notes, each card a single same-tab link to its href", () => {
     render(<LandingPage data={FULL_DATA} />);
 
     const section = screen.getByRole("region", { name: "What's new" });
     expect(
       within(section).getByRole("heading", { level: 2, name: "What's new" })
     ).toBeInTheDocument();
-    expect(
-      within(section).getByRole("link", { name: "All updates →" })
-    ).toHaveAttribute("href", "https://pankbase.org/news.html");
 
     const items = within(section).getAllByRole("listitem");
     expect(items).toHaveLength(3);
@@ -255,14 +252,36 @@ describe("<LandingPage> What's new", () => {
       "2026-05",
       "2026-05",
     ]);
+
+    // One link per card, wrapping the date, title and summary.
+    expect(within(section).getAllByRole("link")).toHaveLength(3);
     WHATS_NEW.slice(0, 3).forEach((note, index) => {
-      const item = within(items[index]);
-      expect(item.getByRole("link", { name: note.title })).toHaveAttribute(
-        "href",
-        note.href
-      );
-      expect(item.getByText(note.summary)).toBeInTheDocument();
+      const link = within(items[index]).getByRole("link");
+      expectHref(link, note.href);
+      expect(link).not.toHaveAttribute("target");
+      expect(link).toHaveTextContent(note.title);
+      expect(link).toHaveTextContent(note.summary);
     });
+  });
+
+  it("doesn't link to the News page", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const section = screen.getByRole("region", { name: "What's new" });
+    expect(
+      within(section).queryByRole("link", { name: /all updates/i })
+    ).not.toBeInTheDocument();
+    within(section)
+      .getAllByRole("link")
+      .forEach((link) => {
+        expect(link.getAttribute("href")).not.toMatch(/news/i);
+      });
+  });
+
+  it("renders no TODO text anywhere on the page", () => {
+    const { container } = render(<LandingPage data={FULL_DATA} />);
+
+    expect(container.textContent).not.toMatch(/todo/i);
   });
 
   it("lays the cards out as one row from md up and stacks them below", () => {
