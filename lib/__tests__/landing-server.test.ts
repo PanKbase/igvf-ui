@@ -130,6 +130,7 @@ describe("getLandingData", () => {
       ["T1D", 255],
       ["Other diabetes types", 28],
     ]);
+    expect(data.donorTotal).toBe(3739);
     expect(data.resourceLink).toMatchObject({ label: "Resource", count: 3 });
     expect(data.tryChips.length).toBeGreaterThan(0);
   });
@@ -183,6 +184,7 @@ describe("getLandingData", () => {
     const data = await getLandingData();
     expect(data.assayTiles).toEqual([]);
     expect(data.stats).toBeNull(); // Needs all three totals.
+    expect(data.donorTotal).toBe(3739); // The donor shares only need the donor total.
     expect(data.analysisTiles.length).toBeGreaterThan(0);
     expect(data.donorChips.length).toBeGreaterThan(0);
   });

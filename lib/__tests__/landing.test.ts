@@ -6,6 +6,7 @@ import {
   buildDonorChips,
   buildSearchHref,
   buildTryChips,
+  formatShare,
   getAssayLabel,
   positiveTerms,
 } from "../landing";
@@ -263,5 +264,29 @@ describe("buildTryChips", () => {
       "scRNA-seq",
       "Islet perifusion",
     ]);
+  });
+});
+
+describe("formatShare", () => {
+  it("rounds to a whole percentage of the total", () => {
+    expect(formatShare(3112, 3739)).toBe("83%");
+    expect(formatShare(343, 3739)).toBe("9%");
+    expect(formatShare(255, 3739)).toBe("7%");
+    expect(formatShare(1, 2)).toBe("50%");
+    expect(formatShare(3739, 3739)).toBe("100%");
+  });
+
+  it("shows a share above zero but under 1% as <1%, and zero as 0%", () => {
+    expect(formatShare(28, 3739)).toBe("<1%");
+    expect(formatShare(0, 3739)).toBe("0%");
+  });
+
+  it("returns an empty string when the share can't be computed", () => {
+    expect(formatShare(5, 0)).toBe("");
+    expect(formatShare(5, null)).toBe("");
+    expect(formatShare(5, undefined)).toBe("");
+    expect(formatShare(null, 10)).toBe("");
+    expect(formatShare(-1, 10)).toBe("");
+    expect(formatShare(11, 10)).toBe("");
   });
 });

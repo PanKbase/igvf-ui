@@ -5,13 +5,27 @@ import { FOCUS_RING, SmartLink } from "./landing-common";
 import { ExternalLinkIcon } from "./landing-icons";
 
 /**
- * Every button shares this width, so a card with fewer buttons has the same button sizes as a card
- * with three, just left-aligned. `whitespace-nowrap` plus `px-[12px]` (12px) keeps a label on one line
- * with comfortable side padding at any width; the row of buttons wraps instead of the labels.
+ * Buttons share a row and split it into equal widths. `whitespace-nowrap` keeps a label on one
+ * line, and the small side padding leaves a label room even in the narrowest column.
  */
-const BUTTON_BASE = `inline-flex h-[40px] w-[96px] shrink-0 items-center justify-center gap-[4px] whitespace-nowrap rounded-[6px] border-[1.5px] border-pkb px-[12px] text-[12px] font-bold no-underline ${FOCUS_RING}`;
+const BUTTON_BASE = `inline-flex h-[40px] min-w-0 items-center justify-center gap-[4px] whitespace-nowrap rounded-[6px] border-[1.5px] border-pkb px-[8px] text-[13px] font-bold no-underline ${FOCUS_RING}`;
 const BUTTON_FILLED = `${BUTTON_BASE} bg-pkb !text-white hover:!text-white hover:bg-pkb-dark`;
 const BUTTON_OUTLINE = `${BUTTON_BASE} bg-white !text-pkb hover:!text-pkb hover:bg-pkb-tint`;
+
+/**
+ * Grid classes for the button row, by how many buttons a card has. The row measures the card (a
+ * container query), not the window. Three buttons share one row once there's room for them side by
+ * side; in a narrower card, Download goes full width above a row with the other two, so no button
+ * ever wraps on its own. Fewer buttons always split the row equally.
+ */
+const ROW_BY_COUNT = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-2 @[300px]:grid-cols-3",
+};
+
+/** Download spans both columns of the narrow three-button layout, and one column of the wide one. */
+const DOWNLOAD_SPAN_WHEN_THREE = "col-span-2 @[300px]:col-span-1";
 
 /**
  * One featured dataset. It renders only the buttons the dataset has links for, in the order
@@ -21,8 +35,15 @@ const BUTTON_OUTLINE = `${BUTTON_BASE} bg-white !text-pkb hover:!text-pkb hover:
  * `aria-label`.
  */
 export default function FeaturedCard({ dataset }) {
-  const hasButtons =
-    dataset.downloadUrl || dataset.detailsUrl || dataset.visualizeUrl;
+  const buttonCount = [
+    dataset.downloadUrl,
+    dataset.detailsUrl,
+    dataset.visualizeUrl,
+  ].filter(Boolean).length;
+  const downloadClasses =
+    buttonCount === 3
+      ? `${BUTTON_FILLED} ${DOWNLOAD_SPAN_WHEN_THREE}`
+      : BUTTON_FILLED;
 
   return (
     <article
@@ -34,39 +55,44 @@ export default function FeaturedCard({ dataset }) {
       </p>
       <h3 className="text-[18px] font-bold leading-tight">{dataset.title}</h3>
       <p className="flex-1 text-[14px] text-pkb-body">{dataset.description}</p>
-      {hasButtons && (
-        <div className="flex flex-wrap justify-start gap-[8px] border-t border-pkb-line-soft pt-[12px]">
-          {dataset.downloadUrl && (
-            <a
-              href={dataset.downloadUrl}
-              aria-label={`Download ${dataset.title}`}
-              className={BUTTON_FILLED}
-            >
-              Download
-            </a>
-          )}
-          {dataset.detailsUrl && (
-            <SmartLink
-              href={dataset.detailsUrl}
-              aria-label={`Details for ${dataset.title}`}
-              className={BUTTON_OUTLINE}
-            >
-              Details
-            </SmartLink>
-          )}
-          {dataset.visualizeUrl && (
-            <a
-              href={dataset.visualizeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={`Visualize in ${dataset.visualizeTool}`}
-              aria-label={`Visualize in ${dataset.visualizeTool}`}
-              className={BUTTON_OUTLINE}
-            >
-              Visualize
-              <ExternalLinkIcon />
-            </a>
-          )}
+      {buttonCount > 0 && (
+        <div className="@container border-t border-pkb-line-soft pt-[12px]">
+          <div
+            data-testid="featured-buttons"
+            className={`grid gap-[8px] ${ROW_BY_COUNT[buttonCount]}`}
+          >
+            {dataset.downloadUrl && (
+              <a
+                href={dataset.downloadUrl}
+                aria-label={`Download ${dataset.title}`}
+                className={downloadClasses}
+              >
+                Download
+              </a>
+            )}
+            {dataset.detailsUrl && (
+              <SmartLink
+                href={dataset.detailsUrl}
+                aria-label={`Details for ${dataset.title}`}
+                className={BUTTON_OUTLINE}
+              >
+                Details
+              </SmartLink>
+            )}
+            {dataset.visualizeUrl && (
+              <a
+                href={dataset.visualizeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Visualize in ${dataset.visualizeTool}`}
+                aria-label={`Visualize in ${dataset.visualizeTool}`}
+                className={BUTTON_OUTLINE}
+              >
+                Visualize
+                <ExternalLinkIcon />
+              </a>
+            )}
+          </div>
         </div>
       )}
     </article>

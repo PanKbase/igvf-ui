@@ -50,6 +50,7 @@ export default function LandingPage({ data }) {
     <LandingShell title="PanKbase Data Library">
       <LandingHero tryChips={data.tryChips} />
       {data.stats && <LandingStats stats={data.stats} />}
+      <LandingFeatured />
       {data.assayTiles.length > 0 && <AssayTiles tiles={data.assayTiles} />}
       {data.analysisTiles.length > 0 && (
         <AnalysisTiles tiles={data.analysisTiles} />
@@ -58,9 +59,9 @@ export default function LandingPage({ data }) {
         <LandingDonors
           conditionChips={data.donorChips}
           autoantibodyChip={data.autoantibodyChip}
+          totalDonors={data.donorTotal}
         />
       )}
-      <LandingFeatured />
       <LandingWhatsNew notes={getNewestReleaseNotes()} />
       <LandingDeveloperBand resourceLink={data.resourceLink} />
       <LandingCitation />
@@ -78,6 +79,7 @@ const chipPropType = PropTypes.shape({
 LandingPage.propTypes = {
   // Live data from `getLandingData()`
   data: PropTypes.shape({
+    donorTotal: PropTypes.number,
     stats: PropTypes.shape({
       donors: PropTypes.number.isRequired,
       measurementSets: PropTypes.number.isRequired,

@@ -24,7 +24,7 @@ export default function LandingHero({ tryChips }) {
         action="/search/"
         method="get"
         role="search"
-        className="flex max-w-[900px] flex-col gap-[10px] md:flex-row"
+        className="flex flex-col gap-[10px] md:flex-row"
       >
         <input
           name="searchTerm"
@@ -41,7 +41,7 @@ export default function LandingHero({ tryChips }) {
           Search
         </button>
       </form>
-      <div className="flex max-w-[900px] flex-wrap items-center justify-between gap-x-[24px] gap-y-[12px]">
+      <div className="flex flex-wrap items-center justify-between gap-x-[24px] gap-y-[12px]">
         {tryChips.length > 0 && (
           <div className="flex flex-wrap items-center gap-[8px]">
             <span className="text-[14px] text-pkb-muted">Try:</span>

@@ -9,6 +9,7 @@ import {
 } from "../../lib/featured-datasets";
 import { EMPTY_LANDING_DATA } from "../../lib/landing-server";
 import { buildSearchHref } from "../../lib/landing";
+import { TILE_ICON_PATHS } from "../landing/landing-icons";
 import { WHATS_NEW } from "../../lib/whats-new";
 
 /**
@@ -24,6 +25,7 @@ function expectHref(element, expected) {
 
 const FULL_DATA = {
   stats: { donors: 3739, measurementSets: 1333, analysisSets: 1455 },
+  donorTotal: 3739,
   assayTiles: [
     {
       label: "Bulk RNA-seq",
@@ -300,6 +302,116 @@ describe("<LandingPage> What's new", () => {
   });
 });
 
+describe("<LandingPage> layout polish", () => {
+  it("links each stat to its released search, with a hover state", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const stats = screen.getByRole("region", { name: "Library statistics" });
+    const links = within(stats).getAllByRole("link");
+    expect(links.map((link) => link.textContent)).toEqual([
+      "3,739donors",
+      "1,333measurement sets",
+      "1,455analysis sets",
+    ]);
+    expectHref(links[0], "/search/?type=HumanDonor&status=released");
+    expectHref(links[1], "/search/?type=MeasurementSet&status=released");
+    expectHref(links[2], "/search/?type=AnalysisSet&status=released");
+    links.forEach((link) => expect(link).toHaveClass("hover:bg-pkb-tint"));
+  });
+
+  it("stretches the search form and the Try row to the full content width", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const form = screen.getByRole("search");
+    expect(form.className).not.toMatch(/max-w-/);
+    const tryRow = screen.getByText("Try:").parentElement.parentElement;
+    expect(tryRow.className).not.toMatch(/max-w-/);
+  });
+
+  it("draws the assay and analysis tiles in the same style", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const assay = within(
+      screen.getByRole("region", { name: "Browse by assay" })
+    ).getAllByRole("link");
+    const analysis = within(
+      screen.getByRole("region", { name: "Browse by analysis" })
+    ).getAllByRole("link");
+    expect(assay.length).toBeGreaterThan(0);
+    expect(analysis.length).toBeGreaterThan(0);
+    [...assay, ...analysis].forEach((tile) => {
+      expect(tile.className).toBe(assay[0].className);
+      expect(tile).toHaveClass("border-t-pkb");
+      expect(tile.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    });
+  });
+
+  it("gives Bulk RNA-seq a layers icon, not the old crossing-strands one that looks like an X", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    // `icon: "rna"` is what buildAssayTiles gives Bulk RNA-seq.
+    expect(TILE_ICON_PATHS.rna).toBe(
+      "M12 3l9 5-9 5-9-5 9-5zM3 12.5l9 5 9-5M3 17l9 5 9-5"
+    );
+  });
+
+  it("shows each donor chip's share of all donors in muted text, with no progress bars", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const donors = screen.getByRole("region", { name: "Find donors" });
+    const conditions = within(donors).getByRole("list", { name: "Condition" });
+    // 3,112 and 343 of 3,739
+    expect(within(conditions).getByText("83% of donors")).toHaveClass(
+      "text-pkb-muted"
+    );
+    expect(within(conditions).getByText("9% of donors")).toBeInTheDocument();
+    expect(donors.querySelector("[style*='width']")).toBeNull();
+  });
+
+  it("leaves the shares out when the donor total is unknown", () => {
+    render(<LandingPage data={{ ...FULL_DATA, donorTotal: null }} />);
+
+    expect(screen.queryByText(/% of donors/)).not.toBeInTheDocument();
+  });
+
+  it("keeps the What's new cards equal height, with two-line titles and the date at the top", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    const section = screen.getByRole("region", { name: "What's new" });
+    within(section)
+      .getAllByRole("link")
+      .forEach((card) => {
+        expect(card).toHaveClass("h-full", "flex", "flex-col");
+        expect(card.firstElementChild.tagName).toBe("TIME");
+        expect(card.querySelector(".line-clamp-2")).not.toBeNull();
+      });
+  });
+
+  it("shows a second example under the curl block: fetch one donor by accession", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    expect(
+      screen.getByText(
+        'curl "https://data.pankbase.org/human-donors/<accession>/?format=json"'
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Copy donor curl command" })
+    ).toBeInTheDocument();
+  });
+
+  it("keeps muted text at 13px or larger", () => {
+    const { container } = render(<LandingPage data={FULL_DATA} />);
+    const small = Array.from(container.querySelectorAll("[class]")).filter(
+      (element) => /text-\[(9|10|11|12)px\]/.test(element.className)
+    );
+    // Smaller text stays only where it isn't muted, like the teal featured card category.
+    small.forEach((element) => {
+      expect(element.className).not.toMatch(/text-pkb-muted/);
+    });
+  });
+});
+
 describe("<LandingPage> with no live data", () => {
   it("hides every live section but keeps the static ones", () => {
     render(<LandingPage data={EMPTY_LANDING_DATA} />);
@@ -494,6 +606,45 @@ describe("<LandingPage> developer, documentation and citation blocks", () => {
 });
 
 describe("<LandingPage> headings", () => {
+  it("orders the sections: stats, featured, assay, analysis, donors, what's new, developers, documentation", () => {
+    render(<LandingPage data={FULL_DATA} />);
+
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(
+      screen.getByRole("region", { name: "Library statistics" })
+    ).toBeInTheDocument();
+    const order = Array.from(
+      document.querySelectorAll(
+        "section[aria-label='Search'], section[aria-label='Library statistics'], section[aria-labelledby], section[aria-label='Citing PanKbase data']"
+      )
+    ).map(
+      (section) =>
+        section.getAttribute("aria-label") ||
+        document.getElementById(section.getAttribute("aria-labelledby"))
+          .textContent
+    );
+    expect(order).toEqual([
+      "Search",
+      "Library statistics",
+      "Featured datasets",
+      "Browse by assay",
+      "Browse by analysis",
+      "Find donors",
+      "What's new",
+      "Citing PanKbase data",
+    ]);
+    // The developer and documentation band sits between What's new and the citation strip.
+    const headings = screen
+      .getAllByRole("heading", { level: 2 })
+      .map((heading) => heading.textContent);
+    expect(headings.indexOf("What's new")).toBeLessThan(
+      headings.indexOf("For developers")
+    );
+    expect(headings.indexOf("For developers")).toBeLessThan(
+      headings.indexOf("Documentation")
+    );
+  });
+
   it("has one h1 and section headings at h2", () => {
     render(<LandingPage data={FULL_DATA} />);
 
