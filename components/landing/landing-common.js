@@ -3,11 +3,10 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 
 /**
- * Paths of the two landing pages. When the redesigned landing page replaces the home page, change
- * these in one place.
+ * Paths of the two landing pages. next.config.js redirects the old /test-homepage URLs here.
  */
-export const LANDING_PATH = "/test-homepage/";
-export const FEATURED_PATH = "/test-homepage/featured/";
+export const LANDING_PATH = "/";
+export const FEATURED_PATH = "/featured/";
 
 /**
  * Visible focus indicator shared by every interactive element on the landing pages. The dark teal
