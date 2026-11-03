@@ -493,7 +493,7 @@ describe("featured datasets on the landing page and the Featured page", () => {
 
     expectHref(
       screen.getByRole("link", { name: "All featured →" }),
-      "/test-homepage/featured/"
+      "/featured/"
     );
   });
 
@@ -519,12 +519,12 @@ describe("featured datasets on the landing page and the Featured page", () => {
 
     expectHref(
       screen.getByRole("link", { name: "← Back to Data Library" }),
-      "/test-homepage/"
+      "/"
     );
     const breadcrumb = screen.getByRole("navigation", { name: "Breadcrumb" });
     expectHref(
       within(breadcrumb).getByRole("link", { name: "Data Library" }),
-      "/test-homepage/"
+      "/"
     );
     expect(within(breadcrumb).getByText("Featured datasets")).toHaveAttribute(
       "aria-current",
