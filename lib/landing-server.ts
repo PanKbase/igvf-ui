@@ -19,12 +19,15 @@ import {
   buildSearchHref,
   buildTryChips,
   HIDDEN_ANALYSIS_CATEGORIES,
+  pickRecentlyUpdated,
   positiveTerms,
   RELEASED_STATUS,
 } from "./landing";
+import { API_URL } from "./constants";
 import FetchRequest from "./fetch-request";
 // types
-import type { CountLink, FacetTerm } from "./landing";
+import type { CountLink, FacetTerm, RecentRow } from "./landing";
+import type { RecentAnalysisSet } from "./landing";
 
 /** How long a successful response stays cached. */
 export const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -35,6 +38,18 @@ export const FAILURE_TTL_MS = 30 * 1000;
 /** Give up on a single search request after this long. */
 export const REQUEST_TIMEOUT_MS = 10 * 1000;
 
+/** Fields requested for each Recently updated candidate. */
+const RECENT_FIELDS = [
+  "@id",
+  "accession",
+  "annotation_type",
+  "annotation_category",
+  "release_timestamp",
+  "submitted_files_timestamp",
+  "files.href",
+  "files.file_url",
+];
+
 type SearchFacet = {
   field: string;
   terms?: Array<FacetTerm>;
@@ -44,6 +59,7 @@ type SearchFacet = {
 export type SearchResponse = {
   total?: number;
   facets?: Array<SearchFacet>;
+  "@graph"?: Array<RecentAnalysisSet>;
 };
 
 /** Everything the landing page renders. Each section is empty or null when it should be hidden. */
@@ -53,26 +69,25 @@ export type LandingData = {
     measurementSets: number;
     analysisSets: number;
   } | null;
-  /** Number of released donors, the whole for the Find donors shares; null if unknown */
-  donorTotal: number | null;
   assayTiles: Array<CountLink>;
   analysisTiles: Array<CountLink>;
   donorChips: Array<CountLink>;
   autoantibodyChip: CountLink | null;
   /** Link to the hidden Resource category, for the Documentation block */
   resourceLink: CountLink | null;
+  recent: Array<RecentRow>;
   tryChips: Array<CountLink>;
 };
 
 /** Landing data with every live-data section hidden. */
 export const EMPTY_LANDING_DATA: LandingData = {
   stats: null,
-  donorTotal: null,
   assayTiles: [],
   analysisTiles: [],
   donorChips: [],
   autoantibodyChip: null,
   resourceLink: null,
+  recent: [],
   tryChips: [],
 };
 
@@ -154,6 +169,18 @@ function countPath(type: string, filters = ""): string {
 }
 
 /**
+ * Build the path that gets the newest released analysis set of one annotation type.
+ */
+function newestOfTypePath(annotationType: string): string {
+  const fields = RECENT_FIELDS.map((field) => `&field=${field}`).join("");
+  return (
+    `/search/?type=AnalysisSet&status=${RELEASED_STATUS}` +
+    `&annotation_type=${encodeURIComponent(annotationType)}` +
+    `&sort=-release_timestamp&limit=1${fields}`
+  );
+}
+
+/**
  * Get the terms of the named facet in a search response.
  */
 function getFacetTerms(
@@ -172,6 +199,33 @@ function getFacetTerms(
 function getTotal(response: SearchResponse | null): number | null {
   const total = response?.total;
   return typeof total === "number" && total > 0 ? total : null;
+}
+
+/**
+ * Get the Recently updated rows: the newest released analysis set of each annotation type, newest
+ * first. Hides the section (empty array) if the list of types or any per-type request fails, since
+ * a missing type could otherwise hide the true newest release.
+ * @param annotationTypes `annotation_type` facet terms of released analysis sets
+ * @returns Table rows
+ */
+async function getRecentRows(
+  annotationTypes: Array<FacetTerm> | null
+): Promise<Array<RecentRow>> {
+  const types = positiveTerms(annotationTypes);
+  if (types.length === 0) {
+    return [];
+  }
+
+  const responses = await Promise.all(
+    types.map((type) => cachedSearch(newestOfTypePath(type.key)))
+  );
+  if (responses.some((response) => response === null)) {
+    return [];
+  }
+  const candidates = responses.flatMap(
+    (response) => response?.["@graph"] || []
+  );
+  return pickRecentlyUpdated(candidates, API_URL);
 }
 
 /**
@@ -216,7 +270,6 @@ export async function getLandingData(): Promise<LandingData> {
             analysisSets: analysisSetTotal,
           }
         : null,
-    donorTotal,
     assayTiles,
     analysisTiles,
     donorChips,
@@ -230,6 +283,7 @@ export async function getLandingData(): Promise<LandingData> {
           ]),
         }
       : null,
+    recent: await getRecentRows(getFacetTerms(analysisSets, "annotation_type")),
     tryChips: buildTryChips({ assayTiles, donorChips, analysisTiles }),
   };
 }
