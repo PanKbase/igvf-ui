@@ -11,12 +11,13 @@ import {
 import { LandingCitation, LandingDeveloperBand } from "./landing-developers";
 import LandingDonors from "./landing-donors";
 import LandingHero from "./landing-hero";
-import LandingRecent from "./landing-recent";
 import LandingShell from "./landing-shell";
 import LandingStats from "./landing-stats";
 import { AnalysisTiles, AssayTiles } from "./landing-tiles";
+import LandingWhatsNew from "./landing-whats-new";
 // lib
 import { getLandingFeaturedDatasets } from "../../lib/featured-datasets";
+import { getNewestReleaseNotes } from "../../lib/whats-new";
 
 /**
  * Featured datasets section of the landing page: the first few cards plus a link to the page with
@@ -42,13 +43,14 @@ function LandingFeatured() {
 /**
  * Body of the redesigned Data Library landing page. Each live-data section renders only when its
  * query succeeded and has something to show; the static developer, documentation and citation
- * blocks always render.
+ * blocks always render. What's new comes from `lib/whats-new.ts` and hides itself when empty.
  */
 export default function LandingPage({ data }) {
   return (
     <LandingShell title="PanKbase Data Library">
       <LandingHero tryChips={data.tryChips} />
       {data.stats && <LandingStats stats={data.stats} />}
+      <LandingFeatured />
       {data.assayTiles.length > 0 && <AssayTiles tiles={data.assayTiles} />}
       {data.analysisTiles.length > 0 && (
         <AnalysisTiles tiles={data.analysisTiles} />
@@ -57,10 +59,10 @@ export default function LandingPage({ data }) {
         <LandingDonors
           conditionChips={data.donorChips}
           autoantibodyChip={data.autoantibodyChip}
+          totalDonors={data.donorTotal}
         />
       )}
-      <LandingFeatured />
-      {data.recent.length > 0 && <LandingRecent rows={data.recent} />}
+      <LandingWhatsNew notes={getNewestReleaseNotes()} />
       <LandingDeveloperBand resourceLink={data.resourceLink} />
       <LandingCitation />
     </LandingShell>
@@ -77,6 +79,7 @@ const chipPropType = PropTypes.shape({
 LandingPage.propTypes = {
   // Live data from `getLandingData()`
   data: PropTypes.shape({
+    donorTotal: PropTypes.number,
     stats: PropTypes.shape({
       donors: PropTypes.number.isRequired,
       measurementSets: PropTypes.number.isRequired,
@@ -87,7 +90,6 @@ LandingPage.propTypes = {
     donorChips: PropTypes.arrayOf(chipPropType).isRequired,
     autoantibodyChip: chipPropType,
     resourceLink: chipPropType,
-    recent: PropTypes.arrayOf(PropTypes.object).isRequired,
     tryChips: PropTypes.arrayOf(chipPropType).isRequired,
   }).isRequired,
 };
