@@ -8,6 +8,9 @@ import { CheckIcon, CopyIcon } from "./landing-icons";
 const CURL_EXAMPLE =
   'curl "https://data.pankbase.org/search/?type=MeasurementSet&assay_term.term_name=single-cell+RNA+sequencing+assay&format=json"';
 
+const DONOR_CURL_EXAMPLE =
+  'curl "https://data.pankbase.org/human-donors/<accession>/?format=json"';
+
 const CARD =
   "flex min-w-0 flex-col gap-[14px] rounded-[6px] border border-l-4 border-pkb-line border-l-pkb bg-white p-[24px]";
 
@@ -15,18 +18,18 @@ const CARD =
  * Code box with a copy button. The "Copied" text sits in a polite live region so screen reader
  * users hear the confirmation.
  */
-function CurlExample() {
-  const { isCopied, initiateCopy } = useCopyAction(CURL_EXAMPLE);
+function CurlExample({ command, copyLabel }) {
+  const { isCopied, initiateCopy } = useCopyAction(command);
 
   return (
     <div className="relative min-w-0 rounded-[8px] bg-pkb-code py-[16px] pl-[16px] pr-[56px]">
       <code className="block break-all font-mono text-[13px] leading-[1.6] text-[#e6eaf5]">
-        {CURL_EXAMPLE}
+        {command}
       </code>
       <button
         type="button"
         onClick={initiateCopy}
-        aria-label="Copy curl command"
+        aria-label={copyLabel}
         className="absolute right-[10px] top-[10px] flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border border-[#7a86b0] bg-[#1f2745] text-white hover:bg-pkb focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#7fd6d6]"
       >
         {isCopied ? <CheckIcon /> : <CopyIcon />}
@@ -41,8 +44,15 @@ function CurlExample() {
   );
 }
 
+CurlExample.propTypes = {
+  // Command to show and copy
+  command: PropTypes.string.isRequired,
+  // Accessible name of the copy button
+  copyLabel: PropTypes.string.isRequired,
+};
+
 /**
- * Developer block: links to the API, scripts, schema and standards, and a working curl example.
+ * Developer block: links to the API, scripts, schema and standards, and two curl examples.
  */
 export function LandingDevelopers() {
   return (
@@ -71,7 +81,21 @@ export function LandingDevelopers() {
           Data standards
         </SmartLink>
       </div>
-      <CurlExample />
+      <div className="flex min-w-0 flex-col gap-[6px]">
+        <p className="text-[13px] text-pkb-muted">
+          Search measurement sets by assay
+        </p>
+        <CurlExample command={CURL_EXAMPLE} copyLabel="Copy curl command" />
+      </div>
+      <div className="flex min-w-0 flex-col gap-[6px]">
+        <p className="text-[13px] text-pkb-muted">
+          Fetch one donor by accession
+        </p>
+        <CurlExample
+          command={DONOR_CURL_EXAMPLE}
+          copyLabel="Copy donor curl command"
+        />
+      </div>
     </div>
   );
 }
