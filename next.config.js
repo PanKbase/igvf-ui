@@ -31,17 +31,6 @@ module.exports = {
         destination: "/profiles/graph.svg",
         permanent: true,
       },
-      // The redesigned landing page was reviewed at /test-homepage before it replaced the home page
-      {
-        source: "/test-homepage/featured/",
-        destination: "/featured/",
-        permanent: false,
-      },
-      {
-        source: "/test-homepage/",
-        destination: "/",
-        permanent: false,
-      },
     ];
   },
 };
