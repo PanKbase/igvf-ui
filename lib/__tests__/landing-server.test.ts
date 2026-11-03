@@ -28,7 +28,8 @@ type Facet = {
 /** Build a search response from a facet map. */
 function response(
   total: number,
-  facets: Record<string, Array<[string, number]>> = {}
+  facets: Record<string, Array<[string, number]>> = {},
+  graph?: Array<Record<string, unknown>>
 ) {
   return {
     total,
@@ -38,6 +39,7 @@ function response(
         terms: terms.map(([key, count]) => ({ key, doc_count: count })),
       })
     ),
+    ...(graph ? { "@graph": graph } : {}),
   };
 }
 
@@ -63,12 +65,38 @@ const ANALYSIS_FACETS = {
     ["Resource", 3],
     ["Differential expression", 250],
   ] as Array<[string, number]>,
+  annotation_type: [
+    ["differential_expression", 250],
+    ["islet_function_perifusion", 40],
+  ] as Array<[string, number]>,
 };
+
+const NEWEST = {
+  differential_expression: {
+    "@id": "/analysis-sets/DE1/",
+    accession: "DE1",
+    annotation_type: "differential_expression",
+    annotation_category: "Differential expression",
+    release_timestamp: "2026-05-06T19:00:00+00:00",
+  },
+  islet_function_perifusion: {
+    "@id": "/analysis-sets/PERI1/",
+    accession: "PERI1",
+    annotation_type: "islet_function_perifusion",
+    annotation_category: "Islet function",
+    release_timestamp: "2026-09-02T10:00:00+00:00",
+    files: [{ href: "/tabular-files/F1/@@download/F1.tsv" }],
+  },
+} as Record<string, Record<string, unknown>>;
 
 /**
  * Default backend: answers every search the landing page makes. Tests override pieces of it.
  */
 function backend(path: string) {
+  if (path.includes("annotation_type=")) {
+    const type = decodeURIComponent(path.match(/annotation_type=([^&]+)/)![1]);
+    return ok(response(1, {}, [NEWEST[type]]));
+  }
   if (path.includes("aab_positive=true")) {
     return ok(response(0));
   }
@@ -130,7 +158,6 @@ describe("getLandingData", () => {
       ["T1D", 255],
       ["Other diabetes types", 28],
     ]);
-    expect(data.donorTotal).toBe(3739);
     expect(data.resourceLink).toMatchObject({ label: "Resource", count: 3 });
     expect(data.tryChips.length).toBeGreaterThan(0);
   });
@@ -147,6 +174,29 @@ describe("getLandingData", () => {
     expect((await getLandingData()).autoantibodyChip).toMatchObject({
       label: "Autoantibody+",
       count: 299,
+    });
+  });
+
+  it("returns the newest set of each annotation type, newest first, dated by release_timestamp", async () => {
+    const { recent } = await getLandingData();
+    expect(recent.map((r) => r.accession)).toEqual(["PERI1", "DE1"]);
+    expect(recent[0].releasedLabel).toBe("Sep 2026");
+    expect(recent[0].isDirectDownload).toBe(true);
+    expect(recent[1].isDirectDownload).toBe(false);
+  });
+
+  it("issues one limit=1, release_timestamp-sorted query per annotation type", async () => {
+    await getLandingData();
+    const perType = requestedPaths().filter((p) =>
+      p.includes("annotation_type=")
+    );
+    expect(perType).toHaveLength(2);
+    perType.forEach((path) => {
+      expect(path).toContain("type=AnalysisSet");
+      expect(path).toContain("status=released");
+      expect(path).toContain("sort=-release_timestamp");
+      expect(path).toContain("limit=1");
+      expect(path).toContain("field=release_timestamp");
     });
   });
 
@@ -184,9 +234,9 @@ describe("getLandingData", () => {
     const data = await getLandingData();
     expect(data.assayTiles).toEqual([]);
     expect(data.stats).toBeNull(); // Needs all three totals.
-    expect(data.donorTotal).toBe(3739); // The donor shares only need the donor total.
     expect(data.analysisTiles.length).toBeGreaterThan(0);
     expect(data.donorChips.length).toBeGreaterThan(0);
+    expect(data.recent.length).toBe(2);
   });
 
   it("treats a thrown request and a malformed response as a failure", async () => {
@@ -203,6 +253,35 @@ describe("getLandingData", () => {
     expect(data.donorChips).toEqual([]);
     expect(data.assayTiles).toEqual([]);
     expect(data.stats).toBeNull();
+  });
+
+  it("hides Recently updated if ANY per-type request fails", async () => {
+    mockGetObject.mockImplementation((path: string) =>
+      Promise.resolve(
+        path.includes("annotation_type=islet_function_perifusion")
+          ? err({ code: 500 })
+          : backend(path)
+      )
+    );
+    const data = await getLandingData();
+    expect(data.recent).toEqual([]);
+    // The rest of the page still renders.
+    expect(data.stats).not.toBeNull();
+  });
+
+  it("hides Recently updated when the annotation_type facet is missing", async () => {
+    mockGetObject.mockImplementation((path: string) =>
+      Promise.resolve(
+        path.includes("type=AnalysisSet") && !path.includes("annotation_type=")
+          ? ok(
+              response(1455, {
+                annotation_category: ANALYSIS_FACETS.annotation_category,
+              })
+            )
+          : backend(path)
+      )
+    );
+    expect((await getLandingData()).recent).toEqual([]);
   });
 
   it("returns the empty page data when every query fails", async () => {
