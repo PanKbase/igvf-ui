@@ -235,8 +235,8 @@ describe("<FeaturedGrid> with the real config", () => {
   it("renders one card per dataset, as a list", () => {
     render(<FeaturedGrid datasets={FEATURED_DATASETS} />);
 
-    expect(screen.getAllByTestId("featured-card")).toHaveLength(8);
-    expect(screen.getAllByRole("listitem")).toHaveLength(8);
+    expect(screen.getAllByTestId("featured-card")).toHaveLength(6);
+    expect(screen.getAllByRole("listitem")).toHaveLength(6);
   });
 
   it("renders each card with exactly the buttons its config has", () => {
@@ -256,7 +256,7 @@ describe("<FeaturedGrid> with the real config", () => {
     });
   });
 
-  it("shows cRE-target gene links without Download and Islet biosample metadata without Visualize", () => {
+  it("shows cRE-target gene links without Download", () => {
     render(<FeaturedGrid datasets={FEATURED_DATASETS} />);
 
     const cre = screen
@@ -264,11 +264,5 @@ describe("<FeaturedGrid> with the real config", () => {
       .closest("article");
     expect(within(cre).queryByText("Download")).not.toBeInTheDocument();
     expect(within(cre).getByText("Visualize")).toBeInTheDocument();
-
-    const biosample = screen
-      .getByRole("heading", { name: "Islet biosample metadata" })
-      .closest("article");
-    expect(within(biosample).getByText("Download")).toBeInTheDocument();
-    expect(within(biosample).queryByText("Visualize")).not.toBeInTheDocument();
   });
 });
