@@ -159,10 +159,10 @@ describe("<FeaturedCard>", () => {
 
   it("leaves no hidden placeholder for a missing button", () => {
     const dataset = { ...FULL, downloadUrl: undefined };
-    const { container } = render(<FeaturedCard dataset={dataset} />);
+    render(<FeaturedCard dataset={dataset} />);
 
     // Only real links in the button row; no empty or aria-hidden stand-ins.
-    const row = container.querySelector(".border-t");
+    const row = screen.getByTestId("featured-buttons");
     expect(row.children).toHaveLength(2);
     Array.from(row.children).forEach((child) => {
       expect(child.tagName).toBe("A");
@@ -171,17 +171,53 @@ describe("<FeaturedCard>", () => {
     });
   });
 
-  it("gives every button the same width and no-wrap, 12px-padded styling, so fewer buttons just left-align", () => {
-    const dataset = { ...FULL, downloadUrl: undefined };
-    render(<FeaturedCard dataset={dataset} />);
-    const withTwo = screen.getAllByRole("link");
+  it("keeps every label on one line, with the same styling on each button", () => {
+    render(<FeaturedCard dataset={FULL} />);
 
-    withTwo.forEach((link) => {
-      expect(link).toHaveClass("w-[96px]");
-      expect(link).toHaveClass("px-[12px]");
+    screen.getAllByRole("link").forEach((link) => {
       expect(link).toHaveClass("whitespace-nowrap");
+      expect(link).toHaveClass("h-[40px]");
+      expect(link).toHaveClass("min-w-0");
     });
-    expect(withTwo[0].parentElement).toHaveClass("justify-start");
+  });
+
+  it("puts three buttons on one row when the card is wide enough, else Download full width above Details and Visualize", () => {
+    render(<FeaturedCard dataset={FULL} />);
+
+    const row = screen.getByTestId("featured-buttons");
+    // The row measures the card, not the window.
+    expect(row.parentElement).toHaveClass("@container");
+    // Narrow: two equal columns, with Download spanning both. Wide: three equal columns.
+    expect(row).toHaveClass("grid-cols-2", "@[300px]:grid-cols-3");
+    expect(screen.getByText("Download")).toHaveClass(
+      "col-span-2",
+      "@[300px]:col-span-1"
+    );
+    expect(screen.getByText("Details")).not.toHaveClass("col-span-2");
+    expect(screen.getByRole("link", { name: /Visualize in/ })).not.toHaveClass(
+      "col-span-2"
+    );
+  });
+
+  it("splits the row equally when there are two buttons, and never strands one", () => {
+    render(<FeaturedCard dataset={{ ...FULL, downloadUrl: undefined }} />);
+
+    const row = screen.getByTestId("featured-buttons");
+    expect(row).toHaveClass("grid-cols-2");
+    expect(row.className).not.toMatch(/@\[/);
+    screen.getAllByRole("link").forEach((link) => {
+      expect(link).not.toHaveClass("col-span-2");
+    });
+  });
+
+  it("makes a lone button full width", () => {
+    render(
+      <FeaturedCard
+        dataset={{ ...FULL, downloadUrl: undefined, visualizeUrl: undefined }}
+      />
+    );
+
+    expect(screen.getByTestId("featured-buttons")).toHaveClass("grid-cols-1");
   });
 
   it("gives Download the filled style, and Details and Visualize the outline style", () => {
