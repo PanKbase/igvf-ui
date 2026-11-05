@@ -82,6 +82,9 @@ class Frontend(Construct):
         self.application_image = ContainerImage.from_asset(
             '../',
             file='docker/nextjs/Dockerfile',
+            build_args={
+                'NEXT_PUBLIC_GA_MEASUREMENT_ID': self.props.config.ga_measurement_id or '',
+            },
         )
         self.nginx_image = ContainerImage.from_asset(
             '../docker/nginx/',

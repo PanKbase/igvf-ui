@@ -18,6 +18,11 @@ from typing import Optional
 from typing import Tuple
 
 
+# Separate GA4 properties keep dev traffic out of production analytics.
+GA_MEASUREMENT_ID_DEV = 'G-BEWL9F8CW7'
+GA_MEASUREMENT_ID_PRODUCTION = 'G-XYBYEW53TS'
+
+
 config: Dict[str, Any] = {
     'pipeline': {
         'demo': {
@@ -57,6 +62,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
+            'ga_measurement_id': GA_MEASUREMENT_ID_DEV,
             'tags': [
                 ('time-to-live-hours', '60'),
                 ('turn-off-on-friday-night', 'yes'),
@@ -70,6 +76,7 @@ config: Dict[str, Any] = {
                 'max_capacity': 4,
             },
             'backend_url': 'https://pankbase-dev.demo.pankbase.org',
+            'ga_measurement_id': GA_MEASUREMENT_ID_DEV,
             'tags': [
             ],
         },
@@ -105,6 +112,7 @@ config: Dict[str, Any] = {
                 'max_capacity': 4,
             },
             'backend_url': 'https://api.data.pankbase.org',
+            'ga_measurement_id': GA_MEASUREMENT_ID_PRODUCTION,
             'use_subdomain': False,
             'tags': [
             ],
@@ -130,6 +138,8 @@ class Config:
     tags: List[Tuple[str, str]]
     url_prefix: Optional[str] = None
     use_subdomain: bool = True
+    #: GA4 measurement ID baked into the frontend build; None disables analytics.
+    ga_measurement_id: Optional[str] = None
     common: Common = field(
         default_factory=Common
     )

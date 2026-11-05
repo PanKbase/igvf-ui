@@ -24,6 +24,14 @@ export const BACKEND_URL = serverRuntimeConfig.BACKEND_URL as string;
 export const UI_VERSION = publicRuntimeConfig.UI_VERSION as string;
 
 /**
+ * Google Analytics 4 measurement ID for this environment, inlined at build time. Each
+ * deployed environment uses its own ID so dev traffic doesn't mix with production. Empty
+ * disables analytics (e.g. local development).
+ */
+export const GA_MEASUREMENT_ID: string =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+
+/**
  * Auth0 SPA client. Do not request a Management API audience; those tokens
  * fail igvfd's /userinfo check during POST /login.
  */

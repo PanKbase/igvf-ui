@@ -224,6 +224,7 @@ def test_config_fill_in_calculated_config():
         'branch': 'my-branch',
         'name': 'demo',
         'backend_url': 'https://pankbase-my-branch.demo.pankbase.org',
+        'ga_measurement_id': 'G-BEWL9F8CW7',
         'tags': [('xyz', '123')]
     }
 
@@ -249,3 +250,18 @@ def test_config_get_backend_url_from_branch():
     assert get_backend_url_from_branch(
         'IGVF-my-feature-branch-123'
     ) == 'https://pankbase-IGVF-my-feature-branch-123.demo.pankbase.org'
+
+
+def test_config_ga_measurement_id_is_separate_for_dev_and_production():
+    from infrastructure.config import build_config_from_name
+    from infrastructure.config import GA_MEASUREMENT_ID_DEV
+    from infrastructure.config import GA_MEASUREMENT_ID_PRODUCTION
+    assert GA_MEASUREMENT_ID_DEV != GA_MEASUREMENT_ID_PRODUCTION
+    for name in ['dev', 'demo']:
+        config = build_config_from_name(name, branch='my-branch')
+        assert config.ga_measurement_id == GA_MEASUREMENT_ID_DEV
+    for name in ['staging', 'sandbox']:
+        config = build_config_from_name(name, branch='my-branch')
+        assert config.ga_measurement_id is None
+    config = build_config_from_name('production', branch='main')
+    assert config.ga_measurement_id == GA_MEASUREMENT_ID_PRODUCTION

@@ -11,6 +11,7 @@ import {
   AUTH0_CLIENT_ID,
   AUTH0_ISSUER_BASE_DOMAIN,
   BRAND_COLOR,
+  GA_MEASUREMENT_ID,
   SITE_TITLE,
 } from "../lib/constants";
 import DarkModeManager from "../lib/dark-mode-manager";
@@ -121,18 +122,22 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#da532c" />
       </Head>
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-XYBYEW53TS"
-      />
-      <Script id="google-analytics-4-script">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-XYBYEW53TS');
-        `}
-      </Script>
+      {GA_MEASUREMENT_ID && (
+        <>
+          <Script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          />
+          <Script id="google-analytics-4-script">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_MEASUREMENT_ID}');
+            `}
+          </Script>
+        </>
+      )}
       <TestServerWarning />
       {auth0Error && (
         <div
