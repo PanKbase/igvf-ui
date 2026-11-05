@@ -367,15 +367,15 @@ describe("featured datasets on the landing page and the Featured page", () => {
     );
   });
 
-  it("shows all eight cards on the Featured datasets page", () => {
+  it("shows all six cards on the Featured datasets page", () => {
     render(<FeaturedPage />);
 
-    expect(screen.getAllByTestId("featured-card")).toHaveLength(8);
+    expect(screen.getAllByTestId("featured-card")).toHaveLength(6);
     expect(
       screen.getByRole("heading", { level: 1, name: "Featured datasets" })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: "All 8 datasets" })
+      screen.getByRole("heading", { level: 2, name: "All 6 datasets" })
     ).toBeInTheDocument();
     expect(
       screen.getByText(

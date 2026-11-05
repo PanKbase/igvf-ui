@@ -5,8 +5,7 @@
  *
  * Each card has up to three buttons, always labeled "Download", "Details" and "Visualize" by the
  * card component. A card only renders the buttons it has a link for, so omit a property to omit
- * its button. Metadata download links carry a date (2026-05-19); update them when new tables get
- * released.
+ * its button.
  */
 
 export type FeaturedDataset = {
@@ -97,24 +96,6 @@ export const FEATURED_DATASETS: ReadonlyArray<FeaturedDataset> = [
     detailsUrl: `${DATA_LIBRARY}/search/?type=AnalysisSet&file_set_type=principal+analysis&annotation_category=Differential+expression&de_comparison_class=disease_status`,
     visualizeUrl: `${PANKBASE}/diff-exp.html`,
     visualizeTool: "DGE Browser",
-  },
-  {
-    id: "donor-metadata",
-    category: "Resource",
-    title: "Donor metadata",
-    description: "Clinical and demographic metadata for all donors.",
-    downloadUrl: `${S3}/analysis_resources/meta_data_table/human_donor.2026-05-19.txt`,
-    detailsUrl: `${DATA_LIBRARY}/analysis-sets/PKBDS5236MJJT/`,
-    visualizeUrl: `${PANKBASE}/donors.html`,
-    visualizeTool: "Donor Summary",
-  },
-  {
-    id: "islet-biosample-metadata",
-    category: "Resource",
-    title: "Islet biosample metadata",
-    description: "Metadata for primary islet biosamples.",
-    downloadUrl: `${S3}/analysis_resources/meta_data_table/biosamples_primary.2026-05-19.txt`,
-    detailsUrl: `${DATA_LIBRARY}/analysis-sets/PKBDS1057RJYW/`,
   },
 ];
 

@@ -5,7 +5,7 @@ import {
 } from "../featured-datasets";
 
 describe("featured datasets config", () => {
-  it("has the 8 cards from the spec, in order", () => {
+  it("has the 6 cards from the spec, in order", () => {
     expect(FEATURED_DATASETS.map((d) => d.title)).toEqual([
       "Islet dynamic perifusion",
       "Pancreatic islet scRNA-seq",
@@ -13,8 +13,6 @@ describe("featured datasets config", () => {
       "Cell-type peaks from snATAC-seq",
       "cRE\u2013target gene links",
       "Differential gene expression",
-      "Donor metadata",
-      "Islet biosample metadata",
     ]);
   });
 
@@ -40,9 +38,6 @@ describe("featured datasets config", () => {
     // No single downloadable file.
     expect(byId["cre-target-gene-links"].downloadUrl).toBeUndefined();
     expect(byId["differential-gene-expression"].downloadUrl).toBeUndefined();
-    // No external tool.
-    expect(byId["islet-biosample-metadata"].visualizeUrl).toBeUndefined();
-    expect(byId["islet-biosample-metadata"].visualizeTool).toBeUndefined();
   });
 
   it("uses absolute URLs for downloads and visualizations and same-site paths for details", () => {
