@@ -2,8 +2,8 @@ import QueryString from "./query-string";
 import type { ColumnSpec } from "./report";
 
 /**
- * Schema properties hidden from Report View column selection and "Show All".
- * These are administrative, provenance, or rarely useful in tabular exports.
+ * Schema properties hidden from Report View column selection and "Show All" for users who aren't
+ * logged in. These are administrative, provenance, or rarely useful in tabular exports.
  */
 export const REPORT_HIDDEN_COLUMN_IDS: readonly string[] = [
   "schema_version",
@@ -327,11 +327,18 @@ export const REPORT_COLUMN_PRESETS: Readonly<
 const hiddenColumnIdSet = new Set(REPORT_HIDDEN_COLUMN_IDS);
 
 /**
- * Remove metadata / admin columns from report column specs.
+ * Remove metadata / admin columns from report column specs. Logged-in users see every column.
+ * @param columnSpecs Column specs to filter
+ * @param isAuthenticated True if the user is logged in
+ * @returns `columnSpecs` without the hidden columns, or unchanged for logged-in users
  */
 export function filterHiddenReportColumns(
-  columnSpecs: ColumnSpec[]
+  columnSpecs: ColumnSpec[],
+  isAuthenticated = false
 ): ColumnSpec[] {
+  if (isAuthenticated) {
+    return columnSpecs;
+  }
   return columnSpecs.filter(
     (columnSpec) => !hiddenColumnIdSet.has(columnSpec.id)
   );
