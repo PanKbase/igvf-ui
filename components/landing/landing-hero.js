@@ -13,9 +13,7 @@ const USER_GUIDE_PATH = "/help/general-help/user-guide/";
 export default function LandingHero({ tryChips }) {
   return (
     <section aria-label="Search" className="flex flex-col gap-[20px]">
-      <LandingBreadcrumb
-        items={[{ label: "Data", href: "/browse/" }, { label: "Data Library" }]}
-      />
+      <LandingBreadcrumb items={[{ label: "Data Library" }]} />
       <h1 className="text-[34px] font-bold leading-[1.1] tracking-[-0.02em] md:text-[48px]">
         PanKbase Data Library
       </h1>
