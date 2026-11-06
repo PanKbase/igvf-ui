@@ -24,7 +24,7 @@ export const WHATS_NEW: ReadonlyArray<ReleaseNote> = [
     title: "Gene expression associated with donor age and sex",
     summary:
       "Differential expression results testing association with donor age and sex across pancreatic cell types.",
-    href: "/search/?type=AnalysisSet&annotation_type=differential_expression&de_comparison_class=clinical_trait",
+    href: "/search/?type=AnalysisSet&annotation_category=Differential+expression&status=released&de_comparison_class=demographic",
   },
   {
     date: "2026-09",

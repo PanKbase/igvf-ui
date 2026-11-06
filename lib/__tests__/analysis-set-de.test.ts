@@ -36,6 +36,7 @@ describe("analysis-set-de helpers", () => {
         "autoantibody",
         "cell_type_markers",
         "clinical_trait",
+        "demographic",
         "disease_status",
         "islet_function_trait",
         "treatment",
