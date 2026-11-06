@@ -11,6 +11,20 @@ import {
 } from "../report-column-config";
 
 describe("filterHiddenReportColumns", () => {
+  it("keeps every column for logged-in users", () => {
+    const columns = [
+      { id: "@id", title: "ID" },
+      { id: "aliases", title: "Aliases" },
+      { id: "award", title: "Award" },
+      { id: "lab", title: "Lab" },
+      { id: "submitted_by", title: "Submitted By" },
+    ];
+    expect(filterHiddenReportColumns(columns, true)).toEqual(columns);
+    expect(
+      filterHiddenReportColumns(columns, false).map((spec) => spec.id)
+    ).toEqual(["@id"]);
+  });
+
   it("removes metadata and admin columns", () => {
     const specs = filterHiddenReportColumns([
       { id: "@id", title: "ID" },
