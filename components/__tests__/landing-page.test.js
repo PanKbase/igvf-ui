@@ -109,14 +109,11 @@ describe("<LandingPage> hero", () => {
     ).toHaveAttribute("type", "submit");
   });
 
-  it("links the Data breadcrumb and the user guide", () => {
+  it("shows the Data Library breadcrumb and links the user guide", () => {
     render(<LandingPage data={FULL_DATA} />);
 
     const breadcrumb = screen.getByRole("navigation", { name: "Breadcrumb" });
-    expectHref(
-      within(breadcrumb).getByRole("link", { name: "Data" }),
-      "/browse/"
-    );
+    expect(within(breadcrumb).queryByRole("link")).toBeNull();
     expect(within(breadcrumb).getByText("Data Library")).toHaveAttribute(
       "aria-current",
       "page"
@@ -247,11 +244,11 @@ describe("<LandingPage> What's new", () => {
     const items = within(section).getAllByRole("listitem");
     expect(items).toHaveLength(3);
     expect(items.map((item) => item.querySelector("time").textContent)).toEqual(
-      ["Sep 2026", "May 2026", "May 2026"]
+      ["Oct 2026", "Sep 2026", "May 2026"]
     );
     expect(items.map((item) => item.querySelector("time").dateTime)).toEqual([
+      "2026-10",
       "2026-09",
-      "2026-05",
       "2026-05",
     ]);
 
