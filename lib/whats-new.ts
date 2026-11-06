@@ -20,6 +20,13 @@ export const WHATS_NEW_COUNT = 3;
 /** Release notes, in any order; the page sorts them. Each card links to its `href`. */
 export const WHATS_NEW: ReadonlyArray<ReleaseNote> = [
   {
+    date: "2026-10",
+    title: "Gene expression associated with donor age and sex",
+    summary:
+      "Differential expression results testing association with donor age and sex across 12 pancreatic cell types.",
+    href: "/search/?type=AnalysisSet&annotation_type=differential_expression&de_comparison_class=clinical_trait",
+  },
+  {
     date: "2026-09",
     title: "cRE-to-gene links for 12 islet cell types",
     summary:
@@ -32,13 +39,6 @@ export const WHATS_NEW: ReadonlyArray<ReleaseNote> = [
     summary:
       "Insulin and glucagon secretion measures from dynamic islet perifusion, in one table.",
     href: "/analysis-sets/PKBDS9874MXRB/",
-  },
-  {
-    date: "2026-05",
-    title: "Gene expression associated with islet function traits",
-    summary:
-      "224 differential expression results: 32 perifusion insulin and glucagon secretion traits across 7 islet cell types.",
-    href: "/search/?type=AnalysisSet&annotation_type=differential_expression&de_comparison_class=islet_function_trait",
   },
 ];
 
