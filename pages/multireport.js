@@ -1,4 +1,5 @@
 // node_modules
+import { useAuth0 } from "@auth0/auth0-react";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
@@ -140,6 +141,7 @@ function applyColumnPresetQuery(queryString, columnIds) {
 export default function MultiReport({ searchResults, facetConfig = null }) {
   const router = useRouter();
   const { collectionTitles, profiles } = useContext(SessionContext);
+  const { isAuthenticated } = useAuth0();
   const { totalPages } = useSearchLimits(searchResults);
 
   const { path, queryString } = splitPathAndQueryString(searchResults["@id"]);
@@ -158,11 +160,19 @@ export default function MultiReport({ searchResults, facetConfig = null }) {
   const visibleColumnSpecs = columnsToColumnSpecs(searchResults.result_columns);
   const allColumnSpecs = getReportTypeColumnSpecs(selectedTypes, profiles);
 
-  const filteredDefaultColumnSpecs =
-    filterHiddenReportColumns(defaultColumnSpecs);
-  const filteredVisibleColumnSpecs =
-    filterHiddenReportColumns(visibleColumnSpecs);
-  const filteredAllColumnSpecs = filterHiddenReportColumns(allColumnSpecs);
+  // Logged-in users can see the admin and provenance columns hidden from everyone else.
+  const filteredDefaultColumnSpecs = filterHiddenReportColumns(
+    defaultColumnSpecs,
+    isAuthenticated
+  );
+  const filteredVisibleColumnSpecs = filterHiddenReportColumns(
+    visibleColumnSpecs,
+    isAuthenticated
+  );
+  const filteredAllColumnSpecs = filterHiddenReportColumns(
+    allColumnSpecs,
+    isAuthenticated
+  );
   const columnPreset = getReportColumnPreset(selectedTypes);
 
   /**
