@@ -8,7 +8,8 @@ export const DE_COMPARISON_CLASS_TITLES: Readonly<Record<string, string>> = {
   islet_function_trait:
     "Association with a perifusion secretion or content measure",
   clinical_trait:
-    "Association with a donor clinical variable (age, BMI, sex, HbA1c, C-peptide)",
+    "Association with a donor clinical variable (BMI, HbA1c, C-peptide)",
+  demographic: "Association with a donor demographic variable (age, sex)",
   disease_status:
     "Comparison or association by diagnosis group (ND, prediabetes, T1D, T2D)",
   treatment: "Treated vs control samples",
@@ -23,6 +24,7 @@ export const DE_COMPARISON_CLASS_SHORT_TITLES: Readonly<
 > = {
   islet_function_trait: "Islet function trait",
   clinical_trait: "Clinical trait",
+  demographic: "Demographic",
   disease_status: "Disease status",
   treatment: "Treatment",
   autoantibody: "Autoantibody",
