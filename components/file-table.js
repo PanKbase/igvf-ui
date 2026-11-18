@@ -1,5 +1,6 @@
 // node_modules
 import { TableCellsIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
 import PropTypes from "prop-types";
 // components
 import { BatchDownloadActuator } from "./batch-download";
@@ -59,6 +60,29 @@ const filesColumns = [
 ];
 
 /**
+ * Get the workflow embedded in a file through its analysis step version, if any.
+ * @param {object} file File object possibly with an embedded analysis step version
+ * @returns {object} Embedded workflow object; null if the file has none
+ */
+function getFileWorkflow(file) {
+  return file.analysis_step_version?.analysis_step?.workflow || null;
+}
+
+const workflowColumn = {
+  id: "workflow",
+  title: "Workflow",
+  display: ({ source }) => {
+    const workflow = getFileWorkflow(source);
+    return workflow ? (
+      <Link href={workflow["@id"]}>{workflow.name || workflow.accession}</Link>
+    ) : (
+      ""
+    );
+  },
+  sorter: (item) => getFileWorkflow(item)?.name || "",
+};
+
+/**
  * Display a sortable table of the given files.
  */
 export default function FileTable({
@@ -83,6 +107,11 @@ export default function FileTable({
     fileSet && isDownloadable
       ? new FileSetController(fileSet, downloadQuery)
       : null;
+
+  // Only show the workflow column when at least one file records the workflow that produced it.
+  const columns = files.some((file) => getFileWorkflow(file))
+    ? [...filesColumns, workflowColumn]
+    : filesColumns;
 
   return (
     <>
@@ -110,7 +139,7 @@ export default function FileTable({
       </DataAreaTitle>
       <SortableGrid
         data={files}
-        columns={filesColumns}
+        columns={columns}
         keyProp="@id"
         initialSort={{ columnId: "version", direction: "desc" }}
         pager={{}}
