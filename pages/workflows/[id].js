@@ -31,9 +31,19 @@ import FetchRequest from "../../lib/fetch-request";
 import buildAttribution from "../../lib/attribution";
 import { isJsonFormat } from "../../lib/query-utils";
 
+/**
+ * Search query for the analysis sets whose files this workflow produced.
+ * @param {object} workflow Workflow object
+ * @returns {string} Search URL for the analysis sets produced by the workflow
+ */
+function analysisSetsQuery(workflow) {
+  return `/search/?type=AnalysisSet&workflows.@id=${workflow["@id"]}`;
+}
+
 export default function Workflow({
   workflow,
   analysisSteps,
+  analysisSetCount = 0,
   documents,
   attribution = null,
   isJson,
@@ -96,6 +106,19 @@ export default function Workflow({
                   </DataItemList>
                 </>
               )}
+              {analysisSetCount > 0 && (
+                <>
+                  <DataItemLabel>
+                    Analysis Sets Produced by This Workflow
+                  </DataItemLabel>
+                  <DataItemValue>
+                    <Link href={analysisSetsQuery(workflow)}>
+                      {analysisSetCount} analysis{" "}
+                      {analysisSetCount === 1 ? "set" : "sets"}
+                    </Link>
+                  </DataItemValue>
+                </>
+              )}
               {workflow.publication_identifiers?.length > 0 && (
                 <>
                   <DataItemLabel>Publication Identifiers</DataItemLabel>
@@ -143,6 +166,8 @@ Workflow.propTypes = {
   attribution: PropTypes.object,
   // Analysis Steps to display
   analysisSteps: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Number of analysis sets with files produced by this workflow
+  analysisSetCount: PropTypes.number,
   // Documents associated with this workflow
   documents: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Is the format JSON?
@@ -168,6 +193,9 @@ export async function getServerSideProps({ params, req, query }) {
     const analysisSteps = workflow.analysis_steps
       ? await requestAnalysisSteps(workflow.analysis_steps, request)
       : [];
+    const analysisSetResults = (
+      await request.getObject(`${analysisSetsQuery(workflow)}&limit=0`)
+    ).optional();
     const breadcrumbs = await buildBreadcrumbs(
       workflow,
       workflow.name,
@@ -180,6 +208,7 @@ export async function getServerSideProps({ params, req, query }) {
         award,
         lab,
         analysisSteps,
+        analysisSetCount: analysisSetResults?.total || 0,
         documents,
         pageContext: { title: workflow.name },
         breadcrumbs,
