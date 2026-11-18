@@ -1,5 +1,6 @@
 // node_modules
 import _ from "lodash";
+import Link from "next/link";
 import PropTypes from "prop-types";
 import { Fragment, useEffect } from "react";
 // components
@@ -24,6 +25,7 @@ import FileTable from "../../components/file-table";
 import JsonDisplay from "../../components/json-display";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
+import SeparatedList from "../../components/separated-list";
 // lib
 import buildAttribution from "../../lib/attribution";
 import buildBreadcrumbs from "../../lib/breadcrumbs";
@@ -159,6 +161,20 @@ export default function AnalysisSet({
                   <DataItemLabel>Annotation Category</DataItemLabel>
                   <DataItemValue>
                     {analysisSet.annotation_category}
+                  </DataItemValue>
+                </>
+              )}
+              {analysisSet.workflows?.length > 0 && (
+                <>
+                  <DataItemLabel>Workflows</DataItemLabel>
+                  <DataItemValue>
+                    <SeparatedList isCollapsible>
+                      {analysisSet.workflows.map((workflow) => (
+                        <Link href={workflow["@id"]} key={workflow["@id"]}>
+                          {workflow.name || workflow.accession}
+                        </Link>
+                      ))}
+                    </SeparatedList>
                   </DataItemValue>
                 </>
               )}

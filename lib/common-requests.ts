@@ -116,6 +116,9 @@ export async function requestFiles(
   return (
     await request.getMultipleObjectsBulk(paths, [
       "accession",
+      "analysis_step_version.analysis_step.workflow.@id",
+      "analysis_step_version.analysis_step.workflow.accession",
+      "analysis_step_version.analysis_step.workflow.name",
       "content_type",
       "creation_timestamp",
       "file_format",
