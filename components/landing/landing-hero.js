@@ -8,7 +8,7 @@ const USER_GUIDE_PATH = "/help/general-help/user-guide/";
 
 /**
  * Landing page hero: breadcrumb, title, search box, and suggestion chips. The search box is a
- * plain GET form, so it works before JavaScript loads and lands on `/search/?searchTerm=<q>`.
+ * plain GET form, so it works before JavaScript loads and lands on `/search/?query=<q>`.
  */
 export default function LandingHero({ tryChips }) {
   return (
@@ -25,7 +25,7 @@ export default function LandingHero({ tryChips }) {
         className="flex flex-col gap-[10px] md:flex-row"
       >
         <input
-          name="searchTerm"
+          name="query"
           type="search"
           aria-label="Search the PanKbase Data Library"
           placeholder="Search donors, assays, genes…"
